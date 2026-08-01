@@ -1,0 +1,77 @@
+{
+  "name": "Employee",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "title": "Navn"
+    },
+    "email": {
+      "type": "string",
+      "format": "email",
+      "title": "Email"
+    },
+    "phone": {
+      "type": "string",
+      "title": "Telefon"
+    },
+    "trade": {
+      "type": "string",
+      "title": "Fag",
+      "enum": [
+        "Gravemaskinef\u00f8rer",
+        "Anl\u00e6gsgartner",
+        "Kloakmester",
+        "Betonarbejder",
+        "Lastbilchauff\u00f8r",
+        "H\u00e5ndv\u00e6rker",
+        "L\u00e6rling",
+        "Andet"
+      ],
+      "default": "H\u00e5ndv\u00e6rker"
+    },
+    "hourly_rate": {
+      "type": "number",
+      "title": "Timepris (DKK)"
+    },
+    "status": {
+      "type": "string",
+      "title": "Status",
+      "enum": [
+        "Aktiv",
+        "Orlov",
+        "Inaktiv"
+      ],
+      "default": "Aktiv"
+    },
+    "notes": {
+      "type": "string",
+      "title": "Noter"
+    }
+  },
+  "required": [
+    "name"
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

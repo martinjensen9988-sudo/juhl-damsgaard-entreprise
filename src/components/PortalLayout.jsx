@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { Outlet, Link } from 'react-router-dom';
-import { Building2, LogOut } from 'lucide-react';
+import { Outlet, Link, NavLink } from 'react-router-dom';
+import { Building2, LogOut, HardHat, Calculator } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 
 export default function PortalLayout() {
@@ -36,6 +36,16 @@ export default function PortalLayout() {
           </div>
         </div>
       </header>
+      <div className="bg-white border-b border-slate-200">
+        <div className="max-w-5xl mx-auto px-4 flex gap-1">
+          <NavLink to="/portal" className={({isActive}) => `flex items-center gap-1.5 px-4 py-2.5 text-sm font-medium border-b-2 transition-colors ${isActive ? 'border-amber-400 text-slate-900' : 'border-transparent text-slate-500 hover:text-slate-900'}`}>
+            <HardHat className="w-4 h-4" /> Mine Projekter
+          </NavLink>
+          <NavLink to="/prisberegner" className={({isActive}) => `flex items-center gap-1.5 px-4 py-2.5 text-sm font-medium border-b-2 transition-colors ${isActive ? 'border-amber-400 text-slate-900' : 'border-transparent text-slate-500 hover:text-slate-900'}`}>
+            <Calculator className="w-4 h-4" /> Prisberegner
+          </NavLink>
+        </div>
+      </div>
       <main className="max-w-5xl mx-auto px-4 py-8">
         <Outlet />
       </main>

@@ -12,6 +12,9 @@ import {
   Activity,
   Settings,
   ExternalLink,
+  Images,
+  Contact,
+  Archive,
 } from 'lucide-react';
 
 const navItems = [
@@ -25,6 +28,9 @@ const navItems = [
   { to: '/leverandoerer', label: 'Leverandører', icon: Truck },
   { to: '/projektstatus', label: 'Projektstatus', icon: Activity },
   { to: '/indstillinger', label: 'Indstillinger', icon: Settings },
+  { to: '/projekt-galleri', label: 'Galleri', icon: Images },
+  { to: '/medarbejdere', label: 'Medarbejdere', icon: Contact },
+  { to: '/dokumenter', label: 'Dokumenter', icon: Archive },
 ];
 
 export default function Layout() {

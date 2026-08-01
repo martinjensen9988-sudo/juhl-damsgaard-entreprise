@@ -24,6 +24,10 @@ import Projektstatus from '@/pages/Projektstatus';
 import Indstillinger from '@/pages/Indstillinger';
 import CustomerPortal from '@/pages/CustomerPortal';
 import PortalLayout from '@/components/PortalLayout';
+import ProjektGalleri from '@/pages/ProjektGalleri';
+import Prisberegner from '@/pages/Prisberegner';
+import Medarbejdere from '@/pages/Medarbejdere';
+import Dokumenter from '@/pages/Dokumenter';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -67,9 +71,13 @@ const AuthenticatedApp = () => {
           <Route path="/leverandoerer" element={<Leverandoerer />} />
           <Route path="/projektstatus" element={<Projektstatus />} />
           <Route path="/indstillinger" element={<Indstillinger />} />
+          <Route path="/projekt-galleri" element={<ProjektGalleri />} />
+          <Route path="/medarbejdere" element={<Medarbejdere />} />
+          <Route path="/dokumenter" element={<Dokumenter />} />
         </Route>
         <Route element={<PortalLayout />}>
           <Route path="/portal" element={<CustomerPortal />} />
+          <Route path="/prisberegner" element={<Prisberegner />} />
         </Route>
       </Route>
       <Route path="*" element={<PageNotFound />} />

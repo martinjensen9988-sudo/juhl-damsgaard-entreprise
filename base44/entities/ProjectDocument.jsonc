@@ -1,0 +1,82 @@
+{
+  "name": "ProjectDocument",
+  "type": "object",
+  "properties": {
+    "project_id": {
+      "type": "string",
+      "title": "Projekt"
+    },
+    "project_name": {
+      "type": "string",
+      "title": "Projektnavn"
+    },
+    "customer_email": {
+      "type": "string",
+      "title": "Kundeemail"
+    },
+    "title": {
+      "type": "string",
+      "title": "Titel"
+    },
+    "type": {
+      "type": "string",
+      "title": "Dokumenttype",
+      "enum": [
+        "Kontrakt",
+        "Tegning",
+        "Sikkerhedsvejledning",
+        "Tilbud",
+        "Faktura",
+        "Rapport",
+        "Andet"
+      ],
+      "default": "Andet"
+    },
+    "file_url": {
+      "type": "string",
+      "title": "Fil"
+    },
+    "description": {
+      "type": "string",
+      "title": "Beskrivelse"
+    },
+    "upload_date": {
+      "type": "string",
+      "format": "date",
+      "title": "Upload dato"
+    }
+  },
+  "required": [
+    "title",
+    "file_url"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "data.customer_email": "{{user.email}}"
+        }
+      ]
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}
