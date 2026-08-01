@@ -36,6 +36,9 @@ import Arbejdsedler from '@/pages/Arbejdsedler';
 import Kvalitetssikring from '@/pages/Kvalitetssikring';
 import Regnskab from '@/pages/Regnskab';
 import TilbudVisning from '@/pages/TilbudVisning';
+import Daekningsbidrag from '@/pages/Daekningsbidrag';
+import RegnskabIntegration from '@/pages/RegnskabIntegration';
+import AITilbud from '@/pages/AITilbud';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -89,6 +92,9 @@ const AuthenticatedApp = () => {
           <Route path="/arbejdssedler" element={<Arbejdsedler />} />
           <Route path="/kvalitetssikring" element={<Kvalitetssikring />} />
           <Route path="/regnskab" element={<Regnskab />} />
+          <Route path="/daekningsbidrag" element={<Daekningsbidrag />} />
+          <Route path="/regnskab-integration" element={<RegnskabIntegration />} />
+          <Route path="/ai-tilbud" element={<AITilbud />} />
         </Route>
         <Route element={<PortalLayout />}>
           <Route path="/portal" element={<CustomerPortal />} />

@@ -54,6 +54,35 @@
     "bank_account": {
       "type": "string",
       "title": "Bankkonto"
+    },
+    "accounting_system": {
+      "type": "string",
+      "title": "Regnskabssystem",
+      "enum": [
+        "none",
+        "dinero",
+        "economic",
+        "billy"
+      ],
+      "default": "none"
+    },
+    "accounting_api_key": {
+      "type": "string",
+      "title": "API-n\u00f8gle"
+    },
+    "accounting_org_id": {
+      "type": "string",
+      "title": "Aftalenummer"
+    },
+    "accounting_sync_invoices": {
+      "type": "boolean",
+      "title": "Synkroniser fakturaer",
+      "default": true
+    },
+    "accounting_sync_customers": {
+      "type": "boolean",
+      "title": "Synkroniser kunder",
+      "default": true
     }
   },
   "required": [

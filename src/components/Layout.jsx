@@ -22,6 +22,9 @@ import {
   ClipboardList,
   ShieldCheck,
   FileSpreadsheet,
+  PieChart,
+  Sparkles,
+  Plug,
 } from 'lucide-react';
 
 const navItems = [
@@ -45,6 +48,9 @@ const navItems = [
   { to: '/arbejdssedler', label: 'Arbejdssedler', icon: ClipboardList },
   { to: '/kvalitetssikring', label: 'Kvalitet', icon: ShieldCheck },
   { to: '/regnskab', label: 'Regnskab', icon: FileSpreadsheet },
+  { to: '/daekningsbidrag', label: 'Dækningsbidrag', icon: PieChart },
+  { to: '/regnskab-integration', label: 'Regnskab int.', icon: Plug },
+  { to: '/ai-tilbud', label: 'AI Tilbud', icon: Sparkles },
 ];
 
 export default function Layout() {
