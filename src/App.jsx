@@ -32,6 +32,10 @@ import Salgsoverblik from '@/pages/Salgsoverblik';
 import Planlaegning from '@/pages/Planlaegning';
 import Ledelsesoverblik from '@/pages/Ledelsesoverblik';
 import Serviceaftaler from '@/pages/Serviceaftaler';
+import Arbejdsedler from '@/pages/Arbejdsedler';
+import Kvalitetssikring from '@/pages/Kvalitetssikring';
+import Regnskab from '@/pages/Regnskab';
+import TilbudVisning from '@/pages/TilbudVisning';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -82,10 +86,14 @@ const AuthenticatedApp = () => {
           <Route path="/planlaegning" element={<Planlaegning />} />
           <Route path="/ledelsesoverblik" element={<Ledelsesoverblik />} />
           <Route path="/serviceaftaler" element={<Serviceaftaler />} />
+          <Route path="/arbejdssedler" element={<Arbejdsedler />} />
+          <Route path="/kvalitetssikring" element={<Kvalitetssikring />} />
+          <Route path="/regnskab" element={<Regnskab />} />
         </Route>
         <Route element={<PortalLayout />}>
           <Route path="/portal" element={<CustomerPortal />} />
           <Route path="/prisberegner" element={<Prisberegner />} />
+          <Route path="/portal/tilbud/:id" element={<TilbudVisning />} />
         </Route>
       </Route>
       <Route path="*" element={<PageNotFound />} />

@@ -19,6 +19,9 @@ import {
   CalendarDays,
   BarChart3,
   RefreshCw,
+  ClipboardList,
+  ShieldCheck,
+  FileSpreadsheet,
 } from 'lucide-react';
 
 const navItems = [
@@ -39,6 +42,9 @@ const navItems = [
   { to: '/dokumenter', label: 'Dokumenter', icon: Archive },
   { to: '/serviceaftaler', label: 'Serviceaftaler', icon: RefreshCw },
   { to: '/ledelsesoverblik', label: 'Ledelse', icon: BarChart3 },
+  { to: '/arbejdssedler', label: 'Arbejdssedler', icon: ClipboardList },
+  { to: '/kvalitetssikring', label: 'Kvalitet', icon: ShieldCheck },
+  { to: '/regnskab', label: 'Regnskab', icon: FileSpreadsheet },
 ];
 
 export default function Layout() {

@@ -20,7 +20,7 @@ import {
 } from '@/components/ui/dialog';
 import LineItemEditor from '@/components/LineItemEditor';
 import { formatDKK, calcSubtotal, calcVAT, calcTotal, formatDate } from '@/lib/format';
-import { Plus, Pencil, Trash2, FileText, ArrowRight } from 'lucide-react';
+import { Plus, Pencil, Trash2, FileText, ArrowRight, Sparkles, ExternalLink } from 'lucide-react';
 
 const STATUSES = ['Kladde', 'Sendt', 'Accepteret', 'Afvist', 'Udløbet'];
 
@@ -52,6 +52,9 @@ export default function Quotes() {
   const [editing, setEditing] = useState(null);
   const [form, setForm] = useState(null);
   const [saving, setSaving] = useState(false);
+  const [aiOpen, setAiOpen] = useState(false);
+  const [aiPrompt, setAiPrompt] = useState('');
+  const [aiLoading, setAiLoading] = useState(false);
 
   const load = async () => {
     setLoading(true);
@@ -153,6 +156,52 @@ export default function Quotes() {
     alert(`Tilbud konverteret til faktura ${invNumber}`);
   };
 
+  const generateWithAI = async () => {
+    if (!aiPrompt.trim()) return;
+    setAiLoading(true);
+    try {
+      const result = await base44.integrations.Core.InvokeLLM({
+        prompt: `Du er en dansk entreprenør. Lav en professionel tilbudsliste med linjeelementer baseret på denne opgavebeskrivelse: "${aiPrompt}". Brug realistiske danske priser for materialer og arbejde. Hver linje skal have: description (hvad der skal laves), quantity (antal), unit (enhed: stk, m², m³, time, m, fs, dag), unit_price (pris i DKK).`,
+        response_json_schema: {
+          type: "object",
+          properties: {
+            line_items: {
+              type: "array",
+              items: {
+                type: "object",
+                properties: {
+                  description: { type: "string" },
+                  quantity: { type: "number" },
+                  unit: { type: "string" },
+                  unit_price: { type: "number" }
+                }
+              }
+            }
+          }
+        }
+      });
+      const newItems = (result.line_items || []).map(item => ({
+        description: item.description || '',
+        quantity: item.quantity || 1,
+        unit: item.unit || 'stk',
+        unit_price: item.unit_price || 0,
+      }));
+      setForm({ ...form, line_items: [...(form.line_items || []), ...newItems] });
+      setAiOpen(false);
+      setAiPrompt('');
+    } catch (e) {
+      console.error(e);
+      alert('Kunne ikke generere tilbud. Prøv igen.');
+    } finally {
+      setAiLoading(false);
+    }
+  };
+
+  const sendLink = (q) => {
+    const url = `${window.location.origin}/portal/tilbud/${q.id}`;
+    navigator.clipboard.writeText(url).then(() => alert('Link kopieret:\n' + url));
+  };
+
   const set = (field) => (e) => setForm({ ...form, [field]: e.target.value });
 
   return (
@@ -201,6 +250,9 @@ export default function Quotes() {
                       <span className={`inline-flex px-2 py-0.5 rounded-full text-xs font-medium ${STATUS_BADGE[q.status] || 'bg-slate-100 text-slate-500'}`}>
                         {q.status}
                       </span>
+                      {q.viewed_at && (
+                        <span className="block text-xs text-blue-500 mt-1">Set {formatDate(q.viewed_at.slice(0, 10))}</span>
+                      )}
                     </td>
                     <td className="px-4 py-3">
                       <div className="flex justify-end gap-1">
@@ -215,6 +267,14 @@ export default function Quotes() {
                             <ArrowRight className="w-4 h-4 mr-1" /> Faktura
                           </Button>
                         )}
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => sendLink(q)}
+                          title="Kopiér kundelink"
+                        >
+                          <ExternalLink className="w-4 h-4 text-slate-500" />
+                        </Button>
                         <Button variant="ghost" size="icon" onClick={() => openEdit(q)}>
                           <Pencil className="w-4 h-4 text-slate-500" />
                         </Button>
@@ -285,7 +345,12 @@ export default function Quotes() {
               </div>
 
               <div className="space-y-2">
-                <Label className="text-base font-semibold">Linjer</Label>
+                <div className="flex items-center justify-between">
+                  <Label className="text-base font-semibold">Linjer</Label>
+                  <Button type="button" variant="outline" size="sm" onClick={() => setAiOpen(true)}>
+                    <Sparkles className="w-4 h-4 mr-1.5 text-amber-500" /> AI Hjælp
+                  </Button>
+                </div>
                 <LineItemEditor
                   items={form.line_items}
                   onChange={(items) => setForm({ ...form, line_items: items })}
@@ -321,6 +386,33 @@ export default function Quotes() {
           </DialogContent>
         </Dialog>
       )}
+
+      <Dialog open={aiOpen} onOpenChange={setAiOpen}>
+        <DialogContent className="max-w-lg">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Sparkles className="w-5 h-5 text-amber-500" /> AI Tilbudsassistent
+            </DialogTitle>
+          </DialogHeader>
+          <div className="space-y-3 py-2">
+            <p className="text-sm text-slate-500">
+              Beskriv opgaven, så genererer AI'en forslag til linjeelementer med danske priser. Du kan herefter tilpasse linjerne manuelt.
+            </p>
+            <Textarea
+              value={aiPrompt}
+              onChange={(e) => setAiPrompt(e.target.value)}
+              rows={5}
+              placeholder="F.eks. Badeværelse renovering 8 m². Nedbrydning af eksisterende vådrum, ny membrane, fliser på gulv og væg, installation af brusekabine, vask og toilet."
+            />
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setAiOpen(false)}>Annuller</Button>
+            <Button onClick={generateWithAI} disabled={aiLoading || !aiPrompt.trim()}>
+              <Sparkles className="w-4 h-4 mr-1.5" /> {aiLoading ? 'Genererer...' : 'Generer linjer'}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

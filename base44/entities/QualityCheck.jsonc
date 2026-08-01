@@ -1,23 +1,7 @@
 {
-  "name": "Quote",
+  "name": "QualityCheck",
   "type": "object",
   "properties": {
-    "quote_number": {
-      "type": "string",
-      "title": "Tilbudsnr."
-    },
-    "customer_id": {
-      "type": "string",
-      "title": "Kunde"
-    },
-    "customer_name": {
-      "type": "string",
-      "title": "Kundenavn"
-    },
-    "customer_email": {
-      "type": "string",
-      "title": "Kundeemail"
-    },
     "project_id": {
       "type": "string",
       "title": "Projekt"
@@ -26,31 +10,41 @@
       "type": "string",
       "title": "Projektnavn"
     },
+    "customer_email": {
+      "type": "string",
+      "title": "Kundeemail"
+    },
+    "title": {
+      "type": "string",
+      "title": "Titel"
+    },
+    "type": {
+      "type": "string",
+      "title": "Type",
+      "enum": [
+        "F\u00e6rdigmelding",
+        "AR-bevis",
+        "Sikkerhedsinspektion",
+        "Selvangivelse",
+        "Varmeinstallation",
+        "Andet"
+      ],
+      "default": "F\u00e6rdigmelding"
+    },
     "status": {
       "type": "string",
       "title": "Status",
       "enum": [
-        "Kladde",
-        "Sendt",
-        "Accepteret",
-        "Afvist",
-        "Udl\u00f8bet"
+        "Ikke startet",
+        "I gang",
+        "Godkendt",
+        "Afvigelse"
       ],
-      "default": "Kladde"
+      "default": "Ikke startet"
     },
-    "date": {
-      "type": "string",
-      "format": "date",
-      "title": "Dato"
-    },
-    "valid_until": {
-      "type": "string",
-      "format": "date",
-      "title": "Gyldig til"
-    },
-    "line_items": {
+    "items": {
       "type": "array",
-      "title": "Linjer",
+      "title": "Tjekpunkter",
       "items": {
         "type": "object",
         "properties": {
@@ -58,32 +52,33 @@
             "type": "string",
             "title": "Beskrivelse"
           },
-          "quantity": {
-            "type": "number",
-            "title": "Antal"
+          "checked": {
+            "type": "boolean",
+            "title": "Tjekket"
           },
-          "unit": {
+          "notes": {
             "type": "string",
-            "title": "Enhed"
-          },
-          "unit_price": {
-            "type": "number",
-            "title": "Stk. pris"
+            "title": "Noter"
           }
         }
       }
     },
+    "checked_by": {
+      "type": "string",
+      "title": "Tjekket af"
+    },
+    "check_date": {
+      "type": "string",
+      "format": "date",
+      "title": "Dato"
+    },
     "notes": {
       "type": "string",
-      "title": "Bem\u00e6rkninger"
-    },
-    "viewed_at": {
-      "type": "string",
-      "title": "Set af kunden"
+      "title": "Noter"
     }
   },
   "required": [
-    "quote_number"
+    "title"
   ],
   "rls": {
     "read": {
