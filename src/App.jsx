@@ -63,6 +63,9 @@ import Afvigelser from '@/pages/Afvigelser';
 import KundeportalIndstillinger from '@/pages/KundeportalIndstillinger';
 import Ressourceallokering from '@/pages/Ressourceallokering';
 import Noegletal from '@/pages/Noegletal';
+import Medarbejderoversigt from '@/pages/Medarbejderoversigt';
+import Kvalitetsstyring from '@/pages/Kvalitetsstyring';
+import Vaerkstedsoverblik from '@/pages/Vaerkstedsoverblik';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -143,6 +146,9 @@ const AuthenticatedApp = () => {
           <Route path="/kundeportal-indstillinger" element={<KundeportalIndstillinger />} />
           <Route path="/ressourceallokering" element={<Ressourceallokering />} />
           <Route path="/noegletal" element={<Noegletal />} />
+          <Route path="/medarbejder-administration" element={<Medarbejderoversigt />} />
+          <Route path="/kvalitetsstyring" element={<Kvalitetsstyring />} />
+          <Route path="/vaerksted" element={<Vaerkstedsoverblik />} />
         </Route>
         <Route element={<PortalLayout />}>
           <Route path="/portal" element={<CustomerPortal />} />

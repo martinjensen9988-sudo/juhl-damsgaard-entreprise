@@ -45,6 +45,7 @@ import {
   AlertOctagon,
   Settings2,
   Users2,
+  UserCog,
 } from 'lucide-react';
 
 const navItems = [
@@ -95,6 +96,9 @@ const navItems = [
   { to: '/kundeportal-indstillinger', label: 'Portal-styring', icon: Settings2 },
   { to: '/ressourceallokering', label: 'Ressource', icon: Users2 },
   { to: '/noegletal', label: 'Nøgletal', icon: PieChart },
+  { to: '/medarbejder-administration', label: 'Medarb.admin', icon: UserCog },
+  { to: '/kvalitetsstyring', label: 'Kvalitetsstyring', icon: ShieldCheck },
+  { to: '/vaerksted', label: 'Værksted', icon: Wrench },
 ];
 
 export default function Layout() {
