@@ -45,7 +45,8 @@
         "45 dage netto",
         "60 dage netto",
         "Kontant",
-        "Forudbetaling"
+        "Forudbetaling",
+        "Acconto"
       ],
       "default": "15 dage netto"
     },

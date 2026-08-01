@@ -33,7 +33,7 @@ const EMPTY = {
   notes: '',
 };
 
-const PAYMENT_TERMS = ['8 dage netto', '15 dage netto', '30 dage netto', '45 dage netto', '60 dage netto', 'Kontant', 'Forudbetaling'];
+const PAYMENT_TERMS = ['8 dage netto', '15 dage netto', '30 dage netto', '45 dage netto', '60 dage netto', 'Kontant', 'Forudbetaling', 'Acconto'];
 
 export default function Customers() {
   const [customers, setCustomers] = useState([]);
