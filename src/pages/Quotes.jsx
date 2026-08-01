@@ -19,8 +19,9 @@ import {
   DialogFooter,
 } from '@/components/ui/dialog';
 import LineItemEditor from '@/components/LineItemEditor';
+import { generateQuotePDF } from '@/lib/quotePdf';
 import { formatDKK, calcSubtotal, calcVAT, calcTotal, formatDate } from '@/lib/format';
-import { Plus, Pencil, Trash2, FileText, ArrowRight, Sparkles, ExternalLink } from 'lucide-react';
+import { Plus, Pencil, Trash2, FileText, ArrowRight, Sparkles, ExternalLink, Download } from 'lucide-react';
 
 const STATUSES = ['Kladde', 'Sendt', 'Accepteret', 'Afvist', 'Udløbet'];
 
@@ -55,18 +56,22 @@ export default function Quotes() {
   const [aiOpen, setAiOpen] = useState(false);
   const [aiPrompt, setAiPrompt] = useState('');
   const [aiLoading, setAiLoading] = useState(false);
+  const [company, setCompany] = useState({});
+  const [pdfLoading, setPdfLoading] = useState(null);
 
   const load = async () => {
     setLoading(true);
     try {
-      const [q, c, p] = await Promise.all([
+      const [q, c, p, cs] = await Promise.all([
         base44.entities.Quote.list('-created_date', 100),
         base44.entities.Customer.list('-created_date', 200),
         base44.entities.Project.list('-created_date', 200),
+        base44.entities.CompanySettings.list('-created_date', 10),
       ]);
       setQuotes(q);
       setCustomers(c);
       setProjects(p);
+      setCompany(cs[0] || {});
     } catch (e) {
       console.error(e);
     } finally {
@@ -202,6 +207,18 @@ export default function Quotes() {
     navigator.clipboard.writeText(url).then(() => alert('Link kopieret:\n' + url));
   };
 
+  const downloadPDF = async (q) => {
+    setPdfLoading(q.id);
+    try {
+      generateQuotePDF(q, company);
+    } catch (e) {
+      console.error(e);
+      alert('Kunne ikke generere PDF');
+    } finally {
+      setPdfLoading(null);
+    }
+  };
+
   const set = (field) => (e) => setForm({ ...form, [field]: e.target.value });
 
   return (
@@ -267,6 +284,19 @@ export default function Quotes() {
                             <ArrowRight className="w-4 h-4 mr-1" /> Faktura
                           </Button>
                         )}
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => downloadPDF(q)}
+                          disabled={pdfLoading === q.id}
+                          title="Download PDF"
+                        >
+                          {pdfLoading === q.id ? (
+                            <div className="w-4 h-4 border-2 border-slate-300 border-t-slate-700 rounded-full animate-spin" />
+                          ) : (
+                            <Download className="w-4 h-4 text-slate-700" />
+                          )}
+                        </Button>
                         <Button
                           variant="ghost"
                           size="icon"
