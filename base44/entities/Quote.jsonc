@@ -1,0 +1,80 @@
+{
+  "name": "Quote",
+  "type": "object",
+  "properties": {
+    "quote_number": {
+      "type": "string",
+      "title": "Tilbudsnr."
+    },
+    "customer_id": {
+      "type": "string",
+      "title": "Kunde"
+    },
+    "customer_name": {
+      "type": "string",
+      "title": "Kundenavn"
+    },
+    "project_id": {
+      "type": "string",
+      "title": "Projekt"
+    },
+    "project_name": {
+      "type": "string",
+      "title": "Projektnavn"
+    },
+    "status": {
+      "type": "string",
+      "title": "Status",
+      "enum": [
+        "Kladde",
+        "Sendt",
+        "Accepteret",
+        "Afvist",
+        "Udl\u00f8bet"
+      ],
+      "default": "Kladde"
+    },
+    "date": {
+      "type": "string",
+      "format": "date",
+      "title": "Dato"
+    },
+    "valid_until": {
+      "type": "string",
+      "format": "date",
+      "title": "Gyldig til"
+    },
+    "line_items": {
+      "type": "array",
+      "title": "Linjer",
+      "items": {
+        "type": "object",
+        "properties": {
+          "description": {
+            "type": "string",
+            "title": "Beskrivelse"
+          },
+          "quantity": {
+            "type": "number",
+            "title": "Antal"
+          },
+          "unit": {
+            "type": "string",
+            "title": "Enhed"
+          },
+          "unit_price": {
+            "type": "number",
+            "title": "Stk. pris"
+          }
+        }
+      }
+    },
+    "notes": {
+      "type": "string",
+      "title": "Bem\u00e6rkninger"
+    }
+  },
+  "required": [
+    "quote_number"
+  ]
+}

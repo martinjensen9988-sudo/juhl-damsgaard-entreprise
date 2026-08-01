@@ -1,0 +1,68 @@
+{
+  "name": "Project",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "title": "Projektnavn"
+    },
+    "customer_id": {
+      "type": "string",
+      "title": "Kunde"
+    },
+    "customer_name": {
+      "type": "string",
+      "title": "Kundenavn"
+    },
+    "description": {
+      "type": "string",
+      "title": "Beskrivelse"
+    },
+    "type": {
+      "type": "string",
+      "title": "Type",
+      "enum": [
+        " Gravearbejde",
+        "Kloak",
+        "Asfalt",
+        "Beton",
+        "Nedrivning",
+        "Anl\u00e6g",
+        "Andet"
+      ],
+      "default": "Anl\u00e6g"
+    },
+    "status": {
+      "type": "string",
+      "title": "Status",
+      "enum": [
+        "Planl\u00e6gning",
+        "I gang",
+        "Afsluttet",
+        "P\u00e5 hold"
+      ],
+      "default": "Planl\u00e6gning"
+    },
+    "start_date": {
+      "type": "string",
+      "format": "date",
+      "title": "Startdato"
+    },
+    "end_date": {
+      "type": "string",
+      "format": "date",
+      "title": "Slutdato"
+    },
+    "budget": {
+      "type": "number",
+      "title": "Budget (DKK)"
+    },
+    "address": {
+      "type": "string",
+      "title": "Adresse"
+    }
+  },
+  "required": [
+    "name"
+  ]
+}

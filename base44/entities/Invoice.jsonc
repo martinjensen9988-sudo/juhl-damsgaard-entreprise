@@ -1,0 +1,89 @@
+{
+  "name": "Invoice",
+  "type": "object",
+  "properties": {
+    "invoice_number": {
+      "type": "string",
+      "title": "Fakturanr."
+    },
+    "customer_id": {
+      "type": "string",
+      "title": "Kunde"
+    },
+    "customer_name": {
+      "type": "string",
+      "title": "Kundenavn"
+    },
+    "project_id": {
+      "type": "string",
+      "title": "Projekt"
+    },
+    "project_name": {
+      "type": "string",
+      "title": "Projektnavn"
+    },
+    "quote_id": {
+      "type": "string",
+      "title": "Tilbud"
+    },
+    "status": {
+      "type": "string",
+      "title": "Status",
+      "enum": [
+        "Kladde",
+        "Sendt",
+        "Betalt",
+        "Forfalden",
+        "Annulleret"
+      ],
+      "default": "Kladde"
+    },
+    "date": {
+      "type": "string",
+      "format": "date",
+      "title": "Fakturadato"
+    },
+    "due_date": {
+      "type": "string",
+      "format": "date",
+      "title": "Forfaldsdato"
+    },
+    "line_items": {
+      "type": "array",
+      "title": "Linjer",
+      "items": {
+        "type": "object",
+        "properties": {
+          "description": {
+            "type": "string",
+            "title": "Beskrivelse"
+          },
+          "quantity": {
+            "type": "number",
+            "title": "Antal"
+          },
+          "unit": {
+            "type": "string",
+            "title": "Enhed"
+          },
+          "unit_price": {
+            "type": "number",
+            "title": "Stk. pris"
+          }
+        }
+      }
+    },
+    "paid_amount": {
+      "type": "number",
+      "title": "Betalt bel\u00f8b",
+      "default": 0
+    },
+    "notes": {
+      "type": "string",
+      "title": "Bem\u00e6rkninger"
+    }
+  },
+  "required": [
+    "invoice_number"
+  ]
+}

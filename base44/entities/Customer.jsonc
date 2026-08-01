@@ -1,0 +1,46 @@
+{
+  "name": "Customer",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "title": "Kontaktperson"
+    },
+    "company": {
+      "type": "string",
+      "title": "Virksomhed"
+    },
+    "email": {
+      "type": "string",
+      "format": "email",
+      "title": "Email"
+    },
+    "phone": {
+      "type": "string",
+      "title": "Telefon"
+    },
+    "address": {
+      "type": "string",
+      "title": "Adresse"
+    },
+    "postal_code": {
+      "type": "string",
+      "title": "Postnummer"
+    },
+    "city": {
+      "type": "string",
+      "title": "By"
+    },
+    "cvr": {
+      "type": "string",
+      "title": "CVR-nr."
+    },
+    "notes": {
+      "type": "string",
+      "title": "Noter"
+    }
+  },
+  "required": [
+    "name"
+  ]
+}
