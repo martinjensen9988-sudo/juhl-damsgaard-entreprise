@@ -67,6 +67,10 @@ import Medarbejderoversigt from '@/pages/Medarbejderoversigt';
 import Kvalitetsstyring from '@/pages/Kvalitetsstyring';
 import Vaerkstedsoverblik from '@/pages/Vaerkstedsoverblik';
 import Storskaerm from '@/pages/Storskaerm';
+import InfoTaavle from '@/pages/InfoTaavle';
+import Bilpark from '@/pages/Bilpark';
+import Underentreprenoerer from '@/pages/Underentreprenoerer';
+import Vidensbase from '@/pages/Vidensbase';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -150,6 +154,9 @@ const AuthenticatedApp = () => {
           <Route path="/medarbejder-administration" element={<Medarbejderoversigt />} />
           <Route path="/kvalitetsstyring" element={<Kvalitetsstyring />} />
           <Route path="/vaerksted" element={<Vaerkstedsoverblik />} />
+          <Route path="/bilpark" element={<Bilpark />} />
+          <Route path="/underentreprenoerer" element={<Underentreprenoerer />} />
+          <Route path="/vidensbase" element={<Vidensbase />} />
         </Route>
         <Route element={<PortalLayout />}>
           <Route path="/portal" element={<CustomerPortal />} />
@@ -157,6 +164,7 @@ const AuthenticatedApp = () => {
           <Route path="/portal/tilbud/:id" element={<TilbudVisning />} />
         </Route>
         <Route path="/storskaerm" element={<Storskaerm />} />
+        <Route path="/infotaavle" element={<InfoTaavle />} />
       </Route>
       <Route path="*" element={<PageNotFound />} />
     </Routes>

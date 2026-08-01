@@ -47,6 +47,10 @@ import {
   Users2,
   UserCog,
   Monitor,
+  Tv,
+  Car,
+  Briefcase,
+  HelpCircle,
 } from 'lucide-react';
 
 const navItems = [
@@ -101,6 +105,10 @@ const navItems = [
   { to: '/kvalitetsstyring', label: 'Kvalitetsstyring', icon: ShieldCheck },
   { to: '/vaerksted', label: 'Værksted', icon: Wrench },
   { to: '/storskaerm', label: 'Storskærm', icon: Monitor },
+  { to: '/infotaavle', label: 'Info-skærm', icon: Tv },
+  { to: '/bilpark', label: 'Bilpark', icon: Car },
+  { to: '/underentreprenoerer', label: 'Underentreprenører', icon: Briefcase },
+  { to: '/vidensbase', label: 'Vidensbase', icon: HelpCircle },
 ];
 
 export default function Layout() {

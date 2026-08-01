@@ -1,0 +1,122 @@
+{
+  "name": "Vehicle",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "title": "Navn"
+    },
+    "plate_number": {
+      "type": "string",
+      "title": "Reg.nr."
+    },
+    "type": {
+      "type": "string",
+      "title": "Type",
+      "enum": [
+        "Lastbil",
+        "Varebil",
+        "Personbil",
+        "Specialk\u00f8ret\u00f8j",
+        "Anh\u00e6nger",
+        "Andet"
+      ],
+      "default": "Lastbil"
+    },
+    "status": {
+      "type": "string",
+      "title": "Status",
+      "enum": [
+        "Ledig",
+        "I brug",
+        "Reparation",
+        "Ude af drift"
+      ],
+      "default": "Ledig"
+    },
+    "location": {
+      "type": "string",
+      "title": "Lokation"
+    },
+    "assigned_project_name": {
+      "type": "string",
+      "title": "Tildelt projekt"
+    },
+    "mileage": {
+      "type": "number",
+      "title": "Km-stand"
+    },
+    "fuel_type": {
+      "type": "string",
+      "title": "Br\u00e6ndstof",
+      "enum": [
+        "Diesel",
+        "Benzin",
+        "El",
+        "Hybrid",
+        "Andet"
+      ],
+      "default": "Diesel"
+    },
+    "insurance_provider": {
+      "type": "string",
+      "title": "Forsikringsselskab"
+    },
+    "insurance_policy": {
+      "type": "string",
+      "title": "Policenummer"
+    },
+    "insurance_expiry": {
+      "type": "string",
+      "format": "date",
+      "title": "Forsikring udl\u00f8ber"
+    },
+    "last_service_date": {
+      "type": "string",
+      "format": "date",
+      "title": "Sidste service"
+    },
+    "last_service_mileage": {
+      "type": "number",
+      "title": "Km ved sidste service"
+    },
+    "next_service_date": {
+      "type": "string",
+      "format": "date",
+      "title": "N\u00e6ste service"
+    },
+    "next_service_mileage": {
+      "type": "number",
+      "title": "Service ved km"
+    },
+    "notes": {
+      "type": "string",
+      "title": "Noter"
+    }
+  },
+  "required": [
+    "name"
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

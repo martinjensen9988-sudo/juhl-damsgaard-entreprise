@@ -64,6 +64,14 @@
     "address": {
       "type": "string",
       "title": "Adresse"
+    },
+    "subcontractor_id": {
+      "type": "string",
+      "title": "Underentrepren\u00f8r"
+    },
+    "subcontractor_name": {
+      "type": "string",
+      "title": "Underentrepren\u00f8r navn"
     }
   },
   "required": [

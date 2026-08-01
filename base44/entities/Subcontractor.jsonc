@@ -1,0 +1,96 @@
+{
+  "name": "Subcontractor",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "title": "Virksomhed"
+    },
+    "contact_person": {
+      "type": "string",
+      "title": "Kontaktperson"
+    },
+    "email": {
+      "type": "string",
+      "format": "email",
+      "title": "Email"
+    },
+    "phone": {
+      "type": "string",
+      "title": "Telefon"
+    },
+    "address": {
+      "type": "string",
+      "title": "Adresse"
+    },
+    "postal_code": {
+      "type": "string",
+      "title": "Postnummer"
+    },
+    "city": {
+      "type": "string",
+      "title": "By"
+    },
+    "cvr": {
+      "type": "string",
+      "title": "CVR-nr."
+    },
+    "trade": {
+      "type": "string",
+      "title": "Fag",
+      "enum": [
+        "Gravearbejde",
+        "Kloak",
+        "Asfalt",
+        "Beton",
+        "Nedrivning",
+        "Anl\u00e6g",
+        "Transport",
+        "Andet"
+      ],
+      "default": "Gravearbejde"
+    },
+    "status": {
+      "type": "string",
+      "title": "Status",
+      "enum": [
+        "Aktiv",
+        "Inaktiv"
+      ],
+      "default": "Aktiv"
+    },
+    "rating": {
+      "type": "number",
+      "title": "Vurdering (1-5)"
+    },
+    "notes": {
+      "type": "string",
+      "title": "Noter"
+    }
+  },
+  "required": [
+    "name"
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

@@ -1,0 +1,81 @@
+{
+  "name": "KnowledgeArticle",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "title": "Titel"
+    },
+    "category": {
+      "type": "string",
+      "title": "Kategori",
+      "enum": [
+        "FAQ",
+        "Vejledning",
+        "Arbejdsprocedure",
+        "Sikkerhed",
+        "Teknik",
+        "Andet"
+      ],
+      "default": "FAQ"
+    },
+    "content": {
+      "type": "string",
+      "title": "Indhold"
+    },
+    "tags": {
+      "type": "string",
+      "title": "Tags"
+    },
+    "author": {
+      "type": "string",
+      "title": "Forfatter"
+    },
+    "status": {
+      "type": "string",
+      "title": "Status",
+      "enum": [
+        "Udkast",
+        "Offentliggjort",
+        "Arkiveret"
+      ],
+      "default": "Offentliggjort"
+    },
+    "views": {
+      "type": "number",
+      "title": "Visninger",
+      "default": 0
+    },
+    "helpful_count": {
+      "type": "number",
+      "title": "Hjalp",
+      "default": 0
+    }
+  },
+  "required": [
+    "title",
+    "category"
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}
