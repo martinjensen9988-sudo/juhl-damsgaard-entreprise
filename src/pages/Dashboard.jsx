@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { base44 } from '@/api/base44Client';
 import { formatDKK, calcSubtotal, calcVAT, calcTotal, formatDate } from '@/lib/format';
 import { HardHat, FileText, Receipt, TrendingUp, ArrowRight, Clock, CheckCircle2, AlertCircle } from 'lucide-react';
+import ProjectTimeline from '@/components/ProjectTimeline';
 
 const STATUS_COLORS = {
   'I gang': 'bg-blue-100 text-blue-700',
@@ -107,6 +108,8 @@ export default function Dashboard() {
           </Link>
         </div>
       )}
+
+      <ProjectTimeline projects={projects} />
 
       <div className="grid lg:grid-cols-3 gap-6">
         {/* Recent projects */}
