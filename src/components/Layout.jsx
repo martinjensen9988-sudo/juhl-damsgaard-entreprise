@@ -144,7 +144,11 @@ export default function Layout() {
             </NavLink>
           ))}
         </nav>
-        <div className="px-3 pb-2">
+        <div className="px-3 pb-2 space-y-1">
+          <a href="/forside" target="_blank" className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-amber-400 hover:bg-slate-800/60 transition-all">
+            <ExternalLink className="w-[18px] h-[18px]" />
+            Forside
+          </a>
           <a href="/portal" className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-amber-400 hover:bg-slate-800/60 transition-all">
             <ExternalLink className="w-[18px] h-[18px]" />
             Kundeportal

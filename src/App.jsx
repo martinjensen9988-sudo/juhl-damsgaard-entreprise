@@ -71,6 +71,7 @@ import InfoTaavle from '@/pages/InfoTaavle';
 import Bilpark from '@/pages/Bilpark';
 import Underentreprenoerer from '@/pages/Underentreprenoerer';
 import Vidensbase from '@/pages/Vidensbase';
+import Forside from '@/pages/Forside';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -98,6 +99,7 @@ const AuthenticatedApp = () => {
   // Render the main app
   return (
     <Routes>
+      <Route path="/forside" element={<Forside />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
