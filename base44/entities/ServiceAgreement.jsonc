@@ -1,0 +1,112 @@
+{
+  "name": "ServiceAgreement",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "title": "Titel"
+    },
+    "customer_id": {
+      "type": "string",
+      "title": "Kunde"
+    },
+    "customer_name": {
+      "type": "string",
+      "title": "Kundenavn"
+    },
+    "customer_email": {
+      "type": "string",
+      "title": "Kundeemail"
+    },
+    "project_id": {
+      "type": "string",
+      "title": "Projekt"
+    },
+    "project_name": {
+      "type": "string",
+      "title": "Projektnavn"
+    },
+    "type": {
+      "type": "string",
+      "title": "Type",
+      "enum": [
+        "Drift",
+        "Vedligeholdelse",
+        "Serviceeftersyn",
+        "Garanti"
+      ],
+      "default": "Vedligeholdelse"
+    },
+    "status": {
+      "type": "string",
+      "title": "Status",
+      "enum": [
+        "Aktiv",
+        "Pauset",
+        "Udl\u00f8bet",
+        "Opsagt"
+      ],
+      "default": "Aktiv"
+    },
+    "start_date": {
+      "type": "string",
+      "format": "date",
+      "title": "Startdato"
+    },
+    "end_date": {
+      "type": "string",
+      "format": "date",
+      "title": "Slutdato"
+    },
+    "interval_months": {
+      "type": "number",
+      "title": "Interval (m\u00e5neder)",
+      "default": 12
+    },
+    "next_service_date": {
+      "type": "string",
+      "format": "date",
+      "title": "N\u00e6ste service"
+    },
+    "annual_value": {
+      "type": "number",
+      "title": "\u00c5rlig v\u00e6rdi (DKK)"
+    },
+    "notes": {
+      "type": "string",
+      "title": "Noter"
+    }
+  },
+  "required": [
+    "title"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "data.customer_email": "{{user.email}}"
+        }
+      ]
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

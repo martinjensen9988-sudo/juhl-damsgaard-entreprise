@@ -1,0 +1,104 @@
+{
+  "name": "Lead",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "title": "Navn"
+    },
+    "customer_name": {
+      "type": "string",
+      "title": "Kunde"
+    },
+    "customer_email": {
+      "type": "string",
+      "title": "Email"
+    },
+    "customer_phone": {
+      "type": "string",
+      "title": "Telefon"
+    },
+    "source": {
+      "type": "string",
+      "title": "Kilde",
+      "enum": [
+        "Hjemmeside",
+        "Telefon",
+        "Henvisning",
+        "Facebook",
+        "Google",
+        "Andet"
+      ],
+      "default": "Andet"
+    },
+    "description": {
+      "type": "string",
+      "title": "Beskrivelse"
+    },
+    "estimated_value": {
+      "type": "number",
+      "title": "Estimeret v\u00e6rdi (DKK)"
+    },
+    "stage": {
+      "type": "string",
+      "title": "Fase",
+      "enum": [
+        "Nyt lead",
+        "Kontaktet",
+        "Tilbud sendt",
+        "Forhandling",
+        "Vundet",
+        "Tabt"
+      ],
+      "default": "Nyt lead"
+    },
+    "project_type": {
+      "type": "string",
+      "title": "Type",
+      "enum": [
+        "Gravearbejde",
+        "Kloak",
+        "Asfalt",
+        "Beton",
+        "Nedrivning",
+        "Anl\u00e6g",
+        "Andet"
+      ],
+      "default": "Anl\u00e6g"
+    },
+    "assigned_to": {
+      "type": "string",
+      "title": "Ansvarlig"
+    },
+    "due_date": {
+      "type": "string",
+      "format": "date",
+      "title": "Deadline"
+    }
+  },
+  "required": [
+    "name"
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

@@ -28,6 +28,10 @@ import ProjektGalleri from '@/pages/ProjektGalleri';
 import Prisberegner from '@/pages/Prisberegner';
 import Medarbejdere from '@/pages/Medarbejdere';
 import Dokumenter from '@/pages/Dokumenter';
+import Salgsoverblik from '@/pages/Salgsoverblik';
+import Planlaegning from '@/pages/Planlaegning';
+import Ledelsesoverblik from '@/pages/Ledelsesoverblik';
+import Serviceaftaler from '@/pages/Serviceaftaler';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -74,6 +78,10 @@ const AuthenticatedApp = () => {
           <Route path="/projekt-galleri" element={<ProjektGalleri />} />
           <Route path="/medarbejdere" element={<Medarbejdere />} />
           <Route path="/dokumenter" element={<Dokumenter />} />
+          <Route path="/salgsoverblik" element={<Salgsoverblik />} />
+          <Route path="/planlaegning" element={<Planlaegning />} />
+          <Route path="/ledelsesoverblik" element={<Ledelsesoverblik />} />
+          <Route path="/serviceaftaler" element={<Serviceaftaler />} />
         </Route>
         <Route element={<PortalLayout />}>
           <Route path="/portal" element={<CustomerPortal />} />

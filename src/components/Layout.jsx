@@ -15,14 +15,20 @@ import {
   Images,
   Contact,
   Archive,
+  Target,
+  CalendarDays,
+  BarChart3,
+  RefreshCw,
 } from 'lucide-react';
 
 const navItems = [
   { to: '/', label: 'Dashboard', icon: LayoutDashboard, end: true },
+  { to: '/salgsoverblik', label: 'Salg', icon: Target },
   { to: '/kunder', label: 'Kunder', icon: Users },
   { to: '/projekter', label: 'Projekter', icon: HardHat },
   { to: '/tilbud', label: 'Tilbud', icon: FileText },
   { to: '/faktura', label: 'Faktura', icon: Receipt },
+  { to: '/planlaegning', label: 'Planlægning', icon: CalendarDays },
   { to: '/materialeliste', label: 'Materialer', icon: Package },
   { to: '/tidsregistrering', label: 'Tid', icon: Clock },
   { to: '/leverandoerer', label: 'Leverandører', icon: Truck },
@@ -31,6 +37,8 @@ const navItems = [
   { to: '/projekt-galleri', label: 'Galleri', icon: Images },
   { to: '/medarbejdere', label: 'Medarbejdere', icon: Contact },
   { to: '/dokumenter', label: 'Dokumenter', icon: Archive },
+  { to: '/serviceaftaler', label: 'Serviceaftaler', icon: RefreshCw },
+  { to: '/ledelsesoverblik', label: 'Ledelse', icon: BarChart3 },
 ];
 
 export default function Layout() {
