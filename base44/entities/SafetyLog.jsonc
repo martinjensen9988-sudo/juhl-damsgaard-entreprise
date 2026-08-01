@@ -1,0 +1,103 @@
+{
+  "name": "SafetyLog",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "title": "Titel"
+    },
+    "type": {
+      "type": "string",
+      "title": "Type",
+      "enum": [
+        "Ulykke",
+        "N\u00e6r-ulykke",
+        "Sikkerhedsgennemgang",
+        "Risikovurdering",
+        "Afvigelse"
+      ],
+      "default": "Sikkerhedsgennemgang"
+    },
+    "project_id": {
+      "type": "string",
+      "title": "Projekt"
+    },
+    "project_name": {
+      "type": "string",
+      "title": "Projektnavn"
+    },
+    "location": {
+      "type": "string",
+      "title": "Lokation"
+    },
+    "date": {
+      "type": "string",
+      "format": "date",
+      "title": "Dato"
+    },
+    "severity": {
+      "type": "string",
+      "title": "Alvorlighed",
+      "enum": [
+        "Lav",
+        "Mellem",
+        "H\u00f8j",
+        "Kritisk"
+      ],
+      "default": "Lav"
+    },
+    "status": {
+      "type": "string",
+      "title": "Status",
+      "enum": [
+        "\u00c5ben",
+        "Under behandling",
+        "Lukket"
+      ],
+      "default": "\u00c5ben"
+    },
+    "reported_by": {
+      "type": "string",
+      "title": "Rapporteret af"
+    },
+    "description": {
+      "type": "string",
+      "title": "Beskrivelse"
+    },
+    "action_taken": {
+      "type": "string",
+      "title": "Tiltag"
+    },
+    "follow_up": {
+      "type": "string",
+      "title": "Opf\u00f8lgning"
+    }
+  },
+  "required": [
+    "title",
+    "type",
+    "date"
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

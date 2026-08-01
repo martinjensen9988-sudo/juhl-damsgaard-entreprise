@@ -36,6 +36,10 @@ import {
   BookOpen,
   ListChecks,
   UserSearch,
+  BarChart2,
+  CalendarClock,
+  CalendarPlus,
+  ShieldAlert,
 } from 'lucide-react';
 
 const navItems = [
@@ -75,6 +79,10 @@ const navItems = [
   { to: '/servicekatalog', label: 'Servicekatalog', icon: BookOpen },
   { to: '/opgaveliste', label: 'Opgaveliste', icon: ListChecks },
   { to: '/kundeoversigt', label: 'Kundeoversigt', icon: UserSearch },
+  { to: '/kundestatistik', label: 'Kundestatistik', icon: BarChart2 },
+  { to: '/udloebs-oversigt', label: 'Udløbsdatoer', icon: CalendarClock },
+  { to: '/materiel-booking', label: 'Værktøjsbooking', icon: CalendarPlus },
+  { to: '/sikkerhedslog', label: 'Sikkerhedslog', icon: ShieldAlert },
 ];
 
 export default function Layout() {

@@ -52,6 +52,10 @@ import Dokumentarkiv from '@/pages/Dokumentarkiv';
 import Servicekatalog from '@/pages/Servicekatalog';
 import Opgaveliste from '@/pages/Opgaveliste';
 import Kundeoversigt from '@/pages/Kundeoversigt';
+import Kundestatistik from '@/pages/Kundestatistik';
+import UdloebsOversigt from '@/pages/UdloebsOversigt';
+import MaterielBooking from '@/pages/MaterielBooking';
+import Sikkerhedslog from '@/pages/Sikkerhedslog';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -121,6 +125,10 @@ const AuthenticatedApp = () => {
           <Route path="/servicekatalog" element={<Servicekatalog />} />
           <Route path="/opgaveliste" element={<Opgaveliste />} />
           <Route path="/kundeoversigt" element={<Kundeoversigt />} />
+          <Route path="/kundestatistik" element={<Kundestatistik />} />
+          <Route path="/udloebs-oversigt" element={<UdloebsOversigt />} />
+          <Route path="/materiel-booking" element={<MaterielBooking />} />
+          <Route path="/sikkerhedslog" element={<Sikkerhedslog />} />
         </Route>
         <Route element={<PortalLayout />}>
           <Route path="/portal" element={<CustomerPortal />} />

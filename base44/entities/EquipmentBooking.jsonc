@@ -1,0 +1,78 @@
+{
+  "name": "EquipmentBooking",
+  "type": "object",
+  "properties": {
+    "equipment_id": {
+      "type": "string",
+      "title": "Materiel"
+    },
+    "equipment_name": {
+      "type": "string",
+      "title": "Materielnavn"
+    },
+    "project_id": {
+      "type": "string",
+      "title": "Projekt"
+    },
+    "project_name": {
+      "type": "string",
+      "title": "Projektnavn"
+    },
+    "employee_name": {
+      "type": "string",
+      "title": "Booket af"
+    },
+    "start_date": {
+      "type": "string",
+      "format": "date",
+      "title": "Fra dato"
+    },
+    "end_date": {
+      "type": "string",
+      "format": "date",
+      "title": "Til dato"
+    },
+    "status": {
+      "type": "string",
+      "title": "Status",
+      "enum": [
+        "Reserveret",
+        "Udleveret",
+        "Returneret",
+        "Annulleret"
+      ],
+      "default": "Reserveret"
+    },
+    "notes": {
+      "type": "string",
+      "title": "Noter"
+    }
+  },
+  "required": [
+    "equipment_name",
+    "start_date",
+    "end_date"
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}
