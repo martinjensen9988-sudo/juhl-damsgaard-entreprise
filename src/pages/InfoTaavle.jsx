@@ -15,6 +15,17 @@ const statusColor = {
 export default function InfoTaavle() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [zoom, setZoom] = useState(1);
+
+  const calcZoom = useCallback(() => {
+    setZoom(Math.max(1, window.innerWidth / 1600));
+  }, []);
+
+  useEffect(() => {
+    calcZoom();
+    window.addEventListener('resize', calcZoom);
+    return () => window.removeEventListener('resize', calcZoom);
+  }, [calcZoom]);
 
   const loadData = useCallback(async () => {
     try {
@@ -43,7 +54,7 @@ export default function InfoTaavle() {
   if (loading || !data) {
     return (
       <div className="fixed inset-0 bg-slate-950 flex items-center justify-center">
-        <div className="w-10 h-10 border-4 border-slate-800 border-t-amber-400 rounded-full animate-spin" />
+        <div className="w-12 h-12 border-4 border-slate-800 border-t-amber-400 rounded-full animate-spin" />
       </div>
     );
   }
@@ -68,20 +79,20 @@ export default function InfoTaavle() {
   ];
 
   return (
-    <div className="fixed inset-0 bg-slate-950 flex flex-col overflow-hidden">
+    <div className="fixed inset-0 bg-slate-950 flex flex-col overflow-hidden" style={{ zoom }}>
       <Clock />
-      <div className="flex-1 p-6 grid grid-cols-12 gap-6 min-h-0">
+      <div className="flex-1 p-8 grid grid-cols-12 gap-8 min-h-0">
         <Panel title="Dagens nøgletal" icon={Target} accent="amber" className="col-span-4">
-          <div className="space-y-4">
+          <div className="space-y-6">
             {kpis.map((k) => (
-              <div key={k.label} className="bg-slate-800/50 rounded-2xl p-6 flex items-center gap-5">
-                <div className="w-16 h-16 rounded-2xl bg-slate-800 flex items-center justify-center flex-shrink-0">
-                  <k.icon className={`w-8 h-8 ${k.color}`} />
+              <div key={k.label} className="bg-slate-800/50 rounded-3xl p-8 flex items-center gap-6">
+                <div className="w-20 h-20 rounded-2xl bg-slate-800 flex items-center justify-center flex-shrink-0">
+                  <k.icon className={`w-10 h-10 ${k.color}`} />
                 </div>
                 <div className="min-w-0">
-                  <div className="text-4xl font-bold text-white tabular-nums leading-none">{k.value}</div>
-                  <div className="text-sm text-slate-400 mt-2">{k.label}</div>
-                  {k.sub && <div className="text-xs text-slate-500 mt-1 tabular-nums">{k.sub}</div>}
+                  <div className="text-6xl font-bold text-white tabular-nums leading-none">{k.value}</div>
+                  <div className="text-2xl text-slate-400 mt-3">{k.label}</div>
+                  {k.sub && <div className="text-lg text-slate-500 mt-1.5 tabular-nums">{k.sub}</div>}
                 </div>
               </div>
             ))}
@@ -89,18 +100,18 @@ export default function InfoTaavle() {
         </Panel>
 
         <Panel title="Opgaveoversigt" icon={ListChecks} accent="blue" className="col-span-4">
-          <div className="mb-5">
-            <div className="text-xs text-slate-500 uppercase tracking-wide mb-2">Dagens tildelinger ({todaysAssignments.length})</div>
+          <div className="mb-8">
+            <div className="text-lg text-slate-500 uppercase tracking-wide mb-3">Dagens tildelinger ({todaysAssignments.length})</div>
             {todaysAssignments.length === 0 ? (
-              <p className="text-sm text-slate-500">Ingen tildelinger i dag</p>
+              <p className="text-xl text-slate-500">Ingen tildelinger i dag</p>
             ) : (
-              <div className="space-y-2">
+              <div className="space-y-3">
                 {todaysAssignments.map((a) => (
-                  <div key={a.id} className="flex items-center gap-3 bg-slate-800/50 rounded-lg px-3 py-3">
-                    <div className="w-2 h-2 rounded-full bg-amber-400 flex-shrink-0" />
+                  <div key={a.id} className="flex items-center gap-4 bg-slate-800/50 rounded-xl px-5 py-4">
+                    <div className="w-3 h-3 rounded-full bg-amber-400 flex-shrink-0" />
                     <div className="flex-1 min-w-0">
-                      <div className="text-sm font-medium text-slate-200 truncate">{a.employee_name}</div>
-                      <div className="text-xs text-slate-500 truncate">→ {a.project_name || '—'}</div>
+                      <div className="text-xl font-medium text-slate-200 truncate">{a.employee_name}</div>
+                      <div className="text-lg text-slate-500 truncate">→ {a.project_name || '—'}</div>
                     </div>
                   </div>
                 ))}
@@ -108,21 +119,21 @@ export default function InfoTaavle() {
             )}
           </div>
           <div>
-            <div className="text-xs text-slate-500 uppercase tracking-wide mb-2">Deadline i dag ({todaysTasks.length})</div>
+            <div className="text-lg text-slate-500 uppercase tracking-wide mb-3">Deadline i dag ({todaysTasks.length})</div>
             {todaysTasks.length === 0 ? (
-              <p className="text-sm text-slate-500">Ingen opgaver med deadline i dag</p>
+              <p className="text-xl text-slate-500">Ingen opgaver med deadline i dag</p>
             ) : (
-              <div className="space-y-2">
+              <div className="space-y-3">
                 {todaysTasks.map((t) => (
-                  <div key={t.id} className="flex items-center gap-3 bg-slate-800/50 rounded-lg px-3 py-3">
+                  <div key={t.id} className="flex items-center gap-4 bg-slate-800/50 rounded-xl px-5 py-4">
                     {t.status === 'Gennemført' ? (
-                      <CheckCircle2 className="w-5 h-5 text-emerald-400 flex-shrink-0" />
+                      <CheckCircle2 className="w-7 h-7 text-emerald-400 flex-shrink-0" />
                     ) : (
-                      <Circle className={`w-5 h-5 flex-shrink-0 ${t.priority === 'Høj' ? 'text-red-400' : 'text-slate-400'}`} />
+                      <Circle className={`w-7 h-7 flex-shrink-0 ${t.priority === 'Høj' ? 'text-red-400' : 'text-slate-400'}`} />
                     )}
                     <div className="flex-1 min-w-0">
-                      <div className={`text-sm truncate ${t.status === 'Gennemført' ? 'text-slate-500 line-through' : 'text-slate-200'}`}>{t.title}</div>
-                      {t.assigned_to && <div className="text-xs text-slate-500 truncate">{t.assigned_to}</div>}
+                      <div className={`text-xl truncate ${t.status === 'Gennemført' ? 'text-slate-500 line-through' : 'text-slate-200'}`}>{t.title}</div>
+                      {t.assigned_to && <div className="text-lg text-slate-500 truncate">{t.assigned_to}</div>}
                     </div>
                   </div>
                 ))}
@@ -133,25 +144,25 @@ export default function InfoTaavle() {
 
         <Panel title="Live lokation — biler" icon={MapPin} accent="violet" className="col-span-4">
           {data.vehicles.length === 0 ? (
-            <p className="text-sm text-slate-500">Ingen køretøjer registreret</p>
+            <p className="text-xl text-slate-500">Ingen køretøjer registreret</p>
           ) : (
-            <div className="space-y-3">
+            <div className="space-y-4">
               {data.vehicles.map((v) => (
-                <div key={v.id} className="bg-slate-800/50 rounded-xl p-4">
-                  <div className="flex items-center justify-between mb-2">
-                    <div className="flex items-center gap-2">
-                      <Truck className="w-5 h-5 text-violet-400" />
-                      <div className="text-base font-medium text-slate-100">{v.name}</div>
+                <div key={v.id} className="bg-slate-800/50 rounded-2xl p-6">
+                  <div className="flex items-center justify-between mb-3">
+                    <div className="flex items-center gap-3">
+                      <Truck className="w-7 h-7 text-violet-400" />
+                      <div className="text-2xl font-medium text-slate-100">{v.name}</div>
                     </div>
-                    <span className={`text-xs font-medium px-2.5 py-1 rounded-full ${statusColor[v.status] || statusColor['Ledig']}`}>{v.status}</span>
+                    <span className={`text-base font-medium px-3 py-1.5 rounded-full ${statusColor[v.status] || statusColor['Ledig']}`}>{v.status}</span>
                   </div>
-                  <div className="flex items-center gap-2 text-sm">
-                    <MapPin className="w-4 h-4 text-slate-500 flex-shrink-0" />
+                  <div className="flex items-center gap-2.5 text-xl">
+                    <MapPin className="w-5 h-5 text-slate-500 flex-shrink-0" />
                     <span className="text-slate-300 truncate">
                       {v.assigned_project_name || v.location || 'Ikke tildelt'}
                     </span>
                   </div>
-                  {v.plate_number && <div className="text-xs text-slate-500 mt-1.5">Reg: {v.plate_number}</div>}
+                  {v.plate_number && <div className="text-lg text-slate-500 mt-2">Reg: {v.plate_number}</div>}
                 </div>
               ))}
             </div>
