@@ -82,7 +82,7 @@ export default function Layout() {
             <div className="text-xs text-slate-500 mt-1">Entreprenørledelse</div>
           </div>
         </div>
-        <nav className="flex-1 px-3 py-4 space-y-1">
+        <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
           {navItems.map((item) => (
             <NavLink
               key={item.to}
