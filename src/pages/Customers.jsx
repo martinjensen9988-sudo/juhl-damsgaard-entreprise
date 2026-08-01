@@ -11,7 +11,14 @@ import {
   DialogTitle,
   DialogFooter,
 } from '@/components/ui/dialog';
-import { Plus, Pencil, Trash2, Users, Mail, Phone, MapPin } from 'lucide-react';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Plus, Pencil, Trash2, Users, Mail, Phone, MapPin, Clock } from 'lucide-react';
 
 const EMPTY = {
   name: '',
@@ -22,8 +29,11 @@ const EMPTY = {
   postal_code: '',
   city: '',
   cvr: '',
+  payment_terms: '15 dage netto',
   notes: '',
 };
+
+const PAYMENT_TERMS = ['8 dage netto', '15 dage netto', '30 dage netto', '45 dage netto', '60 dage netto', 'Kontant', 'Forudbetaling'];
 
 export default function Customers() {
   const [customers, setCustomers] = useState([]);
@@ -144,7 +154,13 @@ export default function Customers() {
                     </span>
                   </div>
                 )}
-                {c.cvr && <div className="text-xs text-slate-400 pt-1">CVR: {c.cvr}</div>}
+                {c.cvr && <div className="text-xs text-slate-400">CVR: {c.cvr}</div>}
+                {c.payment_terms && (
+                  <div className="flex items-center gap-2 pt-1">
+                    <Clock className="w-3.5 h-3.5 text-slate-400" />
+                    <span className="text-xs text-slate-500">{c.payment_terms}</span>
+                  </div>
+                )}
               </div>
             </div>
           ))}
@@ -185,9 +201,18 @@ export default function Customers() {
               <Label>By</Label>
               <Input value={form.city} onChange={set('city')} placeholder="København" />
             </div>
-            <div className="col-span-2 space-y-1.5">
+            <div className="col-span-2 sm:col-span-1 space-y-1.5">
               <Label>CVR-nr.</Label>
               <Input value={form.cvr} onChange={set('cvr')} placeholder="12345678" />
+            </div>
+            <div className="col-span-2 sm:col-span-1 space-y-1.5">
+              <Label>Betalingsbetingelser</Label>
+              <Select value={form.payment_terms} onValueChange={(v) => setForm({ ...form, payment_terms: v })}>
+                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  {PAYMENT_TERMS.map((t) => <SelectItem key={t} value={t}>{t}</SelectItem>)}
+                </SelectContent>
+              </Select>
             </div>
             <div className="col-span-2 space-y-1.5">
               <Label>Noter</Label>

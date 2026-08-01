@@ -35,6 +35,20 @@
       "type": "string",
       "title": "CVR-nr."
     },
+    "payment_terms": {
+      "type": "string",
+      "title": "Betalingsbetingelser",
+      "enum": [
+        "8 dage netto",
+        "15 dage netto",
+        "30 dage netto",
+        "45 dage netto",
+        "60 dage netto",
+        "Kontant",
+        "Forudbetaling"
+      ],
+      "default": "15 dage netto"
+    },
     "notes": {
       "type": "string",
       "title": "Noter"
