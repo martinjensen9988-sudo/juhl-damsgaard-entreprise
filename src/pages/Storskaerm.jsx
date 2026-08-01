@@ -91,7 +91,7 @@ export default function Storskaerm() {
   deadlines.sort((a, b) => a.sortDate - b.sortDate);
 
   return (
-    <div className="fixed inset-0 bg-slate-950 flex flex-col overflow-hidden">
+    <div className="fixed inset-0 bg-slate-950 flex flex-col overflow-hidden" style={{ zoom: 2 }}>
       <Clock />
       <div className="flex-1 p-5 flex flex-col gap-5 min-h-0">
         <Metrics
