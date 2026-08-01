@@ -19,7 +19,8 @@ import {
   DialogFooter,
 } from '@/components/ui/dialog';
 import { formatDKK, formatDate } from '@/lib/format';
-import { Plus, Pencil, Trash2, HardHat, Calendar, MapPin } from 'lucide-react';
+import { Plus, Pencil, Trash2, HardHat, Calendar, MapPin, ClipboardList } from 'lucide-react';
+import ArbejdsseddelDialog from '@/components/ArbejdsseddelDialog';
 
 const PROJECT_TYPES = ['Gravearbejde', 'Kloak', 'Asfalt', 'Beton', 'Nedrivning', 'Anlæg', 'Andet'];
 const STATUSES = ['Planlægning', 'I gang', 'Afsluttet', 'På hold'];
@@ -52,6 +53,7 @@ export default function Projects() {
   const [editing, setEditing] = useState(null);
   const [form, setForm] = useState(EMPTY);
   const [saving, setSaving] = useState(false);
+  const [worksheetProject, setWorksheetProject] = useState(null);
 
   const load = async () => {
     setLoading(true);
@@ -179,7 +181,10 @@ export default function Projects() {
                   <span className="font-semibold text-slate-900">{formatDKK(p.budget)}</span>
                 </div>
               )}
-              <div className="flex justify-end gap-1 mt-3">
+              <Button variant="outline" size="sm" className="w-full mb-2" onClick={() => setWorksheetProject(p)}>
+                <ClipboardList className="w-4 h-4 mr-1.5" /> Arbejdsseddel
+              </Button>
+              <div className="flex justify-end gap-1">
                 <Button variant="ghost" size="icon" onClick={() => openEdit(p)}>
                   <Pencil className="w-4 h-4 text-slate-500" />
                 </Button>
@@ -260,6 +265,8 @@ export default function Projects() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      <ArbejdsseddelDialog project={worksheetProject} onClose={() => setWorksheetProject(null)} />
     </div>
   );
 }
