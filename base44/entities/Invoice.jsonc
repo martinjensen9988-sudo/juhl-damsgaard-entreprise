@@ -82,6 +82,11 @@
       "title": "Betalt bel\u00f8b",
       "default": 0
     },
+    "reminder_sent": {
+      "type": "boolean",
+      "title": "P\u00e5mindelse sendt",
+      "default": false
+    },
     "notes": {
       "type": "string",
       "title": "Bem\u00e6rkninger"

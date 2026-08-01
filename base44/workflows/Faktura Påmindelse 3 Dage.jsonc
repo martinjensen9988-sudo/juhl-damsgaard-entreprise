@@ -1,0 +1,44 @@
+{
+  "description": "Sender automatisk en betalingsp\u00e5mindelse til kunden 3 dage efter forfaldsdatoen, hvis fakturaen stadig er ubetalt",
+  "name": "Faktura P\u00e5mindelse 3 Dage",
+  "trigger": {
+    "condition": null,
+    "config": {
+      "trigger_type": "scheduled",
+      "events": [],
+      "schedule_mode": "recurring",
+      "cron_expression": "0 8 * * *",
+      "one_time_date": null,
+      "timezone": "Europe/Copenhagen",
+      "interval_value": null,
+      "interval_unit": null,
+      "interval_anchor": null,
+      "ends_type": "never",
+      "ends_on_date": null,
+      "ends_after_count": null
+    }
+  },
+  "definition": {
+    "document": {
+      "dsl": "1.0.0",
+      "name": "invoice_reminder_3_days",
+      "version": "1.0",
+      "namespace": "base44"
+    },
+    "do": [
+      {
+        "send_reminders": {
+          "call": "invoke_backend_function",
+          "with": {
+            "function_name": "sendInvoiceReminders"
+          },
+          "then": "end",
+          "x-base44": {
+            "title": "Send fakturap\u00e5mindelser",
+            "description": "3 dage efter forfald"
+          }
+        }
+      }
+    ]
+  }
+}
