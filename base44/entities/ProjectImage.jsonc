@@ -1,47 +1,46 @@
 {
-  "name": "Customer",
+  "name": "ProjectImage",
   "type": "object",
   "properties": {
-    "name": {
+    "project_id": {
       "type": "string",
-      "title": "Kontaktperson"
+      "title": "Projekt"
     },
-    "company": {
+    "project_name": {
       "type": "string",
-      "title": "Virksomhed"
+      "title": "Projektnavn"
     },
-    "email": {
+    "customer_email": {
       "type": "string",
-      "format": "email",
-      "title": "Email"
+      "title": "Kundeemail"
     },
-    "phone": {
+    "image_url": {
       "type": "string",
-      "title": "Telefon"
+      "title": "Billede URL"
     },
-    "address": {
+    "caption": {
       "type": "string",
-      "title": "Adresse"
+      "title": "Billedtekst"
     },
-    "postal_code": {
+    "phase": {
       "type": "string",
-      "title": "Postnummer"
+      "title": "Fase",
+      "enum": [
+        "Start",
+        "Igangv\u00e6rende",
+        "Afsluttet"
+      ],
+      "default": "Igangv\u00e6rende"
     },
-    "city": {
+    "upload_date": {
       "type": "string",
-      "title": "By"
-    },
-    "cvr": {
-      "type": "string",
-      "title": "CVR-nr."
-    },
-    "notes": {
-      "type": "string",
-      "title": "Noter"
+      "format": "date",
+      "title": "Dato"
     }
   },
   "required": [
-    "name"
+    "project_id",
+    "image_url"
   ],
   "rls": {
     "read": {
@@ -52,7 +51,7 @@
           }
         },
         {
-          "data.email": "{{user.email}}"
+          "data.customer_email": "{{user.email}}"
         }
       ]
     },

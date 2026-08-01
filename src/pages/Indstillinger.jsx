@@ -1,0 +1,183 @@
+import { useEffect, useState } from 'react';
+import { base44 } from '@/api/base44Client';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { User, Building2, Save } from 'lucide-react';
+
+export default function Indstillinger() {
+  const [user, setUser] = useState(null);
+  const [profile, setProfile] = useState({ full_name: '' });
+  const [savingProfile, setSavingProfile] = useState(false);
+
+  const [settings, setSettings] = useState(null);
+  const [settingsId, setSettingsId] = useState(null);
+  const [savingSettings, setSavingSettings] = useState(false);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const u = await base44.auth.me();
+        setUser(u);
+        setProfile({ full_name: u.full_name || '' });
+      } catch (e) {
+        console.error(e);
+      }
+      try {
+        const existing = await base44.entities.CompanySettings.list('-created_date', 1);
+        if (existing.length > 0) {
+          setSettings(existing[0]);
+          setSettingsId(existing[0].id);
+        } else {
+          setSettings({
+            company_name: '',
+            cvr: '',
+            address: '',
+            postal_code: '',
+            city: '',
+            phone: '',
+            email: '',
+            vat_rate: 25,
+            invoice_prefix: 'FAK',
+            quote_prefix: 'TIL',
+            payment_terms: '15 dage netto',
+            bank_account: '',
+          });
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    })();
+  }, []);
+
+  const saveProfile = async () => {
+    setSavingProfile(true);
+    try {
+      await base44.auth.updateMe({ full_name: profile.full_name });
+      alert('Profil opdateret');
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setSavingProfile(false);
+    }
+  };
+
+  const saveSettings = async () => {
+    setSavingSettings(true);
+    try {
+      const payload = { ...settings, vat_rate: Number(settings.vat_rate) || 25 };
+      if (settingsId) {
+        await base44.entities.CompanySettings.update(settingsId, payload);
+      } else {
+        const created = await base44.entities.CompanySettings.create(payload);
+        setSettingsId(created.id);
+      }
+      alert('Virksomhedsindstillinger gemt');
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setSavingSettings(false);
+    }
+  };
+
+  const setS = (field) => (e) => setSettings({ ...settings, [field]: e.target.value });
+  const setP = (field) => (e) => setProfile({ ...profile, [field]: e.target.value });
+
+  return (
+    <div className="space-y-6">
+      <div>
+        <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-slate-900">Indstillinger</h1>
+        <p className="text-slate-500 mt-1">Opdater profil og virksomhedsoplysninger</p>
+      </div>
+
+      <Tabs defaultValue="profile">
+        <TabsList>
+          <TabsTrigger value="profile"><User className="w-4 h-4 mr-1.5" /> Profil</TabsTrigger>
+          <TabsTrigger value="company"><Building2 className="w-4 h-4 mr-1.5" /> Virksomhed</TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="profile" className="mt-4">
+          <div className="bg-white rounded-xl border border-slate-200 p-6 max-w-lg space-y-4">
+            <div className="space-y-1.5">
+              <Label>Email</Label>
+              <Input value={user?.email || ''} disabled className="bg-slate-50" />
+              <p className="text-xs text-slate-400">Email kan ikke ændres her.</p>
+            </div>
+            <div className="space-y-1.5">
+              <Label>Navn</Label>
+              <Input value={profile.full_name} onChange={setP('full_name')} placeholder="Dit fulde navn" />
+            </div>
+            <div className="space-y-1.5">
+              <Label>Rolle</Label>
+              <Input value={user?.role === 'admin' ? 'Administrator' : 'Bruger'} disabled className="bg-slate-50" />
+            </div>
+            <Button onClick={saveProfile} disabled={savingProfile} className="bg-slate-950 hover:bg-slate-800">
+              <Save className="w-4 h-4 mr-1.5" /> {savingProfile ? 'Gemmer...' : 'Gem profil'}
+            </Button>
+          </div>
+        </TabsContent>
+
+        <TabsContent value="company" className="mt-4">
+          {settings && (
+            <div className="bg-white rounded-xl border border-slate-200 p-6 max-w-2xl space-y-4">
+              <div className="grid grid-cols-2 gap-3">
+                <div className="col-span-2 space-y-1.5">
+                  <Label>Virksomhedsnavn</Label>
+                  <Input value={settings.company_name} onChange={setS('company_name')} placeholder="BygStyring ApS" />
+                </div>
+                <div className="space-y-1.5">
+                  <Label>CVR-nr.</Label>
+                  <Input value={settings.cvr} onChange={setS('cvr')} placeholder="12345678" />
+                </div>
+                <div className="space-y-1.5">
+                  <Label>Telefon</Label>
+                  <Input value={settings.phone} onChange={setS('phone')} />
+                </div>
+                <div className="col-span-2 space-y-1.5">
+                  <Label>Email</Label>
+                  <Input type="email" value={settings.email} onChange={setS('email')} />
+                </div>
+                <div className="col-span-2 space-y-1.5">
+                  <Label>Adresse</Label>
+                  <Input value={settings.address} onChange={setS('address')} />
+                </div>
+                <div className="space-y-1.5">
+                  <Label>Postnummer</Label>
+                  <Input value={settings.postal_code} onChange={setS('postal_code')} />
+                </div>
+                <div className="space-y-1.5">
+                  <Label>By</Label>
+                  <Input value={settings.city} onChange={setS('city')} />
+                </div>
+                <div className="space-y-1.5">
+                  <Label>Moms (%)</Label>
+                  <Input type="number" value={settings.vat_rate} onChange={setS('vat_rate')} />
+                </div>
+                <div className="space-y-1.5">
+                  <Label>Bankkonto</Label>
+                  <Input value={settings.bank_account} onChange={setS('bank_account')} placeholder="Reg. nr. Kontonr." />
+                </div>
+                <div className="space-y-1.5">
+                  <Label>Faktura prefix</Label>
+                  <Input value={settings.invoice_prefix} onChange={setS('invoice_prefix')} />
+                </div>
+                <div className="space-y-1.5">
+                  <Label>Tilbud prefix</Label>
+                  <Input value={settings.quote_prefix} onChange={setS('quote_prefix')} />
+                </div>
+                <div className="col-span-2 space-y-1.5">
+                  <Label>Betalingsbetingelser</Label>
+                  <Input value={settings.payment_terms} onChange={setS('payment_terms')} />
+                </div>
+              </div>
+              <Button onClick={saveSettings} disabled={savingSettings} className="bg-slate-950 hover:bg-slate-800">
+                <Save className="w-4 h-4 mr-1.5" /> {savingSettings ? 'Gemmer...' : 'Gem indstillinger'}
+              </Button>
+            </div>
+          )}
+        </TabsContent>
+      </Tabs>
+    </div>
+  );
+}

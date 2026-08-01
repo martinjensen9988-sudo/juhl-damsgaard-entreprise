@@ -114,6 +114,7 @@ export default function Invoices() {
       const payload = {
         ...form,
         customer_name: customer ? customer.company || customer.name : '',
+        customer_email: customer ? customer.email : '',
         project_name: project ? project.name : '',
       };
       if (editing) {

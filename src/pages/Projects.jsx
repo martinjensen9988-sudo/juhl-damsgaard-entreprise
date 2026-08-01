@@ -93,6 +93,7 @@ export default function Projects() {
         ...form,
         budget: form.budget ? Number(form.budget) : null,
         customer_name: customer ? customer.company || customer.name : '',
+        customer_email: customer ? customer.email : '',
       };
       if (editing) {
         await base44.entities.Project.update(editing.id, payload);

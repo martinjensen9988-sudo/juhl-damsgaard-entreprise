@@ -1,14 +1,14 @@
 {
-  "name": "Customer",
+  "name": "Supplier",
   "type": "object",
   "properties": {
     "name": {
       "type": "string",
-      "title": "Kontaktperson"
-    },
-    "company": {
-      "type": "string",
       "title": "Virksomhed"
+    },
+    "contact_person": {
+      "type": "string",
+      "title": "Kontaktperson"
     },
     "email": {
       "type": "string",
@@ -35,6 +35,18 @@
       "type": "string",
       "title": "CVR-nr."
     },
+    "category": {
+      "type": "string",
+      "title": "Kategori",
+      "enum": [
+        "Byggematerialer",
+        "Maskiner",
+        "Transport",
+        "V\u00e6rkt\u00f8j",
+        "Andet"
+      ],
+      "default": "Byggematerialer"
+    },
     "notes": {
       "type": "string",
       "title": "Noter"
@@ -45,16 +57,9 @@
   ],
   "rls": {
     "read": {
-      "$or": [
-        {
-          "user_condition": {
-            "role": "admin"
-          }
-        },
-        {
-          "data.email": "{{user.email}}"
-        }
-      ]
+      "user_condition": {
+        "role": "admin"
+      }
     },
     "create": {
       "user_condition": {

@@ -1,0 +1,70 @@
+{
+  "name": "TimeEntry",
+  "type": "object",
+  "properties": {
+    "project_id": {
+      "type": "string",
+      "title": "Projekt"
+    },
+    "project_name": {
+      "type": "string",
+      "title": "Projektnavn"
+    },
+    "user_name": {
+      "type": "string",
+      "title": "Medarbejder"
+    },
+    "date": {
+      "type": "string",
+      "format": "date",
+      "title": "Dato"
+    },
+    "hours": {
+      "type": "number",
+      "title": "Timer"
+    },
+    "description": {
+      "type": "string",
+      "title": "Beskrivelse"
+    },
+    "task_type": {
+      "type": "string",
+      "title": "Arbejdstype",
+      "enum": [
+        "Gravearbejde",
+        "K\u00f8rsel",
+        "Maskinarbejde",
+        "H\u00e5ndarbejde",
+        "M\u00f8de",
+        "Andet"
+      ],
+      "default": "H\u00e5ndarbejde"
+    }
+  },
+  "required": [
+    "project_id",
+    "hours"
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

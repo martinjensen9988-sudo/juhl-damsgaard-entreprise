@@ -17,6 +17,13 @@ import Customers from '@/pages/Customers';
 import Projects from '@/pages/Projects';
 import Quotes from '@/pages/Quotes';
 import Invoices from '@/pages/Invoices';
+import Materialeliste from '@/pages/Materialeliste';
+import Tidsregistrering from '@/pages/Tidsregistrering';
+import Leverandoerer from '@/pages/Leverandoerer';
+import Projektstatus from '@/pages/Projektstatus';
+import Indstillinger from '@/pages/Indstillinger';
+import CustomerPortal from '@/pages/CustomerPortal';
+import PortalLayout from '@/components/PortalLayout';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -55,6 +62,14 @@ const AuthenticatedApp = () => {
           <Route path="/projekter" element={<Projects />} />
           <Route path="/tilbud" element={<Quotes />} />
           <Route path="/faktura" element={<Invoices />} />
+          <Route path="/materialeliste" element={<Materialeliste />} />
+          <Route path="/tidsregistrering" element={<Tidsregistrering />} />
+          <Route path="/leverandoerer" element={<Leverandoerer />} />
+          <Route path="/projektstatus" element={<Projektstatus />} />
+          <Route path="/indstillinger" element={<Indstillinger />} />
+        </Route>
+        <Route element={<PortalLayout />}>
+          <Route path="/portal" element={<CustomerPortal />} />
         </Route>
       </Route>
       <Route path="*" element={<PageNotFound />} />

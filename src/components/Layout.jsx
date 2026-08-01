@@ -6,6 +6,12 @@ import {
   FileText,
   Receipt,
   Building2,
+  Package,
+  Clock,
+  Truck,
+  Activity,
+  Settings,
+  ExternalLink,
 } from 'lucide-react';
 
 const navItems = [
@@ -14,6 +20,11 @@ const navItems = [
   { to: '/projekter', label: 'Projekter', icon: HardHat },
   { to: '/tilbud', label: 'Tilbud', icon: FileText },
   { to: '/faktura', label: 'Faktura', icon: Receipt },
+  { to: '/materialeliste', label: 'Materialer', icon: Package },
+  { to: '/tidsregistrering', label: 'Tid', icon: Clock },
+  { to: '/leverandoerer', label: 'Leverandører', icon: Truck },
+  { to: '/projektstatus', label: 'Projektstatus', icon: Activity },
+  { to: '/indstillinger', label: 'Indstillinger', icon: Settings },
 ];
 
 export default function Layout() {
@@ -49,6 +60,12 @@ export default function Layout() {
             </NavLink>
           ))}
         </nav>
+        <div className="px-3 pb-2">
+          <a href="/portal" className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-amber-400 hover:bg-slate-800/60 transition-all">
+            <ExternalLink className="w-[18px] h-[18px]" />
+            Kundeportal
+          </a>
+        </div>
         <div className="px-6 py-4 border-t border-slate-800 text-xs text-slate-600">
           © 2026 BygStyring
         </div>

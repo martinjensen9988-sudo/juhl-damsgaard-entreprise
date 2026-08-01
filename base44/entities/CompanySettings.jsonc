@@ -1,0 +1,84 @@
+{
+  "name": "CompanySettings",
+  "type": "object",
+  "properties": {
+    "company_name": {
+      "type": "string",
+      "title": "Virksomhedsnavn"
+    },
+    "cvr": {
+      "type": "string",
+      "title": "CVR-nr."
+    },
+    "address": {
+      "type": "string",
+      "title": "Adresse"
+    },
+    "postal_code": {
+      "type": "string",
+      "title": "Postnummer"
+    },
+    "city": {
+      "type": "string",
+      "title": "By"
+    },
+    "phone": {
+      "type": "string",
+      "title": "Telefon"
+    },
+    "email": {
+      "type": "string",
+      "format": "email",
+      "title": "Email"
+    },
+    "vat_rate": {
+      "type": "number",
+      "title": "Moms (%)",
+      "default": 25
+    },
+    "invoice_prefix": {
+      "type": "string",
+      "title": "Faktura prefix",
+      "default": "FAK"
+    },
+    "quote_prefix": {
+      "type": "string",
+      "title": "Tilbud prefix",
+      "default": "TIL"
+    },
+    "payment_terms": {
+      "type": "string",
+      "title": "Betalingsbetingelser",
+      "default": "15 dage netto"
+    },
+    "bank_account": {
+      "type": "string",
+      "title": "Bankkonto"
+    }
+  },
+  "required": [
+    "company_name"
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

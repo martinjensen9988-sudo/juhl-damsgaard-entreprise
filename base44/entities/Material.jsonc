@@ -1,0 +1,84 @@
+{
+  "name": "Material",
+  "type": "object",
+  "properties": {
+    "project_id": {
+      "type": "string",
+      "title": "Projekt"
+    },
+    "project_name": {
+      "type": "string",
+      "title": "Projektnavn"
+    },
+    "name": {
+      "type": "string",
+      "title": "Materialenavn"
+    },
+    "category": {
+      "type": "string",
+      "title": "Kategori",
+      "enum": [
+        "Beton",
+        "Asfalt",
+        "Kloak",
+        "Jord",
+        "Sten",
+        "Metal",
+        "Tr\u00e6",
+        "Andet"
+      ],
+      "default": "Andet"
+    },
+    "quantity": {
+      "type": "number",
+      "title": "Antal"
+    },
+    "unit": {
+      "type": "string",
+      "title": "Enhed",
+      "default": "stk"
+    },
+    "unit_price": {
+      "type": "number",
+      "title": "Stk. pris (DKK)"
+    },
+    "supplier_id": {
+      "type": "string",
+      "title": "Leverand\u00f8r"
+    },
+    "supplier_name": {
+      "type": "string",
+      "title": "Leverand\u00f8rnavn"
+    },
+    "ordered": {
+      "type": "boolean",
+      "title": "Bestilt",
+      "default": false
+    }
+  },
+  "required": [
+    "name"
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}
