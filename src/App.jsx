@@ -39,6 +39,14 @@ import TilbudVisning from '@/pages/TilbudVisning';
 import Daekningsbidrag from '@/pages/Daekningsbidrag';
 import RegnskabIntegration from '@/pages/RegnskabIntegration';
 import AITilbud from '@/pages/AITilbud';
+import Ugeplanlaegning from '@/pages/Ugeplanlaegning';
+import Materielstyring from '@/pages/Materielstyring';
+import SalgsPipeline from '@/pages/SalgsPipeline';
+import ProjektMilepaele from '@/pages/ProjektMilepaele';
+import KundeSupport from '@/pages/KundeSupport';
+import Materialeindkoeb from '@/pages/Materialeindkoeb';
+import ProjektOverblik from '@/pages/ProjektOverblik';
+import Certifikater from '@/pages/Certifikater';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -95,6 +103,14 @@ const AuthenticatedApp = () => {
           <Route path="/daekningsbidrag" element={<Daekningsbidrag />} />
           <Route path="/regnskab-integration" element={<RegnskabIntegration />} />
           <Route path="/ai-tilbud" element={<AITilbud />} />
+          <Route path="/ugeplanlaegning" element={<Ugeplanlaegning />} />
+          <Route path="/materiel" element={<Materielstyring />} />
+          <Route path="/salgs-pipeline" element={<SalgsPipeline />} />
+          <Route path="/projekt-milepaele" element={<ProjektMilepaele />} />
+          <Route path="/kundesupport" element={<KundeSupport />} />
+          <Route path="/materialeindkoeb" element={<Materialeindkoeb />} />
+          <Route path="/projektoverblik" element={<ProjektOverblik />} />
+          <Route path="/certifikater" element={<Certifikater />} />
         </Route>
         <Route element={<PortalLayout />}>
           <Route path="/portal" element={<CustomerPortal />} />

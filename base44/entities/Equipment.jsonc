@@ -1,0 +1,98 @@
+{
+  "name": "Equipment",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "title": "Navn"
+    },
+    "category": {
+      "type": "string",
+      "title": "Kategori",
+      "enum": [
+        "Maskine",
+        "V\u00e6rkt\u00f8j",
+        "K\u00f8ret\u00f8j",
+        "Stillads",
+        "Container",
+        "Andet"
+      ],
+      "default": "V\u00e6rkt\u00f8j"
+    },
+    "serial_number": {
+      "type": "string",
+      "title": "Serienr."
+    },
+    "location": {
+      "type": "string",
+      "title": "Lokation"
+    },
+    "status": {
+      "type": "string",
+      "title": "Status",
+      "enum": [
+        "Ledig",
+        "I brug",
+        "Reparation",
+        "Ude af drift"
+      ],
+      "default": "Ledig"
+    },
+    "assigned_to": {
+      "type": "string",
+      "title": "Tildelt til"
+    },
+    "assigned_project_id": {
+      "type": "string",
+      "title": "Projekt"
+    },
+    "assigned_project_name": {
+      "type": "string",
+      "title": "Projektnavn"
+    },
+    "condition": {
+      "type": "string",
+      "title": "Stand",
+      "enum": [
+        "God",
+        "Slidt",
+        "Defekt"
+      ],
+      "default": "God"
+    },
+    "purchase_date": {
+      "type": "string",
+      "format": "date",
+      "title": "K\u00f8bsdato"
+    },
+    "notes": {
+      "type": "string",
+      "title": "Noter"
+    }
+  },
+  "required": [
+    "name"
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

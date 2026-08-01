@@ -1,0 +1,79 @@
+{
+  "name": "SupportTicket",
+  "type": "object",
+  "properties": {
+    "customer_name": {
+      "type": "string",
+      "title": "Kunde"
+    },
+    "customer_email": {
+      "type": "string",
+      "title": "Email"
+    },
+    "subject": {
+      "type": "string",
+      "title": "Emne"
+    },
+    "message": {
+      "type": "string",
+      "title": "Besked"
+    },
+    "status": {
+      "type": "string",
+      "title": "Status",
+      "enum": [
+        "\u00c5ben",
+        "Besvaret",
+        "Lukket"
+      ],
+      "default": "\u00c5ben"
+    },
+    "priority": {
+      "type": "string",
+      "title": "Prioritet",
+      "enum": [
+        "Lav",
+        "Normal",
+        "H\u00f8j"
+      ],
+      "default": "Normal"
+    },
+    "response": {
+      "type": "string",
+      "title": "Svar"
+    },
+    "responded_at": {
+      "type": "string",
+      "title": "Besvaret"
+    }
+  },
+  "required": [
+    "subject",
+    "customer_email"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "data.customer_email": "{{user.email}}"
+        }
+      ]
+    },
+    "create": {},
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

@@ -1,0 +1,101 @@
+{
+  "name": "PurchaseOrder",
+  "type": "object",
+  "properties": {
+    "order_number": {
+      "type": "string",
+      "title": "Ordrenr."
+    },
+    "supplier_id": {
+      "type": "string",
+      "title": "Leverand\u00f8r"
+    },
+    "supplier_name": {
+      "type": "string",
+      "title": "Leverand\u00f8rnavn"
+    },
+    "project_id": {
+      "type": "string",
+      "title": "Projekt"
+    },
+    "project_name": {
+      "type": "string",
+      "title": "Projektnavn"
+    },
+    "status": {
+      "type": "string",
+      "title": "Status",
+      "enum": [
+        "Kladde",
+        "Bestilt",
+        "Modtaget",
+        "Annulleret"
+      ],
+      "default": "Kladde"
+    },
+    "items": {
+      "type": "array",
+      "title": "Linjer",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Beskrivelse"
+          },
+          "quantity": {
+            "type": "number",
+            "title": "Antal"
+          },
+          "unit": {
+            "type": "string",
+            "title": "Enhed"
+          },
+          "unit_price": {
+            "type": "number",
+            "title": "Stk. pris"
+          }
+        }
+      }
+    },
+    "order_date": {
+      "type": "string",
+      "format": "date",
+      "title": "Ordredato"
+    },
+    "expected_date": {
+      "type": "string",
+      "format": "date",
+      "title": "Forventet levering"
+    },
+    "notes": {
+      "type": "string",
+      "title": "Noter"
+    }
+  },
+  "required": [
+    "order_number"
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

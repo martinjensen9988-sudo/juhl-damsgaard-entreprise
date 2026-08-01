@@ -25,6 +25,13 @@ import {
   PieChart,
   Sparkles,
   Plug,
+  Wrench,
+  Filter,
+  Milestone,
+  Headphones,
+  ShoppingCart,
+  Eye,
+  Award,
 } from 'lucide-react';
 
 const navItems = [
@@ -51,6 +58,14 @@ const navItems = [
   { to: '/daekningsbidrag', label: 'Dækningsbidrag', icon: PieChart },
   { to: '/regnskab-integration', label: 'Regnskab int.', icon: Plug },
   { to: '/ai-tilbud', label: 'AI Tilbud', icon: Sparkles },
+  { to: '/ugeplanlaegning', label: 'Ugeplan', icon: CalendarDays },
+  { to: '/materiel', label: 'Materiel', icon: Wrench },
+  { to: '/salgs-pipeline', label: 'Pipeline', icon: Filter },
+  { to: '/projekt-milepaele', label: 'Milepæle', icon: Milestone },
+  { to: '/kundesupport', label: 'Support', icon: Headphones },
+  { to: '/materialeindkoeb', label: 'Indkøb', icon: ShoppingCart },
+  { to: '/projektoverblik', label: 'Overblik', icon: Eye },
+  { to: '/certifikater', label: 'Certifikater', icon: Award },
 ];
 
 export default function Layout() {

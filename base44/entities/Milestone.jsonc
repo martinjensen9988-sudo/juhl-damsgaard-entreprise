@@ -1,0 +1,81 @@
+{
+  "name": "Milestone",
+  "type": "object",
+  "properties": {
+    "project_id": {
+      "type": "string",
+      "title": "Projekt"
+    },
+    "project_name": {
+      "type": "string",
+      "title": "Projektnavn"
+    },
+    "title": {
+      "type": "string",
+      "title": "Titel"
+    },
+    "description": {
+      "type": "string",
+      "title": "Beskrivelse"
+    },
+    "due_date": {
+      "type": "string",
+      "format": "date",
+      "title": "Deadline"
+    },
+    "status": {
+      "type": "string",
+      "title": "Status",
+      "enum": [
+        "Ikke startet",
+        "I gang",
+        "Gennemf\u00f8rt",
+        "Forsinket"
+      ],
+      "default": "Ikke startet"
+    },
+    "completed_date": {
+      "type": "string",
+      "format": "date",
+      "title": "Gennemf\u00f8rt"
+    },
+    "order": {
+      "type": "number",
+      "title": "R\u00e6kkef\u00f8lge",
+      "default": 0
+    }
+  },
+  "required": [
+    "title",
+    "project_id"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "data.project_id": "{{user.id}}"
+        }
+      ]
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

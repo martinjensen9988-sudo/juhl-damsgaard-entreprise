@@ -1,0 +1,77 @@
+{
+  "name": "Certificate",
+  "type": "object",
+  "properties": {
+    "employee_id": {
+      "type": "string",
+      "title": "Medarbejder"
+    },
+    "employee_name": {
+      "type": "string",
+      "title": "Medarbejdernavn"
+    },
+    "title": {
+      "type": "string",
+      "title": "Certifikat"
+    },
+    "type": {
+      "type": "string",
+      "title": "Type",
+      "enum": [
+        "Maskinf\u00f8rerbevis",
+        "F\u00f8rstehj\u00e6lp",
+        "Arbejdsmilj\u00f8",
+        "Svejsebevis",
+        "Kranbevis",
+        "Truckbevis",
+        "H\u00e5ndv\u00e6rk",
+        "Andet"
+      ],
+      "default": "Andet"
+    },
+    "issue_date": {
+      "type": "string",
+      "format": "date",
+      "title": "Udstedt"
+    },
+    "expiry_date": {
+      "type": "string",
+      "format": "date",
+      "title": "Udl\u00f8b"
+    },
+    "file_url": {
+      "type": "string",
+      "title": "Fil"
+    },
+    "notes": {
+      "type": "string",
+      "title": "Noter"
+    }
+  },
+  "required": [
+    "title",
+    "employee_name"
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}
