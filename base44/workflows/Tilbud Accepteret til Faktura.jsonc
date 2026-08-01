@@ -1,0 +1,40 @@
+{
+  "name": "Tilbud Accepteret \u2192 Faktura",
+  "description": "N\u00e5r en kunde accepterer et tilbud online, oprettes automatisk en faktura som kladde",
+  "trigger": {
+    "config": {
+      "trigger_type": "entity",
+      "entity_name": "Quote",
+      "events": [
+        "update"
+      ]
+    },
+    "condition": "${ .trigger.data.status == \"Accepteret\" and .trigger.old_data.status != \"Accepteret\" }"
+  },
+  "definition": {
+    "document": {
+      "dsl": "1.0.0",
+      "name": "quote_accepted_to_invoice",
+      "version": "1.0",
+      "namespace": "base44"
+    },
+    "do": [
+      {
+        "create_invoice": {
+          "call": "invoke_backend_function",
+          "with": {
+            "function_name": "createInvoiceFromQuote",
+            "args": {
+              "quote_id": "${ .trigger.entity_id }"
+            }
+          },
+          "then": "end",
+          "x-base44": {
+            "title": "Opret faktura",
+            "description": "Automatisk fra accepteret tilbud"
+          }
+        }
+      }
+    ]
+  }
+}
