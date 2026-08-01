@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Outlet, Link, NavLink } from 'react-router-dom';
-import { Building2, LogOut, HardHat, Calculator } from 'lucide-react';
+import { Building2, LogOut, HardHat, Calculator, LayoutDashboard, Home } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 
 export default function PortalLayout() {
@@ -43,6 +43,12 @@ export default function PortalLayout() {
           </NavLink>
           <NavLink to="/prisberegner" className={({isActive}) => `flex items-center gap-1.5 px-4 py-2.5 text-sm font-medium border-b-2 transition-colors ${isActive ? 'border-amber-400 text-slate-900' : 'border-transparent text-slate-500 hover:text-slate-900'}`}>
             <Calculator className="w-4 h-4" /> Prisberegner
+          </NavLink>
+          <NavLink to="/kunde-forside" className={({isActive}) => `flex items-center gap-1.5 px-4 py-2.5 text-sm font-medium border-b-2 transition-colors ${isActive ? 'border-amber-400 text-slate-900' : 'border-transparent text-slate-500 hover:text-slate-900'}`}>
+            <Home className="w-4 h-4" /> Forside
+          </NavLink>
+          <NavLink to="/kunde-dashboard" className={({isActive}) => `flex items-center gap-1.5 px-4 py-2.5 text-sm font-medium border-b-2 transition-colors ${isActive ? 'border-amber-400 text-slate-900' : 'border-transparent text-slate-500 hover:text-slate-900'}`}>
+            <LayoutDashboard className="w-4 h-4" /> Dashboard
           </NavLink>
         </div>
       </div>

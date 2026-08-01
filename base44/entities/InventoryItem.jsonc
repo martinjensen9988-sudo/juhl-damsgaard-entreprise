@@ -1,0 +1,80 @@
+{
+  "name": "InventoryItem",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "title": "Materialnavn"
+    },
+    "category": {
+      "type": "string",
+      "title": "Kategori",
+      "enum": [
+        "Beton",
+        "Asfalt",
+        "Kloak",
+        "Jord",
+        "Sten",
+        "Metal",
+        "Tr\u00e6",
+        "Andet"
+      ],
+      "default": "Andet"
+    },
+    "stock_quantity": {
+      "type": "number",
+      "title": "Beholdning"
+    },
+    "min_stock_level": {
+      "type": "number",
+      "title": "Min. beholdning",
+      "default": 0
+    },
+    "unit": {
+      "type": "string",
+      "title": "Enhed",
+      "default": "stk"
+    },
+    "unit_price": {
+      "type": "number",
+      "title": "Stk. pris (DKK)"
+    },
+    "location": {
+      "type": "string",
+      "title": "Lagerplads"
+    },
+    "supplier_name": {
+      "type": "string",
+      "title": "Leverand\u00f8r"
+    },
+    "notes": {
+      "type": "string",
+      "title": "Noter"
+    }
+  },
+  "required": [
+    "name"
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

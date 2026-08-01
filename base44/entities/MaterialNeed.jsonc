@@ -1,0 +1,86 @@
+{
+  "name": "MaterialNeed",
+  "type": "object",
+  "properties": {
+    "material_name": {
+      "type": "string",
+      "title": "Material"
+    },
+    "quantity": {
+      "type": "number",
+      "title": "Antal"
+    },
+    "unit": {
+      "type": "string",
+      "title": "Enhed",
+      "default": "stk"
+    },
+    "project_id": {
+      "type": "string",
+      "title": "Projekt"
+    },
+    "project_name": {
+      "type": "string",
+      "title": "Projektnavn"
+    },
+    "status": {
+      "type": "string",
+      "title": "Status",
+      "enum": [
+        "Mangler",
+        "Bestilt",
+        "Leveret"
+      ],
+      "default": "Mangler"
+    },
+    "priority": {
+      "type": "string",
+      "title": "Prioritet",
+      "enum": [
+        "Lav",
+        "Normal",
+        "H\u00f8j"
+      ],
+      "default": "Normal"
+    },
+    "estimated_price": {
+      "type": "number",
+      "title": "Estimeret pris (DKK)"
+    },
+    "needed_by_date": {
+      "type": "string",
+      "format": "date",
+      "title": "Beh\u00f8ves senest"
+    },
+    "notes": {
+      "type": "string",
+      "title": "Noter"
+    }
+  },
+  "required": [
+    "material_name",
+    "quantity"
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

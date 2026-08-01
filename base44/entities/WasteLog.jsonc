@@ -1,0 +1,103 @@
+{
+  "name": "WasteLog",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "title": "Titel"
+    },
+    "project_id": {
+      "type": "string",
+      "title": "Projekt"
+    },
+    "project_name": {
+      "type": "string",
+      "title": "Projektnavn"
+    },
+    "waste_type": {
+      "type": "string",
+      "title": "Affaldstype",
+      "enum": [
+        "Beton",
+        "Tr\u00e6",
+        "Metal",
+        "Blandet",
+        "Farligt affald",
+        "Jord",
+        "Gips",
+        "Andet"
+      ],
+      "default": "Blandet"
+    },
+    "amount": {
+      "type": "number",
+      "title": "M\u00e6ngde"
+    },
+    "unit": {
+      "type": "string",
+      "title": "Enhed",
+      "default": "ton"
+    },
+    "disposal_method": {
+      "type": "string",
+      "title": "H\u00e5ndtering",
+      "enum": [
+        "Genanvendelse",
+        "Forbr\u00e6nding",
+        "Deponi",
+        "Farligt affald centrret",
+        "Andet"
+      ],
+      "default": "Genanvendelse"
+    },
+    "date": {
+      "type": "string",
+      "format": "date",
+      "title": "Dato"
+    },
+    "certified": {
+      "type": "boolean",
+      "title": "Certificeret",
+      "default": false
+    },
+    "certificate_number": {
+      "type": "string",
+      "title": "Certifikatnr."
+    },
+    "reported_by": {
+      "type": "string",
+      "title": "Rapporteret af"
+    },
+    "notes": {
+      "type": "string",
+      "title": "Noter"
+    }
+  },
+  "required": [
+    "title",
+    "waste_type",
+    "date"
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

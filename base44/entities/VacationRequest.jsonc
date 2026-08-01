@@ -1,0 +1,88 @@
+{
+  "name": "VacationRequest",
+  "type": "object",
+  "properties": {
+    "employee_name": {
+      "type": "string",
+      "title": "Medarbejder"
+    },
+    "employee_email": {
+      "type": "string",
+      "title": "Email"
+    },
+    "start_date": {
+      "type": "string",
+      "format": "date",
+      "title": "Startdato"
+    },
+    "end_date": {
+      "type": "string",
+      "format": "date",
+      "title": "Slutdato"
+    },
+    "type": {
+      "type": "string",
+      "title": "Type",
+      "enum": [
+        "Ferie",
+        "Afspadsering",
+        "Sygdom",
+        "Fri",
+        "Andet"
+      ],
+      "default": "Ferie"
+    },
+    "status": {
+      "type": "string",
+      "title": "Status",
+      "enum": [
+        "Afventer",
+        "Godkendt",
+        "Afvist",
+        "Annulleret"
+      ],
+      "default": "Afventer"
+    },
+    "submitted_date": {
+      "type": "string",
+      "format": "date",
+      "title": "Indsendt"
+    },
+    "notes": {
+      "type": "string",
+      "title": "Bem\u00e6rkning"
+    },
+    "manager_note": {
+      "type": "string",
+      "title": "Ledelseskommentar"
+    }
+  },
+  "required": [
+    "employee_name",
+    "start_date",
+    "end_date",
+    "type"
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

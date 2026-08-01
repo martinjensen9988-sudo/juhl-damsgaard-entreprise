@@ -72,6 +72,18 @@ import Bilpark from '@/pages/Bilpark';
 import Underentreprenoerer from '@/pages/Underentreprenoerer';
 import Vidensbase from '@/pages/Vidensbase';
 import Forside from '@/pages/Forside';
+import KundeForside from '@/pages/KundeForside';
+import KundeDashboard from '@/pages/KundeDashboard';
+import ProjektArkiv from '@/pages/ProjektArkiv';
+import Indkoebsliste from '@/pages/Indkoebsliste';
+import Tilbudsskabeloner from '@/pages/Tilbudsskabeloner';
+import LagerStyring from '@/pages/LagerStyring';
+import MiljoeAffald from '@/pages/MiljoeAffald';
+import FerieAdministration from '@/pages/FerieAdministration';
+import OpgavePrioritering from '@/pages/OpgavePrioritering';
+import ProjektOekonomi from '@/pages/ProjektOekonomi';
+import Kontaktliste from '@/pages/Kontaktliste';
+import CertifikatArkiv from '@/pages/CertifikatArkiv';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -159,10 +171,22 @@ const AuthenticatedApp = () => {
           <Route path="/bilpark" element={<Bilpark />} />
           <Route path="/underentreprenoerer" element={<Underentreprenoerer />} />
           <Route path="/vidensbase" element={<Vidensbase />} />
+          <Route path="/projekt-arkiv" element={<ProjektArkiv />} />
+          <Route path="/indkoebsliste" element={<Indkoebsliste />} />
+          <Route path="/tilbudsskabeloner" element={<Tilbudsskabeloner />} />
+          <Route path="/lager-styring" element={<LagerStyring />} />
+          <Route path="/miljoe-affald" element={<MiljoeAffald />} />
+          <Route path="/ferie-administration" element={<FerieAdministration />} />
+          <Route path="/opgave-prioritering" element={<OpgavePrioritering />} />
+          <Route path="/projekt-oekonomi" element={<ProjektOekonomi />} />
+          <Route path="/kontaktliste" element={<Kontaktliste />} />
+          <Route path="/certifikat-arkiv" element={<CertifikatArkiv />} />
         </Route>
         <Route element={<PortalLayout />}>
           <Route path="/portal" element={<CustomerPortal />} />
           <Route path="/prisberegner" element={<Prisberegner />} />
+          <Route path="/kunde-forside" element={<KundeForside />} />
+          <Route path="/kunde-dashboard" element={<KundeDashboard />} />
           <Route path="/portal/tilbud/:id" element={<TilbudVisning />} />
         </Route>
         <Route path="/storskaerm" element={<Storskaerm />} />

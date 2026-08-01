@@ -1,0 +1,69 @@
+{
+  "name": "Contact",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "title": "Navn"
+    },
+    "company": {
+      "type": "string",
+      "title": "Virksomhed"
+    },
+    "role": {
+      "type": "string",
+      "title": "Rolle"
+    },
+    "email": {
+      "type": "string",
+      "format": "email",
+      "title": "Email"
+    },
+    "phone": {
+      "type": "string",
+      "title": "Telefon"
+    },
+    "category": {
+      "type": "string",
+      "title": "Kategori",
+      "enum": [
+        "Partner",
+        "R\u00e5dgiver",
+        "Myndighed",
+        "Underentrepren\u00f8r",
+        "Leverand\u00f8r",
+        "Andet"
+      ],
+      "default": "Partner"
+    },
+    "notes": {
+      "type": "string",
+      "title": "Noter"
+    }
+  },
+  "required": [
+    "name"
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

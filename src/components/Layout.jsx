@@ -51,6 +51,16 @@ import {
   Car,
   Briefcase,
   HelpCircle,
+  Files,
+  ShoppingBag,
+  LayoutTemplate,
+  Warehouse,
+  Recycle,
+  Palmtree,
+  ListOrdered,
+  Calculator,
+  UserPlus,
+  BadgeCheck,
 } from 'lucide-react';
 
 const navItems = [
@@ -109,6 +119,16 @@ const navItems = [
   { to: '/bilpark', label: 'Bilpark', icon: Car },
   { to: '/underentreprenoerer', label: 'Underentreprenører', icon: Briefcase },
   { to: '/vidensbase', label: 'Vidensbase', icon: HelpCircle },
+  { to: '/projekt-arkiv', label: 'Projektarkiv', icon: Files },
+  { to: '/indkoebsliste', label: 'Indkøbsliste', icon: ShoppingBag },
+  { to: '/tilbudsskabeloner', label: 'Tilbudsskabeloner', icon: LayoutTemplate },
+  { to: '/lager-styring', label: 'Lagerstyring', icon: Warehouse },
+  { to: '/miljoe-affald', label: 'Miljø & Affald', icon: Recycle },
+  { to: '/ferie-administration', label: 'Ferie', icon: Palmtree },
+  { to: '/opgave-prioritering', label: 'Opgaveprioritering', icon: ListOrdered },
+  { to: '/projekt-oekonomi', label: 'Projektøkonomi', icon: Calculator },
+  { to: '/kontaktliste', label: 'Kontaktliste', icon: UserPlus },
+  { to: '/certifikat-arkiv', label: 'Certifikat Arkiv', icon: BadgeCheck },
 ];
 
 export default function Layout() {

@@ -1,0 +1,87 @@
+{
+  "name": "QuoteTemplate",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "title": "Titel"
+    },
+    "category": {
+      "type": "string",
+      "title": "Kategori",
+      "enum": [
+        "Standard",
+        "Gravearbejde",
+        "Kloak",
+        "Asfalt",
+        "Beton",
+        "Nedrivning",
+        "Anl\u00e6g",
+        "Andet"
+      ],
+      "default": "Standard"
+    },
+    "description": {
+      "type": "string",
+      "title": "Beskrivelse"
+    },
+    "line_items": {
+      "type": "array",
+      "title": "Standardlinjer",
+      "items": {
+        "type": "object",
+        "properties": {
+          "description": {
+            "type": "string",
+            "title": "Beskrivelse"
+          },
+          "quantity": {
+            "type": "number",
+            "title": "Antal"
+          },
+          "unit": {
+            "type": "string",
+            "title": "Enhed"
+          },
+          "unit_price": {
+            "type": "number",
+            "title": "Stk. pris"
+          }
+        }
+      }
+    },
+    "terms": {
+      "type": "string",
+      "title": "Standardbetingelser"
+    },
+    "notes": {
+      "type": "string",
+      "title": "Noter"
+    }
+  },
+  "required": [
+    "title"
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}
