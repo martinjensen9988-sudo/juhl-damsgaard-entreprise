@@ -1,0 +1,109 @@
+{
+  "name": "Subscription",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "title": "Titel"
+    },
+    "customer_id": {
+      "type": "string",
+      "title": "Kunde"
+    },
+    "customer_name": {
+      "type": "string",
+      "title": "Kundenavn"
+    },
+    "customer_email": {
+      "type": "string",
+      "title": "Kundeemail"
+    },
+    "description": {
+      "type": "string",
+      "title": "Beskrivelse"
+    },
+    "amount": {
+      "type": "number",
+      "title": "Bel\u00f8b (DKK)"
+    },
+    "interval": {
+      "type": "string",
+      "title": "Interval",
+      "enum": [
+        "M\u00e5nedlig",
+        "Kvartalsvis",
+        "Halv\u00e5rlig",
+        "\u00c5rlig"
+      ],
+      "default": "M\u00e5nedlig"
+    },
+    "status": {
+      "type": "string",
+      "title": "Status",
+      "enum": [
+        "Aktiv",
+        "Pauset",
+        "Opsagt",
+        "Udl\u00f8bet"
+      ],
+      "default": "Aktiv"
+    },
+    "start_date": {
+      "type": "string",
+      "format": "date",
+      "title": "Startdato"
+    },
+    "next_invoice_date": {
+      "type": "string",
+      "format": "date",
+      "title": "N\u00e6ste fakturering"
+    },
+    "end_date": {
+      "type": "string",
+      "format": "date",
+      "title": "Slutdato"
+    },
+    "last_invoiced_date": {
+      "type": "string",
+      "format": "date",
+      "title": "Sidst faktureret"
+    },
+    "notes": {
+      "type": "string",
+      "title": "Noter"
+    }
+  },
+  "required": [
+    "title",
+    "customer_id"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "data.customer_email": "{{user.email}}"
+        }
+      ]
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

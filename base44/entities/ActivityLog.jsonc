@@ -1,0 +1,80 @@
+{
+  "name": "ActivityLog",
+  "type": "object",
+  "properties": {
+    "entity_type": {
+      "type": "string",
+      "title": "Objekttype",
+      "enum": [
+        "Tilbud",
+        "Faktura",
+        "Projekt",
+        "Kunde",
+        "Abonnement",
+        "Indk\u00f8bsordre",
+        "Sikkerhed",
+        "Andet"
+      ],
+      "default": "Andet"
+    },
+    "entity_id": {
+      "type": "string",
+      "title": "Objekt ID"
+    },
+    "entity_name": {
+      "type": "string",
+      "title": "Objektnavn"
+    },
+    "action": {
+      "type": "string",
+      "title": "Handling",
+      "enum": [
+        "Oprettet",
+        "Opdateret",
+        "Slettet",
+        "Accepteret",
+        "Afvist",
+        "Godkendt",
+        "Sendt",
+        "Betalt",
+        "Status\u00e6ndring",
+        "Andet"
+      ],
+      "default": "Andet"
+    },
+    "user_email": {
+      "type": "string",
+      "title": "Bruger"
+    },
+    "user_name": {
+      "type": "string",
+      "title": "Navn"
+    },
+    "details": {
+      "type": "string",
+      "title": "Detaljer"
+    }
+  },
+  "required": [
+    "entity_type",
+    "action"
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "create": {},
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

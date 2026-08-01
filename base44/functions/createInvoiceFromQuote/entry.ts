@@ -48,6 +48,18 @@ export default async function(req) {
       notes: `Oprettet fra tilbud ${quote.quote_number}`,
     });
 
+    try {
+      await base44.asServiceRole.entities.ActivityLog.create({
+        entity_type: 'Faktura',
+        entity_id: invoice.id,
+        entity_name: invoiceNumber,
+        action: 'Oprettet',
+        user_email: '',
+        user_name: 'System',
+        details: `Faktura oprettet fra tilbud ${quote.quote_number || quote_id}`,
+      });
+    } catch (e) { /* log fejler ikke flow */ }
+
     return Response.json({ success: true, invoice_id: invoice.id, invoice_number: invoiceNumber });
   } catch (error) {
     return Response.json({ error: error.message }, { status: 500 });

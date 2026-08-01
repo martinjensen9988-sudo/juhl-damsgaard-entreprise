@@ -1,0 +1,111 @@
+{
+  "name": "Deviation",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "title": "Titel"
+    },
+    "project_id": {
+      "type": "string",
+      "title": "Projekt"
+    },
+    "project_name": {
+      "type": "string",
+      "title": "Projektnavn"
+    },
+    "customer_name": {
+      "type": "string",
+      "title": "Kunde"
+    },
+    "type": {
+      "type": "string",
+      "title": "Type",
+      "enum": [
+        "Merarbejde",
+        "Materialefejl",
+        "Forsinkelse",
+        "Klage",
+        "Fejl udf\u00f8relse",
+        "Andet"
+      ],
+      "default": "Merarbejde"
+    },
+    "severity": {
+      "type": "string",
+      "title": "Alvorlighed",
+      "enum": [
+        "Lav",
+        "Mellem",
+        "H\u00f8j",
+        "Kritisk"
+      ],
+      "default": "Mellem"
+    },
+    "status": {
+      "type": "string",
+      "title": "Status",
+      "enum": [
+        "\u00c5ben",
+        "Under behandling",
+        "Lukket"
+      ],
+      "default": "\u00c5ben"
+    },
+    "extra_cost": {
+      "type": "number",
+      "title": "Meromkostning (DKK)",
+      "default": 0
+    },
+    "extra_hours": {
+      "type": "number",
+      "title": "Mertimer",
+      "default": 0
+    },
+    "date": {
+      "type": "string",
+      "format": "date",
+      "title": "Dato"
+    },
+    "reported_by": {
+      "type": "string",
+      "title": "Rapporteret af"
+    },
+    "description": {
+      "type": "string",
+      "title": "Beskrivelse"
+    },
+    "resolution": {
+      "type": "string",
+      "title": "L\u00f8sning"
+    }
+  },
+  "required": [
+    "title",
+    "project_id",
+    "type",
+    "date"
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

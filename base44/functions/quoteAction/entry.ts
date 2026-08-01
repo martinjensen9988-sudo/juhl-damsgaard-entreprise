@@ -36,6 +36,17 @@ export default async function(req) {
       await base44.asServiceRole.entities.Quote.update(quote_id, {
         status: newStatus,
       });
+      try {
+        await base44.asServiceRole.entities.ActivityLog.create({
+          entity_type: 'Tilbud',
+          entity_id: quote_id,
+          entity_name: quote.quote_number || quote_id,
+          action: action === 'accept' ? 'Accepteret' : 'Afvist',
+          user_email: user.email,
+          user_name: user.full_name || '',
+          details: `Tilbud ${newStatus.toLowerCase()} af kunde (${user.email})`,
+        });
+      } catch (e) { /* log fejler ikke flow */ }
       return Response.json({ success: true, status: newStatus });
     }
 

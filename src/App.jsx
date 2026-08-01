@@ -56,6 +56,13 @@ import Kundestatistik from '@/pages/Kundestatistik';
 import UdloebsOversigt from '@/pages/UdloebsOversigt';
 import MaterielBooking from '@/pages/MaterielBooking';
 import Sikkerhedslog from '@/pages/Sikkerhedslog';
+import Abonnementer from '@/pages/Abonnementer';
+import Indkoebsordrer from '@/pages/Indkoebsordrer';
+import Aktivitetslog from '@/pages/Aktivitetslog';
+import Afvigelser from '@/pages/Afvigelser';
+import KundeportalIndstillinger from '@/pages/KundeportalIndstillinger';
+import Ressourceallokering from '@/pages/Ressourceallokering';
+import Noegletal from '@/pages/Noegletal';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -129,6 +136,13 @@ const AuthenticatedApp = () => {
           <Route path="/udloebs-oversigt" element={<UdloebsOversigt />} />
           <Route path="/materiel-booking" element={<MaterielBooking />} />
           <Route path="/sikkerhedslog" element={<Sikkerhedslog />} />
+          <Route path="/abonnementer" element={<Abonnementer />} />
+          <Route path="/indkoebsordrer" element={<Indkoebsordrer />} />
+          <Route path="/aktivitetslog" element={<Aktivitetslog />} />
+          <Route path="/afvigelser" element={<Afvigelser />} />
+          <Route path="/kundeportal-indstillinger" element={<KundeportalIndstillinger />} />
+          <Route path="/ressourceallokering" element={<Ressourceallokering />} />
+          <Route path="/noegletal" element={<Noegletal />} />
         </Route>
         <Route element={<PortalLayout />}>
           <Route path="/portal" element={<CustomerPortal />} />

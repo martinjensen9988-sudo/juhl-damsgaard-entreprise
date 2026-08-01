@@ -1,0 +1,97 @@
+{
+  "name": "PortalSetting",
+  "type": "object",
+  "properties": {
+    "label": {
+      "type": "string",
+      "title": "Navn"
+    },
+    "show_projects": {
+      "type": "boolean",
+      "title": "Vis projekter",
+      "default": true
+    },
+    "show_project_budget": {
+      "type": "boolean",
+      "title": "Vis projektbudget",
+      "default": false
+    },
+    "show_quotes": {
+      "type": "boolean",
+      "title": "Vis tilbud",
+      "default": true
+    },
+    "show_invoices": {
+      "type": "boolean",
+      "title": "Vis fakturaer",
+      "default": true
+    },
+    "show_invoice_amounts": {
+      "type": "boolean",
+      "title": "Vis fakturabel\u00f8b",
+      "default": true
+    },
+    "show_images": {
+      "type": "boolean",
+      "title": "Vis projektbilleder",
+      "default": true
+    },
+    "show_documents": {
+      "type": "boolean",
+      "title": "Vis dokumenter",
+      "default": true
+    },
+    "show_quality_checks": {
+      "type": "boolean",
+      "title": "Vis kvalitetssikring",
+      "default": false
+    },
+    "show_prisberegner": {
+      "type": "boolean",
+      "title": "Vis prisberegner",
+      "default": true
+    },
+    "allow_quote_accept": {
+      "type": "boolean",
+      "title": "Tillad tilbudsaccept",
+      "default": true
+    },
+    "welcome_message": {
+      "type": "string",
+      "title": "Velkomstbesked"
+    },
+    "contact_email": {
+      "type": "string",
+      "title": "Kontakt-email"
+    },
+    "contact_phone": {
+      "type": "string",
+      "title": "Kontakt-telefon"
+    }
+  },
+  "required": [
+    "label"
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

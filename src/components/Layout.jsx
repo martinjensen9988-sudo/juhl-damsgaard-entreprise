@@ -40,6 +40,11 @@ import {
   CalendarClock,
   CalendarPlus,
   ShieldAlert,
+  Repeat,
+  History,
+  AlertOctagon,
+  Settings2,
+  Users2,
 } from 'lucide-react';
 
 const navItems = [
@@ -83,6 +88,13 @@ const navItems = [
   { to: '/udloebs-oversigt', label: 'Udløbsdatoer', icon: CalendarClock },
   { to: '/materiel-booking', label: 'Værktøjsbooking', icon: CalendarPlus },
   { to: '/sikkerhedslog', label: 'Sikkerhedslog', icon: ShieldAlert },
+  { to: '/abonnementer', label: 'Abonnementer', icon: Repeat },
+  { to: '/indkoebsordrer', label: 'Indkøbsordrer', icon: ClipboardList },
+  { to: '/aktivitetslog', label: 'Aktivitetslog', icon: History },
+  { to: '/afvigelser', label: 'Afvigelser', icon: AlertOctagon },
+  { to: '/kundeportal-indstillinger', label: 'Portal-styring', icon: Settings2 },
+  { to: '/ressourceallokering', label: 'Ressource', icon: Users2 },
+  { to: '/noegletal', label: 'Nøgletal', icon: PieChart },
 ];
 
 export default function Layout() {
