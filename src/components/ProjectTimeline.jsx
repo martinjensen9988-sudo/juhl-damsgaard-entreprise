@@ -10,7 +10,12 @@ const STATUS_BAR = {
 
 export default function ProjectTimeline({ projects }) {
   const withDates = projects
-    .filter((p) => p.start_date && p.end_date)
+    .filter((p) => {
+      if (!p.start_date || !p.end_date) return false;
+      const s = new Date(p.start_date);
+      const e = new Date(p.end_date);
+      return !isNaN(s.getTime()) && !isNaN(e.getTime());
+    })
     .sort((a, b) => new Date(a.start_date) - new Date(b.start_date));
 
   if (withDates.length === 0) {
