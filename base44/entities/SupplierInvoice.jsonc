@@ -1,0 +1,94 @@
+{
+  "name": "SupplierInvoice",
+  "type": "object",
+  "properties": {
+    "invoice_number": {
+      "type": "string",
+      "title": "Fakturanr."
+    },
+    "supplier_name": {
+      "type": "string",
+      "title": "Leverand\u00f8r"
+    },
+    "project_id": {
+      "type": "string",
+      "title": "Projekt"
+    },
+    "project_name": {
+      "type": "string",
+      "title": "Projektnavn"
+    },
+    "amount": {
+      "type": "number",
+      "title": "Bel\u00f8b (DKK)"
+    },
+    "vat_amount": {
+      "type": "number",
+      "title": "Moms (DKK)"
+    },
+    "date": {
+      "type": "string",
+      "format": "date",
+      "title": "Dato"
+    },
+    "due_date": {
+      "type": "string",
+      "format": "date",
+      "title": "Forfaldsdato"
+    },
+    "status": {
+      "type": "string",
+      "title": "Status",
+      "enum": [
+        "Afventer",
+        "Godkendt",
+        "Afvist",
+        "Betalt"
+      ],
+      "default": "Afventer"
+    },
+    "description": {
+      "type": "string",
+      "title": "Beskrivelse"
+    },
+    "file_url": {
+      "type": "string",
+      "title": "Fil"
+    },
+    "approved_by": {
+      "type": "string",
+      "title": "Godkendt af"
+    },
+    "notes": {
+      "type": "string",
+      "title": "Noter"
+    }
+  },
+  "required": [
+    "invoice_number",
+    "supplier_name",
+    "amount"
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

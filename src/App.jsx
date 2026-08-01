@@ -84,6 +84,10 @@ import OpgavePrioritering from '@/pages/OpgavePrioritering';
 import ProjektOekonomi from '@/pages/ProjektOekonomi';
 import Kontaktliste from '@/pages/Kontaktliste';
 import CertifikatArkiv from '@/pages/CertifikatArkiv';
+import Brugerprofil from '@/pages/Brugerprofil';
+import Afvigelsesrapport from '@/pages/Afvigelsesrapport';
+import TimeseddelRapport from '@/pages/TimeseddelRapport';
+import Leverandoerfakturaer from '@/pages/Leverandoerfakturaer';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -181,6 +185,10 @@ const AuthenticatedApp = () => {
           <Route path="/projekt-oekonomi" element={<ProjektOekonomi />} />
           <Route path="/kontaktliste" element={<Kontaktliste />} />
           <Route path="/certifikat-arkiv" element={<CertifikatArkiv />} />
+          <Route path="/brugerprofil" element={<Brugerprofil />} />
+          <Route path="/afvigelsesrapport" element={<Afvigelsesrapport />} />
+          <Route path="/timeseddel-rapport" element={<TimeseddelRapport />} />
+          <Route path="/leverandoerfakturaer" element={<Leverandoerfakturaer />} />
         </Route>
         <Route element={<PortalLayout />}>
           <Route path="/portal" element={<CustomerPortal />} />

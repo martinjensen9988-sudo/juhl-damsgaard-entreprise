@@ -61,6 +61,10 @@ import {
   Calculator,
   UserPlus,
   BadgeCheck,
+  UserRound,
+  AlertCircle,
+  Timer,
+  FileCheck,
 } from 'lucide-react';
 
 const navItems = [
@@ -129,6 +133,10 @@ const navItems = [
   { to: '/projekt-oekonomi', label: 'Projektøkonomi', icon: Calculator },
   { to: '/kontaktliste', label: 'Kontaktliste', icon: UserPlus },
   { to: '/certifikat-arkiv', label: 'Certifikat Arkiv', icon: BadgeCheck },
+  { to: '/brugerprofil', label: 'Brugerprofil', icon: UserRound },
+  { to: '/afvigelsesrapport', label: 'Afvigelsesrapport', icon: AlertCircle },
+  { to: '/timeseddel-rapport', label: 'Timeseddel', icon: Timer },
+  { to: '/leverandoerfakturaer', label: 'Leverandørfakturaer', icon: FileCheck },
 ];
 
 export default function Layout() {
