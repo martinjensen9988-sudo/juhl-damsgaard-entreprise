@@ -31,10 +31,19 @@
       "format": "email",
       "title": "Email"
     },
+    "logo_url": {
+      "type": "string",
+      "title": "Logo URL"
+    },
     "vat_rate": {
       "type": "number",
       "title": "Moms (%)",
       "default": 25
+    },
+    "vat_enabled": {
+      "type": "boolean",
+      "title": "Moms aktiveret",
+      "default": true
     },
     "invoice_prefix": {
       "type": "string",

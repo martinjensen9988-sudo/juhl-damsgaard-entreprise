@@ -47,6 +47,11 @@ import KundeSupport from '@/pages/KundeSupport';
 import Materialeindkoeb from '@/pages/Materialeindkoeb';
 import ProjektOverblik from '@/pages/ProjektOverblik';
 import Certifikater from '@/pages/Certifikater';
+import Virksomhedsindstillinger from '@/pages/Virksomhedsindstillinger';
+import Dokumentarkiv from '@/pages/Dokumentarkiv';
+import Servicekatalog from '@/pages/Servicekatalog';
+import Opgaveliste from '@/pages/Opgaveliste';
+import Kundeoversigt from '@/pages/Kundeoversigt';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -111,6 +116,11 @@ const AuthenticatedApp = () => {
           <Route path="/materialeindkoeb" element={<Materialeindkoeb />} />
           <Route path="/projektoverblik" element={<ProjektOverblik />} />
           <Route path="/certifikater" element={<Certifikater />} />
+          <Route path="/virksomhedsindstillinger" element={<Virksomhedsindstillinger />} />
+          <Route path="/dokumentarkiv" element={<Dokumentarkiv />} />
+          <Route path="/servicekatalog" element={<Servicekatalog />} />
+          <Route path="/opgaveliste" element={<Opgaveliste />} />
+          <Route path="/kundeoversigt" element={<Kundeoversigt />} />
         </Route>
         <Route element={<PortalLayout />}>
           <Route path="/portal" element={<CustomerPortal />} />

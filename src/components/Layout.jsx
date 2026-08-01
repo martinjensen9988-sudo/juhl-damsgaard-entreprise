@@ -32,6 +32,10 @@ import {
   ShoppingCart,
   Eye,
   Award,
+  FolderOpen,
+  BookOpen,
+  ListChecks,
+  UserSearch,
 } from 'lucide-react';
 
 const navItems = [
@@ -66,6 +70,11 @@ const navItems = [
   { to: '/materialeindkoeb', label: 'Indkøb', icon: ShoppingCart },
   { to: '/projektoverblik', label: 'Overblik', icon: Eye },
   { to: '/certifikater', label: 'Certifikater', icon: Award },
+  { to: '/virksomhedsindstillinger', label: 'Firmaoplysninger', icon: Building2 },
+  { to: '/dokumentarkiv', label: 'Dokumentarkiv', icon: FolderOpen },
+  { to: '/servicekatalog', label: 'Servicekatalog', icon: BookOpen },
+  { to: '/opgaveliste', label: 'Opgaveliste', icon: ListChecks },
+  { to: '/kundeoversigt', label: 'Kundeoversigt', icon: UserSearch },
 ];
 
 export default function Layout() {

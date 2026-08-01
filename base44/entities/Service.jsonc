@@ -1,0 +1,73 @@
+{
+  "name": "Service",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "title": "Ydelsesnavn"
+    },
+    "category": {
+      "type": "string",
+      "title": "Kategori",
+      "enum": [
+        "Gravearbejde",
+        "Kloak",
+        "Asfalt",
+        "Beton",
+        "Nedrivning",
+        "Anl\u00e6g",
+        "Transport",
+        "R\u00e5dgivning",
+        "Andet"
+      ],
+      "default": "Andet"
+    },
+    "description": {
+      "type": "string",
+      "title": "Beskrivelse"
+    },
+    "unit": {
+      "type": "string",
+      "title": "Enhed",
+      "default": "stk"
+    },
+    "unit_price": {
+      "type": "number",
+      "title": "Stk. pris (DKK)"
+    },
+    "min_price": {
+      "type": "number",
+      "title": "Min. pris (DKK)"
+    },
+    "active": {
+      "type": "boolean",
+      "title": "Aktiv",
+      "default": true
+    }
+  },
+  "required": [
+    "name"
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

@@ -1,0 +1,74 @@
+{
+  "name": "Task",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "title": "Titel"
+    },
+    "description": {
+      "type": "string",
+      "title": "Beskrivelse"
+    },
+    "assigned_to": {
+      "type": "string",
+      "title": "Tildelt til"
+    },
+    "status": {
+      "type": "string",
+      "title": "Status",
+      "enum": [
+        "Ikke startet",
+        "I gang",
+        "Afventer",
+        "Gennemf\u00f8rt"
+      ],
+      "default": "Ikke startet"
+    },
+    "priority": {
+      "type": "string",
+      "title": "Prioritet",
+      "enum": [
+        "Lav",
+        "Normal",
+        "H\u00f8j"
+      ],
+      "default": "Normal"
+    },
+    "due_date": {
+      "type": "string",
+      "format": "date",
+      "title": "Deadline"
+    },
+    "completed_date": {
+      "type": "string",
+      "format": "date",
+      "title": "Gennemf\u00f8rt"
+    }
+  },
+  "required": [
+    "title"
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}
