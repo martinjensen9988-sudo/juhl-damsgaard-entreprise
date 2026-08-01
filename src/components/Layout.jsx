@@ -149,8 +149,8 @@ export default function Layout() {
             <Building2 className="w-5 h-5 text-slate-950" />
           </div>
           <div>
-            <div className="font-bold text-white tracking-tight leading-none">BygStyring</div>
-            <div className="text-xs text-slate-500 mt-1">Entreprenørledelse</div>
+            <div className="font-bold text-white tracking-tight leading-none">Juhl & Damsgaard</div>
+            <div className="text-xs text-slate-500 mt-1">Entreprise</div>
           </div>
         </div>
         <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
@@ -183,7 +183,7 @@ export default function Layout() {
           </a>
         </div>
         <div className="px-6 py-4 border-t border-slate-800 text-xs text-slate-600">
-          © 2026 BygStyring
+          © 2026 Juhl & Damsgaard
         </div>
       </aside>
 
@@ -192,7 +192,7 @@ export default function Layout() {
         <div className="w-8 h-8 rounded-lg bg-amber-400 flex items-center justify-center">
           <Building2 className="w-4 h-4 text-slate-950" />
         </div>
-        <span className="font-bold tracking-tight">BygStyring</span>
+        <span className="font-bold tracking-tight">Juhl & Damsgaard</span>
       </div>
 
       {/* Mobile nav */}

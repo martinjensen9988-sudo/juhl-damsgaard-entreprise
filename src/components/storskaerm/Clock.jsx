@@ -20,7 +20,7 @@ export default function Clock() {
           <Building2 className="w-6 h-6 text-slate-950" />
         </div>
         <div>
-          <div className="text-xl font-bold text-white tracking-tight leading-none">BygStyring</div>
+          <div className="text-xl font-bold text-white tracking-tight leading-none">Juhl & Damsgaard</div>
           <div className="text-sm text-slate-500 mt-1">Operations Center</div>
         </div>
       </div>

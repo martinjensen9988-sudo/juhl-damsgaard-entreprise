@@ -36,7 +36,7 @@ export default function Forside() {
             <div className="w-9 h-9 rounded-lg bg-amber-400 flex items-center justify-center">
               <HardHat className="w-5 h-5 text-slate-950" />
             </div>
-            <span className="font-bold text-white tracking-tight">BygStyring</span>
+            <span className="font-bold text-white tracking-tight">Juhl & Damsgaard</span>
           </div>
           <div className="hidden md:flex items-center gap-8 text-sm text-slate-300">
             <a href="#tjenester" className="hover:text-amber-400 transition">Tjenester</a>
@@ -175,12 +175,12 @@ export default function Forside() {
               <div className="text-sm text-slate-500 mb-1">Ring til os</div>
               <div className="font-semibold text-white">+45 00 00 00 00</div>
             </a>
-            <a href="mailto:info@bygstyring.dk" className="bg-slate-900 border border-slate-800 rounded-2xl p-6 text-center hover:border-amber-400/40 transition group">
+            <a href="mailto:info@juhldamsgaard.dk" className="bg-slate-900 border border-slate-800 rounded-2xl p-6 text-center hover:border-amber-400/40 transition group">
               <div className="w-12 h-12 rounded-xl bg-amber-400/10 flex items-center justify-center mx-auto mb-4 group-hover:bg-amber-400/20 transition">
                 <Mail className="w-6 h-6 text-amber-400" />
               </div>
               <div className="text-sm text-slate-500 mb-1">Skriv til os</div>
-              <div className="font-semibold text-white">info@bygstyring.dk</div>
+              <div className="font-semibold text-white">info@juhldamsgaard.dk</div>
             </a>
             <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 text-center">
               <div className="w-12 h-12 rounded-xl bg-amber-400/10 flex items-center justify-center mx-auto mb-4">
@@ -200,9 +200,9 @@ export default function Forside() {
             <div className="w-7 h-7 rounded bg-amber-400 flex items-center justify-center">
               <HardHat className="w-4 h-4 text-slate-950" />
             </div>
-            <span className="font-bold text-white">BygStyring</span>
+            <span className="font-bold text-white">Juhl & Damsgaard</span>
           </div>
-          <div className="text-sm text-slate-500">© 2026 BygStyring. Alle rettigheder forbeholdt.</div>
+          <div className="text-sm text-slate-500">© 2026 Juhl & Damsgaard. Alle rettigheder forbeholdt.</div>
           <div className="flex items-center gap-4 text-sm text-slate-400">
             <Link to="/portal" className="hover:text-amber-400 transition">Kundeportal</Link>
             <Link to="/login" className="hover:text-amber-400 transition">Log ind</Link>
