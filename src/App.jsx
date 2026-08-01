@@ -66,6 +66,7 @@ import Noegletal from '@/pages/Noegletal';
 import Medarbejderoversigt from '@/pages/Medarbejderoversigt';
 import Kvalitetsstyring from '@/pages/Kvalitetsstyring';
 import Vaerkstedsoverblik from '@/pages/Vaerkstedsoverblik';
+import Storskaerm from '@/pages/Storskaerm';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -155,6 +156,7 @@ const AuthenticatedApp = () => {
           <Route path="/prisberegner" element={<Prisberegner />} />
           <Route path="/portal/tilbud/:id" element={<TilbudVisning />} />
         </Route>
+        <Route path="/storskaerm" element={<Storskaerm />} />
       </Route>
       <Route path="*" element={<PageNotFound />} />
     </Routes>

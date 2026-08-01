@@ -46,6 +46,7 @@ import {
   Settings2,
   Users2,
   UserCog,
+  Monitor,
 } from 'lucide-react';
 
 const navItems = [
@@ -99,6 +100,7 @@ const navItems = [
   { to: '/medarbejder-administration', label: 'Medarb.admin', icon: UserCog },
   { to: '/kvalitetsstyring', label: 'Kvalitetsstyring', icon: ShieldCheck },
   { to: '/vaerksted', label: 'Værksted', icon: Wrench },
+  { to: '/storskaerm', label: 'Storskærm', icon: Monitor },
 ];
 
 export default function Layout() {
