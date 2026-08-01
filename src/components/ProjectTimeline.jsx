@@ -32,9 +32,9 @@ export default function ProjectTimeline({ projects }) {
     );
   }
 
-  const dates = withDates.flatMap((p) => [new Date(p.start_date), new Date(p.end_date)]);
-  const minDate = new Date(Math.min(...dates).getTime() - 86400000);
-  const maxDate = new Date(Math.max(...dates).getTime() + 86400000);
+  const timestamps = withDates.flatMap((p) => [new Date(p.start_date).getTime(), new Date(p.end_date).getTime()]);
+  const minDate = new Date(Math.min(...timestamps) - 86400000);
+  const maxDate = new Date(Math.max(...timestamps) + 86400000);
   const totalRange = maxDate.getTime() - minDate.getTime();
 
   const today = new Date();
