@@ -1,0 +1,40 @@
+{
+  "description": "Opretter automatisk standard kvalitetssikringstjeklister (F\u00e6rdigmelding, AR-bevis, Sikkerhedsinspektion) s\u00e5 snart et nyt projekt oprettes",
+  "trigger": {
+    "condition": null,
+    "config": {
+      "trigger_type": "entity",
+      "events": [
+        "create"
+      ],
+      "entity_name": "Project"
+    }
+  },
+  "definition": {
+    "document": {
+      "dsl": "1.0.0",
+      "name": "auto_quality_checks",
+      "version": "1.0",
+      "namespace": "base44"
+    },
+    "do": [
+      {
+        "create_checks": {
+          "call": "invoke_backend_function",
+          "with": {
+            "function_name": "createDefaultQualityChecks",
+            "args": {
+              "project_id": "${ .trigger.entity_id }"
+            }
+          },
+          "then": "end",
+          "x-base44": {
+            "title": "Opret standard tjeklister",
+            "description": "F\u00e6rdigmelding, AR-bevis og Sikkerhedsinspektion"
+          }
+        }
+      }
+    ]
+  },
+  "name": "Standard Tjekliste ved Nyt Projekt"
+}
