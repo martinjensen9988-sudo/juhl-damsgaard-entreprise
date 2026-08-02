@@ -1,0 +1,152 @@
+{
+  "name": "AsbestFjernelse",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "title": "Titel"
+    },
+    "project_id": {
+      "type": "string",
+      "title": "Projekt"
+    },
+    "project_name": {
+      "type": "string",
+      "title": "Projektnavn"
+    },
+    "customer_name": {
+      "type": "string",
+      "title": "Kunde"
+    },
+    "address": {
+      "type": "string",
+      "title": "Adresse"
+    },
+    "asbestos_type": {
+      "type": "string",
+      "title": "Asbesttype",
+      "enum": [
+        "Hvid asbest (Chrysotil)",
+        "Brun asbest (Amosit)",
+        "Bl\u00e5 asbest (Crocidolit)",
+        "Blandet",
+        "Ukendt"
+      ],
+      "default": "Hvid asbest (Chrysotil)"
+    },
+    "location": {
+      "type": "string",
+      "title": "Placering i bygning"
+    },
+    "amount": {
+      "type": "number",
+      "title": "M\u00e6ngde"
+    },
+    "unit": {
+      "type": "string",
+      "title": "Enhed",
+      "enum": [
+        "m\u00b2",
+        "m\u00b3",
+        "kg",
+        "ton",
+        "stk",
+        "m"
+      ],
+      "default": "m\u00b2"
+    },
+    "removal_method": {
+      "type": "string",
+      "title": "Fjernelsesmetode",
+      "enum": [
+        "Mekanisk fjernelse",
+        "Kemisk fjernelse",
+        "Indkapsling",
+        "Bortskaffelse af hele elementer",
+        "Andet"
+      ],
+      "default": "Mekanisk fjernelse"
+    },
+    "status": {
+      "type": "string",
+      "title": "Status",
+      "enum": [
+        "Planlagt",
+        "I gang",
+        "Gennemf\u00f8rt",
+        "Certificeret",
+        "Afsluttet"
+      ],
+      "default": "Planlagt"
+    },
+    "start_date": {
+      "type": "string",
+      "format": "date",
+      "title": "Startdato"
+    },
+    "end_date": {
+      "type": "string",
+      "format": "date",
+      "title": "Slutdato"
+    },
+    "responsible_person": {
+      "type": "string",
+      "title": "Ansvarlig"
+    },
+    "safety_measures": {
+      "type": "string",
+      "title": "Sikkerhedsforanstaltninger"
+    },
+    "disposal_facility": {
+      "type": "string",
+      "title": "Modtageranl\u00e6g"
+    },
+    "certificate_number": {
+      "type": "string",
+      "title": "Certifikatnr."
+    },
+    "certificate_url": {
+      "type": "string",
+      "title": "Certifikat fil"
+    },
+    "before_photo_url": {
+      "type": "string",
+      "title": "F\u00f8r-billede"
+    },
+    "after_photo_url": {
+      "type": "string",
+      "title": "Efter-billede"
+    },
+    "notes": {
+      "type": "string",
+      "title": "Noter"
+    }
+  },
+  "required": [
+    "title",
+    "asbestos_type",
+    "status"
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

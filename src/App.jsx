@@ -88,6 +88,7 @@ import Brugerprofil from '@/pages/Brugerprofil';
 import Afvigelsesrapport from '@/pages/Afvigelsesrapport';
 import TimeseddelRapport from '@/pages/TimeseddelRapport';
 import Leverandoerfakturaer from '@/pages/Leverandoerfakturaer';
+import AsbestFjernelse from '@/pages/AsbestFjernelse';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -189,6 +190,7 @@ const AuthenticatedApp = () => {
           <Route path="/afvigelsesrapport" element={<Afvigelsesrapport />} />
           <Route path="/timeseddel-rapport" element={<TimeseddelRapport />} />
           <Route path="/leverandoerfakturaer" element={<Leverandoerfakturaer />} />
+          <Route path="/asbestfjernelse" element={<AsbestFjernelse />} />
         </Route>
         <Route element={<PortalLayout />}>
           <Route path="/portal" element={<CustomerPortal />} />

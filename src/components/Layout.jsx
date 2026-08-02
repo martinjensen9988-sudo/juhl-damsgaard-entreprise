@@ -137,6 +137,7 @@ const navItems = [
   { to: '/afvigelsesrapport', label: 'Afvigelsesrapport', icon: AlertCircle },
   { to: '/timeseddel-rapport', label: 'Timeseddel', icon: Timer },
   { to: '/leverandoerfakturaer', label: 'Leverandørfakturaer', icon: FileCheck },
+  { to: '/asbestfjernelse', label: 'Asbestfjernelse', icon: ShieldAlert },
 ];
 
 export default function Layout() {
