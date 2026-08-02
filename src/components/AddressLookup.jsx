@@ -20,7 +20,7 @@ export default function AddressLookup({ value, onChange }) {
   const [loading, setLoading] = useState(false);
   const [coords, setCoords] = useState(null);
   const [showSuggestions, setShowSuggestions] = useState(false);
-  const [satellite, setSatellite] = useState(true);
+  const [viewMode, setViewMode] = useState('satellite'); // 'satellite' | 'street'
   const debounceRef = useRef(null);
   const inputRef = useRef(null);
 
@@ -107,30 +107,52 @@ export default function AddressLookup({ value, onChange }) {
         )}
       </div>
 
-      {/* Map preview */}
+      {/* Map preview with satellite / street view toggle */}
       {coords && (
-        <div className="relative rounded-xl overflow-hidden border border-slate-200" style={{ height: '260px' }}>
-          <MapContainer
-            center={coords}
-            zoom={18}
-            scrollWheelZoom={false}
-            zoomControl={false}
-            attributionControl={false}
-            style={{ height: '100%', width: '100%' }}
-          >
-            <TileLayer url={satellite ? SATELLITE_URL : STREET_URL} />
-            <Marker position={coords} icon={markerIcon} />
-          </MapContainer>
-          <button
-            type="button"
-            onClick={() => setSatellite(!satellite)}
-            className="absolute top-3 right-3 z-[1000] flex items-center gap-1.5 bg-slate-950/80 text-white px-3 py-1.5 rounded-lg text-xs font-medium hover:bg-slate-950 transition backdrop-blur"
-          >
-            {satellite ? <><MapIcon className="w-3.5 h-3.5" /> Kort</> : <><Satellite className="w-3.5 h-3.5" /> Satellit</>}
-          </button>
-          <div className="absolute bottom-3 left-3 z-[1000] bg-slate-950/80 text-white px-3 py-1.5 rounded-lg text-xs backdrop-blur flex items-center gap-1.5">
-            <MapPin className="w-3.5 h-3.5 text-amber-400" />
-            {coords[0].toFixed(5)}, {coords[1].toFixed(5)}
+        <div className="space-y-2">
+          <div className="flex gap-2">
+            <button
+              type="button"
+              onClick={() => setViewMode('satellite')}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition ${viewMode === 'satellite' ? 'bg-slate-950 text-white' : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-50'}`}
+            >
+              <Satellite className="w-3.5 h-3.5" /> Satellit/Kort
+            </button>
+            <button
+              type="button"
+              onClick={() => setViewMode('street')}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition ${viewMode === 'street' ? 'bg-slate-950 text-white' : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-50'}`}
+            >
+              <MapIcon className="w-3.5 h-3.5" /> Street View
+            </button>
+          </div>
+          <div className="relative rounded-xl overflow-hidden border border-slate-200" style={{ height: '280px' }}>
+            {viewMode === 'satellite' ? (
+              <MapContainer
+                center={coords}
+                zoom={18}
+                scrollWheelZoom={false}
+                zoomControl={false}
+                attributionControl={false}
+                style={{ height: '100%', width: '100%' }}
+              >
+                <TileLayer url={SATELLITE_URL} />
+                <Marker position={coords} icon={markerIcon} />
+              </MapContainer>
+            ) : (
+              <iframe
+                title="Street View"
+                src={`https://www.google.com/maps?layer=c&cbll=${coords[0]},${coords[1]}&z=18&output=embed`}
+                className="w-full h-full"
+                style={{ border: 0 }}
+                loading="lazy"
+                allowFullScreen
+              />
+            )}
+            <div className="absolute bottom-3 left-3 z-[1000] bg-slate-950/80 text-white px-3 py-1.5 rounded-lg text-xs backdrop-blur flex items-center gap-1.5 pointer-events-none">
+              <MapPin className="w-3.5 h-3.5 text-amber-400" />
+              {coords[0].toFixed(5)}, {coords[1].toFixed(5)}
+            </div>
           </div>
         </div>
       )}
