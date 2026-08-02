@@ -4,6 +4,7 @@ import {
   HardHat, ArrowRight, ShieldCheck, Clock, Award, CheckCircle2, HelpCircle,
 } from 'lucide-react';
 import ForsideLayout from '@/components/forside/ForsideLayout';
+import InteraktivtHus from '@/components/forside/InteraktivtHus';
 import { stats, allServices, faqItems } from '@/components/forside/forsideData';
 
 export default function Forside() {
@@ -50,6 +51,9 @@ export default function Forside() {
           </div>
         </div>
       </section>
+
+      {/* Interaktivt hus — HUD */}
+      <InteraktivtHus />
 
       {/* Stats */}
       <section className="bg-amber-400 text-slate-950 py-10">
