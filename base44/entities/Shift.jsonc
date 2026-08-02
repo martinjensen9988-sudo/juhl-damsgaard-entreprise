@@ -1,0 +1,79 @@
+{
+  "name": "Shift",
+  "type": "object",
+  "properties": {
+    "employee_name": {
+      "type": "string",
+      "title": "Medarbejder"
+    },
+    "role": {
+      "type": "string",
+      "title": "Rolle",
+      "enum": [
+        "Vicev\u00e6rt",
+        "Snerydning",
+        "Drift",
+        "Vagt",
+        "Andet"
+      ],
+      "default": "Vagt"
+    },
+    "date": {
+      "type": "string",
+      "format": "date",
+      "title": "Dato"
+    },
+    "start_time": {
+      "type": "string",
+      "title": "Start"
+    },
+    "end_time": {
+      "type": "string",
+      "title": "Slut"
+    },
+    "location": {
+      "type": "string",
+      "title": "Lokation"
+    },
+    "status": {
+      "type": "string",
+      "title": "Status",
+      "enum": [
+        "Planlagt",
+        "Gennemf\u00f8rt",
+        "Aflyst"
+      ],
+      "default": "Planlagt"
+    },
+    "notes": {
+      "type": "string",
+      "title": "Noter"
+    }
+  },
+  "required": [
+    "employee_name",
+    "date"
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

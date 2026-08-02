@@ -1,0 +1,115 @@
+{
+  "name": "Handover",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "title": "Titel"
+    },
+    "project_id": {
+      "type": "string",
+      "title": "Projekt"
+    },
+    "project_name": {
+      "type": "string",
+      "title": "Projektnavn"
+    },
+    "customer_name": {
+      "type": "string",
+      "title": "Kunde"
+    },
+    "handover_date": {
+      "type": "string",
+      "format": "date",
+      "title": "Afleveringsdato"
+    },
+    "status": {
+      "type": "string",
+      "title": "Status",
+      "enum": [
+        "Planlagt",
+        "Gennemf\u00f8rt",
+        "Med mangler",
+        "Afvist"
+      ],
+      "default": "Planlagt"
+    },
+    "defects": {
+      "type": "array",
+      "title": "Mangler",
+      "items": {
+        "type": "object",
+        "properties": {
+          "description": {
+            "type": "string",
+            "title": "Beskrivelse"
+          },
+          "resolved": {
+            "type": "boolean",
+            "title": "L\u00f8st"
+          }
+        }
+      }
+    },
+    "before_photo_urls": {
+      "type": "array",
+      "title": "F\u00f8r-billeder",
+      "items": {
+        "type": "string"
+      }
+    },
+    "after_photo_urls": {
+      "type": "array",
+      "title": "Efter-billeder",
+      "items": {
+        "type": "string"
+      }
+    },
+    "signature_url": {
+      "type": "string",
+      "title": "Kundesignatur"
+    },
+    "signed_by": {
+      "type": "string",
+      "title": "Signeret af"
+    },
+    "signed_date": {
+      "type": "string",
+      "format": "date",
+      "title": "Signeret dato"
+    },
+    "inspector": {
+      "type": "string",
+      "title": "Afleveret af"
+    },
+    "notes": {
+      "type": "string",
+      "title": "Noter"
+    }
+  },
+  "required": [
+    "project_name"
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

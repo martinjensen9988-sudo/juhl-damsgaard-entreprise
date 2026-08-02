@@ -1,0 +1,81 @@
+{
+  "name": "BudgetItem",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "title": "Post"
+    },
+    "category": {
+      "type": "string",
+      "title": "Kategori",
+      "enum": [
+        "Forsikring",
+        "Leasing",
+        "Husleje",
+        "L\u00f8n",
+        "Br\u00e6ndstof",
+        "Telefon/Internet",
+        "Software",
+        "El/Vand/Varme",
+        "Markedsf\u00f8ring",
+        "Andet"
+      ],
+      "default": "Andet"
+    },
+    "amount": {
+      "type": "number",
+      "title": "Bel\u00f8b (DKK)"
+    },
+    "frequency": {
+      "type": "string",
+      "title": "Hyppighed",
+      "enum": [
+        "M\u00e5nedlig",
+        "Kvartalvis",
+        "Halv\u00e5rlig",
+        "\u00c5rlig"
+      ],
+      "default": "M\u00e5nedlig"
+    },
+    "next_due_date": {
+      "type": "string",
+      "format": "date",
+      "title": "N\u00e6ste betaling"
+    },
+    "supplier": {
+      "type": "string",
+      "title": "Leverand\u00f8r"
+    },
+    "notes": {
+      "type": "string",
+      "title": "Noter"
+    }
+  },
+  "required": [
+    "name",
+    "amount"
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

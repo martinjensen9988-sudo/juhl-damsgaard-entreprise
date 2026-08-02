@@ -1,0 +1,119 @@
+{
+  "name": "InsuranceCase",
+  "type": "object",
+  "properties": {
+    "case_number": {
+      "type": "string",
+      "title": "Sagsnr."
+    },
+    "customer_name": {
+      "type": "string",
+      "title": "Kunde"
+    },
+    "project_name": {
+      "type": "string",
+      "title": "Projekt"
+    },
+    "insurance_company": {
+      "type": "string",
+      "title": "Forsikringsselskab"
+    },
+    "policy_number": {
+      "type": "string",
+      "title": "Policenummer"
+    },
+    "damage_type": {
+      "type": "string",
+      "title": "Skadetype",
+      "enum": [
+        "Vandskade",
+        "Stormskade",
+        "Frostskade",
+        "Ildskade",
+        "H\u00e6rv\u00e6rk",
+        "Andet"
+      ],
+      "default": "Andet"
+    },
+    "damage_date": {
+      "type": "string",
+      "format": "date",
+      "title": "Skadesdato"
+    },
+    "description": {
+      "type": "string",
+      "title": "Skadesrapport"
+    },
+    "before_photo_urls": {
+      "type": "array",
+      "title": "F\u00f8r-billeder",
+      "items": {
+        "type": "string"
+      }
+    },
+    "after_photo_urls": {
+      "type": "array",
+      "title": "Efter-billeder",
+      "items": {
+        "type": "string"
+      }
+    },
+    "report_url": {
+      "type": "string",
+      "title": "Rapport fil"
+    },
+    "status": {
+      "type": "string",
+      "title": "Status",
+      "enum": [
+        "Oprettet",
+        "Under behandling",
+        "Godkendt",
+        "Afvist",
+        "Afsluttet"
+      ],
+      "default": "Oprettet"
+    },
+    "estimated_amount": {
+      "type": "number",
+      "title": "Estimeret bel\u00f8b (DKK)"
+    },
+    "approved_amount": {
+      "type": "number",
+      "title": "Godkendt bel\u00f8b (DKK)"
+    },
+    "assigned_to": {
+      "type": "string",
+      "title": "Sagsbehandler"
+    },
+    "notes": {
+      "type": "string",
+      "title": "Noter"
+    }
+  },
+  "required": [
+    "case_number"
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

@@ -1,0 +1,96 @@
+{
+  "name": "ServiceTask",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "title": "Titel"
+    },
+    "type": {
+      "type": "string",
+      "title": "Type",
+      "enum": [
+        "Snerydning",
+        "Vicev\u00e6rt",
+        "Skadeservice",
+        "Drift",
+        "Andet"
+      ],
+      "default": "Vicev\u00e6rt"
+    },
+    "customer_name": {
+      "type": "string",
+      "title": "Kunde"
+    },
+    "address": {
+      "type": "string",
+      "title": "Adresse"
+    },
+    "assigned_to": {
+      "type": "string",
+      "title": "Tildelt til"
+    },
+    "priority": {
+      "type": "string",
+      "title": "Prioritet",
+      "enum": [
+        "Lav",
+        "Normal",
+        "H\u00f8j",
+        "Akut"
+      ],
+      "default": "Normal"
+    },
+    "status": {
+      "type": "string",
+      "title": "Status",
+      "enum": [
+        "Oprettet",
+        "Tildelt",
+        "I gang",
+        "Gennemf\u00f8rt",
+        "Aflyst"
+      ],
+      "default": "Oprettet"
+    },
+    "due_date": {
+      "type": "string",
+      "format": "date",
+      "title": "Deadline"
+    },
+    "completed_date": {
+      "type": "string",
+      "format": "date",
+      "title": "Gennemf\u00f8rt"
+    },
+    "notes": {
+      "type": "string",
+      "title": "Noter"
+    }
+  },
+  "required": [
+    "title"
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

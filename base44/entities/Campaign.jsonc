@@ -1,0 +1,93 @@
+{
+  "name": "Campaign",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "title": "Kampagnenavn"
+    },
+    "channel": {
+      "type": "string",
+      "title": "Kanal",
+      "enum": [
+        "Facebook",
+        "Google Ads",
+        "Instagram",
+        "LinkedIn",
+        "Lokal avis",
+        "Hjemmeside",
+        "Flyer",
+        "Andet"
+      ],
+      "default": "Facebook"
+    },
+    "start_date": {
+      "type": "string",
+      "format": "date",
+      "title": "Start"
+    },
+    "end_date": {
+      "type": "string",
+      "format": "date",
+      "title": "Slut"
+    },
+    "budget": {
+      "type": "number",
+      "title": "Budget (DKK)"
+    },
+    "status": {
+      "type": "string",
+      "title": "Status",
+      "enum": [
+        "Planlagt",
+        "Aktiv",
+        "Afsluttet"
+      ],
+      "default": "Aktiv"
+    },
+    "inquiries": {
+      "type": "number",
+      "title": "Henvendelser",
+      "default": 0
+    },
+    "quotes_sent": {
+      "type": "number",
+      "title": "Tilbud sendt",
+      "default": 0
+    },
+    "won": {
+      "type": "number",
+      "title": "Vundet",
+      "default": 0
+    },
+    "notes": {
+      "type": "string",
+      "title": "Noter"
+    }
+  },
+  "required": [
+    "name"
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

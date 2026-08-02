@@ -89,6 +89,16 @@
       "type": "number",
       "title": "Service ved km"
     },
+    "last_inspection_date": {
+      "type": "string",
+      "format": "date",
+      "title": "Sidste syn"
+    },
+    "inspection_due": {
+      "type": "string",
+      "format": "date",
+      "title": "N\u00e6ste syn"
+    },
     "notes": {
       "type": "string",
       "title": "Noter"

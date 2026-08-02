@@ -109,6 +109,18 @@ import LagerOverblik from '@/pages/LagerOverblik';
 import Lagerbeholdning from '@/pages/Lagerbeholdning';
 import Projektkalender from '@/pages/Projektkalender';
 import Medarbejderliste from '@/pages/Medarbejderliste';
+import Kvalitetskontrol from '@/pages/Kvalitetskontrol';
+import Vagtplan from '@/pages/Vagtplan';
+import Afleveringsforretning from '@/pages/Afleveringsforretning';
+import BilparkOversigt from '@/pages/BilparkOversigt';
+import MarketingKampagner from '@/pages/MarketingKampagner';
+import Subunderleverandoerer from '@/pages/Subunderleverandoerer';
+import Driftsbudget from '@/pages/Driftsbudget';
+import Kundetilfredshed from '@/pages/Kundetilfredshed';
+import Serviceopgaver from '@/pages/Serviceopgaver';
+import Forsikringssager from '@/pages/Forsikringssager';
+import TimeprisBeregner from '@/pages/TimeprisBeregner';
+import Vedligeholdelseslog from '@/pages/Vedligeholdelseslog';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -232,6 +244,18 @@ const AuthenticatedApp = () => {
           <Route path="/lagerbeholdning" element={<Lagerbeholdning />} />
           <Route path="/projektkalender" element={<Projektkalender />} />
           <Route path="/medarbejderliste" element={<Medarbejderliste />} />
+          <Route path="/kvalitetskontrol" element={<Kvalitetskontrol />} />
+          <Route path="/vagtplan" element={<Vagtplan />} />
+          <Route path="/afleveringsforretning" element={<Afleveringsforretning />} />
+          <Route path="/bilpark-oversigt" element={<BilparkOversigt />} />
+          <Route path="/marketing-kampagner" element={<MarketingKampagner />} />
+          <Route path="/subunderleverandoerer" element={<Subunderleverandoerer />} />
+          <Route path="/driftsbudget" element={<Driftsbudget />} />
+          <Route path="/kundetilfredshed" element={<Kundetilfredshed />} />
+          <Route path="/serviceopgaver" element={<Serviceopgaver />} />
+          <Route path="/forsikringssager" element={<Forsikringssager />} />
+          <Route path="/timepris-beregner" element={<TimeprisBeregner />} />
+          <Route path="/vedligeholdelseslog" element={<Vedligeholdelseslog />} />
         </Route>
         <Route element={<PortalLayout />}>
           <Route path="/portal" element={<CustomerPortal />} />

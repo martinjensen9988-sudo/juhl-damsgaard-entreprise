@@ -1,0 +1,83 @@
+{
+  "name": "CustomerFeedback",
+  "type": "object",
+  "properties": {
+    "project_id": {
+      "type": "string",
+      "title": "Projekt"
+    },
+    "project_name": {
+      "type": "string",
+      "title": "Projektnavn"
+    },
+    "customer_name": {
+      "type": "string",
+      "title": "Kunde"
+    },
+    "overall_rating": {
+      "type": "number",
+      "title": "Samlet karakter (1-5)"
+    },
+    "quality_rating": {
+      "type": "number",
+      "title": "Kvalitet (1-5)"
+    },
+    "communication_rating": {
+      "type": "number",
+      "title": "Kommunikation (1-5)"
+    },
+    "punctuality_rating": {
+      "type": "number",
+      "title": "Punktualitet (1-5)"
+    },
+    "would_recommend": {
+      "type": "boolean",
+      "title": "Vil anbefale",
+      "default": true
+    },
+    "comment": {
+      "type": "string",
+      "title": "Kommentar"
+    },
+    "date": {
+      "type": "string",
+      "format": "date",
+      "title": "Dato"
+    },
+    "status": {
+      "type": "string",
+      "title": "Status",
+      "enum": [
+        "Modtaget",
+        "Opf\u00f8lget"
+      ],
+      "default": "Modtaget"
+    }
+  },
+  "required": [
+    "customer_name",
+    "overall_rating"
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}
