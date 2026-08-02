@@ -1,0 +1,107 @@
+{
+  "name": "WebsiteInquiry",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "title": "Navn"
+    },
+    "email": {
+      "type": "string",
+      "title": "Email"
+    },
+    "phone": {
+      "type": "string",
+      "title": "Telefon"
+    },
+    "project_type": {
+      "type": "string",
+      "title": "Ogavetype",
+      "enum": [
+        "Gravearbejde",
+        "Kloak",
+        "Asfalt",
+        "Beton",
+        "Nedrivning",
+        "Anl\u00e6g",
+        "Andet"
+      ],
+      "default": "Andet"
+    },
+    "description": {
+      "type": "string",
+      "title": "Beskrivelse"
+    },
+    "estimated_budget": {
+      "type": "number",
+      "title": "Estimeret budget (DKK)"
+    },
+    "address": {
+      "type": "string",
+      "title": "Adresse"
+    },
+    "source": {
+      "type": "string",
+      "title": "Kilde",
+      "enum": [
+        "Forside kontakt",
+        "Prisberegner",
+        "AI tilbudschat",
+        "Telefon",
+        "Andet"
+      ],
+      "default": "Forside kontakt"
+    },
+    "status": {
+      "type": "string",
+      "title": "Status",
+      "enum": [
+        "Ny",
+        "Kontaktet",
+        "Tilbud sendt",
+        "Konverteret",
+        "Tabt"
+      ],
+      "default": "Ny"
+    },
+    "converted_project_id": {
+      "type": "string",
+      "title": "Konverteret til projekt"
+    },
+    "submitted_date": {
+      "type": "string",
+      "format": "date",
+      "title": "Indsendt"
+    },
+    "notes": {
+      "type": "string",
+      "title": "Noter"
+    }
+  },
+  "required": [
+    "name",
+    "email"
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

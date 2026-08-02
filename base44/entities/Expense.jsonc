@@ -1,0 +1,89 @@
+{
+  "name": "Expense",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "title": "Titel"
+    },
+    "category": {
+      "type": "string",
+      "title": "Kategori",
+      "enum": [
+        "Materialer",
+        "Maskiner",
+        "Transport",
+        "L\u00f8nninger",
+        "Br\u00e6ndstof",
+        "Forsikring",
+        "V\u00e6rkt\u00f8j",
+        " Kontor",
+        "Markedsf\u00f8ring",
+        "Andet"
+      ],
+      "default": "Materialer"
+    },
+    "amount": {
+      "type": "number",
+      "title": "Bel\u00f8b (DKK)"
+    },
+    "date": {
+      "type": "string",
+      "format": "date",
+      "title": "Dato"
+    },
+    "project_id": {
+      "type": "string",
+      "title": "Projekt"
+    },
+    "project_name": {
+      "type": "string",
+      "title": "Projektnavn"
+    },
+    "supplier_name": {
+      "type": "string",
+      "title": "Leverand\u00f8r"
+    },
+    "supplier_invoice_id": {
+      "type": "string",
+      "title": "Leverand\u00f8rfaktura"
+    },
+    "recurring": {
+      "type": "boolean",
+      "title": "Tilbagevendende",
+      "default": false
+    },
+    "notes": {
+      "type": "string",
+      "title": "Noter"
+    }
+  },
+  "required": [
+    "title",
+    "category",
+    "amount",
+    "date"
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

@@ -1,0 +1,89 @@
+{
+  "name": "CertificateLog",
+  "type": "object",
+  "properties": {
+    "employee_name": {
+      "type": "string",
+      "title": "Medarbejder"
+    },
+    "certificate_type": {
+      "type": "string",
+      "title": "Certifikattype",
+      "enum": [
+        "Gravemaskinef\u00f8rerbevis",
+        "H\u00e5ndv\u00e6rksuddannelse",
+        "F\u00f8rstehj\u00e6lp",
+        "Arbejdsmilj\u00f8",
+        "Brandtilsyn",
+        "Elektriker",
+        "Svejsebevis",
+        "Andet"
+      ],
+      "default": "Andet"
+    },
+    "certificate_number": {
+      "type": "string",
+      "title": "Certifikatnr."
+    },
+    "issue_date": {
+      "type": "string",
+      "format": "date",
+      "title": "Udstedt"
+    },
+    "expiry_date": {
+      "type": "string",
+      "format": "date",
+      "title": "Udl\u00f8ber"
+    },
+    "issuer": {
+      "type": "string",
+      "title": "Udsteder"
+    },
+    "file_url": {
+      "type": "string",
+      "title": "Certifikat fil"
+    },
+    "status": {
+      "type": "string",
+      "title": "Status",
+      "enum": [
+        "Gyldig",
+        "Udl\u00f8ber snart",
+        "Udl\u00f8bet",
+        "Fornyet"
+      ],
+      "default": "Gyldig"
+    },
+    "notes": {
+      "type": "string",
+      "title": "Noter"
+    }
+  },
+  "required": [
+    "employee_name",
+    "certificate_type",
+    "expiry_date"
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

@@ -1,0 +1,85 @@
+{
+  "name": "SafetyProtocol",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "title": "Titel"
+    },
+    "category": {
+      "type": "string",
+      "title": "Kategori",
+      "enum": [
+        "Arbejdsmilj\u00f8",
+        "Sikkerhedsprotokol",
+        "Vejledning",
+        "Riskikovurdering",
+        "V\u00e6rneudstyr",
+        "Andet"
+      ],
+      "default": "Sikkerhedsprotokol"
+    },
+    "risk_level": {
+      "type": "string",
+      "title": "Risikoniveau",
+      "enum": [
+        "Lav",
+        "Mellem",
+        "H\u00f8j",
+        "Kritisk"
+      ],
+      "default": "Mellem"
+    },
+    "content": {
+      "type": "string",
+      "title": "Indhold"
+    },
+    "required_ppe": {
+      "type": "string",
+      "title": "P\u00e5kr\u00e6vet v\u00e6rnemiddel"
+    },
+    "applies_to": {
+      "type": "string",
+      "title": "G\u00e6lder for"
+    },
+    "file_url": {
+      "type": "string",
+      "title": "Fil"
+    },
+    "last_updated": {
+      "type": "string",
+      "format": "date",
+      "title": "Sidst opdateret"
+    },
+    "created_by": {
+      "type": "string",
+      "title": "Oprettet af"
+    }
+  },
+  "required": [
+    "title",
+    "category"
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

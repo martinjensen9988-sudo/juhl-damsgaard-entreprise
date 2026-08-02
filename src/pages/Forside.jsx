@@ -6,6 +6,7 @@ import {
   ClipboardCheck, FileText, Truck, CheckCircle2, Star, Quote,
 } from 'lucide-react';
 import PrisBeregnerSection from '@/components/forside/PrisBeregnerSection';
+import ForsideKontaktForm from '@/components/forside/ForsideKontaktForm';
 
 const services = [
   { icon: HardHat, title: 'Gravearbejde', desc: 'Professionelt gravearbejde til alle formål — fra fundamenter til ledningsgraving.' },
@@ -287,6 +288,9 @@ export default function Forside() {
               <div className="text-sm text-slate-500 mb-1">Besøg os</div>
               <div className="font-semibold text-slate-900">Hovedvej 1, 1000 By</div>
             </div>
+          </div>
+          <div className="mt-12 max-w-2xl mx-auto">
+            <ForsideKontaktForm />
           </div>
         </div>
       </section>

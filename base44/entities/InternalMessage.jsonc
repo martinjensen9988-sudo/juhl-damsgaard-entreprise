@@ -1,0 +1,78 @@
+{
+  "name": "InternalMessage",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "title": "Titel"
+    },
+    "message": {
+      "type": "string",
+      "title": "Besked"
+    },
+    "priority": {
+      "type": "string",
+      "title": "Prioritet",
+      "enum": [
+        "Lav",
+        "Normal",
+        "H\u00f8j",
+        "Vigtig"
+      ],
+      "default": "Normal"
+    },
+    "category": {
+      "type": "string",
+      "title": "Kategori",
+      "enum": [
+        "Generel",
+        "M\u00f8de",
+        "Sikkerhed",
+        " projekt",
+        "Personale",
+        "Andet"
+      ],
+      "default": "Generel"
+    },
+    "author_name": {
+      "type": "string",
+      "title": "Forfatter"
+    },
+    "active": {
+      "type": "boolean",
+      "title": "Aktiv",
+      "default": true
+    },
+    "expires_date": {
+      "type": "string",
+      "format": "date",
+      "title": "Udl\u00f8ber"
+    }
+  },
+  "required": [
+    "title",
+    "message"
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

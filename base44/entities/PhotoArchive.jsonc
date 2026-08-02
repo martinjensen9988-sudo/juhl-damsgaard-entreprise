@@ -1,0 +1,83 @@
+{
+  "name": "PhotoArchive",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "title": "Titel"
+    },
+    "project_id": {
+      "type": "string",
+      "title": "Projekt"
+    },
+    "project_name": {
+      "type": "string",
+      "title": "Projektnavn"
+    },
+    "description": {
+      "type": "string",
+      "title": "Beskrivelse"
+    },
+    "before_photo_url": {
+      "type": "string",
+      "title": "F\u00f8r-billede"
+    },
+    "after_photo_url": {
+      "type": "string",
+      "title": "Efter-billede"
+    },
+    "photo_urls": {
+      "type": "array",
+      "title": "Flere billeder",
+      "items": {
+        "type": "string"
+      }
+    },
+    "category": {
+      "type": "string",
+      "title": "Kategori",
+      "enum": [
+        "F\u00f8r/Efter",
+        "Byggeplads",
+        "F\u00e6rdigt",
+        "Problem",
+        "Andet"
+      ],
+      "default": "F\u00f8r/Efter"
+    },
+    "uploaded_by": {
+      "type": "string",
+      "title": "Uploadet af"
+    },
+    "date": {
+      "type": "string",
+      "format": "date",
+      "title": "Dato"
+    }
+  },
+  "required": [
+    "title"
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

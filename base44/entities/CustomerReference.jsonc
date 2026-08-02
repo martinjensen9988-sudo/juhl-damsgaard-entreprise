@@ -1,0 +1,91 @@
+{
+  "name": "CustomerReference",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "title": "Titel"
+    },
+    "customer_name": {
+      "type": "string",
+      "title": "Kunde"
+    },
+    "project_name": {
+      "type": "string",
+      "title": "Projekt"
+    },
+    "project_type": {
+      "type": "string",
+      "title": "Type",
+      "enum": [
+        "Gravearbejde",
+        "Kloak",
+        "Asfalt",
+        "Beton",
+        "Nedrivning",
+        "Anl\u00e6g",
+        "Andet"
+      ],
+      "default": "Anl\u00e6g"
+    },
+    "description": {
+      "type": "string",
+      "title": "Beskrivelse"
+    },
+    "photo_urls": {
+      "type": "array",
+      "title": "Billeder",
+      "items": {
+        "type": "string"
+      }
+    },
+    "main_photo_url": {
+      "type": "string",
+      "title": "Hovedbillede"
+    },
+    "completed_date": {
+      "type": "string",
+      "format": "date",
+      "title": "Afsluttet"
+    },
+    "location": {
+      "type": "string",
+      "title": "Lokation"
+    },
+    "featured": {
+      "type": "boolean",
+      "title": "Fremh\u00e6vet",
+      "default": false
+    },
+    "rating": {
+      "type": "number",
+      "title": "Kundevurdering (1-5)"
+    }
+  },
+  "required": [
+    "title",
+    "description"
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

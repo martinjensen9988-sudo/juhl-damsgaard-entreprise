@@ -33,6 +33,7 @@ const emptyForm = {
   address: '',
   asbestos_type: 'Hvid asbest (Chrysotil)',
   location: '',
+  sample_results: '',
   amount: '',
   unit: 'm²',
   removal_method: 'Mekanisk fjernelse',
@@ -352,6 +353,11 @@ export default function AsbestFjernelse() {
               <div className="md:col-span-2">
                 <Label>Placering i bygning</Label>
                 <Input value={form.location} onChange={(e) => handleField('location', e.target.value)} placeholder="f.eks. Tag, kælderloft, eternitplader" />
+              </div>
+
+              <div className="md:col-span-2">
+                <Label>Prøveresultater</Label>
+                <Textarea value={form.sample_results} onChange={(e) => handleField('sample_results', e.target.value)} placeholder="Resultater af asbestanalyse, laboratorieprøver, fundne fibre mv." rows={2} />
               </div>
 
               <div>

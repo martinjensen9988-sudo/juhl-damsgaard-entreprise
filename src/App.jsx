@@ -89,6 +89,17 @@ import Afvigelsesrapport from '@/pages/Afvigelsesrapport';
 import TimeseddelRapport from '@/pages/TimeseddelRapport';
 import Leverandoerfakturaer from '@/pages/Leverandoerfakturaer';
 import AsbestFjernelse from '@/pages/AsbestFjernelse';
+import VidensbaseFiler from '@/pages/VidensbaseFiler';
+import Kundereferencer from '@/pages/Kundereferencer';
+import Sikkerhedsprotokoller from '@/pages/Sikkerhedsprotokoller';
+import MaterielVedligehold from '@/pages/MaterielVedligehold';
+import MoedeBooking from '@/pages/MoedeBooking';
+import UdgiftsOversigt from '@/pages/UdgiftsOversigt';
+import MedarbejderDashboard from '@/pages/MedarbejderDashboard';
+import CertifikatLog from '@/pages/CertifikatLog';
+import Kundehenvendelser from '@/pages/Kundehenvendelser';
+import Billedarkiv from '@/pages/Billedarkiv';
+import TilbudsBeregner from '@/pages/TilbudsBeregner';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -191,6 +202,18 @@ const AuthenticatedApp = () => {
           <Route path="/timeseddel-rapport" element={<TimeseddelRapport />} />
           <Route path="/leverandoerfakturaer" element={<Leverandoerfakturaer />} />
           <Route path="/asbestfjernelse" element={<AsbestFjernelse />} />
+          <Route path="/asbest-dokumentation" element={<AsbestFjernelse />} />
+          <Route path="/vidensbase-filer" element={<VidensbaseFiler />} />
+          <Route path="/kundereferencer" element={<Kundereferencer />} />
+          <Route path="/sikkerhedsprotokoller" element={<Sikkerhedsprotokoller />} />
+          <Route path="/materiel-vedligehold" element={<MaterielVedligehold />} />
+          <Route path="/moede-booking" element={<MoedeBooking />} />
+          <Route path="/udgifts-oversigt" element={<UdgiftsOversigt />} />
+          <Route path="/medarbejder-dashboard" element={<MedarbejderDashboard />} />
+          <Route path="/certifikat-log" element={<CertifikatLog />} />
+          <Route path="/kundehenvendelser" element={<Kundehenvendelser />} />
+          <Route path="/billedarkiv" element={<Billedarkiv />} />
+          <Route path="/tilbuds-beregner" element={<TilbudsBeregner />} />
         </Route>
         <Route element={<PortalLayout />}>
           <Route path="/portal" element={<CustomerPortal />} />

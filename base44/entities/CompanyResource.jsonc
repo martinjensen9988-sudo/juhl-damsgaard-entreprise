@@ -1,0 +1,84 @@
+{
+  "name": "CompanyResource",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "title": "Titel"
+    },
+    "category": {
+      "type": "string",
+      "title": "Kategori",
+      "enum": [
+        "Personaleh\u00e5ndbog",
+        "Firma-politik",
+        "Sikkerhedsinstruks",
+        "Procedure",
+        "Skabelon",
+        "Andet"
+      ],
+      "default": "Procedure"
+    },
+    "description": {
+      "type": "string",
+      "title": "Beskrivelse"
+    },
+    "file_url": {
+      "type": "string",
+      "title": "Fil"
+    },
+    "file_name": {
+      "type": "string",
+      "title": "Filnavn"
+    },
+    "version": {
+      "type": "string",
+      "title": "Version"
+    },
+    "last_updated": {
+      "type": "string",
+      "format": "date",
+      "title": "Sidst opdateret"
+    },
+    "access_level": {
+      "type": "string",
+      "title": "Adgang",
+      "enum": [
+        "Alle",
+        "Ledelse",
+        "Admin"
+      ],
+      "default": "Alle"
+    },
+    "uploaded_by": {
+      "type": "string",
+      "title": "Uploadet af"
+    }
+  },
+  "required": [
+    "title",
+    "category"
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

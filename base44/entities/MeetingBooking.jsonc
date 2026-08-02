@@ -1,0 +1,98 @@
+{
+  "name": "MeetingBooking",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "title": "Titel"
+    },
+    "customer_name": {
+      "type": "string",
+      "title": "Kunde"
+    },
+    "customer_email": {
+      "type": "string",
+      "title": "Email"
+    },
+    "customer_phone": {
+      "type": "string",
+      "title": "Telefon"
+    },
+    "meeting_type": {
+      "type": "string",
+      "title": "Type",
+      "enum": [
+        "Besigtigelse",
+        "Kundem\u00f8de",
+        "Tilbudsgennemgang",
+        "Opf\u00f8lgning",
+        "Andet"
+      ],
+      "default": "Besigtigelse"
+    },
+    "date": {
+      "type": "string",
+      "format": "date",
+      "title": "Dato"
+    },
+    "time": {
+      "type": "string",
+      "title": "Tidspunkt"
+    },
+    "duration_minutes": {
+      "type": "number",
+      "title": "Varighed (min)",
+      "default": 60
+    },
+    "address": {
+      "type": "string",
+      "title": "Adresse"
+    },
+    "employee_name": {
+      "type": "string",
+      "title": "Ansvarlig medarbejder"
+    },
+    "status": {
+      "type": "string",
+      "title": "Status",
+      "enum": [
+        "Forespurgt",
+        "Bekr\u00e6ftet",
+        "Gennemf\u00f8rt",
+        "Aflyst"
+      ],
+      "default": "Forespurgt"
+    },
+    "notes": {
+      "type": "string",
+      "title": "Noter"
+    }
+  },
+  "required": [
+    "title",
+    "customer_name",
+    "date"
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

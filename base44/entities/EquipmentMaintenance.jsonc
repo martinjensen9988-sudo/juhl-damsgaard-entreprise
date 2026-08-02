@@ -1,0 +1,98 @@
+{
+  "name": "EquipmentMaintenance",
+  "type": "object",
+  "properties": {
+    "equipment_name": {
+      "type": "string",
+      "title": "Maskin/udstyr"
+    },
+    "equipment_type": {
+      "type": "string",
+      "title": "Type",
+      "enum": [
+        "Gravemaskine",
+        "Lastbil",
+        "Varebil",
+        "Kompressor",
+        "Sav",
+        "Andet"
+      ],
+      "default": "Gravemaskine"
+    },
+    "maintenance_type": {
+      "type": "string",
+      "title": "Vedligeholdelse",
+      "enum": [
+        "Lovpligtigt eftersyn",
+        "Service",
+        "Reparation",
+        "Skift af dele",
+        "Andet"
+      ],
+      "default": "Service"
+    },
+    "last_date": {
+      "type": "string",
+      "format": "date",
+      "title": "Sidste eftersyn"
+    },
+    "next_date": {
+      "type": "string",
+      "format": "date",
+      "title": "N\u00e6ste eftersyn"
+    },
+    "cost": {
+      "type": "number",
+      "title": "Omkostning (DKK)"
+    },
+    "status": {
+      "type": "string",
+      "title": "Status",
+      "enum": [
+        "Planlagt",
+        "Gennemf\u00f8rt",
+        "Forsinket",
+        "Aflyst"
+      ],
+      "default": "Planlagt"
+    },
+    "performed_by": {
+      "type": "string",
+      "title": "Udf\u00f8rt af"
+    },
+    "mileage_hours": {
+      "type": "number",
+      "title": "Timer/km ved eftersyn"
+    },
+    "notes": {
+      "type": "string",
+      "title": "Noter"
+    }
+  },
+  "required": [
+    "equipment_name",
+    "maintenance_type"
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

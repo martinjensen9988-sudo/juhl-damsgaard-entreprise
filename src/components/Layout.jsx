@@ -65,6 +65,9 @@ import {
   AlertCircle,
   Timer,
   FileCheck,
+  Star,
+  TrendingDown,
+  Inbox,
 } from 'lucide-react';
 
 const navItems = [
@@ -137,7 +140,18 @@ const navItems = [
   { to: '/afvigelsesrapport', label: 'Afvigelsesrapport', icon: AlertCircle },
   { to: '/timeseddel-rapport', label: 'Timeseddel', icon: Timer },
   { to: '/leverandoerfakturaer', label: 'Leverandørfakturaer', icon: FileCheck },
-  { to: '/asbestfjernelse', label: 'Asbestfjernelse', icon: ShieldAlert },
+  { to: '/asbestfjernelse', label: 'Asbest', icon: ShieldAlert },
+  { to: '/sikkerhedsprotokoller', label: 'Sikkerhedsprotok.', icon: ShieldAlert },
+  { to: '/materiel-vedligehold', label: 'Materiel-vedligehold', icon: Wrench },
+  { to: '/certifikat-log', label: 'Certifikat-log', icon: Award },
+  { to: '/kundereferencer', label: 'Kundereferencer', icon: Star },
+  { to: '/billedarkiv', label: 'Billedarkiv', icon: Images },
+  { to: '/moede-booking', label: 'Mødebooker', icon: CalendarDays },
+  { to: '/udgifts-oversigt', label: 'Udgiftsoversigt', icon: TrendingDown },
+  { to: '/vidensbase-filer', label: 'Firmaressourcer', icon: FolderOpen },
+  { to: '/medarbejder-dashboard', label: 'Medarb. Dashboard', icon: LayoutDashboard },
+  { to: '/kundehenvendelser', label: 'Kundehenvendelser', icon: Inbox },
+  { to: '/tilbuds-beregner', label: 'Tilbudsberegner', icon: Calculator },
 ];
 
 export default function Layout() {
