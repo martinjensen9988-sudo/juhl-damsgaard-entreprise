@@ -42,6 +42,7 @@
       "enum": [
         "Planl\u00e6gning",
         "I gang",
+        "F\u00e6rdig",
         "Afsluttet",
         "P\u00e5 hold"
       ],

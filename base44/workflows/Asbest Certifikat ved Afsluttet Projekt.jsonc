@@ -1,0 +1,40 @@
+{
+  "name": "Asbest Certifikat ved Afsluttet Projekt",
+  "description": "Genererer automatisk asbest-certifikat (PDF) og gemmer det p\u00e5 asbestdokumentet, s\u00e5 snart et projekts status s\u00e6ttes til 'F\u00e6rdig' eller 'Afsluttet'",
+  "trigger": {
+    "config": {
+      "trigger_type": "entity",
+      "entity_name": "Project",
+      "events": [
+        "update"
+      ]
+    },
+    "condition": "${ (.trigger.data.status == \"Afsluttet\" or .trigger.data.status == \"F\u00e6rdig\") and .trigger.old_data.status != \"Afsluttet\" and .trigger.old_data.status != \"F\u00e6rdig\" }"
+  },
+  "definition": {
+    "document": {
+      "dsl": "1.0.0",
+      "name": "asbest_cert_ved_afsluttet",
+      "version": "1.0",
+      "namespace": "base44"
+    },
+    "do": [
+      {
+        "generate_cert": {
+          "call": "invoke_backend_function",
+          "with": {
+            "function_name": "generateAsbestCertificate",
+            "args": {
+              "project_id": "${ .trigger.entity_id }"
+            }
+          },
+          "then": "end",
+          "x-base44": {
+            "title": "Generer asbest-certifikat",
+            "description": "Opretter PDF og gemmer p\u00e5 kundens asbestdokument"
+          }
+        }
+      }
+    ]
+  }
+}
