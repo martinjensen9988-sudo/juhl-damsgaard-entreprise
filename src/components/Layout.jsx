@@ -68,6 +68,10 @@ import {
   Star,
   TrendingDown,
   Inbox,
+  CalendarRange,
+  LineChart,
+  MapPinned,
+  Wallet,
 } from 'lucide-react';
 
 const navItems = [
@@ -152,6 +156,11 @@ const navItems = [
   { to: '/medarbejder-dashboard', label: 'Medarb. Dashboard', icon: LayoutDashboard },
   { to: '/kundehenvendelser', label: 'Kundehenvendelser', icon: Inbox },
   { to: '/tilbuds-beregner', label: 'Tilbudsberegner', icon: Calculator },
+  { to: '/udstyrskalender', label: 'Udstyrskalender', icon: CalendarRange },
+  { to: '/sikkerhedsinstruktioner', label: 'Sikkerhedsinstruks', icon: HardHat },
+  { to: '/salgsstatistik', label: 'Salgsstatistik', icon: LineChart },
+  { to: '/adresse-opslag', label: 'Adressesøgning', icon: MapPinned },
+  { to: '/udgiftsstyring', label: 'Udgiftsstyring', icon: Wallet },
 ];
 
 export default function Layout() {

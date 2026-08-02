@@ -100,6 +100,11 @@ import CertifikatLog from '@/pages/CertifikatLog';
 import Kundehenvendelser from '@/pages/Kundehenvendelser';
 import Billedarkiv from '@/pages/Billedarkiv';
 import TilbudsBeregner from '@/pages/TilbudsBeregner';
+import Udstyrskalender from '@/pages/Udstyrskalender';
+import Sikkerhedsinstruktioner from '@/pages/Sikkerhedsinstruktioner';
+import Salgsstatistik from '@/pages/Salgsstatistik';
+import AdresseOpslag from '@/pages/AdresseOpslag';
+import Udgiftsstyring from '@/pages/Udgiftsstyring';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -214,6 +219,11 @@ const AuthenticatedApp = () => {
           <Route path="/kundehenvendelser" element={<Kundehenvendelser />} />
           <Route path="/billedarkiv" element={<Billedarkiv />} />
           <Route path="/tilbuds-beregner" element={<TilbudsBeregner />} />
+          <Route path="/udstyrskalender" element={<Udstyrskalender />} />
+          <Route path="/sikkerhedsinstruktioner" element={<Sikkerhedsinstruktioner />} />
+          <Route path="/salgsstatistik" element={<Salgsstatistik />} />
+          <Route path="/adresse-opslag" element={<AdresseOpslag />} />
+          <Route path="/udgiftsstyring" element={<Udgiftsstyring />} />
         </Route>
         <Route element={<PortalLayout />}>
           <Route path="/portal" element={<CustomerPortal />} />
