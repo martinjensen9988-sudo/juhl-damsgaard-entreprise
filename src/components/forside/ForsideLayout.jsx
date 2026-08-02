@@ -17,6 +17,7 @@ export default function ForsideLayout({ children }) {
             <Link to="/tjenester" className="hover:text-amber-400 transition">Tjenester</Link>
             <Link to="/beregn-tilbud" className="hover:text-amber-400 transition">Prisberegner</Link>
             <Link to="/om-os" className="hover:text-amber-400 transition">Om os</Link>
+            <Link to="/faq" className="hover:text-amber-400 transition">FAQ</Link>
             <Link to="/kontakt" className="hover:text-amber-400 transition">Kontakt</Link>
           </div>
           <Link to="/login" className="text-sm font-medium text-slate-950 bg-amber-400 px-4 py-2 rounded-lg hover:bg-amber-300 transition">

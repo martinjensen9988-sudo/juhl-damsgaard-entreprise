@@ -72,6 +72,7 @@ import Bilpark from '@/pages/Bilpark';
 import Underentreprenoerer from '@/pages/Underentreprenoerer';
 import Vidensbase from '@/pages/Vidensbase';
 import Forside from '@/pages/Forside';
+import FAQ from '@/pages/FAQ';
 import Tjenester from '@/pages/Tjenester';
 import BeregnTilbud from '@/pages/BeregnTilbud';
 import OmOs from '@/pages/OmOs';
@@ -156,6 +157,7 @@ const AuthenticatedApp = () => {
       <Route path="/tjenester" element={<Tjenester />} />
       <Route path="/beregn-tilbud" element={<BeregnTilbud />} />
       <Route path="/om-os" element={<OmOs />} />
+      <Route path="/faq" element={<FAQ />} />
       <Route path="/kontakt" element={<Kontakt />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />

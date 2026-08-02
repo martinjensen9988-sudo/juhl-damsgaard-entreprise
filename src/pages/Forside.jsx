@@ -1,11 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import {
-  HardHat,
-  ArrowRight, ShieldCheck, Clock, Award,
+  HardHat, ArrowRight, ShieldCheck, Clock, Award, CheckCircle2, HelpCircle,
 } from 'lucide-react';
 import ForsideLayout from '@/components/forside/ForsideLayout';
-import { stats } from '@/components/forside/forsideData';
+import { stats, allServices, faqItems } from '@/components/forside/forsideData';
 
 export default function Forside() {
   return (
@@ -64,7 +63,7 @@ export default function Forside() {
         </div>
       </section>
 
-      {/* Quick links to dedicated pages */}
+      {/* Quick links */}
       <section className="py-20 bg-white">
         <div className="max-w-6xl mx-auto px-6">
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -99,6 +98,85 @@ export default function Forside() {
               <h3 className="font-semibold text-slate-900 text-lg mb-1">Kontakt</h3>
               <p className="text-sm text-slate-500">Ring, skriv eller send en besked — vi svarer hurtigt.</p>
               <span className="inline-flex items-center gap-1 text-sm text-amber-600 mt-3 font-medium">Kontakt os <ArrowRight className="w-3.5 h-3.5" /></span>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ALT vi laver — fuldt overblik */}
+      <section className="py-20 bg-slate-50">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="text-center max-w-2xl mx-auto mb-14">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-amber-400/10 border border-amber-400/20 text-amber-600 text-sm font-medium mb-4">
+              <CheckCircle2 className="w-4 h-4" /> Alt hvad vi laver
+            </div>
+            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight">
+              Én entreprenør — alt inden for bygge & anlæg
+            </h2>
+            <p className="text-slate-500 mt-4 leading-relaxed">
+              Fra første spadetag til færdigt anlæg. Her er det fulde overblik over alt vi løser —
+              stort som småt, for private, foreninger og erhverv.
+            </p>
+          </div>
+
+          <div className="space-y-10">
+            {allServices.map((cat) => (
+              <div key={cat.title}>
+                <div className="flex items-center gap-3 mb-5">
+                  <div className="w-10 h-10 rounded-xl bg-slate-950 flex items-center justify-center">
+                    <cat.icon className="w-5 h-5 text-amber-400" />
+                  </div>
+                  <h3 className="text-xl font-bold text-slate-900">{cat.title}</h3>
+                  <div className="flex-1 h-px bg-slate-200 ml-2" />
+                </div>
+                <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                  {cat.items.map((it) => (
+                    <div
+                      key={it.name}
+                      className="group bg-white rounded-xl border border-slate-200 p-5 hover:shadow-lg hover:border-amber-300 transition"
+                    >
+                      <div className="w-9 h-9 rounded-lg bg-amber-50 group-hover:bg-amber-100 flex items-center justify-center mb-3 transition">
+                        <it.icon className="w-5 h-5 text-amber-600" />
+                      </div>
+                      <h4 className="font-semibold text-slate-900 text-sm mb-1">{it.name}</h4>
+                      <p className="text-xs text-slate-500 leading-relaxed">{it.desc}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ teaser */}
+      <section className="py-20 bg-white">
+        <div className="max-w-3xl mx-auto px-6">
+          <div className="text-center mb-10">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-amber-400/10 border border-amber-400/20 text-amber-600 text-sm font-medium mb-4">
+              <HelpCircle className="w-4 h-4" /> FAQ
+            </div>
+            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight">
+              Ofte stillede spørgsmål
+            </h2>
+            <p className="text-slate-500 mt-4">
+              Få hurtigt svar på de mest almindelige spørgsmål om vores tjenester.
+            </p>
+          </div>
+          <div className="divide-y divide-slate-200 border border-slate-200 rounded-2xl overflow-hidden">
+            {faqItems.slice(0, 5).map((item, i) => (
+              <details key={i} className="group p-5 open:bg-slate-50 transition">
+                <summary className="font-semibold text-slate-900 cursor-pointer list-none flex items-center justify-between gap-4">
+                  {item.q}
+                  <span className="text-amber-500 group-open:rotate-45 transition-transform text-xl leading-none">+</span>
+                </summary>
+                <p className="text-slate-600 text-sm mt-3 leading-relaxed">{item.a}</p>
+              </details>
+            ))}
+          </div>
+          <div className="text-center mt-8">
+            <Link to="/faq" className="inline-flex items-center gap-2 bg-slate-950 text-white px-6 py-3.5 rounded-xl font-semibold hover:bg-slate-800 transition">
+              Se alle spørgsmål <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
         </div>
