@@ -7,7 +7,8 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { formatDKK, formatDate } from '@/lib/format';
-import { Plus, Pencil, Trash2, AlertTriangle, FileCheck, ShieldAlert, Search, Upload, X } from 'lucide-react';
+import { Plus, Pencil, Trash2, AlertTriangle, FileCheck, ShieldAlert, Search, Upload, X, Award, Loader2, Download } from 'lucide-react';
+import { generateAsbestCertificate } from '@/lib/asbestCertificate';
 
 const statusColors = {
   Planlagt: 'bg-blue-100 text-blue-700 border-blue-200',
@@ -128,11 +129,34 @@ export default function AsbestFjernelse() {
     }
   };
 
+  const generateCertNumber = () => {
+    const year = new Date().getFullYear();
+    const existingCount = items.filter((i) => i.certificate_number?.includes(`ASB-${year}`)).length;
+    return `ASB-${year}-${String(existingCount + 1).padStart(4, '0')}`;
+  };
+
   const save = async () => {
     if (!form.title) { alert('Angiv en titel'); return; }
     setSaving(true);
     try {
-      const payload = { ...form, amount: Number(form.amount) || 0 };
+      let payload = { ...form, amount: Number(form.amount) || 0 };
+
+      // Auto-generate certificate when status is set to "Certificeret"
+      const isBecomingCertified = form.status === 'Certificeret' && (!editing || editing.status !== 'Certificeret');
+      if (isBecomingCertified && !payload.certificate_number) {
+        const certNumber = generateCertNumber();
+        payload.certificate_number = certNumber;
+
+        // Generate PDF certificate
+        const doc = generateAsbestCertificate(payload);
+        const pdfBlob = doc.output('blob');
+        const file = new File([pdfBlob], `asbest-certifikat-${certNumber}.pdf`, { type: 'application/pdf' });
+
+        // Upload the certificate
+        const { file_url } = await base44.integrations.Core.UploadFile({ file });
+        payload.certificate_url = file_url;
+      }
+
       if (editing) {
         await base44.entities.AsbestFjernelse.update(editing.id, payload);
       } else {
@@ -291,6 +315,17 @@ export default function AsbestFjernelse() {
                   </div>
                 </div>
               </div>
+
+              {item.certificate_url && (
+                <div className="px-5 py-2.5 bg-emerald-50 border-t border-emerald-100 flex items-center justify-between">
+                  <span className="flex items-center gap-1.5 text-xs font-medium text-emerald-700">
+                    <Award className="w-4 h-4" /> Certifikat genereret
+                  </span>
+                  <a href={item.certificate_url} target="_blank" rel="noreferrer" className="flex items-center gap-1 text-xs text-emerald-700 hover:text-emerald-800 font-medium">
+                    <Download className="w-3.5 h-3.5" /> Åbn certifikat
+                  </a>
+                </div>
+              )}
 
               <div className="flex border-t border-slate-100">
                 <button onClick={() => openEdit(item)} className="flex-1 flex items-center justify-center gap-1.5 py-2.5 text-sm text-slate-600 hover:bg-slate-50 transition">
