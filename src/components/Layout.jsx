@@ -72,6 +72,7 @@ import {
   LineChart,
   MapPinned,
   Wallet,
+  PackageSearch,
 } from 'lucide-react';
 
 const navItems = [
@@ -161,6 +162,7 @@ const navItems = [
   { to: '/salgsstatistik', label: 'Salgsstatistik', icon: LineChart },
   { to: '/adresse-opslag', label: 'Adressesøgning', icon: MapPinned },
   { to: '/udgiftsstyring', label: 'Udgiftsstyring', icon: Wallet },
+  { to: '/lager-overblik', label: 'Lageroverblik', icon: PackageSearch },
 ];
 
 export default function Layout() {

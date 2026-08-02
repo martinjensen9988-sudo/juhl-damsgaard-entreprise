@@ -105,6 +105,7 @@ import Sikkerhedsinstruktioner from '@/pages/Sikkerhedsinstruktioner';
 import Salgsstatistik from '@/pages/Salgsstatistik';
 import AdresseOpslag from '@/pages/AdresseOpslag';
 import Udgiftsstyring from '@/pages/Udgiftsstyring';
+import LagerOverblik from '@/pages/LagerOverblik';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -224,6 +225,7 @@ const AuthenticatedApp = () => {
           <Route path="/salgsstatistik" element={<Salgsstatistik />} />
           <Route path="/adresse-opslag" element={<AdresseOpslag />} />
           <Route path="/udgiftsstyring" element={<Udgiftsstyring />} />
+          <Route path="/lager-overblik" element={<LagerOverblik />} />
         </Route>
         <Route element={<PortalLayout />}>
           <Route path="/portal" element={<CustomerPortal />} />

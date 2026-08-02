@@ -1,0 +1,45 @@
+{
+  "name": "Lagerkontrol Daglig",
+  "trigger": {
+    "condition": null,
+    "config": {
+      "trigger_type": "scheduled",
+      "events": [],
+      "schedule_mode": "recurring",
+      "cron_expression": "0 8 * * 1-5",
+      "one_time_date": null,
+      "timezone": "Europe/Copenhagen",
+      "interval_value": null,
+      "interval_unit": null,
+      "interval_anchor": null,
+      "ends_type": "never",
+      "ends_on_date": null,
+      "ends_after_count": null
+    }
+  },
+  "definition": {
+    "document": {
+      "dsl": "1.0.0",
+      "name": "lagerkontrol_daglig",
+      "version": "1.0",
+      "namespace": "base44"
+    },
+    "do": [
+      {
+        "check_stock": {
+          "call": "invoke_backend_function",
+          "with": {
+            "function_name": "checkLowStock",
+            "args": {}
+          },
+          "then": "end",
+          "x-base44": {
+            "title": "Tjek lagerniveauer",
+            "description": "Finder varer under minimum og sender e-mail til admins"
+          }
+        }
+      }
+    ]
+  },
+  "description": "Tjekker lagerniveauer hver hverdag kl. 08:00 og sender automatisk besked til admins ved varer under minimum"
+}
