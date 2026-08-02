@@ -31,6 +31,14 @@
       "type": "string",
       "title": "By"
     },
+    "latitude": {
+      "type": "number",
+      "title": "Breddegrad"
+    },
+    "longitude": {
+      "type": "number",
+      "title": "L\u00e6ngdegrad"
+    },
     "cvr": {
       "type": "string",
       "title": "CVR-nr."

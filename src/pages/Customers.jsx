@@ -18,7 +18,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Plus, Pencil, Trash2, Users, Mail, Phone, MapPin, Clock } from 'lucide-react';
+import { Plus, Pencil, Trash2, Users, Mail, Phone, MapPin, Clock, MapPinned } from 'lucide-react';
+import AddressLookup from '@/components/AddressLookup';
 
 const EMPTY = {
   name: '',
@@ -28,6 +29,8 @@ const EMPTY = {
   address: '',
   postal_code: '',
   city: '',
+  latitude: null,
+  longitude: null,
   cvr: '',
   payment_terms: '15 dage netto',
   notes: '',
@@ -190,16 +193,13 @@ export default function Customers() {
               <Input value={form.phone} onChange={set('phone')} placeholder="12 34 56 78" />
             </div>
             <div className="col-span-2 space-y-1.5">
-              <Label>Adresse</Label>
-              <Input value={form.address} onChange={set('address')} placeholder="Vejnavn 1" />
-            </div>
-            <div className="space-y-1.5">
-              <Label>Postnummer</Label>
-              <Input value={form.postal_code} onChange={set('postal_code')} placeholder="2100" />
-            </div>
-            <div className="space-y-1.5">
-              <Label>By</Label>
-              <Input value={form.city} onChange={set('city')} placeholder="København" />
+              <Label className="flex items-center gap-1.5">
+                <MapPinned className="w-3.5 h-3.5 text-amber-500" /> Adresseopslag
+              </Label>
+              <AddressLookup
+                value={{ address: form.address, postal_code: form.postal_code, city: form.city, lat: form.latitude, lng: form.longitude }}
+                onChange={(addr) => setForm({ ...form, address: addr.address, postal_code: addr.postal_code, city: addr.city, latitude: addr.lat, longitude: addr.lng })}
+              />
             </div>
             <div className="col-span-2 sm:col-span-1 space-y-1.5">
               <Label>CVR-nr.</Label>
