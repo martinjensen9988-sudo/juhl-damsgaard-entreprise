@@ -4,6 +4,7 @@ import {
   HardHat, Droplets, Layers, Building2, Hammer, Trees,
   ArrowRight, Phone, Mail, MapPin, ShieldCheck, Clock, Award,
   ClipboardCheck, FileText, Truck, CheckCircle2, Star, Quote,
+  Siren, KeyRound, Snowflake,
 } from 'lucide-react';
 import PrisBeregnerSection from '@/components/forside/PrisBeregnerSection';
 import ForsideKontaktForm from '@/components/forside/ForsideKontaktForm';
@@ -15,6 +16,9 @@ const services = [
   { icon: Building2, title: 'Beton & Støbning', desc: 'Betonarbejde, fundamenter og støbning til både små og store projekter.' },
   { icon: Hammer, title: 'Nedrivning', desc: 'Sikker og effektiv nedrivning af bygninger og installationer.' },
   { icon: Trees, title: 'Anlæg & Udearealer', desc: 'Anlægsarbejde, haveanlæg og udearealer skræddersyet til din ejendom.' },
+  { icon: Siren, title: 'Skadeservice', desc: 'Hurtig hjælp ved vandskade, stormskade og akutte skader — vi rykker ud når det gælder.' },
+  { icon: KeyRound, title: 'Vicevært service', desc: 'Løbende vedligeholdelse, tilsyn og småreparationer for foreninger og virksomheder.' },
+  { icon: Snowflake, title: 'Snerydding', desc: 'Vintervedligeholdelse med sneryddning, grusning og holdbare arealer om vinteren.' },
 ];
 
 const stats = [
