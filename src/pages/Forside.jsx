@@ -5,7 +5,7 @@ import {
   ArrowRight, Phone, Mail, MapPin, ShieldCheck, Clock, Award,
   ClipboardCheck, FileText, Truck, CheckCircle2, Star, Quote,
 } from 'lucide-react';
-import ForsidePrisberegner from '@/components/forside/ForsidePrisberegner';
+import PrisBeregnerSection from '@/components/forside/PrisBeregnerSection';
 
 const services = [
   { icon: HardHat, title: 'Gravearbejde', desc: 'Professionelt gravearbejde til alle formål — fra fundamenter til ledningsgraving.' },
@@ -129,10 +129,10 @@ export default function Forside() {
             </div>
             <h2 className="text-3xl md:text-4xl font-bold text-slate-900">Beregn dit tilbud</h2>
             <p className="text-slate-500 mt-3 max-w-xl mx-auto">
-              Få et vejledende estimat på din opgave. Vælg de ydelser du har brug for, og se prisen med det samme.
+              Brug vores AI til at beskrive din opgave og få et komplet tilbud — eller vælg ydelser selv manuelt.
             </p>
           </div>
-          <ForsidePrisberegner />
+          <PrisBeregnerSection />
         </div>
       </section>
 
