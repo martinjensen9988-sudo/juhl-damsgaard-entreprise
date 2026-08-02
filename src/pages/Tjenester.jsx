@@ -23,13 +23,16 @@ export default function Tjenester() {
         <div className="max-w-6xl mx-auto px-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {services.map((s) => (
-              <div key={s.title} className="bg-white rounded-2xl border border-slate-200 p-6 hover:shadow-xl hover:border-amber-300 transition group">
+              <Link key={s.title} to={`/tjenester/${s.slug}`} className="bg-white rounded-2xl border border-slate-200 p-6 hover:shadow-xl hover:border-amber-300 transition group block">
                 <div className="w-12 h-12 rounded-xl bg-slate-100 group-hover:bg-amber-100 flex items-center justify-center mb-4 transition">
                   <s.icon className="w-6 h-6 text-slate-700 group-hover:text-amber-600 transition" />
                 </div>
                 <h3 className="font-semibold text-slate-900 text-lg mb-2">{s.title}</h3>
                 <p className="text-sm text-slate-500 leading-relaxed">{s.desc}</p>
-              </div>
+                <span className="inline-flex items-center gap-1 text-amber-600 text-sm font-medium mt-4 group-hover:gap-2 transition-all">
+                  Læs mere <ArrowRight className="w-4 h-4" />
+                </span>
+              </Link>
             ))}
           </div>
         </div>

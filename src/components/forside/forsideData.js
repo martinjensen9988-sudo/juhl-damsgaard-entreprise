@@ -8,15 +8,60 @@ import {
 } from 'lucide-react';
 
 export const services = [
-  { icon: HardHat, title: 'Gravearbejde', desc: 'Professionelt gravearbejde til alle formål — fra fundamenter til ledningsgraving.' },
-  { icon: Droplets, title: 'Kloak & Dræn', desc: 'Kloaklægning, omtilslutninger og drænløsninger udført efter gældende normer.' },
-  { icon: Layers, title: 'Asfalt & Brolægning', desc: 'Asfaltlægning, brolægning og flisearbejde med holdbart resultat.' },
-  { icon: Building2, title: 'Beton & Støbning', desc: 'Betonarbejde, fundamenter og støbning til både små og store projekter.' },
-  { icon: Hammer, title: 'Nedrivning', desc: 'Sikker og effektiv nedrivning af bygninger og installationer.' },
-  { icon: Trees, title: 'Anlæg & Udearealer', desc: 'Anlægsarbejde, haveanlæg og udearealer skræddersyet til din ejendom.' },
-  { icon: Siren, title: 'Skadeservice', desc: 'Hurtig hjælp ved vandskade, stormskade og akutte skader — vi rykker ud når det gælder.' },
-  { icon: KeyRound, title: 'Vicevært service', desc: 'Løbende vedligeholdelse, tilsyn og småreparationer for foreninger og virksomheder.' },
-  { icon: Snowflake, title: 'Snerydding', desc: 'Vintervedligeholdelse med snerydding, grusning og holdbare arealer om vinteren.' },
+  {
+    icon: HardHat, title: 'Gravearbejde', slug: 'gravearbejde',
+    desc: 'Professionelt gravearbejde til alle formål — fra fundamenter til ledningsgraving.',
+    longDesc: 'Vi udfører alt gravearbejde — fra den simple spadetagning til store jordflytninger og terrænregulering. Vores erfarne gravemaskineoperatører sikrer præcist arbejde, uanset om det gælder fundamenter, ledningsgraving eller etablering af byggeplads. Vi arbejder både for private, foreninger og erhverv, og vi sørger for at jord og fyld fjernes eller placeres korrekt.',
+    highlights: ['Fundamenter & sokler', 'Ledningsgraving (vand, el, fjernvarme, data)', 'Terrænregulering & udjævning', 'Jordforflytning & skærver', 'Spadetagning & gravearbejde til alle formål'],
+  },
+  {
+    icon: Droplets, title: 'Kloak & Dræn', slug: 'kloak-draen',
+    desc: 'Kloaklægning, omtilslutninger og drænløsninger udført efter gældende normer.',
+    longDesc: 'Vi lægger ny kloak, udskifter eksisterende ledninger og etablerer drænløsninger omkring bygninger og på arealer mod fugt. Alt arbejde udføres efter gældende normer og i tæt dialog med kommunen om tilslutninger. Vi håndterer også separatkloakering og regnvandshåndtering med bassiner og faskiner.',
+    highlights: ['Ny kloak & udskiftning', 'Drænløsninger mod fugt', 'Omtilslutning til offentlig kloak', 'Separatkloakering', 'Regnvandsbassiner & faskiner'],
+  },
+  {
+    icon: Layers, title: 'Asfalt & Brolægning', slug: 'asfalt-brolaegning',
+    desc: 'Asfaltlægning, brolægning og flisearbejde med holdbart resultat.',
+    longDesc: 'Vi lægger asfalt til kørearealer, stier og pladser med et holdbart og ensartet resultat. Derudover udfører vi brolægning af indkørsler, torve og arealer samt flise- og klinkelægning til udearealer. Vi tilbyder også overfladebehandling som slurry og microasfalt til vedligeholdelse af eksisterende asfalt.',
+    highlights: ['Asfaltlægning til kørearealer', 'Brolægning af indkørsler & torve', 'Flise- og klinkelægning', 'Overfladebehandling (slurry, microasfalt)', 'Vedligeholdelse af eksisterende asfalt'],
+  },
+  {
+    icon: Building2, title: 'Beton & Støbning', slug: 'beton-stobning',
+    desc: 'Betonarbejde, fundamenter og støbning til både små og store projekter.',
+    longDesc: 'Vi udfører betonarbejde i alle skalaer — fra fundamenter til bygninger, maskiner og hegn til støbning af gulve, sokler og plader. Vi støber også trapper og specialdetaljer, og leverer større industribeton til erhverv og industri. Kvaliteten sikres gennem korrekt armering, udstøbning og efterbehandling.',
+    highlights: ['Betonfundamenter til bygninger & maskiner', 'Støbning af gulve, sokler & plader', 'Sokler, trapper & detaljer', 'Industribeton til erhverv', 'Korrekt armering & efterbehandling'],
+  },
+  {
+    icon: Hammer, title: 'Nedrivning', slug: 'nedrivning',
+    desc: 'Sikker og effektiv nedrivning af bygninger og installationer.',
+    longDesc: 'Vi udfører sikker og effektiv nedrivning af bygninger, installationer og arealer. Arbejdet planlægges nøje med henblik på sikkerhed og mulighed for genbrug. Vi sorterer byggeaffald korrekt og sørger for containerløsninger til jord, beton og affald, så pladsen efterlades ryddet og klar til nyt brug.',
+    highlights: ['Nedrivning af bygninger & installationer', 'Kontrolleret demontering med genbrug', 'Affaldssortering efter reglerne', 'Containerløsninger til jord & beton', 'Byggeplads ryddet og klar'],
+  },
+  {
+    icon: Trees, title: 'Anlæg & Udearealer', slug: 'anlaeg-udearealer',
+    desc: 'Anlægsarbejde, haveanlæg og udearealer skræddersyet til din ejendom.',
+    longDesc: 'Vi anlægger haver, græsarealer og beplantning skræddersyet til din ejendom. Det gælder både træer, buske og bede samt heg, støttemure og opkantning af arealer. Vi etablerer også udebelægning og belysning, så det samlede udeareal fremstår helstøbt og indbydende.',
+    highlights: ['Haveanlæg & græsarealer', 'Beplantning — træer, buske & bede', 'Hegn & støttemure', 'Opkantning af arealer', 'Udebelægning & belysning'],
+  },
+  {
+    icon: Siren, title: 'Skadeservice', slug: 'skadeservice',
+    desc: 'Hurtig hjælp ved vandskade, stormskade og akutte skader — vi rykker ud når det gælder.',
+    longDesc: 'Ved akutte skader rykker vi typisk ud samme dag. Vi har erfaring med vandskade, stormskade og frostskade, og vi arbejder tæt sammen med forsikringsselskaber om skadesrapportering og udbudring. Undervejs sikrer vi fuld billedokumentation, så du har det nødvendige grundlag for forsikringssagen.',
+    highlights: ['Akut hjælp — samme dag', 'Vandskade, stormskade & frostskade', 'Skadesrapportering til forsikring', 'Fuld billedokumentation', 'Samarbejde med forsikringsselskab'],
+  },
+  {
+    icon: KeyRound, title: 'Vicevært service', slug: 'vicevaert-service',
+    desc: 'Løbende vedligeholdelse, tilsyn og småreparationer for foreninger og virksomheder.',
+    longDesc: 'Vi tilbyder løbende viceværtsservice med tilsyn og vedligehold for foreninger og virksomheder. Det omfatter faste serviceaftaler, småreparationer og istandsættelse ved behov, så ejendommen holdes i god stand året rundt. Vi tilpasser omfanget til jeres behov og budget.',
+    highlights: ['Løbende tilsyn & vedligehold', 'Faste serviceaftaler', 'Småreparationer & istandsættelse', 'Tilpasset foreninger & virksomheder', 'Ejendommen holdes i god stand'],
+  },
+  {
+    icon: Snowflake, title: 'Snerydding', slug: 'snerydding',
+    desc: 'Vintervedligeholdelse med snerydding, grusning og holdbare arealer om vinteren.',
+    longDesc: 'Vi varetager vintervedligeholdelse med snerydding, grusning og saltning, så arealerne forbliver sikre og fremkommelige hele vinteren. Vi tilbyder faste vinteraftaler til foreninger og virksomheder, så I ved, hvem der rykker ud — og hvornår. Arealerne holdes fri for is og sne, uanset vejret.',
+    highlights: ['Snerydding af arealer', 'Grusning & saltning', 'Faste vinteraftaler', 'Sikre & fremkommelige arealer', 'Tilpasset foreninger & virksomheder'],
+  },
 ];
 
 // Det fulde overblik — ALT vi laver, grupperet i kategorier

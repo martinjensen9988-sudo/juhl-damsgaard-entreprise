@@ -74,6 +74,7 @@ import Vidensbase from '@/pages/Vidensbase';
 import Forside from '@/pages/Forside';
 import FAQ from '@/pages/FAQ';
 import Tjenester from '@/pages/Tjenester';
+import TjenesteDetalje from '@/pages/TjenesteDetalje';
 import BeregnTilbud from '@/pages/BeregnTilbud';
 import OmOs from '@/pages/OmOs';
 import Kontakt from '@/pages/Kontakt';
@@ -162,6 +163,7 @@ const AuthenticatedApp = () => {
     <Routes>
       <Route path="/" element={<Forside />} />
       <Route path="/tjenester" element={<Tjenester />} />
+      <Route path="/tjenester/:slug" element={<TjenesteDetalje />} />
       <Route path="/beregn-tilbud" element={<BeregnTilbud />} />
       <Route path="/om-os" element={<OmOs />} />
       <Route path="/faq" element={<FAQ />} />
