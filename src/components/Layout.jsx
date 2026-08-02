@@ -163,6 +163,9 @@ const navItems = [
   { to: '/adresse-opslag', label: 'Adressesøgning', icon: MapPinned },
   { to: '/udgiftsstyring', label: 'Udgiftsstyring', icon: Wallet },
   { to: '/lager-overblik', label: 'Lageroverblik', icon: PackageSearch },
+  { to: '/lagerbeholdning', label: 'Lagerbeholdning', icon: Warehouse },
+  { to: '/projektkalender', label: 'Projektkalender', icon: CalendarRange },
+  { to: '/medarbejderliste', label: 'Medarbejderliste', icon: Contact },
 ];
 
 export default function Layout() {
