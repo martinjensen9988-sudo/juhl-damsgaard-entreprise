@@ -152,7 +152,7 @@ const AuthenticatedApp = () => {
   // Render the main app
   return (
     <Routes>
-      <Route path="/forside" element={<Forside />} />
+      <Route path="/" element={<Forside />} />
       <Route path="/tjenester" element={<Tjenester />} />
       <Route path="/beregn-tilbud" element={<BeregnTilbud />} />
       <Route path="/om-os" element={<OmOs />} />
@@ -163,7 +163,7 @@ const AuthenticatedApp = () => {
       <Route path="/reset-password" element={<ResetPassword />} />
       <Route element={<ProtectedRoute unauthenticatedElement={<Navigate to="/login" replace />} />}>
         <Route element={<Layout />}>
-          <Route path="/" element={<Dashboard />} />
+          <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/kunder" element={<Customers />} />
           <Route path="/projekter" element={<Projects />} />
           <Route path="/tilbud" element={<Quotes />} />

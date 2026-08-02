@@ -7,7 +7,7 @@ export default function ForsideLayout({ children }) {
     <div className="min-h-screen bg-white flex flex-col">
       <nav className="fixed top-0 inset-x-0 z-50 bg-slate-950/90 backdrop-blur-md border-b border-slate-800">
         <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-          <Link to="/forside" className="flex items-center gap-2.5">
+          <Link to="/" className="flex items-center gap-2.5">
             <div className="w-9 h-9 rounded-lg bg-amber-400 flex items-center justify-center">
               <HardHat className="w-5 h-5 text-slate-950" />
             </div>
