@@ -43,6 +43,35 @@
       ],
       "default": "Reserveret"
     },
+    "is_external_rental": {
+      "type": "boolean",
+      "title": "Ekstern udlejning",
+      "default": false
+    },
+    "renter_name": {
+      "type": "string",
+      "title": "Lejer"
+    },
+    "renter_company": {
+      "type": "string",
+      "title": "Lejer virksomhed"
+    },
+    "renter_phone": {
+      "type": "string",
+      "title": "Lejer telefon"
+    },
+    "daily_rate": {
+      "type": "number",
+      "title": "Dagspris (DKK)"
+    },
+    "total_price": {
+      "type": "number",
+      "title": "Totalpris (DKK)"
+    },
+    "invoice_number": {
+      "type": "string",
+      "title": "Fakturanr."
+    },
     "notes": {
       "type": "string",
       "title": "Noter"

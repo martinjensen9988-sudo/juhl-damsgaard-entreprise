@@ -74,6 +74,7 @@ import {
   Wallet,
   PackageSearch,
   ClipboardCheck,
+  PenLine,
 } from 'lucide-react';
 
 const navItems = [
@@ -179,6 +180,13 @@ const navItems = [
   { to: '/forsikringssager', label: 'Forsikringssager', icon: ShieldAlert },
   { to: '/timepris-beregner', label: 'Timeprisberegner', icon: Calculator },
   { to: '/vedligeholdelseslog', label: 'Vedligeholdelseslog', icon: ClipboardCheck },
+  { to: '/leverandoeroversigt', label: 'Leverandøroversigt', icon: Truck },
+  { to: '/digital-signatur', label: 'Digital signatur', icon: PenLine },
+  { to: '/tids-rapporter', label: 'Tidsrapporter', icon: Timer },
+  { to: '/affalds-log', label: 'Affaldshåndtering', icon: Recycle },
+  { to: '/tilbudsanalyse', label: 'Tilbudsanalyse', icon: Target },
+  { to: '/materieludlejning', label: 'Materieludlejning', icon: Wrench },
+  { to: '/firma-indstillinger', label: 'Firma-indstillinger', icon: Building2 },
 ];
 
 export default function Layout() {

@@ -1,0 +1,95 @@
+{
+  "name": "SignatureRequest",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "title": "Titel"
+    },
+    "document_url": {
+      "type": "string",
+      "title": "Dokument"
+    },
+    "customer_name": {
+      "type": "string",
+      "title": "Kunde"
+    },
+    "customer_email": {
+      "type": "string",
+      "title": "Kundeemail"
+    },
+    "project_id": {
+      "type": "string",
+      "title": "Projekt"
+    },
+    "project_name": {
+      "type": "string",
+      "title": "Projektnavn"
+    },
+    "status": {
+      "type": "string",
+      "title": "Status",
+      "enum": [
+        "Kladde",
+        "Sendt",
+        "Underskrevet",
+        "Afvist",
+        "Udl\u00f8bet"
+      ],
+      "default": "Kladde"
+    },
+    "sent_date": {
+      "type": "string",
+      "format": "date",
+      "title": "Sendt"
+    },
+    "signed_date": {
+      "type": "string",
+      "format": "date",
+      "title": "Underskrevet"
+    },
+    "signed_by": {
+      "type": "string",
+      "title": "Underskrevet af"
+    },
+    "signature_url": {
+      "type": "string",
+      "title": "Signatur fil"
+    },
+    "expires_date": {
+      "type": "string",
+      "format": "date",
+      "title": "Udl\u00f8ber"
+    },
+    "notes": {
+      "type": "string",
+      "title": "Noter"
+    }
+  },
+  "required": [
+    "title",
+    "customer_email"
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

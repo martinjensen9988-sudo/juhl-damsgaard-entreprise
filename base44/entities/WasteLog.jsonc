@@ -50,6 +50,10 @@
       ],
       "default": "Genanvendelse"
     },
+    "disposal_facility": {
+      "type": "string",
+      "title": "Modtageranl\u00e6g"
+    },
     "date": {
       "type": "string",
       "format": "date",
@@ -63,6 +67,10 @@
     "certificate_number": {
       "type": "string",
       "title": "Certifikatnr."
+    },
+    "receipt_url": {
+      "type": "string",
+      "title": "Kvittering"
     },
     "reported_by": {
       "type": "string",

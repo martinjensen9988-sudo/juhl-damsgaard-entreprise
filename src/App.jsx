@@ -126,6 +126,13 @@ import Serviceopgaver from '@/pages/Serviceopgaver';
 import Forsikringssager from '@/pages/Forsikringssager';
 import TimeprisBeregner from '@/pages/TimeprisBeregner';
 import Vedligeholdelseslog from '@/pages/Vedligeholdelseslog';
+import Leverandoeroversigt from '@/pages/Leverandoeroversigt';
+import DigitalSignatur from '@/pages/DigitalSignatur';
+import TidsRapporter from '@/pages/TidsRapporter';
+import AffaldsLog from '@/pages/AffaldsLog';
+import Kundeportal from '@/pages/Kundeportal';
+import Tilbudsanalyse from '@/pages/Tilbudsanalyse';
+import Materieludlejning from '@/pages/Materieludlejning';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -266,6 +273,13 @@ const AuthenticatedApp = () => {
           <Route path="/forsikringssager" element={<Forsikringssager />} />
           <Route path="/timepris-beregner" element={<TimeprisBeregner />} />
           <Route path="/vedligeholdelseslog" element={<Vedligeholdelseslog />} />
+          <Route path="/leverandoeroversigt" element={<Leverandoeroversigt />} />
+          <Route path="/digital-signatur" element={<DigitalSignatur />} />
+          <Route path="/tids-rapporter" element={<TidsRapporter />} />
+          <Route path="/affalds-log" element={<AffaldsLog />} />
+          <Route path="/tilbudsanalyse" element={<Tilbudsanalyse />} />
+          <Route path="/materieludlejning" element={<Materieludlejning />} />
+          <Route path="/firma-indstillinger" element={<Virksomhedsindstillinger />} />
         </Route>
         <Route element={<PortalLayout />}>
           <Route path="/portal" element={<CustomerPortal />} />
@@ -276,6 +290,7 @@ const AuthenticatedApp = () => {
         </Route>
         <Route path="/storskaerm" element={<Storskaerm />} />
         <Route path="/infotaavle" element={<InfoTaavle />} />
+        <Route path="/kundeportal" element={<Kundeportal />} />
       </Route>
       <Route path="*" element={<PageNotFound />} />
     </Routes>
