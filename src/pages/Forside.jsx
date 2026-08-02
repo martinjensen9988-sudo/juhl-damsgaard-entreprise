@@ -82,7 +82,7 @@ export default function Forside() {
           <div className="max-w-3xl">
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-amber-400/10 border border-amber-400/20 text-amber-400 text-sm font-medium mb-6">
               <ShieldCheck className="w-4 h-4" />
-              Din lokale entreprenør på Fyn
+              Din entreprenør i hele Fyn og Jylland
             </div>
             <h1 className="text-5xl md:text-6xl font-bold text-white tracking-tight leading-[1.05]">
               Vi bygger, graver og<br />
@@ -286,7 +286,7 @@ export default function Forside() {
                 <MapPin className="w-6 h-6 text-amber-600" />
               </div>
               <div className="text-sm text-slate-500 mb-1">Besøg os</div>
-              <div className="font-semibold text-slate-900">Hovedvej 1, 1000 By</div>
+              <div className="font-semibold text-slate-900">Karup, Midtjylland</div>
             </div>
           </div>
           <div className="mt-12 max-w-2xl mx-auto">
