@@ -19,8 +19,9 @@ import {
   DialogFooter,
 } from '@/components/ui/dialog';
 import { formatDKK, formatDate } from '@/lib/format';
-import { Plus, Pencil, Trash2, HardHat, Calendar, MapPin, ClipboardList } from 'lucide-react';
+import { Plus, Pencil, Trash2, HardHat, Calendar, MapPin, ClipboardList, LayoutGrid, List } from 'lucide-react';
 import ArbejdsseddelDialog from '@/components/ArbejdsseddelDialog';
+import ProjectKanban from '@/components/ProjectKanban';
 
 const PROJECT_TYPES = ['Gravearbejde', 'Kloak', 'Asfalt', 'Beton', 'Nedrivning', 'Anlæg', 'Andet'];
 const STATUSES = ['Planlægning', 'I gang', 'Afsluttet', 'På hold'];
@@ -54,6 +55,17 @@ export default function Projects() {
   const [form, setForm] = useState(EMPTY);
   const [saving, setSaving] = useState(false);
   const [worksheetProject, setWorksheetProject] = useState(null);
+  const [view, setView] = useState('list');
+
+  const moveStatus = async (id, status) => {
+    try {
+      await base44.entities.Project.update(id, { status });
+      setProjects((prev) => prev.map((p) => (p.id === id ? { ...p, status } : p)));
+    } catch (e) {
+      console.error(e);
+      load();
+    }
+  };
 
   const load = async () => {
     setLoading(true);
@@ -126,9 +138,25 @@ export default function Projects() {
           <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-slate-900">Projekter</h1>
           <p className="text-slate-500 mt-1">Styr alle dine entrepriseprojekter</p>
         </div>
-        <Button onClick={openNew} className="bg-slate-950 hover:bg-slate-800">
-          <Plus className="w-4 h-4 mr-1.5" /> Nyt projekt
-        </Button>
+        <div className="flex items-center gap-3">
+          <div className="inline-flex rounded-lg border border-slate-200 bg-white p-0.5">
+            <button
+              onClick={() => setView('list')}
+              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition ${view === 'list' ? 'bg-slate-950 text-white' : 'text-slate-600 hover:bg-slate-100'}`}
+            >
+              <List className="w-4 h-4" /> Liste
+            </button>
+            <button
+              onClick={() => setView('kanban')}
+              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition ${view === 'kanban' ? 'bg-slate-950 text-white' : 'text-slate-600 hover:bg-slate-100'}`}
+            >
+              <LayoutGrid className="w-4 h-4" /> Kanban
+            </button>
+          </div>
+          <Button onClick={openNew} className="bg-slate-950 hover:bg-slate-800">
+            <Plus className="w-4 h-4 mr-1.5" /> Nyt projekt
+          </Button>
+        </div>
       </div>
 
       {loading ? (
@@ -140,6 +168,8 @@ export default function Projects() {
           <HardHat className="w-10 h-10 text-slate-300 mx-auto mb-3" />
           <p className="text-slate-500">Ingen projekter endnu. Opret dit første projekt.</p>
         </div>
+      ) : view === 'kanban' ? (
+        <ProjectKanban projects={projects} onMove={moveStatus} />
       ) : (
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
           {projects.map((p) => (
