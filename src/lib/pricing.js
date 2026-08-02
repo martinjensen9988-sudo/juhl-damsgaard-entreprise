@@ -8,7 +8,7 @@ export const SERVICES = [
   { name: 'Nedrivning', unit: 'm²', price: 450 },
   { name: 'Transport (materiale)', unit: 'fs', price: 3500 },
   { name: 'Maskinleje (gravemaskine)', unit: 'dag', price: 4500 },
-  { name: 'Håndarbejde', unit: 'time', price: 395 },
+  { name: 'Håndarbejde', unit: 'time', price: 280 },
 ];
 
 export const SERVICE_CATEGORIES = [
@@ -51,7 +51,7 @@ export const SERVICE_CATEGORIES = [
       { name: 'Transport (materiale)', unit: 'fs', price: 3500 },
       { name: 'Maskinleje (gravemaskine)', unit: 'dag', price: 4500 },
       { name: 'Affaldsbortkørsel', unit: 'fs', price: 3500 },
-      { name: 'Håndarbejde', unit: 'time', price: 395 },
+      { name: 'Håndarbejde', unit: 'time', price: 280 },
     ],
   },
 ];
