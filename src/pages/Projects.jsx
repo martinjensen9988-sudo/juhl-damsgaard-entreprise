@@ -19,9 +19,10 @@ import {
   DialogFooter,
 } from '@/components/ui/dialog';
 import { formatDKK, formatDate } from '@/lib/format';
-import { Plus, Pencil, Trash2, HardHat, Calendar, MapPin, ClipboardList, LayoutGrid, List } from 'lucide-react';
+import { Plus, Pencil, Trash2, HardHat, Calendar, MapPin, ClipboardList, LayoutGrid, List, FileText, Send } from 'lucide-react';
 import ArbejdsseddelDialog from '@/components/ArbejdsseddelDialog';
 import ProjectKanban from '@/components/ProjectKanban';
+import { useToast } from '@/components/ui/use-toast';
 
 const PROJECT_TYPES = ['Gravearbejde', 'Kloak', 'Asfalt', 'Beton', 'Nedrivning', 'Anlæg', 'Andet'];
 const STATUSES = ['Planlægning', 'I gang', 'Afsluttet', 'På hold'];
@@ -64,6 +65,29 @@ export default function Projects() {
     } catch (e) {
       console.error(e);
       load();
+    }
+  };
+
+  const { toast } = useToast();
+  const [invoiceBusy, setInvoiceBusy] = useState(null);
+
+  const createInvoiceFromHours = async (project, send) => {
+    setInvoiceBusy(project.id);
+    try {
+      const res = await base44.functions.invoke('createInvoiceFromHours', { project_id: project.id, send });
+      const data = res.data || res;
+      if (data.error) {
+        toast({ title: 'Kunne ikke oprette faktura', description: data.error, variant: 'destructive' });
+      } else {
+        toast({
+          title: send ? 'Faktura oprettet og sendt' : 'Fakturakladde oprettet',
+          description: `${data.invoice_number} • ${data.hours} timer registreret`,
+        });
+      }
+    } catch (e) {
+      toast({ title: 'Fejl', description: e.message, variant: 'destructive' });
+    } finally {
+      setInvoiceBusy(null);
     }
   };
 
@@ -214,6 +238,25 @@ export default function Projects() {
               <Button variant="outline" size="sm" className="w-full mb-2" onClick={() => setWorksheetProject(p)}>
                 <ClipboardList className="w-4 h-4 mr-1.5" /> Arbejdsseddel
               </Button>
+              <div className="grid grid-cols-2 gap-2 mb-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  disabled={invoiceBusy === p.id}
+                  onClick={() => createInvoiceFromHours(p, false)}
+                >
+                  <FileText className="w-4 h-4 mr-1.5" /> {invoiceBusy === p.id ? '...' : 'Fakturakladde'}
+                </Button>
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  className="bg-emerald-600 hover:bg-emerald-700 text-white"
+                  disabled={invoiceBusy === p.id}
+                  onClick={() => createInvoiceFromHours(p, true)}
+                >
+                  <Send className="w-4 h-4 mr-1.5" /> Send faktura
+                </Button>
+              </div>
               <div className="flex justify-end gap-1">
                 <Button variant="ghost" size="icon" onClick={() => openEdit(p)}>
                   <Pencil className="w-4 h-4 text-slate-500" />
