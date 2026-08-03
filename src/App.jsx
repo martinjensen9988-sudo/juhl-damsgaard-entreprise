@@ -134,6 +134,7 @@ import TidsRapporter from '@/pages/TidsRapporter';
 import AffaldsLog from '@/pages/AffaldsLog';
 import Kundeportal from '@/pages/Kundeportal';
 import Tilbudsanalyse from '@/pages/Tilbudsanalyse';
+import Tilfredshedskema from '@/pages/Tilfredhedskema';
 import Materieludlejning from '@/pages/Materieludlejning';
 
 const AuthenticatedApp = () => {
@@ -291,6 +292,7 @@ const AuthenticatedApp = () => {
           <Route path="/kunde-forside" element={<KundeForside />} />
           <Route path="/kunde-dashboard" element={<KundeDashboard />} />
           <Route path="/portal/tilbud/:id" element={<TilbudVisning />} />
+          <Route path="/portal/tilfredshed" element={<Tilfredshedskema />} />
         </Route>
         <Route path="/storskaerm" element={<Storskaerm />} />
         <Route path="/infotaavle" element={<InfoTaavle />} />
