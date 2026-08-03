@@ -152,6 +152,7 @@ import Materieloversigt from '@/pages/Materieloversigt';
 import Udgiftsgodkendelse from '@/pages/Udgiftsgodkendelse';
 import ProjektLogbog from '@/pages/ProjektLogbog';
 import RessourcePlanlaegning from '@/pages/RessourcePlanlaegning';
+import Fakturaarkiv from '@/pages/Fakturaarkiv';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -317,6 +318,7 @@ const AuthenticatedApp = () => {
           <Route path="/udgifts-godkendelse" element={<Udgiftsgodkendelse />} />
           <Route path="/projekt-logbog" element={<ProjektLogbog />} />
           <Route path="/ressource-planlaegning" element={<RessourcePlanlaegning />} />
+          <Route path="/faktura-arkiv" element={<Fakturaarkiv />} />
         </Route>
         <Route element={<PortalLayout />}>
           <Route path="/portal" element={<CustomerPortal />} />

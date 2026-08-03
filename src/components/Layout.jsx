@@ -87,6 +87,7 @@ const navItems = [
   { to: '/projekter', label: 'Projekter', icon: HardHat },
   { to: '/tilbud', label: 'Tilbud', icon: FileText },
   { to: '/faktura', label: 'Faktura', icon: Receipt },
+  { to: '/faktura-arkiv', label: 'Fakturaarkiv', icon: Archive },
   { to: '/planlaegning', label: 'Planlægning', icon: CalendarDays },
   { to: '/materialeliste', label: 'Materialer', icon: Package },
   { to: '/tidsregistrering', label: 'Tid', icon: Clock },
