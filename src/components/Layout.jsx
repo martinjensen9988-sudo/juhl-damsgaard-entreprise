@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { NavLink, Outlet, useLocation } from 'react-router-dom';
+import { Image } from '@/components/ui/image';
+import { BRAND_LOGO_URL } from '@/lib/brand';
 import {
   LayoutDashboard,
   Users,
@@ -279,9 +281,7 @@ export default function Layout() {
       {/* Desktop sidebar */}
       <aside className="hidden md:flex w-64 flex-col bg-slate-950 text-slate-300 fixed inset-y-0 left-0 z-30">
         <div className="flex items-center gap-3 px-6 py-6 border-b border-slate-800">
-          <div className="w-10 h-10 rounded-lg bg-amber-400 flex items-center justify-center shadow-lg shadow-amber-400/20">
-            <Building2 className="w-5 h-5 text-slate-950" />
-          </div>
+          <Image src={BRAND_LOGO_URL} fittingType="fit" className="h-10 w-10 rounded-lg bg-white overflow-hidden shadow-lg shadow-amber-400/20 flex-shrink-0" alt="Juhl & Damsgaard Entreprise logo" />
           <div>
             <div className="font-bold text-white tracking-tight leading-none">Juhl & Damsgaard</div>
             <div className="text-xs text-slate-500 mt-1">Entreprise</div>

@@ -1,5 +1,6 @@
 import { jsPDF } from 'jspdf';
 import { formatDKK, calcSubtotal, calcVAT, calcTotal, formatDate } from './format';
+import { BRAND_LOGO_URL } from './brand';
 
 const DEFAULT_TERMS = [
   'Betaling senest på den angivne forfaldsdato.',
@@ -38,9 +39,10 @@ export async function generateInvoicePDF(invoice, company = {}) {
   const margin = 20;
   let y = 0;
 
+  const logoUrl = company.logo_url || BRAND_LOGO_URL;
   let logoData = null;
-  if (company.logo_url) {
-    logoData = await fetchImageAsDataURL(company.logo_url);
+  if (logoUrl) {
+    logoData = await fetchImageAsDataURL(logoUrl);
   }
 
   // ── Header bar ──
@@ -49,7 +51,9 @@ export async function generateInvoicePDF(invoice, company = {}) {
 
   if (logoData) {
     try {
-      doc.addImage(logoData, imgFormat(company.logo_url), margin, 7, 34, 16, undefined, 'FAST');
+      doc.setFillColor(255, 255, 255);
+      doc.roundedRect(margin - 1.5, 5.5, 37, 20, 2.5, 2.5, 'F');
+      doc.addImage(logoData, imgFormat(logoUrl), margin, 7, 34, 17, undefined, 'FAST');
     } catch {
       // Fald tilbage til virksomhedsnavn
     }

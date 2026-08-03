@@ -1,5 +1,6 @@
 import { jsPDF } from 'jspdf';
 import { formatDKK, calcSubtotal, calcVAT, calcTotal, formatDate } from './format';
+import { BRAND_LOGO_URL } from './brand';
 
 // Standard faste betingelser for entreprenørtilbud
 const DEFAULT_TERMS = [
@@ -42,9 +43,10 @@ export async function generateQuotePDF(quote, company = {}) {
   let y = 0;
 
   // ── Logo (hvis tilgængeligt) ──
+  const logoUrl = company.logo_url || BRAND_LOGO_URL;
   let logoData = null;
-  if (company.logo_url) {
-    logoData = await fetchImageAsDataURL(company.logo_url);
+  if (logoUrl) {
+    logoData = await fetchImageAsDataURL(logoUrl);
   }
 
   // ── Header bar ──
@@ -53,7 +55,9 @@ export async function generateQuotePDF(quote, company = {}) {
 
   if (logoData) {
     try {
-      doc.addImage(logoData, imgFormat(company.logo_url), margin, 7, 34, 16, undefined, 'FAST');
+      doc.setFillColor(255, 255, 255);
+      doc.roundedRect(margin - 1.5, 5.5, 37, 20, 2.5, 2.5, 'F');
+      doc.addImage(logoData, imgFormat(logoUrl), margin, 7, 34, 17, undefined, 'FAST');
     } catch {
       // Fald tilbage til virksomhedsnavn
     }
