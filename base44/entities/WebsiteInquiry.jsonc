@@ -16,7 +16,7 @@
     },
     "project_type": {
       "type": "string",
-      "title": "Ogavetype",
+      "title": "Opgavetype",
       "enum": [
         "Gravearbejde",
         "Kloak",
@@ -24,17 +24,59 @@
         "Beton",
         "Nedrivning",
         "Anl\u00e6g",
+        "Malerarbejde",
+        "T\u00f8mrer",
+        "VVS",
+        "Elektriker",
+        "Totalentreprise",
         "Andet"
       ],
       "default": "Andet"
     },
     "description": {
       "type": "string",
-      "title": "Beskrivelse"
+      "title": "Bem\u00e6rkninger"
+    },
+    "request_summary": {
+      "type": "string",
+      "title": "Kundens beskrivelse"
+    },
+    "line_items": {
+      "type": "array",
+      "title": "Tilbudslinjer",
+      "items": {
+        "type": "object",
+        "properties": {
+          "description": {
+            "type": "string",
+            "title": "Beskrivelse"
+          },
+          "quantity": {
+            "type": "number",
+            "title": "Antal"
+          },
+          "unit": {
+            "type": "string",
+            "title": "Enhed"
+          },
+          "unit_price": {
+            "type": "number",
+            "title": "Stk. pris"
+          },
+          "line_total": {
+            "type": "number",
+            "title": "Linje total"
+          }
+        }
+      }
     },
     "estimated_budget": {
       "type": "number",
       "title": "Estimeret budget (DKK)"
+    },
+    "quote_total": {
+      "type": "number",
+      "title": "Tilbud total inkl. moms"
     },
     "address": {
       "type": "string",
@@ -88,11 +130,7 @@
         "role": "admin"
       }
     },
-    "create": {
-      "user_condition": {
-        "role": "admin"
-      }
-    },
+    "create": {},
     "update": {
       "user_condition": {
         "role": "admin"
