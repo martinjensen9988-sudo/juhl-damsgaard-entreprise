@@ -10,7 +10,7 @@ const DEFAULT_TERMS = [
   'Arbejdet udføres i overensstemmelse med gældende normer, bygningsreglement og arbejdsmiljølovgivning.',
   'Byggeplads etableres og ryddes af Juhl & Damsgaard Entreprise ved arbejdets afslutning.',
   'Forbehold for ændringer i materialepriser samt uforudsete forhold i undergrund kan forekomme.',
-  'Ejendommen / arealset afleveres i fejlfri og rengjort stand efter endt arbejde.',
+  'Ejendommen / arealet afleveres i fejlfri og rengjort stand efter endt arbejde.',
 ];
 
 async function fetchImageAsDataURL(url) {
@@ -36,10 +36,18 @@ function imgFormat(url) {
   return 'PNG';
 }
 
+const SLATE = [15, 23, 42];
+const SLATE_LIGHT = [100, 116, 139];
+const SLATE_MID = [71, 85, 105];
+const BORDER = [226, 232, 240];
+const ROW_ALT = [248, 250, 252];
+const ACCENT = [180, 83, 9]; // warm amber
+
 export async function generateQuotePDF(quote, company = {}) {
   const doc = new jsPDF({ unit: 'mm', format: 'a4' });
   const pageW = 210;
   const margin = 20;
+  const contentW = pageW - 2 * margin;
   let y = 0;
 
   // ── Logo (hvis tilgængeligt) ──
@@ -49,171 +57,224 @@ export async function generateQuotePDF(quote, company = {}) {
     logoData = await fetchImageAsDataURL(logoUrl);
   }
 
-  // ── Header bar ──
-  doc.setFillColor(15, 23, 42);
-  doc.rect(0, 0, pageW, 35, 'F');
+  // ── Header bar (mørk) ──
+  doc.setFillColor(...SLATE);
+  doc.rect(0, 0, pageW, 38, 'F');
 
+  // Tynd accent-linje under header
+  doc.setFillColor(...ACCENT);
+  doc.rect(0, 38, pageW, 1.2, 'F');
+
+  // Logo i hvid chip
   if (logoData) {
     try {
       doc.setFillColor(255, 255, 255);
-      doc.roundedRect(margin - 1.5, 5.5, 37, 20, 2.5, 2.5, 'F');
-      doc.addImage(logoData, imgFormat(logoUrl), margin, 7, 34, 17, undefined, 'FAST');
+      doc.roundedRect(margin, 6, 36, 22, 2, 2, 'F');
+      doc.addImage(logoData, imgFormat(logoUrl), margin + 2, 8, 32, 18, undefined, 'FAST');
     } catch {
-      // Fald tilbage til virksomhedsnavn
+      doc.setTextColor(255, 255, 255);
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(16);
+      doc.text(company.company_name || 'Juhl & Damsgaard Entreprise', margin, 20);
     }
+  } else {
+    doc.setTextColor(255, 255, 255);
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(16);
+    doc.text(company.company_name || 'Juhl & Damsgaard Entreprise', margin, 20);
   }
 
+  // Dokumenttype + nummer til højre
   doc.setTextColor(255, 255, 255);
   doc.setFont('helvetica', 'bold');
-  doc.setFontSize(logoData ? 12 : 20);
-  if (!logoData) {
-    doc.text(company.company_name || 'Juhl & Damsgaard Entreprise', margin, 16);
-  } else {
-    doc.text(company.company_name || 'Juhl & Damsgaard Entreprise', margin + 38, 14);
-  }
-
-  doc.setFont('helvetica', 'normal');
-  doc.setFontSize(9);
-  const addr = [company.address, [company.postal_code, company.city].filter(Boolean).join(' ')].filter(Boolean).join(', ');
-  const contact = [company.phone, company.email].filter(Boolean).join('  ·  ');
-  let infoY = logoData ? 18 : 22;
-  const infoX = logoData ? margin + 38 : margin;
-  if (addr) { doc.text(addr, infoX, infoY); infoY += 5; }
-  if (contact) { doc.text(contact, infoX, infoY); infoY += 5; }
-  if (company.cvr) { doc.text(`CVR: ${company.cvr}`, infoX, infoY); }
-
-  doc.setTextColor(251, 191, 36);
-  doc.setFont('helvetica', 'bold');
-  doc.setFontSize(26);
-  doc.text('TILBUD', pageW - margin, 16, { align: 'right' });
+  doc.setFontSize(22);
+  doc.text('TILBUD', pageW - margin, 18, { align: 'right' });
 
   doc.setTextColor(203, 213, 225);
   doc.setFont('helvetica', 'normal');
-  doc.setFontSize(11);
-  doc.text(quote.quote_number, pageW - margin, 23, { align: 'right' });
+  doc.setFontSize(10);
+  doc.text(quote.quote_number || '', pageW - margin, 25, { align: 'right' });
   doc.setFontSize(9);
-  doc.text(formatDate(quote.date), pageW - margin, 28, { align: 'right' });
+  doc.text(formatDate(quote.date), pageW - margin, 30, { align: 'right' });
 
-  // ── Customer + meta ──
-  y = 48;
-  doc.setTextColor(15, 23, 42);
+  // ── Modtager- og metainfo (to kolonner) ──
+  y = 50;
+  const colW = contentW / 2;
+
+  // Venstre: Tilbud til
+  doc.setTextColor(...SLATE);
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(9);
+  doc.text('TILBUD TIL', margin, y);
+  doc.setDrawColor(...BORDER);
+  doc.setLineWidth(0.3);
+  doc.line(margin, y + 2, margin + colW - 6, y + 2);
+
+  y += 7;
+  doc.setTextColor(...SLATE);
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(11);
-  doc.text('Tilbud til:', margin, y);
-  y += 6;
-  doc.setFont('helvetica', 'normal');
-  doc.setFontSize(10);
   doc.text(quote.customer_name || '—', margin, y);
+  y += 5;
+
   if (quote.customer_email) {
-    y += 5;
-    doc.setTextColor(100, 116, 139);
+    doc.setFont('helvetica', 'normal');
     doc.setFontSize(9);
+    doc.setTextColor(...SLATE_LIGHT);
     doc.text(quote.customer_email, margin, y);
+    y += 4.5;
+  }
+  if (quote.project_name) {
+    doc.setTextColor(...SLATE_LIGHT);
+    doc.setFontSize(9);
+    doc.text(quote.project_name, margin, y);
   }
 
-  let metaY = 48;
-  doc.setTextColor(15, 23, 42);
+  // Højre: Tilbudsoplysninger
+  let metaY = 50;
+  const metaX = margin + colW + 6;
+  doc.setTextColor(...SLATE);
   doc.setFont('helvetica', 'bold');
-  doc.setFontSize(10);
-  doc.text('Projekt:', pageW - margin - 55, metaY);
-  doc.text('Gyldig til:', pageW - margin - 55, metaY + 6);
-  doc.setFont('helvetica', 'normal');
-  doc.text(quote.project_name || '—', pageW - margin, metaY, { align: 'right' });
-  doc.text(quote.valid_until ? formatDate(quote.valid_until) : '30 dage', pageW - margin, metaY + 6, { align: 'right' });
+  doc.setFontSize(9);
+  doc.text('TILBUDSOPLYSNINGER', metaX, metaY);
+  doc.setDrawColor(...BORDER);
+  doc.line(metaX, metaY + 2, pageW - margin, metaY + 2);
 
-  // ── Table header ──
-  y = 72;
-  doc.setFillColor(15, 23, 42);
-  doc.rect(margin, y, pageW - 2 * margin, 8, 'F');
+  const metaRows = [
+    ['Tilbudsnr.', quote.quote_number || '—'],
+    ['Dato', formatDate(quote.date)],
+    ['Gyldig til', quote.valid_until ? formatDate(quote.valid_until) : '30 dage'],
+    ['Projekt', quote.project_name || '—'],
+  ];
+  metaY += 7;
+  metaRows.forEach(([label, value]) => {
+    doc.setTextColor(...SLATE_LIGHT);
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(9);
+    doc.text(label, metaX, metaY);
+    doc.setTextColor(...SLATE);
+    doc.setFont('helvetica', 'bold');
+    doc.text(String(value), pageW - margin, metaY, { align: 'right' });
+    metaY += 5;
+  });
+
+  // ── Tabeloverskrift ──
+  y = 92;
+  const colX = {
+    desc: margin,
+    qty: margin + 115,
+    unit: margin + 130,
+    price: pageW - margin - 27,
+    total: pageW - margin,
+  };
+
+  doc.setFillColor(...SLATE);
+  doc.rect(margin, y, contentW, 9, 'F');
   doc.setTextColor(255, 255, 255);
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(9);
-  doc.text('Beskrivelse', margin + 2, y + 5.5);
-  doc.text('Antal', margin + 115, y + 5.5, { align: 'right' });
-  doc.text('Enhed', margin + 130, y + 5.5);
-  doc.text('Stk. pris', pageW - margin - 27, y + 5.5, { align: 'right' });
-  doc.text('Beløb', pageW - margin - 2, y + 5.5, { align: 'right' });
+  doc.text('BESKRIVELSE', colX.desc + 3, y + 6);
+  doc.text('ANTAL', colX.qty + 8, y + 6, { align: 'right' });
+  doc.text('ENHED', colX.unit, y + 6);
+  doc.text('STK. PRIS', colX.price + 25, y + 6, { align: 'right' });
+  doc.text('BELØB', colX.total - 3, y + 6, { align: 'right' });
 
-  y += 8;
+  y += 9;
 
-  // ── Line items ──
+  // ── Linjeelementer ──
   const items = quote.line_items || [];
   doc.setFontSize(9);
+
   items.forEach((item, i) => {
-    if (y > 200) { doc.addPage(); y = 20; }
+    if (y > 225) { doc.addPage(); y = 20; }
     const rowH = 7;
     if (i % 2 === 0) {
-      doc.setFillColor(248, 250, 252);
-      doc.rect(margin, y, pageW - 2 * margin, rowH, 'F');
+      doc.setFillColor(...ROW_ALT);
+      doc.rect(margin, y, contentW, rowH, 'F');
     }
-    doc.setTextColor(15, 23, 42);
+    doc.setTextColor(...SLATE);
     doc.setFont('helvetica', 'normal');
-    const descLines = doc.splitTextToSize(item.description || '', 103);
-    doc.text(descLines, margin + 2, y + 5);
-    doc.setTextColor(100, 116, 139);
-    doc.text(String(item.quantity || ''), margin + 115, y + 5, { align: 'right' });
-    doc.text(item.unit || '', margin + 130, y + 5);
-    doc.text(formatDKK(item.unit_price), pageW - margin - 27, y + 5, { align: 'right' });
-    doc.setTextColor(15, 23, 42);
+    const descLines = doc.splitTextToSize(item.description || '', 108);
+    doc.text(descLines, colX.desc + 3, y + 5);
+
+    doc.setTextColor(...SLATE_LIGHT);
+    doc.text(String(item.quantity || ''), colX.qty + 8, y + 5, { align: 'right' });
+    doc.text(item.unit || '', colX.unit, y + 5);
+    doc.text(formatDKK(item.unit_price), colX.price + 25, y + 5, { align: 'right' });
+
+    doc.setTextColor(...SLATE);
     doc.setFont('helvetica', 'bold');
-    doc.text(formatDKK((item.quantity || 0) * (item.unit_price || 0)), pageW - margin - 2, y + 5, { align: 'right' });
+    doc.text(formatDKCLine(item), colX.total - 3, y + 5, { align: 'right' });
     doc.setFont('helvetica', 'normal');
     y += rowH;
   });
 
   if (items.length === 0) {
-    doc.setTextColor(150, 150, 150);
-    doc.text('Ingen linjeelementer', margin + 2, y + 5);
+    doc.setTextColor(...SLATE_LIGHT);
+    doc.text('Ingen linjeelementer', colX.desc + 3, y + 5);
     y += 7;
   }
 
-  // ── Totals ──
-  y += 5;
+  // ── Totalbox (højre) ──
+  y += 6;
+  if (y > 235) { doc.addPage(); y = 20; }
+
   const subtotal = calcSubtotal(items);
   const vat = calcVAT(subtotal);
   const total = calcTotal(items);
+  const boxW = 70;
+  const boxX = pageW - margin - boxW;
 
-  doc.setTextColor(15, 23, 42);
+  doc.setFillColor(248, 250, 252);
+  doc.rect(boxX, y, boxW, 20, 'F');
+  doc.setDrawColor(...BORDER);
+  doc.rect(boxX, y, boxW, 20);
+
+  doc.setTextColor(...SLATE);
   doc.setFont('helvetica', 'normal');
-  doc.setFontSize(10);
-  doc.text('Subtotal ekskl. moms:', pageW - margin - 57, y);
-  doc.text(formatDKK(subtotal), pageW - margin - 2, y, { align: 'right' });
-  y += 6;
-  doc.text('Moms (25%):', pageW - margin - 57, y);
-  doc.text(formatDKK(vat), pageW - margin - 2, y, { align: 'right' });
-  y += 3;
-  doc.setFillColor(15, 23, 42);
-  doc.rect(pageW - margin - 57, y, 57, 10, 'F');
+  doc.setFontSize(9);
+  doc.text('Subtotal ekskl. moms', boxX + 4, y + 6);
+  doc.text(formatDKK(subtotal), pageW - margin - 4, y + 6, { align: 'right' });
+  doc.text('Moms (25%)', boxX + 4, y + 11);
+  doc.text(formatDKK(vat), pageW - margin - 4, y + 11, { align: 'right' });
+
+  // Total bjælke
+  doc.setFillColor(...SLATE);
+  doc.rect(boxX, y + 14, boxW, 9, 'F');
   doc.setTextColor(255, 255, 255);
   doc.setFont('helvetica', 'bold');
-  doc.setFontSize(12);
-  doc.text('Total inkl. moms:', pageW - margin - 55, y + 6.5);
-  doc.text(formatDKK(total), pageW - margin - 2, y + 6.5, { align: 'right' });
+  doc.setFontSize(10);
+  doc.text('TOTAL INKL. MOMS', boxX + 4, y + 20);
+  doc.text(formatDKK(total), pageW - margin - 4, y + 20, { align: 'right' });
 
   // ── Bemærkninger ──
-  y += 18;
+  y = Math.max(y + 26, 200);
   if (quote.notes) {
     if (y > 240) { doc.addPage(); y = 20; }
-    doc.setTextColor(15, 23, 42);
+    doc.setTextColor(...SLATE);
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(10);
-    doc.text('Bemærkninger:', margin, y);
+    doc.text('Bemærkninger', margin, y);
+    doc.setDrawColor(...BORDER);
+    doc.line(margin, y + 2, margin + 60, y + 2);
+    y += 7;
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(9);
-    const noteLines = doc.splitTextToSize(quote.notes, pageW - 2 * margin);
-    doc.text(noteLines, margin, y + 6);
-    y += 6 + noteLines.length * 5;
+    doc.setTextColor(...SLATE_MID);
+    const noteLines = doc.splitTextToSize(quote.notes, contentW);
+    doc.text(noteLines, margin, y);
+    y += noteLines.length * 5 + 4;
   }
 
   // ── Betingelser & vilkår ──
-  y += 8;
-  if (y > 245) { doc.addPage(); y = 20; }
+  y += 4;
+  if (y > 250) { doc.addPage(); y = 20; }
 
-  doc.setDrawColor(226, 232, 240);
+  doc.setDrawColor(...BORDER);
   doc.line(margin, y, pageW - margin, y);
   y += 6;
 
-  doc.setTextColor(15, 23, 42);
+  doc.setTextColor(...SLATE);
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(10);
   doc.text('Betingelser & vilkår', margin, y);
@@ -221,7 +282,7 @@ export async function generateQuotePDF(quote, company = {}) {
 
   doc.setFont('helvetica', 'normal');
   doc.setFontSize(8);
-  doc.setTextColor(71, 85, 105);
+  doc.setTextColor(...SLATE_MID);
 
   if (company.payment_terms) {
     doc.text(`Betalingsbetingelser: ${company.payment_terms}`, margin, y);
@@ -229,29 +290,56 @@ export async function generateQuotePDF(quote, company = {}) {
   }
 
   DEFAULT_TERMS.forEach((term) => {
-    if (y > 282) { doc.addPage(); y = 20; }
-    const lines = doc.splitTextToSize(`•  ${term}`, pageW - 2 * margin);
+    if (y > 270) { doc.addPage(); y = 20; }
+    const lines = doc.splitTextToSize(`•  ${term}`, contentW);
     doc.text(lines, margin, y);
     y += lines.length * 4 + 1.5;
   });
 
+  // ── Signaturafsnit (ikke på ny side hvis plads) ──
+  y += 6;
+  if (y > 260) { doc.addPage(); y = 20; }
+
+  const sigW = 80;
+  const sigY = y;
+  doc.setDrawColor(...SLATE_LIGHT);
+  doc.setLineWidth(0.3);
+  doc.line(margin, sigY, margin + sigW, sigY);
+  doc.line(margin + sigW + 14, sigY, margin + 2 * sigW + 14, sigY);
+
+  doc.setTextColor(...SLATE_LIGHT);
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(8);
+  doc.text('Dato & underskrift (kunde)', margin, sigY + 5);
+  doc.text('Underskrift (Juhl & Damsgaard)', margin + sigW + 14, sigY + 5);
+
   // ── Footer ──
-  if (y < 282) y = 282;
-  doc.setDrawColor(226, 232, 240);
+  doc.setDrawColor(...BORDER);
+  doc.setLineWidth(0.3);
   doc.line(margin, 285, pageW - margin, 285);
-  doc.setTextColor(100, 116, 139);
+  doc.setFillColor(...SLATE);
+  doc.rect(0, 285.3, pageW, 0.5, 'F');
+
+  doc.setTextColor(...SLATE_LIGHT);
   doc.setFontSize(8);
   doc.setFont('helvetica', 'normal');
   const footerParts = [
-    company.bank_account ? `Bank: ${company.bank_account}` : '',
-    company.email || '',
-    company.phone || '',
+    company.company_name || 'Juhl & Damsgaard Entreprise',
+    company.cvr ? `CVR ${company.cvr}` : '',
+    company.bank_account ? `Bank ${company.bank_account}` : '',
   ].filter(Boolean);
   if (footerParts.length) {
     doc.text(footerParts.join('  ·  '), margin, 290);
   }
-  doc.setTextColor(148, 163, 184);
-  doc.text('Juhl & Damsgaard Entreprise', pageW - margin, 290, { align: 'right' });
+  const contactParts = [company.phone, company.email].filter(Boolean);
+  if (contactParts.length) {
+    doc.text(contactParts.join('  ·  '), pageW - margin, 290, { align: 'right' });
+  }
 
   doc.save(`Tilbud-${quote.quote_number}.pdf`);
+}
+
+// Hjælpefunktion for linjetotal
+function formatDKCLine(item) {
+  return formatDKK((item.quantity || 0) * (item.unit_price || 0));
 }
