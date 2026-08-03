@@ -1,7 +1,30 @@
 import { Plus, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { calcLineTotal, formatDKK } from '@/lib/format';
+
+const UNITS = [
+  { value: 'stk', label: 'stk' },
+  { value: 'sæt', label: 'sæt' },
+  { value: 'timer', label: 'timer' },
+  { value: 'm', label: 'm' },
+  { value: 'm²', label: 'm²' },
+  { value: 'm³', label: 'm³' },
+  { value: 'fs', label: 'fs' },
+  { value: 'ton', label: 'ton' },
+  { value: 'kg', label: 'kg' },
+  { value: 'læs', label: 'læs' },
+  { value: 'km', label: 'km' },
+  { value: 'dag', label: 'dag' },
+  { value: 'mnd', label: 'mnd' },
+];
 
 export default function LineItemEditor({ items = [], onChange }) {
   const update = (index, field, value) => {
@@ -44,12 +67,19 @@ export default function LineItemEditor({ items = [], onChange }) {
             value={item.quantity ?? ''}
             onChange={(e) => update(i, 'quantity', parseFloat(e.target.value) || 0)}
           />
-          <Input
-            className="col-span-3 md:col-span-2"
-            value={item.unit || ''}
-            onChange={(e) => update(i, 'unit', e.target.value)}
-            placeholder="stk"
-          />
+          <Select
+            value={item.unit || 'stk'}
+            onValueChange={(v) => update(i, 'unit', v)}
+          >
+            <SelectTrigger className="col-span-3 md:col-span-2">
+              <SelectValue placeholder="stk" />
+            </SelectTrigger>
+            <SelectContent>
+              {UNITS.map((u) => (
+                <SelectItem key={u.value} value={u.value}>{u.label}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
           <Input
             className="col-span-4 md:col-span-2 text-right"
             type="number"
