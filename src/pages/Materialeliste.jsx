@@ -17,8 +17,9 @@ import {
   DialogTitle,
   DialogFooter,
 } from '@/components/ui/dialog';
+import { Link } from 'react-router-dom';
 import { formatDKK, calcLineTotal } from '@/lib/format';
-import { Plus, Pencil, Trash2, Package, CheckCircle2, Circle } from 'lucide-react';
+import { Plus, Pencil, Trash2, Package, CheckCircle2, Circle, Warehouse, ArrowRight } from 'lucide-react';
 
 const CATEGORIES = ['Beton', 'Asfalt', 'Kloak', 'Jord', 'Sten', 'Metal', 'Træ', 'Andet'];
 
@@ -132,9 +133,22 @@ export default function Materialeliste() {
           <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-slate-900">Materialeliste</h1>
           <p className="text-slate-500 mt-1">Administrer materialer per projekt</p>
         </div>
-        <Button onClick={openNew} className="bg-slate-950 hover:bg-slate-800">
-          <Plus className="w-4 h-4 mr-1.5" /> Tilføj materiale
-        </Button>
+        <div className="flex gap-2">
+          <Link to="/lager-overblik">
+            <Button variant="outline">
+              <Warehouse className="w-4 h-4 mr-1.5" /> Lagerbeholdning <ArrowRight className="w-3.5 h-3.5 ml-1" />
+            </Button>
+          </Link>
+          <Button onClick={openNew} className="bg-slate-950 hover:bg-slate-800">
+            <Plus className="w-4 h-4 mr-1.5" /> Tilføj materiale
+          </Button>
+        </div>
+      </div>
+
+      <div className="flex items-center gap-2.5 bg-amber-50 border border-amber-200 rounded-xl p-3 text-sm text-amber-800">
+        <Warehouse className="w-4 h-4 text-amber-600 shrink-0" />
+        <span><strong>Lagerbeholdning & min. lager:</strong> Registrer varer med beholdning, stk. pris og minimumsniveau på</span>
+        <Link to="/lager-overblik" className="font-medium text-amber-900 underline hover:text-amber-700">Lageroverblik-siden →</Link>
       </div>
 
       <div className="flex items-center gap-3">
