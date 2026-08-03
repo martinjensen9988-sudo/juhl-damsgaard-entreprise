@@ -2,8 +2,9 @@ import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { base44 } from '@/api/base44Client';
 import { Button } from '@/components/ui/button';
+import { generateQuotePDF } from '@/lib/quotePdf';
 import { formatDKK, calcSubtotal, calcVAT, calcTotal, formatDate } from '@/lib/format';
-import { Check, X, FileText, CheckCircle2, XCircle, ArrowLeft } from 'lucide-react';
+import { Check, X, FileText, CheckCircle2, XCircle, ArrowLeft, Download } from 'lucide-react';
 
 export default function TilbudVisning() {
   const { id } = useParams();
@@ -12,12 +13,16 @@ export default function TilbudVisning() {
   const [loading, setLoading] = useState(true);
   const [acting, setActing] = useState(false);
   const [error, setError] = useState(null);
+  const [company, setCompany] = useState({});
+  const [pdfLoading, setPdfLoading] = useState(false);
 
   useEffect(() => {
     (async () => {
       try {
         const q = await base44.entities.Quote.get(id);
         setQuote(q);
+        const cs = await base44.entities.CompanySettings.list('-created_date', 10);
+        setCompany(cs[0] || {});
         await base44.functions.invoke('quoteAction', { quote_id: id, action: 'view' });
       } catch (e) {
         setError(e?.response?.data?.error || e?.message || 'Kunne ikke hente tilbud');
@@ -26,6 +31,17 @@ export default function TilbudVisning() {
       }
     })();
   }, [id]);
+
+  const downloadPDF = async () => {
+    setPdfLoading(true);
+    try {
+      await generateQuotePDF(quote, company);
+    } catch (e) {
+      alert('Kunne ikke generere PDF');
+    } finally {
+      setPdfLoading(false);
+    }
+  };
 
   const handleAction = async (action) => {
     setActing(true);
@@ -82,6 +98,19 @@ export default function TilbudVisning() {
               <div className="font-bold text-slate-900 text-lg">{quote.quote_number}</div>
             </div>
           </div>
+          <Button
+            onClick={downloadPDF}
+            disabled={pdfLoading}
+            variant="outline"
+            size="sm"
+          >
+            {pdfLoading ? (
+              <div className="w-4 h-4 border-2 border-slate-300 border-t-slate-700 rounded-full animate-spin" />
+            ) : (
+              <Download className="w-4 h-4 mr-1.5" />
+            )}
+            Download PDF
+          </Button>
           {isAccepted && (
             <div className="flex items-center gap-2 text-emerald-600 font-medium">
               <CheckCircle2 className="w-5 h-5" /> Accepteret

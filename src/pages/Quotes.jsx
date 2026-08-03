@@ -19,9 +19,10 @@ import {
   DialogFooter,
 } from '@/components/ui/dialog';
 import LineItemEditor from '@/components/LineItemEditor';
+import SendTilbudDialog from '@/components/SendTilbudDialog';
 import { generateQuotePDF } from '@/lib/quotePdf';
 import { formatDKK, calcSubtotal, calcVAT, calcTotal, formatDate } from '@/lib/format';
-import { Plus, Pencil, Trash2, FileText, ArrowRight, Sparkles, ExternalLink, Download } from 'lucide-react';
+import { Plus, Pencil, Trash2, FileText, ArrowRight, Sparkles, ExternalLink, Download, Send } from 'lucide-react';
 
 const STATUSES = ['Kladde', 'Sendt', 'Accepteret', 'Afvist', 'Udløbet'];
 
@@ -58,6 +59,8 @@ export default function Quotes() {
   const [aiLoading, setAiLoading] = useState(false);
   const [company, setCompany] = useState({});
   const [pdfLoading, setPdfLoading] = useState(null);
+  const [sendOpen, setSendOpen] = useState(false);
+  const [sendQuote, setSendQuote] = useState(null);
 
   const load = async () => {
     setLoading(true);
@@ -207,6 +210,22 @@ export default function Quotes() {
     navigator.clipboard.writeText(url).then(() => alert('Link kopieret:\n' + url));
   };
 
+  const openSend = (q) => {
+    setSendQuote(q);
+    setSendOpen(true);
+  };
+
+  const handleSent = async () => {
+    if (sendQuote && sendQuote.status === 'Kladde') {
+      try {
+        await base44.entities.Quote.update(sendQuote.id, { status: 'Sendt' });
+        load();
+      } catch (e) {
+        console.error(e);
+      }
+    }
+  };
+
   const downloadPDF = async (q) => {
     setPdfLoading(q.id);
     try {
@@ -284,6 +303,15 @@ export default function Quotes() {
                             <ArrowRight className="w-4 h-4 mr-1" /> Faktura
                           </Button>
                         )}
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => openSend(q)}
+                          disabled={!q.customer_email}
+                          title={q.customer_email ? 'Send til kunde' : 'Kunden har ingen email'}
+                        >
+                          <Send className="w-4 h-4 text-blue-600" />
+                        </Button>
                         <Button
                           variant="ghost"
                           size="icon"
@@ -416,6 +444,14 @@ export default function Quotes() {
           </DialogContent>
         </Dialog>
       )}
+
+      <SendTilbudDialog
+        quote={sendQuote}
+        company={company}
+        open={sendOpen}
+        onOpenChange={setSendOpen}
+        onSent={handleSent}
+      />
 
       <Dialog open={aiOpen} onOpenChange={setAiOpen}>
         <DialogContent className="max-w-lg">
