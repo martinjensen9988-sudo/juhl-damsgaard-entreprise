@@ -5,6 +5,7 @@ import {
   Siren, KeyRound, Snowflake, Recycle, Boxes, Pickaxe, Construction,
   Route, Waves, Trash2, Leaf, Snowflake as Snow, Wrench, Flame,
   ParkingCircle, Fence, Lightbulb, Shovel, Mountain, Truck, HousePlus, Banknote, FileWarning,
+  Zap, Ruler, Thermometer, Plug, PaintRoller, DoorClosed,
 } from 'lucide-react';
 
 export const services = [
@@ -61,6 +62,30 @@ export const services = [
     desc: 'Vintervedligeholdelse med snerydding, grusning og holdbare arealer om vinteren.',
     longDesc: 'Vi varetager vintervedligeholdelse med snerydding, grusning og saltning, så arealerne forbliver sikre og fremkommelige hele vinteren. Vi tilbyder faste vinteraftaler til foreninger og virksomheder, så I ved, hvem der rykker ud — og hvornår. Arealerne holdes fri for is og sne, uanset vejret.',
     highlights: ['Snerydding af arealer', 'Grusning & saltning', 'Faste vinteraftaler', 'Sikre & fremkommelige arealer', 'Tilpasset foreninger & virksomheder'],
+  },
+  {
+    icon: Ruler, title: 'Tømrerarbejde', slug: 'toemrerarbejde',
+    desc: 'Tømrerarbejde, tagværk, udvidelser og bygningssnedkeri — fra enkeltopgaver til fuld opførelse.',
+    longDesc: 'Vi udfører alt tømrerarbejde — fra tagværk og træbeklædning til udvidelser, tilbygninger og fuld opførelse af carport, redskabsrum og udhus. Vores tømrere leverer kvalitetshåndværk til både private og erhverv, og vi sørger for at alt mål- og samlinger sidder perfekt. Vi tager også reparationer og vedligeholdelse af eksisterende træværk.',
+    highlights: ['Tagværk & træbeklædning', 'Tilbygninger & udvidelser', 'Carport, redskabsrum & udhus', 'Reparation & vedligeholdelse af træværk', 'Mål- og samlinger i topklasse'],
+  },
+  {
+    icon: Wrench, title: 'VVS & Installationer', slug: 'vvs-installationer',
+    desc: 'VVS-arbejde — vand, varme og sanitet til både private og erhverv.',
+    longDesc: 'Vi leverer komplet VVS-arbejde — installation af vand, varme og sanitet, udskiftning af rør og fittings, montering af VVS-udstyr og service på eksisterende installationer. Vi håndterer både nye installationer og reparationer, og sikrer at alt arbejde overholder gældende normer. Vi arbejder tæt sammen med autoriserede VVS-fagfolk ved installationer, der kræver certificering.',
+    highlights: ['Vand, varme & sanitet', 'Installation af VVS-udstyr', 'Rørudskiftning & reparation', 'Nye installationer & service', 'Efter gældende normer'],
+  },
+  {
+    icon: Zap, title: 'Elektriker', slug: 'elektriker',
+    desc: 'El-installation, tilslutninger og service — trygt og certificeret.',
+    longDesc: 'Vi leverer el-installation til både private og erhverv — fra nye installationer og tilslutninger til service og fejlfinding på eksisterende anlæg. Vi monterer belysning, stikkontakter, tavler og data, og sikrer at alt arbejde udføres certificeret og efter gældende regler. Vi arbejder med autoriserede elektrikere på opgaver, der kræver dokumentation.',
+    highlights: ['Nye el-installationer', 'Tilslutninger & tavler', 'Belysning & stikkontakter', 'Fejlfinding & service', 'Certificeret & efter reglerne'],
+  },
+  {
+    icon: HousePlus, title: 'Totalentreprise', slug: 'totalentreprise',
+    desc: 'Samlet levering fra grav til færdigt byggeri — vi tager det hele.',
+    longDesc: 'Vi tilbyder totalentrepriser, hvor vi håndterer hele byggeprocessen fra grav og fundament til færdigt byggeri — inklusive tømrer, VVS, elektriker og alt andet. Du får én samlet samarbejdspartner og ét kontaktpunkt, og vi koordinerer alle fag undervejs. Perfekt når du vil have det hele samlet ét sted uden at skulle samle underleverandører selv.',
+    highlights: ['Fra grav til færdigt byggeri', 'Tømrer, VVS, elektriker & alt andet', 'Én samlet samarbejdspartner', 'Ét kontaktpunkt — vi koordinerer alt', 'Samlet levering uden underleverandører'],
   },
 ];
 
@@ -158,6 +183,46 @@ export const allServices = [
       { icon: HousePlus, name: 'Totalentrepriser', desc: 'Samlet levering fra grav til færdigt anlæg.', slug: null },
     ],
   },
+  {
+    icon: Ruler,
+    title: 'Tømrer & Byg',
+    items: [
+      { icon: Ruler, name: 'Tømrerarbejde', desc: 'Tagværk, træbeklædning og bygningssnedkeri.', slug: 'toemrerarbejde' },
+      { icon: HousePlus, name: 'Tilbygninger', desc: 'Udvidelser og tilbygninger til eksisterende bygninger.', slug: 'toemrerarbejde' },
+      { icon: DoorClosed, name: 'Carport & Udhus', desc: 'Opførelse af carport, redskabsrum og udhus.', slug: 'toemrerarbejde' },
+      { icon: PaintRoller, name: 'Reparation af træværk', desc: 'Vedligeholdelse og reparation af eksisterende træværk.', slug: 'toemrerarbejde' },
+    ],
+  },
+  {
+    icon: Wrench,
+    title: 'VVS & Installationer',
+    items: [
+      { icon: Droplets, name: 'Vand & Sanitet', desc: 'Installation af vand og sanitet til private og erhverv.', slug: 'vvs-installationer' },
+      { icon: Thermometer, name: 'Varme', desc: 'Varmeanlæg, radiatorer og gulvvarme.', slug: 'vvs-installationer' },
+      { icon: Wrench, name: 'Rørudskiftning', desc: 'Udskiftning og reparation af rør og fittings.', slug: 'vvs-installationer' },
+      { icon: Wrench, name: 'VVS-service', desc: 'Service og vedligeholdelse af eksisterende installationer.', slug: 'vvs-installationer' },
+    ],
+  },
+  {
+    icon: Zap,
+    title: 'Elektriker & El',
+    items: [
+      { icon: Zap, name: 'El-installation', desc: 'Nye installationer til private og erhverv.', slug: 'elektriker' },
+      { icon: Plug, name: 'Tilslutninger & Tavler', desc: 'Montering af tavler, stikkontakter og tilslutninger.', slug: 'elektriker' },
+      { icon: Lightbulb, name: 'Belysning', desc: 'Montering af indendørs- og udendørsbelysning.', slug: 'elektriker' },
+      { icon: Zap, name: 'Fejlfinding & Service', desc: 'Fejlfinding og service på eksisterende anlæg.', slug: 'elektriker' },
+    ],
+  },
+  {
+    icon: HousePlus,
+    title: 'Totalentreprise',
+    items: [
+      { icon: HousePlus, name: 'Samlet byggelevering', desc: 'Fra grav og fundament til færdigt byggeri.', slug: 'totalentreprise' },
+      { icon: Ruler, name: 'Tømrer, VVS & Elektriker', desc: 'Vi samler alle fag under ét projekt.', slug: 'totalentreprise' },
+      { icon: ClipboardCheck, name: 'Byggeledelse', desc: 'Ét kontaktpunkt — vi koordinerer alt.', slug: 'totalentreprise' },
+      { icon: Building2, name: 'Alt andet', desc: 'Skræddersyede løsninger til specialopgaver.', slug: 'totalentreprise' },
+    ],
+  },
 ];
 
 export const stats = [
@@ -189,7 +254,7 @@ export const testimonials = [
 export const faqItems = [
   {
     q: 'Hvilke opgaver løser I?',
-    a: 'Vi udfører alt inden for entreprenørarbejde — gravearbejde, kloak og dræn, asfalt og brolægning, beton og støbning, nedrivning, anlæg, asbestfjernelse, skadeservice, viceværtsservice og snerydding. Se det fulde overblik længere oppe.',
+    a: 'Vi udfører alt inden for entreprenørarbejde — gravearbejde, kloak og dræn, asfalt og brolægning, beton og støbning, nedrivning, anlæg, asbestfjernelse, skadeservice, viceværtsservice og snerydding. Derudover har vi tømrere, VVS-installatører og elektrikere, så vi også tager byggeopgaver, installationer og totalentrepriser — kort sagt alt andet. Se det fulde overblik længere oppe.',
   },
   {
     q: 'Hvor hurtigt kan I komme ud?',
