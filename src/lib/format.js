@@ -27,7 +27,14 @@ export function calcTotal(items = []) {
 export function formatDate(dateStr) {
   if (!dateStr) return '—';
   try {
-    return new Date(dateStr).toLocaleDateString('da-DK', {
+    let d;
+    if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) {
+      const [y, m, day] = dateStr.split('-').map(Number);
+      d = new Date(y, m - 1, day);
+    } else {
+      d = new Date(dateStr);
+    }
+    return d.toLocaleDateString('da-DK', {
       day: '2-digit',
       month: 'short',
       year: 'numeric',

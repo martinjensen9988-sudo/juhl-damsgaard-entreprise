@@ -7,7 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Textarea } from '@/components/ui/textarea';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import ReactMarkdown from 'react-markdown';
-import { Plus, Pencil, Trash2, Search, Eye, ThumbsUp, BookOpen, FolderOpen, Download, X } from 'lucide-react';
+import { Plus, Pencil, Trash2, Search, Eye, ThumbsUp, BookOpen, FolderOpen, Download, X, Upload } from 'lucide-react';
 
 const CATEGORIES = ['FAQ', 'Vejledning', 'Arbejdsprocedure', 'Sikkerhed', 'Teknik', 'Andet'];
 const STATUSES = ['Udkast', 'Offentliggjort', 'Arkiveret'];
@@ -133,7 +133,10 @@ export default function Vidensbase() {
           <h1 className="text-2xl font-bold text-slate-900">Vidensbase</h1>
           <p className="text-sm text-slate-500 mt-1">Interne vejledninger, FAQ og arbejdsprocedurer</p>
         </div>
-        <Button onClick={openCreate} className="gap-2"><Plus className="w-4 h-4" /> Ny artikel</Button>
+        <div className="flex gap-2">
+          <Button onClick={openCreate} className="gap-2"><Plus className="w-4 h-4" /> Ny artikel</Button>
+          <Button onClick={openResCreate} variant="outline" className="gap-2"><Upload className="w-4 h-4" /> Upload fil</Button>
+        </div>
       </div>
 
       <div className="flex gap-3 mb-6">

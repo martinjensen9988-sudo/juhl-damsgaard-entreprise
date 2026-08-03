@@ -103,6 +103,18 @@ export default function AsbestFjernelse() {
 
   const handleField = (field, value) => setForm((f) => ({ ...f, [field]: value }));
 
+  const hasUnsavedData = () => Object.keys(form).some((k) => {
+    if (['asbestos_type', 'unit', 'removal_method', 'status'].includes(k)) return false;
+    return form[k] !== emptyForm[k];
+  });
+
+  const handleDialogChange = (nextOpen) => {
+    if (!nextOpen && hasUnsavedData()) {
+      if (!confirm('Du har indtastet data, der ikke er gemt. Luk formular og mist ændringer?')) return;
+    }
+    setDialogOpen(nextOpen);
+  };
+
   const handleProject = (projectId) => {
     const project = projects.find((p) => p.id === projectId);
     if (project) {
@@ -341,7 +353,7 @@ export default function AsbestFjernelse() {
       )}
 
       {/* Dialog */}
-      <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+      <Dialog open={dialogOpen} onOpenChange={handleDialogChange}>
         <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
