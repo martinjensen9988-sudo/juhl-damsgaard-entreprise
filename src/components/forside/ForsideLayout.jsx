@@ -1,8 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { HardHat } from 'lucide-react';
+import { HardHat, Menu, X } from 'lucide-react';
+
+const navLinks = [
+  { to: '/tjenester', label: 'Tjenester' },
+  { to: '/beregn-tilbud', label: 'Prisberegner' },
+  { to: '/om-os', label: 'Om os' },
+  { to: '/faq', label: 'FAQ' },
+  { to: '/kontakt', label: 'Kontakt' },
+];
 
 export default function ForsideLayout({ children }) {
+  const [open, setOpen] = useState(false);
   return (
     <div className="min-h-screen bg-white flex flex-col">
       <nav className="fixed top-0 inset-x-0 z-50 bg-slate-950/90 backdrop-blur-md border-b border-slate-800">
@@ -14,16 +23,44 @@ export default function ForsideLayout({ children }) {
             <span className="font-bold text-white tracking-tight">Juhl & Damsgaard</span>
           </Link>
           <div className="hidden md:flex items-center gap-8 text-sm text-slate-300">
-            <Link to="/tjenester" className="hover:text-amber-400 transition">Tjenester</Link>
-            <Link to="/beregn-tilbud" className="hover:text-amber-400 transition">Prisberegner</Link>
-            <Link to="/om-os" className="hover:text-amber-400 transition">Om os</Link>
-            <Link to="/faq" className="hover:text-amber-400 transition">FAQ</Link>
-            <Link to="/kontakt" className="hover:text-amber-400 transition">Kontakt</Link>
+            {navLinks.map((l) => (
+              <Link key={l.to} to={l.to} className="hover:text-amber-400 transition">{l.label}</Link>
+            ))}
           </div>
-          <Link to="/login" className="text-sm font-medium text-slate-950 bg-amber-400 px-4 py-2 rounded-lg hover:bg-amber-300 transition">
-            Log ind
-          </Link>
+          <div className="flex items-center gap-2">
+            <Link to="/login" className="hidden sm:inline-flex text-sm font-medium text-slate-950 bg-amber-400 px-4 py-2 rounded-lg hover:bg-amber-300 transition">
+              Log ind
+            </Link>
+            <button
+              onClick={() => setOpen((v) => !v)}
+              className="md:hidden inline-flex items-center justify-center w-10 h-10 rounded-lg text-white hover:bg-slate-800 transition"
+              aria-label="Menu"
+            >
+              {open ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </button>
+          </div>
         </div>
+
+        {/* Mobil-menu */}
+        {open && (
+          <div className="md:hidden border-t border-slate-800 bg-slate-950">
+            <div className="max-w-6xl mx-auto px-6 py-3 flex flex-col gap-1">
+              {navLinks.map((l) => (
+                <Link
+                  key={l.to}
+                  to={l.to}
+                  onClick={() => setOpen(false)}
+                  className="py-2.5 text-sm text-slate-200 hover:text-amber-400 transition border-b border-slate-800/60 last:border-0"
+                >
+                  {l.label}
+                </Link>
+              ))}
+              <Link to="/login" onClick={() => setOpen(false)} className="mt-2 inline-flex justify-center text-sm font-medium text-slate-950 bg-amber-400 px-4 py-2.5 rounded-lg hover:bg-amber-300 transition">
+                Log ind
+              </Link>
+            </div>
+          </div>
+        )}
       </nav>
 
       <main className="flex-1">{children}</main>
