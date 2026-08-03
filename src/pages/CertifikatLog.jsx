@@ -83,7 +83,7 @@ export default function CertifikatLog() {
         <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden">
           <div className="divide-y divide-slate-100">
             {filtered.map(i => {
-              const status = getStatus(i); const exp = i.expiry_date ? (/^\d{4}-\d{2}-\d{2}$/.test(i.expiry_date) ? new Date(...i.expiry_date.split('-').map((n,idx)=>idx===1?Number(n)-1:Number(n))) : new Date(i.expiry_date)) : null;
+              const status = getStatus(i); const exp = i.expiry_date;
               const isExpired = status === 'Udløbet'; const isExpiring = status === 'Udløber snart';
               return (
                 <div key={i.id} className="p-5 flex items-center gap-4 hover:bg-slate-50 transition">

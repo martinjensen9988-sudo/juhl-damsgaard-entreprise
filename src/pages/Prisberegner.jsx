@@ -13,7 +13,7 @@ export default function Prisberegner() {
     if (existing) {
       setItems(items.map((i) => i.name === svc.name ? { ...i, quantity: i.quantity + 1 } : i));
     } else {
-      setItems([...items, { ...svc, quantity: 1 }]);
+      setItems([...items, { ...svc, unit_price: svc.price, quantity: 1 }]);
     }
   };
 

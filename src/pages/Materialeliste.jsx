@@ -42,6 +42,7 @@ export default function Materialeliste() {
   const [suppliers, setSuppliers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filterProject, setFilterProject] = useState('all');
+  const [filterCategory, setFilterCategory] = useState('all');
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editing, setEditing] = useState(null);
   const [form, setForm] = useState(EMPTY);
@@ -69,9 +70,11 @@ export default function Materialeliste() {
     load();
   }, []);
 
-  const filtered = filterProject === 'all'
-    ? materials
-    : materials.filter((m) => m.project_id === filterProject);
+  const filtered = materials.filter((m) => {
+    if (filterProject !== 'all' && m.project_id !== filterProject) return false;
+    if (filterCategory !== 'all' && m.category !== filterCategory) return false;
+    return true;
+  });
 
   const totalValue = filtered.reduce((sum, m) => sum + calcLineTotal(m), 0);
 
@@ -152,13 +155,23 @@ export default function Materialeliste() {
       </div>
 
       <div className="flex items-center gap-3">
-        <Label className="text-sm text-slate-600">Filtrer projekt:</Label>
+        <Label className="text-sm text-slate-600">Projekt:</Label>
         <Select value={filterProject} onValueChange={setFilterProject}>
-          <SelectTrigger className="w-64"><SelectValue /></SelectTrigger>
+          <SelectTrigger className="w-56"><SelectValue /></SelectTrigger>
           <SelectContent>
             <SelectItem value="all">Alle projekter</SelectItem>
             {projects.map((p) => (
               <SelectItem key={p.id} value={p.id}>{p.name}</SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+        <Label className="text-sm text-slate-600">Kategori:</Label>
+        <Select value={filterCategory} onValueChange={setFilterCategory}>
+          <SelectTrigger className="w-44"><SelectValue /></SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">Alle kategorier</SelectItem>
+            {CATEGORIES.map((c) => (
+              <SelectItem key={c} value={c}>{c}</SelectItem>
             ))}
           </SelectContent>
         </Select>
