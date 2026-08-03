@@ -75,6 +75,7 @@ export default function Forsikringssager() {
               </div>
               <div className="flex items-center gap-2 mt-2"><span className="text-xs bg-red-50 text-red-700 px-2 py-0.5 rounded-full">{c.damage_type}</span><span className="text-xs text-slate-400">{formatDate(c.damage_date)}</span></div>
               {c.insurance_company && <div className="text-xs text-slate-500 mt-2">{c.insurance_company}{c.policy_number && ` · ${c.policy_number}`}</div>}
+              {c.insurance_contact && <div className="text-xs text-slate-500 mt-1"><span className="text-slate-400">SB:</span> {c.insurance_contact}{c.insurance_phone && ` · ${c.insurance_phone}`}</div>}
               <div className="flex items-center gap-3 mt-2 text-xs">
                 <span className="text-slate-500">Før: {c.before_photo_urls?.length || 0}</span>
                 <span className="text-slate-500">Undervejs: {c.during_photo_urls?.length || 0}</span>
@@ -108,10 +109,23 @@ export default function Forsikringssager() {
               <div><Label>Forsikringsselskab</Label><Input value={form.insurance_company} onChange={(e) => set('insurance_company', e.target.value)} /></div>
               <div><Label>Policenummer</Label><Input value={form.policy_number} onChange={(e) => set('policy_number', e.target.value)} /></div>
             </div>
-            <div className="grid grid-cols-3 gap-3">
+            <div className="rounded-xl border border-slate-200 bg-slate-50/50 p-3 space-y-3">
+              <div className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Kontakt hos forsikringsselskab</div>
+              <div><Label>Sagsbehandler</Label><Input value={form.insurance_contact} onChange={(e) => set('insurance_contact', e.target.value)} placeholder="Navn på sagsbehandler" /></div>
+              <div className="grid grid-cols-2 gap-3">
+                <div><Label>Telefon</Label><Input value={form.insurance_phone} onChange={(e) => set('insurance_phone', e.target.value)} placeholder="F.eks. +45 12 34 56 78" /></div>
+                <div><Label>Email</Label><Input type="email" value={form.insurance_email} onChange={(e) => set('insurance_email', e.target.value)} placeholder="sagsbehandler@forsikring.dk" /></div>
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-3">
               <div><Label>Skadesdato</Label><Input type="date" value={form.damage_date} onChange={(e) => set('damage_date', e.target.value)} /></div>
+              <div><Label>Anmeldt den</Label><Input type="date" value={form.reported_date} onChange={(e) => set('reported_date', e.target.value)} /></div>
+            </div>
+            <div><Label>Skadesadresse</Label><Input value={form.address} onChange={(e) => set('address', e.target.value)} placeholder="Adresse på skaden" /></div>
+            <div className="grid grid-cols-3 gap-3">
               <div><Label>Est. beløb</Label><Input type="number" value={form.estimated_amount} onChange={(e) => set('estimated_amount', e.target.value ? Number(e.target.value) : '')} /></div>
               <div><Label>Godkendt beløb</Label><Input type="number" value={form.approved_amount} onChange={(e) => set('approved_amount', e.target.value ? Number(e.target.value) : '')} /></div>
+              <div><Label>Selvrisiko</Label><Input type="number" value={form.deductible} onChange={(e) => set('deductible', e.target.value ? Number(e.target.value) : '')} /></div>
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div><Label>Sagsbehandler</Label><Input value={form.assigned_to} onChange={(e) => set('assigned_to', e.target.value)} /></div>
