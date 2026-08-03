@@ -210,7 +210,7 @@ export default function Quotes() {
   const downloadPDF = async (q) => {
     setPdfLoading(q.id);
     try {
-      generateQuotePDF(q, company);
+      await generateQuotePDF(q, company);
     } catch (e) {
       console.error(e);
       alert('Kunne ikke generere PDF');

@@ -1,29 +1,82 @@
 import { jsPDF } from 'jspdf';
 import { formatDKK, calcSubtotal, calcVAT, calcTotal, formatDate } from './format';
 
-export function generateQuotePDF(quote, company = {}) {
+// Standard faste betingelser for entreprenørtilbud
+const DEFAULT_TERMS = [
+  'Tilbudet er gyldigt i den angivne periode — herefter forbeholder vi os ret til prisjustering.',
+  'Priserne er eksklusive moms, som tilføjes med gældende sats.',
+  'Betaling sker efter de aftalte betalingsbetingelser, med mindre der er aftalt acconto.',
+  'Arbejdet udføres i overensstemmelse med gældende normer, bygningsreglement og arbejdsmiljølovgivning.',
+  'Byggeplads etableres og ryddes af Juhl & Damsgaard Entreprise ved arbejdets afslutning.',
+  'Forbehold for ændringer i materialepriser samt uforudsete forhold i undergrund kan forekomme.',
+  'Ejendommen / arealset afleveres i fejlfri og rengjort stand efter endt arbejde.',
+];
+
+async function fetchImageAsDataURL(url) {
+  try {
+    const res = await fetch(url, { mode: 'cors' });
+    if (!res.ok) return null;
+    const blob = await res.blob();
+    return await new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onloadend = () => resolve(reader.result);
+      reader.onerror = () => resolve(null);
+      reader.readAsDataURL(blob);
+    });
+  } catch {
+    return null;
+  }
+}
+
+function imgFormat(url) {
+  if (!url) return 'PNG';
+  const ext = url.split('?')[0].split('.').pop().toUpperCase();
+  if (['PNG', 'JPEG', 'JPG', 'WEBP'].includes(ext)) return ext === 'JPG' ? 'JPEG' : ext;
+  return 'PNG';
+}
+
+export async function generateQuotePDF(quote, company = {}) {
   const doc = new jsPDF({ unit: 'mm', format: 'a4' });
   const pageW = 210;
   const margin = 20;
   let y = 0;
 
+  // ── Logo (hvis tilgængeligt) ──
+  let logoData = null;
+  if (company.logo_url) {
+    logoData = await fetchImageAsDataURL(company.logo_url);
+  }
+
   // ── Header bar ──
   doc.setFillColor(15, 23, 42);
   doc.rect(0, 0, pageW, 35, 'F');
 
+  if (logoData) {
+    try {
+      doc.addImage(logoData, imgFormat(company.logo_url), margin, 7, 34, 16, undefined, 'FAST');
+    } catch {
+      // Fald tilbage til virksomhedsnavn
+    }
+  }
+
   doc.setTextColor(255, 255, 255);
   doc.setFont('helvetica', 'bold');
-  doc.setFontSize(20);
-  doc.text(company.company_name || 'Virksomhed', margin, 16);
+  doc.setFontSize(logoData ? 12 : 20);
+  if (!logoData) {
+    doc.text(company.company_name || 'Juhl & Damsgaard Entreprise', margin, 16);
+  } else {
+    doc.text(company.company_name || 'Juhl & Damsgaard Entreprise', margin + 38, 14);
+  }
 
   doc.setFont('helvetica', 'normal');
   doc.setFontSize(9);
   const addr = [company.address, [company.postal_code, company.city].filter(Boolean).join(' ')].filter(Boolean).join(', ');
   const contact = [company.phone, company.email].filter(Boolean).join('  ·  ');
-  let infoY = 22;
-  if (addr) { doc.text(addr, margin, infoY); infoY += 5; }
-  if (contact) { doc.text(contact, margin, infoY); infoY += 5; }
-  if (company.cvr) { doc.text(`CVR: ${company.cvr}`, margin, infoY); }
+  let infoY = logoData ? 18 : 22;
+  const infoX = logoData ? margin + 38 : margin;
+  if (addr) { doc.text(addr, infoX, infoY); infoY += 5; }
+  if (contact) { doc.text(contact, infoX, infoY); infoY += 5; }
+  if (company.cvr) { doc.text(`CVR: ${company.cvr}`, infoX, infoY); }
 
   doc.setTextColor(251, 191, 36);
   doc.setFont('helvetica', 'bold');
@@ -83,7 +136,7 @@ export function generateQuotePDF(quote, company = {}) {
   const items = quote.line_items || [];
   doc.setFontSize(9);
   items.forEach((item, i) => {
-    if (y > 235) { doc.addPage(); y = 20; }
+    if (y > 200) { doc.addPage(); y = 20; }
     const rowH = 7;
     if (i % 2 === 0) {
       doc.setFillColor(248, 250, 252);
@@ -133,9 +186,10 @@ export function generateQuotePDF(quote, company = {}) {
   doc.text('Total inkl. moms:', pageW - margin - 55, y + 6.5);
   doc.text(formatDKK(total), pageW - margin - 2, y + 6.5, { align: 'right' });
 
-  // ── Notes ──
-  y += 20;
+  // ── Bemærkninger ──
+  y += 18;
   if (quote.notes) {
+    if (y > 240) { doc.addPage(); y = 20; }
     doc.setTextColor(15, 23, 42);
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(10);
@@ -144,9 +198,41 @@ export function generateQuotePDF(quote, company = {}) {
     doc.setFontSize(9);
     const noteLines = doc.splitTextToSize(quote.notes, pageW - 2 * margin);
     doc.text(noteLines, margin, y + 6);
+    y += 6 + noteLines.length * 5;
   }
 
+  // ── Betingelser & vilkår ──
+  y += 8;
+  if (y > 245) { doc.addPage(); y = 20; }
+
+  doc.setDrawColor(226, 232, 240);
+  doc.line(margin, y, pageW - margin, y);
+  y += 6;
+
+  doc.setTextColor(15, 23, 42);
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(10);
+  doc.text('Betingelser & vilkår', margin, y);
+  y += 6;
+
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(8);
+  doc.setTextColor(71, 85, 105);
+
+  if (company.payment_terms) {
+    doc.text(`Betalingsbetingelser: ${company.payment_terms}`, margin, y);
+    y += 4.5;
+  }
+
+  DEFAULT_TERMS.forEach((term) => {
+    if (y > 282) { doc.addPage(); y = 20; }
+    const lines = doc.splitTextToSize(`•  ${term}`, pageW - 2 * margin);
+    doc.text(lines, margin, y);
+    y += lines.length * 4 + 1.5;
+  });
+
   // ── Footer ──
+  if (y < 282) y = 282;
   doc.setDrawColor(226, 232, 240);
   doc.line(margin, 285, pageW - margin, 285);
   doc.setTextColor(100, 116, 139);
@@ -154,11 +240,14 @@ export function generateQuotePDF(quote, company = {}) {
   doc.setFont('helvetica', 'normal');
   const footerParts = [
     company.bank_account ? `Bank: ${company.bank_account}` : '',
-    company.payment_terms || '',
+    company.email || '',
+    company.phone || '',
   ].filter(Boolean);
   if (footerParts.length) {
     doc.text(footerParts.join('  ·  '), margin, 290);
   }
+  doc.setTextColor(148, 163, 184);
+  doc.text('Juhl & Damsgaard Entreprise', pageW - margin, 290, { align: 'right' });
 
   doc.save(`Tilbud-${quote.quote_number}.pdf`);
 }
