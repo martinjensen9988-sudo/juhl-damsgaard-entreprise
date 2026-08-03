@@ -19,8 +19,9 @@ import {
   DialogFooter,
 } from '@/components/ui/dialog';
 import { formatDKK, formatDate } from '@/lib/format';
-import { Plus, Pencil, Trash2, HardHat, Calendar, MapPin, ClipboardList, LayoutGrid, List, FileText, Send } from 'lucide-react';
+import { Plus, Pencil, Trash2, HardHat, Calendar, MapPin, ClipboardList, LayoutGrid, List, FileText, Send, Clock } from 'lucide-react';
 import ArbejdsseddelDialog from '@/components/ArbejdsseddelDialog';
+import TidsregistreringDialog from '@/components/TidsregistreringDialog';
 import ProjectKanban from '@/components/ProjectKanban';
 import { useToast } from '@/components/ui/use-toast';
 
@@ -56,6 +57,7 @@ export default function Projects() {
   const [form, setForm] = useState(EMPTY);
   const [saving, setSaving] = useState(false);
   const [worksheetProject, setWorksheetProject] = useState(null);
+  const [timeProject, setTimeProject] = useState(null);
   const [view, setView] = useState('list');
 
   const moveStatus = async (id, status) => {
@@ -235,6 +237,9 @@ export default function Projects() {
                   <span className="font-semibold text-slate-900">{formatDKK(p.budget)}</span>
                 </div>
               )}
+              <Button variant="outline" size="sm" className="w-full mb-2" onClick={() => setTimeProject(p)}>
+                <Clock className="w-4 h-4 mr-1.5" /> Tidsregistrering
+              </Button>
               <Button variant="outline" size="sm" className="w-full mb-2" onClick={() => setWorksheetProject(p)}>
                 <ClipboardList className="w-4 h-4 mr-1.5" /> Arbejdsseddel
               </Button>
@@ -340,6 +345,7 @@ export default function Projects() {
       </Dialog>
 
       <ArbejdsseddelDialog project={worksheetProject} onClose={() => setWorksheetProject(null)} />
+      <TidsregistreringDialog project={timeProject} onClose={() => setTimeProject(null)} />
     </div>
   );
 }
