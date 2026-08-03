@@ -201,6 +201,10 @@ const navItems = [
   { to: '/udstyrsudlejning', label: 'Udstyrsudlejning', icon: Wrench },
   { to: '/sagsarkiv', label: 'Sagsarkiv', icon: Archive },
   { to: '/indkoebskurv', label: 'Indkøbskurv', icon: ShoppingCart },
+  { to: '/materiel-oversigt', label: 'Materieloversigt', icon: Wrench },
+  { to: '/udgifts-godkendelse', label: 'Udgiftsgodkendelse', icon: ClipboardCheck },
+  { to: '/projekt-logbog', label: 'Projektlogbog', icon: BookOpen },
+  { to: '/ressource-planlaegning', label: 'Ressourceplan', icon: CalendarRange },
 ];
 
 export default function Layout() {

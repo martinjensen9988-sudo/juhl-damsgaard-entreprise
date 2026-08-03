@@ -17,7 +17,7 @@
         "Br\u00e6ndstof",
         "Forsikring",
         "V\u00e6rkt\u00f8j",
-        " Kontor",
+        "Kontor",
         "Markedsf\u00f8ring",
         "Andet"
       ],
@@ -47,6 +47,38 @@
     "supplier_invoice_id": {
       "type": "string",
       "title": "Leverand\u00f8rfaktura"
+    },
+    "receipt_url": {
+      "type": "string",
+      "title": "Bilag"
+    },
+    "approval_status": {
+      "type": "string",
+      "title": "Godkendelsesstatus",
+      "enum": [
+        "Afventer",
+        "Godkendt",
+        "Afvist",
+        "Bogf\u00f8rt"
+      ],
+      "default": "Afventer"
+    },
+    "submitted_by": {
+      "type": "string",
+      "title": "Indsendt af"
+    },
+    "approved_by": {
+      "type": "string",
+      "title": "Godkendt af"
+    },
+    "approved_date": {
+      "type": "string",
+      "format": "date",
+      "title": "Godkendt dato"
+    },
+    "rejection_reason": {
+      "type": "string",
+      "title": "Afvisningsgrund"
     },
     "recurring": {
       "type": "boolean",

@@ -148,6 +148,10 @@ import Udstyrsudlejning from '@/pages/Udstyrsudlejning';
 import Sagsarkiv from '@/pages/Sagsarkiv';
 import Indkoebskurv from '@/pages/Indkoebskurv';
 import SkadesrapportDetalje from '@/pages/SkadesrapportDetalje';
+import Materieloversigt from '@/pages/Materieloversigt';
+import Udgiftsgodkendelse from '@/pages/Udgiftsgodkendelse';
+import ProjektLogbog from '@/pages/ProjektLogbog';
+import RessourcePlanlaegning from '@/pages/RessourcePlanlaegning';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -309,6 +313,10 @@ const AuthenticatedApp = () => {
           <Route path="/sagsarkiv" element={<Sagsarkiv />} />
           <Route path="/indkoebskurv" element={<Indkoebskurv />} />
           <Route path="/skadesrapport" element={<SkadesrapportDetalje />} />
+          <Route path="/materiel-oversigt" element={<Materieloversigt />} />
+          <Route path="/udgifts-godkendelse" element={<Udgiftsgodkendelse />} />
+          <Route path="/projekt-logbog" element={<ProjektLogbog />} />
+          <Route path="/ressource-planlaegning" element={<RessourcePlanlaegning />} />
         </Route>
         <Route element={<PortalLayout />}>
           <Route path="/portal" element={<CustomerPortal />} />
