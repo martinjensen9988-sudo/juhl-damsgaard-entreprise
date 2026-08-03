@@ -120,6 +120,7 @@ import Vagtplan from '@/pages/Vagtplan';
 import Afleveringsforretning from '@/pages/Afleveringsforretning';
 import BilparkOversigt from '@/pages/BilparkOversigt';
 import MarketingKampagner from '@/pages/MarketingKampagner';
+import Marketing from '@/pages/Marketing';
 import Subunderleverandoerer from '@/pages/Subunderleverandoerer';
 import Driftsbudget from '@/pages/Driftsbudget';
 import Kundetilfredshed from '@/pages/Kundetilfredshed';
@@ -268,6 +269,7 @@ const AuthenticatedApp = () => {
           <Route path="/afleveringsforretning" element={<Afleveringsforretning />} />
           <Route path="/bilpark-oversigt" element={<BilparkOversigt />} />
           <Route path="/marketing-kampagner" element={<MarketingKampagner />} />
+          <Route path="/marketing" element={<Marketing />} />
           <Route path="/subunderleverandoerer" element={<Subunderleverandoerer />} />
           <Route path="/driftsbudget" element={<Driftsbudget />} />
           <Route path="/kundetilfredshed" element={<Kundetilfredshed />} />

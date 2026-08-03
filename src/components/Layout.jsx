@@ -172,7 +172,7 @@ const navItems = [
   { to: '/vagtplan', label: 'Vagtplan', icon: CalendarClock },
   { to: '/afleveringsforretning', label: 'Aflevering', icon: ClipboardList },
   { to: '/bilpark-oversigt', label: 'Bilpark oversigt', icon: Car },
-  { to: '/marketing-kampagner', label: 'Marketing', icon: Target },
+  { to: '/marketing', label: 'Marketing', icon: Target },
   { to: '/subunderleverandoerer', label: 'Underleverandører', icon: HardHat },
   { to: '/driftsbudget', label: 'Driftsbudget', icon: Wallet },
   { to: '/kundetilfredshed', label: 'Kundetilfredshed', icon: Star },

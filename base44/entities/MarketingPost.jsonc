@@ -1,0 +1,112 @@
+{
+  "name": "MarketingPost",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "title": "Overskrift"
+    },
+    "platform": {
+      "type": "string",
+      "title": "Platform",
+      "enum": [
+        "Facebook",
+        "Instagram",
+        "LinkedIn",
+        "Google My Business",
+        "Hjemmeside",
+        "Andet"
+      ],
+      "default": "Facebook"
+    },
+    "post_type": {
+      "type": "string",
+      "title": "Type",
+      "enum": [
+        "Opslag",
+        "Reklame",
+        "Event",
+        "Kunde-reference",
+        "Kampagneindl\u00e6g",
+        "Andet"
+      ],
+      "default": "Opslag"
+    },
+    "content": {
+      "type": "string",
+      "title": "Indhold"
+    },
+    "image_url": {
+      "type": "string",
+      "title": "Billede"
+    },
+    "planned_date": {
+      "type": "string",
+      "format": "date",
+      "title": "Planlagt dato"
+    },
+    "status": {
+      "type": "string",
+      "title": "Status",
+      "enum": [
+        "Id\u00e9",
+        "Kladde",
+        "Planlagt",
+        "Offentliggjort",
+        "Afvist"
+      ],
+      "default": "Kladde"
+    },
+    "campaign_id": {
+      "type": "string",
+      "title": "Kampagne"
+    },
+    "campaign_name": {
+      "type": "string",
+      "title": "Kampagnenavn"
+    },
+    "assigned_to": {
+      "type": "string",
+      "title": "Ansvarlig"
+    },
+    "reach": {
+      "type": "number",
+      "title": "R\u00e6kkevidde",
+      "default": 0
+    },
+    "engagement": {
+      "type": "number",
+      "title": "Interaktioner",
+      "default": 0
+    },
+    "notes": {
+      "type": "string",
+      "title": "Noter"
+    }
+  },
+  "required": [
+    "title"
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

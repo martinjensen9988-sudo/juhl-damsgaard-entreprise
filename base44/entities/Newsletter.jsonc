@@ -1,0 +1,100 @@
+{
+  "name": "Newsletter",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "title": "Emne"
+    },
+    "audience": {
+      "type": "string",
+      "title": "M\u00e5lgruppe",
+      "enum": [
+        "Alle kunder",
+        "Erhverv",
+        "Private",
+        "Foreninger",
+        "Nyhedsbrev-abonnenter",
+        "Specifik segment",
+        "Andet"
+      ],
+      "default": "Alle kunder"
+    },
+    "content": {
+      "type": "string",
+      "title": "Indhold"
+    },
+    "planned_date": {
+      "type": "string",
+      "format": "date",
+      "title": "Planlagt afsendelse"
+    },
+    "status": {
+      "type": "string",
+      "title": "Status",
+      "enum": [
+        "Kladde",
+        "Planlagt",
+        "Sendt",
+        "Afvist"
+      ],
+      "default": "Kladde"
+    },
+    "recipients_count": {
+      "type": "number",
+      "title": "Modtagere",
+      "default": 0
+    },
+    "opened": {
+      "type": "number",
+      "title": "\u00c5bnede",
+      "default": 0
+    },
+    "clicked": {
+      "type": "number",
+      "title": "Klikkede",
+      "default": 0
+    },
+    "assigned_to": {
+      "type": "string",
+      "title": "Ansvarlig"
+    },
+    "campaign_id": {
+      "type": "string",
+      "title": "Kampagne"
+    },
+    "campaign_name": {
+      "type": "string",
+      "title": "Kampagnenavn"
+    },
+    "notes": {
+      "type": "string",
+      "title": "Noter"
+    }
+  },
+  "required": [
+    "title"
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}
