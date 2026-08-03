@@ -26,9 +26,10 @@ export default function CertifikatLog() {
   useEffect(() => { load(); }, []);
 
   const today = new Date(); const in30 = new Date(); in30.setDate(in30.getDate()+30); const in90 = new Date(); in90.setDate(in90.getDate()+90);
+  const parseLocal = (s) => { if (/^\d{4}-\d{2}-\d{2}$/.test(s)) { const [y,m,d]=s.split('-').map(Number); return new Date(y,m-1,d); } return new Date(s); };
   const getStatus = (item) => {
     if (!item.expiry_date) return item.status;
-    const exp = new Date(item.expiry_date);
+    const exp = parseLocal(item.expiry_date);
     if (exp < today) return 'Udløbet';
     if (exp < in30) return 'Udløber snart';
     if (exp < in90) return 'Udløber snart';
@@ -82,7 +83,7 @@ export default function CertifikatLog() {
         <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden">
           <div className="divide-y divide-slate-100">
             {filtered.map(i => {
-              const status = getStatus(i); const exp = i.expiry_date ? new Date(i.expiry_date) : null;
+              const status = getStatus(i); const exp = i.expiry_date ? (/^\d{4}-\d{2}-\d{2}$/.test(i.expiry_date) ? new Date(...i.expiry_date.split('-').map((n,idx)=>idx===1?Number(n)-1:Number(n))) : new Date(i.expiry_date)) : null;
               const isExpired = status === 'Udløbet'; const isExpiring = status === 'Udløber snart';
               return (
                 <div key={i.id} className="p-5 flex items-center gap-4 hover:bg-slate-50 transition">

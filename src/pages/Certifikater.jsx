@@ -44,7 +44,8 @@ export default function Certifikater() {
   const getCertStatus = (cert) => {
     if (!cert.expiry_date) return { key: 'valid', label: 'Gyldig', style: 'bg-slate-100 text-slate-600', icon: CheckCircle2 };
     const now = new Date();
-    const expiry = new Date(cert.expiry_date);
+    const [ey, em, ed] = cert.expiry_date.split('-').map(Number);
+    const expiry = /^\d{4}-\d{2}-\d{2}$/.test(cert.expiry_date) ? new Date(ey, em - 1, ed) : new Date(cert.expiry_date);
     const daysUntil = Math.floor((expiry - now) / (1000 * 60 * 60 * 24));
     if (daysUntil < 0) return { key: 'expired', label: 'Udløbet', style: 'bg-red-100 text-red-700', icon: AlertTriangle };
     if (daysUntil <= 60) return { key: 'expiring', label: `Udløber (${daysUntil}d)`, style: 'bg-amber-100 text-amber-700', icon: AlertTriangle };

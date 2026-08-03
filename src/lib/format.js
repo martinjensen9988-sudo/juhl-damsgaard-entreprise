@@ -27,13 +27,11 @@ export function calcTotal(items = []) {
 export function formatDate(dateStr) {
   if (!dateStr) return '—';
   try {
-    let d;
-    if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) {
-      const [y, m, day] = dateStr.split('-').map(Number);
-      d = new Date(y, m - 1, day);
-    } else {
-      d = new Date(dateStr);
-    }
+    // Date-only strings (YYYY-MM-DD) are parsed as UTC by default,
+    // which shifts the displayed date back a day in non-UTC timezones.
+    // Append T00:00:00 to parse as local time instead.
+    const isDateOnly = /^\d{4}-\d{2}-\d{2}$/.test(dateStr);
+    const d = isDateOnly ? new Date(dateStr + 'T00:00:00') : new Date(dateStr);
     return d.toLocaleDateString('da-DK', {
       day: '2-digit',
       month: 'short',
