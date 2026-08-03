@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { base44 } from '@/api/base44Client';
 import { formatDKK } from '@/lib/format';
 import { Send, Loader2, Bot, User, Calculator, ArrowRight, Sparkles } from 'lucide-react';
@@ -12,6 +12,7 @@ export default function AiTilbudChat() {
   const [loading, setLoading] = useState(false);
   const [estimate, setEstimate] = useState(null);
   const scrollRef = useRef(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -141,9 +142,9 @@ export default function AiTilbudChat() {
                 <div className="flex justify-between text-xl font-bold pt-3 border-t border-slate-700">
                   <span>Total inkl. moms</span><span className="text-amber-400">{formatDKK(estimate.total)}</span>
                 </div>
-                <Link to="/login" className="mt-4 w-full inline-flex items-center justify-center gap-2 bg-amber-400 text-slate-950 px-6 py-3 rounded-xl font-semibold hover:bg-amber-300 transition text-sm">
+                <button onClick={() => estimate && navigate('/forespoergsel', { state: { estimate, source: 'AI tilbudschat' } })} className="mt-4 w-full inline-flex items-center justify-center gap-2 bg-amber-400 text-slate-950 px-6 py-3 rounded-xl font-semibold hover:bg-amber-300 transition text-sm disabled:opacity-50" disabled={!estimate}>
                   Send forespørgsel <ArrowRight className="w-4 h-4" />
-                </Link>
+                </button>
                 <p className="text-xs text-slate-500 mt-2 text-center">Uforpligtende estimat. Kontakt os for et endeligt tilbud.</p>
               </div>
             </>

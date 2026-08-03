@@ -161,6 +161,7 @@ import KvalitetsstyringOversigt from '@/pages/KvalitetsstyringOversigt';
 import Kundearkiv from '@/pages/Kundearkiv';
 import Udstyrshistorik from '@/pages/Udstyrshistorik';
 import MoedeKalender from '@/pages/MoedeKalender';
+import Forespoergsel from '@/pages/Forespoergsel';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -192,6 +193,7 @@ const AuthenticatedApp = () => {
       <Route path="/tjenester" element={<Tjenester />} />
       <Route path="/tjenester/:slug" element={<TjenesteDetalje />} />
       <Route path="/beregn-tilbud" element={<BeregnTilbud />} />
+      <Route path="/forespoergsel" element={<Forespoergsel />} />
       <Route path="/om-os" element={<OmOs />} />
       <Route path="/faq" element={<FAQ />} />
       <Route path="/kontakt" element={<Kontakt />} />

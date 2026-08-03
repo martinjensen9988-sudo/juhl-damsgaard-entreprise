@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { formatDKK, calcSubtotal, calcVAT, calcTotal } from '@/lib/format';
 import { SERVICE_CATEGORIES } from '@/lib/pricing';
 import { Calculator, Plus, RotateCcw, ArrowRight, ChevronDown, Trash2 } from 'lucide-react';
@@ -7,6 +7,7 @@ import { Calculator, Plus, RotateCcw, ArrowRight, ChevronDown, Trash2 } from 'lu
 export default function ForsidePrisberegner() {
   const [items, setItems] = useState([]);
   const [expanded, setExpanded] = useState('Gravearbejde');
+  const navigate = useNavigate();
 
   const addService = (svc) => {
     const existing = items.find((i) => i.name === svc.name);
@@ -130,9 +131,9 @@ export default function ForsidePrisberegner() {
             </>
           )}
 
-          <Link to="/login" className="mt-5 w-full inline-flex items-center justify-center gap-2 bg-amber-400 text-slate-950 px-6 py-3 rounded-xl font-semibold hover:bg-amber-300 transition">
+          <button onClick={() => items.length > 0 && navigate('/forespoergsel', { state: { items, source: 'Prisberegner' } })} disabled={items.length === 0} className="mt-5 w-full inline-flex items-center justify-center gap-2 bg-amber-400 text-slate-950 px-6 py-3 rounded-xl font-semibold hover:bg-amber-300 transition disabled:opacity-50">
             Send forespørgsel <ArrowRight className="w-4 h-4" />
-          </Link>
+          </button>
 
           <p className="text-xs text-slate-500 mt-3 text-center leading-relaxed">
             Uforpligtende overslag. Kontakt os for et endeligt og bindende tilbud.
