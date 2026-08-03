@@ -135,16 +135,20 @@ export default function Forside() {
                 </div>
                 <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                   {cat.items.map((it) => (
-                    <div
+                    <Link
                       key={it.name}
-                      className="group bg-white rounded-xl border border-slate-200 p-5 hover:shadow-lg hover:border-amber-300 transition"
+                      to={it.slug ? `/tjenester/${it.slug}` : '/tjenester'}
+                      className="group bg-white rounded-xl border border-slate-200 p-5 hover:shadow-lg hover:border-amber-300 transition flex flex-col"
                     >
                       <div className="w-9 h-9 rounded-lg bg-amber-50 group-hover:bg-amber-100 flex items-center justify-center mb-3 transition">
                         <it.icon className="w-5 h-5 text-amber-600" />
                       </div>
                       <h4 className="font-semibold text-slate-900 text-sm mb-1">{it.name}</h4>
-                      <p className="text-xs text-slate-500 leading-relaxed">{it.desc}</p>
-                    </div>
+                      <p className="text-xs text-slate-500 leading-relaxed flex-1">{it.desc}</p>
+                      <span className="inline-flex items-center gap-1 text-xs text-amber-600 mt-3 font-medium opacity-0 group-hover:opacity-100 transition">
+                        Læs mere <ArrowRight className="w-3 h-3" />
+                      </span>
+                    </Link>
                   ))}
                 </div>
               </div>
