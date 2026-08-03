@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { ArrowRight, Info } from 'lucide-react';
 
 // Interaktiv arkitekttegnet hus — klik på en del for at se tilhørende tjeneste
@@ -66,7 +66,9 @@ const hotspots = [
 
 export default function InteraktivtHus() {
   const [active, setActive] = useState(null);
+  const navigate = useNavigate();
   const current = hotspots.find((h) => h.id === active);
+  const goTo = (slug) => navigate(`/tjenester/${slug}`);
 
   return (
     <section className="py-16 bg-slate-950 relative overflow-hidden">
@@ -107,7 +109,7 @@ export default function InteraktivtHus() {
               <g
                 onMouseEnter={() => setActive('tag')}
                 onMouseLeave={() => setActive(null)}
-                onClick={() => setActive('tag')}
+                onClick={() => goTo('snerydding')}
                 className="cursor-pointer"
               >
                 <polygon
@@ -126,7 +128,7 @@ export default function InteraktivtHus() {
               <g
                 onMouseEnter={() => setActive('fundament')}
                 onMouseLeave={() => setActive(null)}
-                onClick={() => setActive('fundament')}
+                onClick={() => goTo('beton-stobning')}
                 className="cursor-pointer"
               >
                 <rect
@@ -144,7 +146,7 @@ export default function InteraktivtHus() {
               <g
                 onMouseEnter={() => setActive('vinduer')}
                 onMouseLeave={() => setActive(null)}
-                onClick={() => setActive('vinduer')}
+                onClick={() => goTo('skadeservice')}
                 className="cursor-pointer"
               >
                 <rect
@@ -162,7 +164,7 @@ export default function InteraktivtHus() {
               <g
                 onMouseEnter={() => setActive('vinduer')}
                 onMouseLeave={() => setActive(null)}
-                onClick={() => setActive('vinduer')}
+                onClick={() => goTo('skadeservice')}
                 className="cursor-pointer"
               >
                 <rect
@@ -180,7 +182,7 @@ export default function InteraktivtHus() {
               <g
                 onMouseEnter={() => setActive('dor')}
                 onMouseLeave={() => setActive(null)}
-                onClick={() => setActive('dor')}
+                onClick={() => goTo('vicevaert-service')}
                 className="cursor-pointer"
               >
                 <rect
@@ -197,7 +199,7 @@ export default function InteraktivtHus() {
               <g
                 onMouseEnter={() => setActive('indkorsel')}
                 onMouseLeave={() => setActive(null)}
-                onClick={() => setActive('indkorsel')}
+                onClick={() => goTo('asfalt-brolaegning')}
                 className="cursor-pointer"
               >
                 <polygon
@@ -217,7 +219,7 @@ export default function InteraktivtHus() {
               <g
                 onMouseEnter={() => setActive('have')}
                 onMouseLeave={() => setActive(null)}
-                onClick={() => setActive('have')}
+                onClick={() => goTo('anlaeg-udearealer')}
                 className="cursor-pointer"
               >
                 <path
@@ -236,7 +238,7 @@ export default function InteraktivtHus() {
               <g
                 onMouseEnter={() => setActive('kloak')}
                 onMouseLeave={() => setActive(null)}
-                onClick={() => setActive('kloak')}
+                onClick={() => goTo('kloak-draen')}
                 className="cursor-pointer"
               >
                 <path
@@ -254,7 +256,7 @@ export default function InteraktivtHus() {
               <g
                 onMouseEnter={() => setActive('grave')}
                 onMouseLeave={() => setActive(null)}
-                onClick={() => setActive('grave')}
+                onClick={() => goTo('gravearbejde')}
                 className="cursor-pointer"
               >
                 <rect
@@ -309,7 +311,7 @@ export default function InteraktivtHus() {
                     {hotspots.map((h) => (
                       <button
                         key={h.id}
-                        onClick={() => setActive(h.id)}
+                        onClick={() => goTo(h.slug)}
                         className="text-xs px-2.5 py-1 rounded-full bg-slate-800 border border-slate-700 text-slate-300 hover:bg-amber-400/10 hover:border-amber-400/30 hover:text-amber-400 transition"
                       >
                         {h.label}
