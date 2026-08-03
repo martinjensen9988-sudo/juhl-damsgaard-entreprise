@@ -19,8 +19,10 @@ import {
   DialogFooter,
 } from '@/components/ui/dialog';
 import LineItemEditor from '@/components/LineItemEditor';
+import SendFakturaDialog from '@/components/SendFakturaDialog';
+import { generateInvoicePDF } from '@/lib/invoicePdf';
 import { formatDKK, calcSubtotal, calcVAT, calcTotal, formatDate } from '@/lib/format';
-import { Plus, Pencil, Trash2, Receipt } from 'lucide-react';
+import { Plus, Pencil, Trash2, Receipt, Download, Send } from 'lucide-react';
 
 const STATUSES = ['Kladde', 'Sendt', 'Betalt', 'Forfalden', 'Annulleret'];
 
@@ -51,18 +53,24 @@ export default function Invoices() {
   const [editing, setEditing] = useState(null);
   const [form, setForm] = useState(null);
   const [saving, setSaving] = useState(false);
+  const [company, setCompany] = useState({});
+  const [pdfLoading, setPdfLoading] = useState(null);
+  const [sendOpen, setSendOpen] = useState(false);
+  const [sendInvoice, setSendInvoice] = useState(null);
 
   const load = async () => {
     setLoading(true);
     try {
-      const [inv, c, p] = await Promise.all([
+      const [inv, c, p, cs] = await Promise.all([
         base44.entities.Invoice.list('-created_date', 100),
         base44.entities.Customer.list('-created_date', 200),
         base44.entities.Project.list('-created_date', 200),
+        base44.entities.CompanySettings.list('-created_date', 10),
       ]);
       setInvoices(inv);
       setCustomers(c);
       setProjects(p);
+      setCompany(cs[0] || {});
     } catch (e) {
       console.error(e);
     } finally {
@@ -139,6 +147,33 @@ export default function Invoices() {
 
   const set = (field) => (e) => setForm({ ...form, [field]: e.target.value });
 
+  const downloadPDF = async (inv) => {
+    setPdfLoading(inv.id);
+    try {
+      await generateInvoicePDF(inv, company);
+    } catch (e) {
+      alert('Kunne ikke generere PDF');
+    } finally {
+      setPdfLoading(null);
+    }
+  };
+
+  const openSend = (inv) => {
+    setSendInvoice(inv);
+    setSendOpen(true);
+  };
+
+  const handleSent = async () => {
+    if (sendInvoice && (sendInvoice.status === 'Kladde')) {
+      try {
+        await base44.entities.Invoice.update(sendInvoice.id, { status: 'Sendt' });
+        load();
+      } catch (e) {
+        console.error(e);
+      }
+    }
+  };
+
   const totalUnpaid = invoices
     .filter((i) => i.status === 'Sendt' || i.status === 'Forfalden')
     .reduce((sum, inv) => sum + calcTotal(inv.line_items), 0);
@@ -209,6 +244,28 @@ export default function Invoices() {
                     </td>
                     <td className="px-4 py-3">
                       <div className="flex justify-end gap-1">
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => openSend(inv)}
+                          disabled={!inv.customer_email}
+                          title={inv.customer_email ? 'Send til kunde' : 'Kunden har ingen email'}
+                        >
+                          <Send className="w-4 h-4 text-blue-600" />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => downloadPDF(inv)}
+                          disabled={pdfLoading === inv.id}
+                          title="Download PDF"
+                        >
+                          {pdfLoading === inv.id ? (
+                            <div className="w-4 h-4 border-2 border-slate-300 border-t-slate-700 rounded-full animate-spin" />
+                          ) : (
+                            <Download className="w-4 h-4 text-slate-700" />
+                          )}
+                        </Button>
                         <Button variant="ghost" size="icon" onClick={() => openEdit(inv)}>
                           <Pencil className="w-4 h-4 text-slate-500" />
                         </Button>
@@ -315,6 +372,14 @@ export default function Invoices() {
           </DialogContent>
         </Dialog>
       )}
+
+      <SendFakturaDialog
+        invoice={sendInvoice}
+        company={company}
+        open={sendOpen}
+        onOpenChange={setSendOpen}
+        onSent={handleSent}
+      />
     </div>
   );
 }
