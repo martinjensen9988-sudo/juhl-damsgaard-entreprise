@@ -78,6 +78,10 @@
     "resolution": {
       "type": "string",
       "title": "L\u00f8sning"
+    },
+    "photo_url": {
+      "type": "string",
+      "title": "Billeddokumentation"
     }
   },
   "required": [

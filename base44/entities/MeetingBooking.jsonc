@@ -26,9 +26,10 @@
         "Kundem\u00f8de",
         "Tilbudsgennemgang",
         "Opf\u00f8lgning",
+        "Byggem\u00f8de",
         "Andet"
       ],
-      "default": "Besigtigelse"
+      "default": "Byggem\u00f8de"
     },
     "date": {
       "type": "string",
@@ -51,6 +52,18 @@
     "employee_name": {
       "type": "string",
       "title": "Ansvarlig medarbejder"
+    },
+    "attendees": {
+      "type": "string",
+      "title": "Deltagere"
+    },
+    "agenda": {
+      "type": "string",
+      "title": "Dagsorden"
+    },
+    "minutes": {
+      "type": "string",
+      "title": "Referat"
     },
     "status": {
       "type": "string",

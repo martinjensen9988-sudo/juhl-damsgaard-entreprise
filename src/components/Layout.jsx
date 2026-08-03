@@ -75,6 +75,9 @@ import {
   PackageSearch,
   ClipboardCheck,
   PenLine,
+  NotebookPen,
+  ListTodo,
+  GraduationCap,
 } from 'lucide-react';
 
 const navItems = [
@@ -187,6 +190,17 @@ const navItems = [
   { to: '/tilbudsanalyse', label: 'Tilbudsanalyse', icon: Target },
   { to: '/materieludlejning', label: 'Materieludlejning', icon: Wrench },
   { to: '/firma-indstillinger', label: 'Firma-indstillinger', icon: Building2 },
+  { to: '/sikkerhedsarkiv', label: 'Sikkerhedsarkiv', icon: ShieldCheck },
+  { to: '/dokumentcenter', label: 'Dokumentcenter', icon: FileText },
+  { to: '/underentreprenorer', label: 'Underentreprenører', icon: Briefcase },
+  { to: '/afvigelsesrapporter', label: 'Afvigelsesrapporter', icon: AlertOctagon },
+  { to: '/projektnotater', label: 'Projektnotater', icon: NotebookPen },
+  { to: '/moedeoversigt', label: 'Mødeoversigt', icon: CalendarDays },
+  { to: '/opgavestyring', label: 'Opgavestyring', icon: ListTodo },
+  { to: '/kursusstyring', label: 'Kursusstyring', icon: GraduationCap },
+  { to: '/udstyrsudlejning', label: 'Udstyrsudlejning', icon: Wrench },
+  { to: '/sagsarkiv', label: 'Sagsarkiv', icon: Archive },
+  { to: '/indkoebskurv', label: 'Indkøbskurv', icon: ShoppingCart },
 ];
 
 export default function Layout() {

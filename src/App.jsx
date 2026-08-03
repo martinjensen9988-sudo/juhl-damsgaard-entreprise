@@ -136,6 +136,17 @@ import Kundeportal from '@/pages/Kundeportal';
 import Tilbudsanalyse from '@/pages/Tilbudsanalyse';
 import Tilfredshedskema from '@/pages/Tilfredhedskema';
 import Materieludlejning from '@/pages/Materieludlejning';
+import Sikkerhedsarkiv from '@/pages/Sikkerhedsarkiv';
+import Dokumentcenter from '@/pages/Dokumentcenter';
+import Underentreprenorer from '@/pages/Underentreprenorer';
+import Afvigelsesrapporter from '@/pages/Afvigelsesrapporter';
+import Projektnotater from '@/pages/Projektnotater';
+import Moedeoversigt from '@/pages/Moedeoversigt';
+import Opgavestyring from '@/pages/Opgavestyring';
+import Kursusstyring from '@/pages/Kursusstyring';
+import Udstyrsudlejning from '@/pages/Udstyrsudlejning';
+import Sagsarkiv from '@/pages/Sagsarkiv';
+import Indkoebskurv from '@/pages/Indkoebskurv';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -285,6 +296,17 @@ const AuthenticatedApp = () => {
           <Route path="/tilbudsanalyse" element={<Tilbudsanalyse />} />
           <Route path="/materieludlejning" element={<Materieludlejning />} />
           <Route path="/firma-indstillinger" element={<Virksomhedsindstillinger />} />
+          <Route path="/sikkerhedsarkiv" element={<Sikkerhedsarkiv />} />
+          <Route path="/dokumentcenter" element={<Dokumentcenter />} />
+          <Route path="/underentreprenorer" element={<Underentreprenorer />} />
+          <Route path="/afvigelsesrapporter" element={<Afvigelsesrapporter />} />
+          <Route path="/projektnotater" element={<Projektnotater />} />
+          <Route path="/moedeoversigt" element={<Moedeoversigt />} />
+          <Route path="/opgavestyring" element={<Opgavestyring />} />
+          <Route path="/kursusstyring" element={<Kursusstyring />} />
+          <Route path="/udstyrsudlejning" element={<Udstyrsudlejning />} />
+          <Route path="/sagsarkiv" element={<Sagsarkiv />} />
+          <Route path="/indkoebskurv" element={<Indkoebskurv />} />
         </Route>
         <Route element={<PortalLayout />}>
           <Route path="/portal" element={<CustomerPortal />} />
