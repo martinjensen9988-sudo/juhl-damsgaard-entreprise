@@ -1,4 +1,5 @@
-import { NavLink, Outlet } from 'react-router-dom';
+import { useState } from 'react';
+import { NavLink, Outlet, useLocation } from 'react-router-dom';
 import {
   LayoutDashboard,
   Users,
@@ -24,19 +25,21 @@ import {
   FileSpreadsheet,
   PieChart,
   Sparkles,
-  Plug,
   Wrench,
   Filter,
   Milestone,
   Headphones,
   ShoppingCart,
-  Eye,
   Award,
-  FolderOpen,
-  BookOpen,
-  ListChecks,
-  UserSearch,
-  BarChart2,
+  Files,
+  Warehouse,
+  Recycle,
+  Palmtree,
+  Calculator,
+  UserRound,
+  Timer,
+  FileCheck,
+  Star,
   CalendarClock,
   CalendarPlus,
   ShieldAlert,
@@ -51,164 +54,218 @@ import {
   Car,
   Briefcase,
   HelpCircle,
-  Files,
-  ShoppingBag,
-  LayoutTemplate,
-  Warehouse,
-  Recycle,
-  Palmtree,
-  ListOrdered,
-  Calculator,
-  UserPlus,
-  BadgeCheck,
-  UserRound,
-  AlertCircle,
-  Timer,
-  FileCheck,
-  Star,
-  TrendingDown,
-  Inbox,
-  CalendarRange,
-  LineChart,
-  MapPinned,
-  Wallet,
-  PackageSearch,
-  ClipboardCheck,
   PenLine,
-  NotebookPen,
-  ListTodo,
+  ClipboardCheck,
   GraduationCap,
+  ChevronDown,
 } from 'lucide-react';
 
-const navItems = [
+const primaryItems = [
   { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard, end: true },
-  { to: '/salgsoverblik', label: 'Salg', icon: Target },
-  { to: '/kunder', label: 'Kunder', icon: Users },
-  { to: '/projekter', label: 'Projekter', icon: HardHat },
-  { to: '/tilbud', label: 'Tilbud', icon: FileText },
-  { to: '/faktura', label: 'Faktura', icon: Receipt },
-  { to: '/faktura-arkiv', label: 'Fakturaarkiv', icon: Archive },
-  { to: '/planlaegning', label: 'Planlægning', icon: CalendarDays },
-  { to: '/materialeliste', label: 'Materialer', icon: Package },
-  { to: '/tidsregistrering', label: 'Tid', icon: Clock },
-  { to: '/leverandoerer', label: 'Leverandører', icon: Truck },
-  { to: '/projektstatus', label: 'Projektstatus', icon: Activity },
-  { to: '/indstillinger', label: 'Indstillinger', icon: Settings },
-  { to: '/projekt-galleri', label: 'Galleri', icon: Images },
-  { to: '/medarbejdere', label: 'Medarbejdere', icon: Contact },
-  { to: '/dokumenter', label: 'Dokumenter', icon: Archive },
-  { to: '/serviceaftaler', label: 'Serviceaftaler', icon: RefreshCw },
-  { to: '/ledelsesoverblik', label: 'Ledelse', icon: BarChart3 },
-  { to: '/arbejdssedler', label: 'Arbejdssedler', icon: ClipboardList },
-  { to: '/kvalitetssikring', label: 'Kvalitet', icon: ShieldCheck },
-  { to: '/regnskab', label: 'Regnskab', icon: FileSpreadsheet },
-  { to: '/daekningsbidrag', label: 'Dækningsbidrag', icon: PieChart },
-  { to: '/regnskab-integration', label: 'Regnskab int.', icon: Plug },
-  { to: '/ai-tilbud', label: 'AI Tilbud', icon: Sparkles },
-  { to: '/ugeplanlaegning', label: 'Ugeplan', icon: CalendarDays },
-  { to: '/materiel', label: 'Materiel', icon: Wrench },
-  { to: '/salgs-pipeline', label: 'Pipeline', icon: Filter },
-  { to: '/projekt-milepaele', label: 'Milepæle', icon: Milestone },
-  { to: '/kundesupport', label: 'Support', icon: Headphones },
-  { to: '/materialeindkoeb', label: 'Indkøb', icon: ShoppingCart },
-  { to: '/projektoverblik', label: 'Overblik', icon: Eye },
-  { to: '/certifikater', label: 'Certifikater', icon: Award },
-  { to: '/virksomhedsindstillinger', label: 'Firmaoplysninger', icon: Building2 },
-  { to: '/dokumentarkiv', label: 'Dokumentarkiv', icon: FolderOpen },
-  { to: '/servicekatalog', label: 'Servicekatalog', icon: BookOpen },
-  { to: '/opgaveliste', label: 'Opgaveliste', icon: ListChecks },
-  { to: '/kundeoversigt', label: 'Kundeoversigt', icon: UserSearch },
-  { to: '/kundestatistik', label: 'Kundestatistik', icon: BarChart2 },
-  { to: '/udloebs-oversigt', label: 'Udløbsdatoer', icon: CalendarClock },
-  { to: '/materiel-booking', label: 'Værktøjsbooking', icon: CalendarPlus },
-  { to: '/sikkerhedslog', label: 'Sikkerhedslog', icon: ShieldAlert },
-  { to: '/abonnementer', label: 'Abonnementer', icon: Repeat },
-  { to: '/indkoebsordrer', label: 'Indkøbsordrer', icon: ClipboardList },
-  { to: '/aktivitetslog', label: 'Aktivitetslog', icon: History },
-  { to: '/afvigelser', label: 'Afvigelser', icon: AlertOctagon },
-  { to: '/kundeportal-indstillinger', label: 'Portal-styring', icon: Settings2 },
-  { to: '/ressourceallokering', label: 'Ressource', icon: Users2 },
-  { to: '/noegletal', label: 'Nøgletal', icon: PieChart },
-  { to: '/medarbejder-administration', label: 'Medarb.admin', icon: UserCog },
-  { to: '/kvalitetsstyring', label: 'Kvalitetsstyring', icon: ShieldCheck },
-  { to: '/vaerksted', label: 'Værksted', icon: Wrench },
-  { to: '/storskaerm', label: 'Storskærm', icon: Monitor },
-  { to: '/infotaavle', label: 'Info-skærm', icon: Tv },
-  { to: '/bilpark', label: 'Bilpark', icon: Car },
-  { to: '/underentreprenoerer', label: 'Underentreprenører', icon: Briefcase },
-  { to: '/vidensbase', label: 'Vidensbase', icon: HelpCircle },
-  { to: '/projekt-arkiv', label: 'Projektarkiv', icon: Files },
-  { to: '/indkoebsliste', label: 'Indkøbsliste', icon: ShoppingBag },
-  { to: '/tilbudsskabeloner', label: 'Tilbudsskabeloner', icon: LayoutTemplate },
-  { to: '/lager-styring', label: 'Lagerstyring', icon: Warehouse },
-  { to: '/miljoe-affald', label: 'Miljø & Affald', icon: Recycle },
-  { to: '/ferie-administration', label: 'Ferie', icon: Palmtree },
-  { to: '/opgave-prioritering', label: 'Opgaveprioritering', icon: ListOrdered },
-  { to: '/projekt-oekonomi', label: 'Projektøkonomi', icon: Calculator },
-  { to: '/kontaktliste', label: 'Kontaktliste', icon: UserPlus },
-  { to: '/certifikat-arkiv', label: 'Certifikat Arkiv', icon: BadgeCheck },
-  { to: '/brugerprofil', label: 'Brugerprofil', icon: UserRound },
-  { to: '/afvigelsesrapport', label: 'Afvigelsesrapport', icon: AlertCircle },
-  { to: '/timeseddel-rapport', label: 'Timeseddel', icon: Timer },
-  { to: '/leverandoerfakturaer', label: 'Leverandørfakturaer', icon: FileCheck },
-  { to: '/asbestfjernelse', label: 'Asbest', icon: ShieldAlert },
-  { to: '/sikkerhedsprotokoller', label: 'Sikkerhedsprotok.', icon: ShieldAlert },
-  { to: '/materiel-vedligehold', label: 'Materiel-vedligehold', icon: Wrench },
-  { to: '/certifikat-log', label: 'Certifikat-log', icon: Award },
-  { to: '/kundereferencer', label: 'Kundereferencer', icon: Star },
-  { to: '/billedarkiv', label: 'Billedarkiv', icon: Images },
-  { to: '/moede-booking', label: 'Mødebooker', icon: CalendarDays },
-  { to: '/udgifts-oversigt', label: 'Udgiftsoversigt', icon: TrendingDown },
-  { to: '/vidensbase-filer', label: 'Firmaressourcer', icon: FolderOpen },
-  { to: '/medarbejder-dashboard', label: 'Medarb. Dashboard', icon: LayoutDashboard },
-  { to: '/kundehenvendelser', label: 'Kundehenvendelser', icon: Inbox },
-  { to: '/tilbuds-beregner', label: 'Tilbudsberegner', icon: Calculator },
-  { to: '/udstyrskalender', label: 'Udstyrskalender', icon: CalendarRange },
-  { to: '/sikkerhedsinstruktioner', label: 'Sikkerhedsinstruks', icon: HardHat },
-  { to: '/salgsstatistik', label: 'Salgsstatistik', icon: LineChart },
-  { to: '/adresse-opslag', label: 'Adressesøgning', icon: MapPinned },
-  { to: '/udgiftsstyring', label: 'Udgiftsstyring', icon: Wallet },
-  { to: '/lager-overblik', label: 'Lageroverblik', icon: PackageSearch },
-  { to: '/lagerbeholdning', label: 'Lagerbeholdning', icon: Warehouse },
-  { to: '/projektkalender', label: 'Projektkalender', icon: CalendarRange },
-  { to: '/medarbejderliste', label: 'Medarbejderliste', icon: Contact },
-  { to: '/kvalitetskontrol', label: 'Kvalitetskontrol', icon: ShieldCheck },
-  { to: '/vagtplan', label: 'Vagtplan', icon: CalendarClock },
-  { to: '/afleveringsforretning', label: 'Aflevering', icon: ClipboardList },
-  { to: '/bilpark-oversigt', label: 'Bilpark oversigt', icon: Car },
-  { to: '/marketing', label: 'Marketing', icon: Target },
-  { to: '/subunderleverandoerer', label: 'Underleverandører', icon: HardHat },
-  { to: '/driftsbudget', label: 'Driftsbudget', icon: Wallet },
-  { to: '/kundetilfredshed', label: 'Kundetilfredshed', icon: Star },
-  { to: '/serviceopgaver', label: 'Serviceopgaver', icon: Wrench },
-  { to: '/forsikringssager', label: 'Forsikringssager', icon: ShieldAlert },
-  { to: '/timepris-beregner', label: 'Timeprisberegner', icon: Calculator },
-  { to: '/vedligeholdelseslog', label: 'Vedligeholdelseslog', icon: ClipboardCheck },
-  { to: '/leverandoeroversigt', label: 'Leverandøroversigt', icon: Truck },
-  { to: '/digital-signatur', label: 'Digital signatur', icon: PenLine },
-  { to: '/tids-rapporter', label: 'Tidsrapporter', icon: Timer },
-  { to: '/affalds-log', label: 'Affaldshåndtering', icon: Recycle },
-  { to: '/tilbudsanalyse', label: 'Tilbudsanalyse', icon: Target },
-  { to: '/materieludlejning', label: 'Materieludlejning', icon: Wrench },
-  { to: '/firma-indstillinger', label: 'Firma-indstillinger', icon: Building2 },
-  { to: '/sikkerhedsarkiv', label: 'Sikkerhedsarkiv', icon: ShieldCheck },
-  { to: '/dokumentcenter', label: 'Dokumentcenter', icon: FileText },
-  { to: '/underentreprenorer', label: 'Underentreprenører', icon: Briefcase },
-  { to: '/afvigelsesrapporter', label: 'Afvigelsesrapporter', icon: AlertOctagon },
-  { to: '/projektnotater', label: 'Projektnotater', icon: NotebookPen },
-  { to: '/moedeoversigt', label: 'Mødeoversigt', icon: CalendarDays },
-  { to: '/opgavestyring', label: 'Opgavestyring', icon: ListTodo },
-  { to: '/kursusstyring', label: 'Kursusstyring', icon: GraduationCap },
-  { to: '/udstyrsudlejning', label: 'Udstyrsudlejning', icon: Wrench },
-  { to: '/sagsarkiv', label: 'Sagsarkiv', icon: Archive },
-  { to: '/indkoebskurv', label: 'Indkøbskurv', icon: ShoppingCart },
-  { to: '/materiel-oversigt', label: 'Materieloversigt', icon: Wrench },
-  { to: '/udgifts-godkendelse', label: 'Udgiftsgodkendelse', icon: ClipboardCheck },
-  { to: '/projekt-logbog', label: 'Projektlogbog', icon: BookOpen },
-  { to: '/ressource-planlaegning', label: 'Ressourceplan', icon: CalendarRange },
 ];
 
+const navGroups = [
+  {
+    label: 'Salg & Tilbud',
+    icon: Target,
+    items: [
+      { to: '/salgsoverblik', label: 'Salgsoverblik', icon: BarChart3 },
+      { to: '/tilbud', label: 'Tilbud', icon: FileText },
+      { to: '/ai-tilbud', label: 'AI Tilbud', icon: Sparkles },
+      { to: '/salgs-pipeline', label: 'Salgs Pipeline', icon: Filter },
+    ],
+  },
+  {
+    label: 'Kunder',
+    icon: Users,
+    items: [
+      { to: '/kunder', label: 'Kunder', icon: Users },
+      { to: '/kundetilfredshed', label: 'Kundetilfredshed', icon: Star },
+      { to: '/kundesupport', label: 'Kundesupport', icon: Headphones },
+    ],
+  },
+  {
+    label: 'Projekter',
+    icon: HardHat,
+    items: [
+      { to: '/projekter', label: 'Projekter', icon: HardHat },
+      { to: '/projektstatus', label: 'Projektstatus', icon: Activity },
+      { to: '/projekt-arkiv', label: 'Projektarkiv', icon: Files },
+      { to: '/projekt-oekonomi', label: 'Projektøkonomi', icon: Calculator },
+      { to: '/projektkalender', label: 'Projektkalender', icon: CalendarDays },
+      { to: '/projekt-milepaele', label: 'Milepæle', icon: Milestone },
+    ],
+  },
+  {
+    label: 'Økonomi',
+    icon: FileSpreadsheet,
+    items: [
+      { to: '/faktura', label: 'Fakturaer', icon: Receipt },
+      { to: '/faktura-arkiv', label: 'Fakturaarkiv', icon: Archive },
+      { to: '/regnskab', label: 'Regnskab', icon: FileSpreadsheet },
+      { to: '/daekningsbidrag', label: 'Dækningsbidrag', icon: PieChart },
+      { to: '/leverandoerfakturaer', label: 'Leverandørfakturaer', icon: FileCheck },
+      { to: '/udgiftsstyring', label: 'Udgiftsstyring', icon: Receipt },
+    ],
+  },
+  {
+    label: 'Planlægning',
+    icon: CalendarDays,
+    items: [
+      { to: '/planlaegning', label: 'Planlægning', icon: CalendarDays },
+      { to: '/ugeplanlaegning', label: 'Ugeplan', icon: CalendarDays },
+      { to: '/vagtplan', label: 'Vagtplan', icon: CalendarClock },
+      { to: '/moede-booking', label: 'Mødebooker', icon: CalendarPlus },
+      { to: '/ressourceallokering', label: 'Ressource', icon: Users2 },
+    ],
+  },
+  {
+    label: 'Opgaver',
+    icon: ClipboardList,
+    items: [
+      { to: '/opgaveliste', label: 'Opgaveliste', icon: ClipboardList },
+      { to: '/arbejdssedler', label: 'Arbejdssedler', icon: ClipboardList },
+    ],
+  },
+  {
+    label: 'Materialer & Lager',
+    icon: Package,
+    items: [
+      { to: '/materialeliste', label: 'Materialer', icon: Package },
+      { to: '/materialeindkoeb', label: 'Indkøb', icon: ShoppingCart },
+      { to: '/lager-styring', label: 'Lagerstyring', icon: Warehouse },
+    ],
+  },
+  {
+    label: 'Materiel & Udstyr',
+    icon: Wrench,
+    items: [
+      { to: '/materiel', label: 'Materiel', icon: Wrench },
+      { to: '/udstyrskalender', label: 'Udstyrskalender', icon: CalendarDays },
+      { to: '/vaerksted', label: 'Værksted', icon: Wrench },
+      { to: '/bilpark', label: 'Bilpark', icon: Car },
+    ],
+  },
+  {
+    label: 'Medarbejdere',
+    icon: Contact,
+    items: [
+      { to: '/medarbejdere', label: 'Medarbejdere', icon: Contact },
+      { to: '/medarbejder-administration', label: 'Administration', icon: UserCog },
+      { to: '/ferie-administration', label: 'Ferie', icon: Palmtree },
+      { to: '/tidsregistrering', label: 'Tidsregistrering', icon: Clock },
+      { to: '/timeseddel-rapport', label: 'Timeseddel', icon: Timer },
+      { to: '/brugerprofil', label: 'Brugerprofil', icon: UserRound },
+      { to: '/kursusstyring', label: 'Kursusstyring', icon: GraduationCap },
+    ],
+  },
+  {
+    label: 'Leverandører',
+    icon: Truck,
+    items: [
+      { to: '/leverandoerer', label: 'Leverandører', icon: Truck },
+      { to: '/underentreprenoerer', label: 'Underentreprenører', icon: Briefcase },
+    ],
+  },
+  {
+    label: 'Kvalitet & Sikkerhed',
+    icon: ShieldCheck,
+    items: [
+      { to: '/kvalitetssikring', label: 'Kvalitet', icon: ShieldCheck },
+      { to: '/sikkerhedslog', label: 'Sikkerhedslog', icon: ShieldAlert },
+      { to: '/afvigelser', label: 'Afvigelser', icon: AlertOctagon },
+    ],
+  },
+  {
+    label: 'Miljø & Affald',
+    icon: Recycle,
+    items: [
+      { to: '/miljoe-affald', label: 'Miljø & Affald', icon: Recycle },
+      { to: '/asbestfjernelse', label: 'Asbest', icon: ShieldAlert },
+      { to: '/forsikringssager', label: 'Forsikringssager', icon: ShieldAlert },
+    ],
+  },
+  {
+    label: 'Service & Abonnementer',
+    icon: RefreshCw,
+    items: [
+      { to: '/serviceaftaler', label: 'Serviceaftaler', icon: RefreshCw },
+      { to: '/serviceopgaver', label: 'Serviceopgaver', icon: Wrench },
+      { to: '/abonnementer', label: 'Abonnementer', icon: Repeat },
+      { to: '/afleveringsforretning', label: 'Aflevering', icon: ClipboardCheck },
+      { to: '/certifikater', label: 'Certifikater', icon: Award },
+    ],
+  },
+  {
+    label: 'Dokumenter & Viden',
+    icon: Archive,
+    items: [
+      { to: '/dokumenter', label: 'Dokumenter', icon: Archive },
+      { to: '/vidensbase', label: 'Vidensbase', icon: HelpCircle },
+      { to: '/billedarkiv', label: 'Billedarkiv', icon: Images },
+      { to: '/digital-signatur', label: 'Digital signatur', icon: PenLine },
+    ],
+  },
+  {
+    label: 'Firma',
+    icon: Building2,
+    items: [
+      { to: '/ledelsesoverblik', label: 'Ledelse', icon: BarChart3 },
+      { to: '/noegletal', label: 'Nøgletal', icon: PieChart },
+      { to: '/aktivitetslog', label: 'Aktivitetslog', icon: History },
+      { to: '/marketing', label: 'Marketing', icon: Target },
+      { to: '/indstillinger', label: 'Indstillinger', icon: Settings },
+      { to: '/kundeportal-indstillinger', label: 'Portal-styring', icon: Settings2 },
+    ],
+  },
+  {
+    label: 'Skærme',
+    icon: Monitor,
+    items: [
+      { to: '/storskaerm', label: 'Storskærm', icon: Monitor },
+      { to: '/infotaavle', label: 'Info-skærm', icon: Tv },
+    ],
+  },
+];
+
+const allItems = [
+  ...primaryItems,
+  ...navGroups.flatMap((g) => g.items),
+];
+
+function NavLinkRow({ item }) {
+  return (
+    <NavLink
+      to={item.to}
+      end={item.end}
+      className={({ isActive }) =>
+        `flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all ${
+          isActive
+            ? 'bg-amber-400 text-slate-950 shadow-sm'
+            : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
+        }`
+      }
+    >
+      <item.icon className="w-[18px] h-[18px]" />
+      {item.label}
+    </NavLink>
+  );
+}
+
 export default function Layout() {
+  const location = useLocation();
+  const [openGroups, setOpenGroups] = useState({});
+
+  // Auto-expand the group that contains the active route
+  const activeGroup = navGroups.find((g) =>
+    g.items.some((i) => location.pathname === i.to)
+  )?.label;
+
+  const toggleGroup = (label) =>
+    setOpenGroups((prev) => ({ ...prev, [label]: !prev[label] }));
+
+  const isGroupOpen = (label) => openGroups[label] || activeGroup === label;
+
   return (
     <div className="min-h-screen bg-slate-50">
       {/* Desktop sidebar */}
@@ -223,23 +280,33 @@ export default function Layout() {
           </div>
         </div>
         <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
-          {navItems.map((item) => (
-            <NavLink
-              key={item.to}
-              to={item.to}
-              end={item.end}
-              className={({ isActive }) =>
-                `flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${
-                  isActive
-                    ? 'bg-amber-400 text-slate-950 shadow-sm'
-                    : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
-                }`
-              }
-            >
-              <item.icon className="w-[18px] h-[18px]" />
-              {item.label}
-            </NavLink>
+          {primaryItems.map((item) => (
+            <NavLinkRow key={item.to} item={item} />
           ))}
+          {navGroups.map((group) => {
+            const open = isGroupOpen(group.label);
+            return (
+              <div key={group.label}>
+                <button
+                  onClick={() => toggleGroup(group.label)}
+                  className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-semibold text-slate-300 hover:bg-slate-800/60 transition-all"
+                >
+                  <group.icon className="w-[18px] h-[18px] text-slate-400" />
+                  <span className="flex-1 text-left">{group.label}</span>
+                  <ChevronDown
+                    className={`w-4 h-4 text-slate-500 transition-transform ${open ? 'rotate-180' : ''}`}
+                  />
+                </button>
+                {open && (
+                  <div className="mt-1 ml-3 pl-3 border-l border-slate-800 space-y-1">
+                    {group.items.map((item) => (
+                      <NavLinkRow key={item.to} item={item} />
+                    ))}
+                  </div>
+                )}
+              </div>
+            );
+          })}
         </nav>
         <div className="px-3 pb-2 space-y-1">
           <a href="/" target="_blank" className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-amber-400 hover:bg-slate-800/60 transition-all">
@@ -266,7 +333,7 @@ export default function Layout() {
 
       {/* Mobile nav */}
       <nav className="md:hidden sticky top-[52px] z-20 bg-white border-b flex overflow-x-auto px-2 py-2 gap-1">
-        {navItems.map((item) => (
+        {allItems.map((item) => (
           <NavLink
             key={item.to}
             to={item.to}
