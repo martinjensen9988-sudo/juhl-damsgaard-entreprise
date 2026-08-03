@@ -1,0 +1,106 @@
+{
+  "name": "SafetyChecklist",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "title": "Titel"
+    },
+    "project_id": {
+      "type": "string",
+      "title": "Projekt"
+    },
+    "project_name": {
+      "type": "string",
+      "title": "Projektnavn"
+    },
+    "location": {
+      "type": "string",
+      "title": "Lokation"
+    },
+    "date": {
+      "type": "string",
+      "format": "date",
+      "title": "Dato"
+    },
+    "type": {
+      "type": "string",
+      "title": "Type",
+      "enum": [
+        "Arbejdsmilj\u00f8-tjekliste",
+        "Pladsgennemgang",
+        "Stilladsinspektion",
+        "Maskinsikkerhed",
+        "Elektrisk sikkerhed",
+        "Andet"
+      ],
+      "default": "Arbejdsmilj\u00f8-tjekliste"
+    },
+    "items": {
+      "type": "array",
+      "title": "Tjekpunkter",
+      "items": {
+        "type": "object",
+        "properties": {
+          "description": {
+            "type": "string",
+            "title": "Beskrivelse"
+          },
+          "checked": {
+            "type": "boolean",
+            "title": "OK"
+          },
+          "notes": {
+            "type": "string",
+            "title": "Noter"
+          }
+        }
+      }
+    },
+    "filled_by": {
+      "type": "string",
+      "title": "Udfyldt af"
+    },
+    "status": {
+      "type": "string",
+      "title": "Status",
+      "enum": [
+        "Udkast",
+        "Udfyldt",
+        "Godkendt",
+        "Med bem\u00e6rkninger"
+      ],
+      "default": "Udkast"
+    },
+    "notes": {
+      "type": "string",
+      "title": "Samlede noter"
+    }
+  },
+  "required": [
+    "title",
+    "date"
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

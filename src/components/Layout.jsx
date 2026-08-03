@@ -82,6 +82,7 @@ const navGroups = [
       { to: '/kunder', label: 'Kunder', icon: Users },
       { to: '/kundetilfredshed', label: 'Kundetilfredshed', icon: Star },
       { to: '/kundesupport', label: 'Kundesupport', icon: Headphones },
+      { to: '/kundearkiv', label: 'Kundearkiv', icon: Archive },
     ],
   },
   {
@@ -106,6 +107,7 @@ const navGroups = [
       { to: '/daekningsbidrag', label: 'Dækningsbidrag', icon: PieChart },
       { to: '/leverandoerfakturaer', label: 'Leverandørfakturaer', icon: FileCheck },
       { to: '/udgiftsstyring', label: 'Udgiftsstyring', icon: Receipt },
+      { to: '/oekonomi-rapport', label: 'Økonomirapport', icon: BarChart3 },
     ],
   },
   {
@@ -117,6 +119,7 @@ const navGroups = [
       { to: '/vagtplan', label: 'Vagtplan', icon: CalendarClock },
       { to: '/moede-booking', label: 'Mødebooker', icon: CalendarPlus },
       { to: '/ressourceallokering', label: 'Ressource', icon: Users2 },
+      { to: '/moede-kalender', label: 'Mødekalender', icon: CalendarPlus },
     ],
   },
   {
@@ -144,6 +147,7 @@ const navGroups = [
       { to: '/udstyrskalender', label: 'Udstyrskalender', icon: CalendarDays },
       { to: '/vaerksted', label: 'Værksted', icon: Wrench },
       { to: '/bilpark', label: 'Bilpark', icon: Car },
+      { to: '/udstyrs-historik', label: 'Udstyrshistorik', icon: History },
     ],
   },
   {
@@ -157,6 +161,7 @@ const navGroups = [
       { to: '/timeseddel-rapport', label: 'Timeseddel', icon: Timer },
       { to: '/brugerprofil', label: 'Brugerprofil', icon: UserRound },
       { to: '/kursusstyring', label: 'Kursusstyring', icon: GraduationCap },
+      { to: '/bruger-administration', label: 'Brugeradministration', icon: UserCog },
     ],
   },
   {
@@ -165,6 +170,7 @@ const navGroups = [
     items: [
       { to: '/leverandoerer', label: 'Leverandører', icon: Truck },
       { to: '/underentreprenoerer', label: 'Underentreprenører', icon: Briefcase },
+      { to: '/samarbejdspartnere', label: 'Samarbejdspartnere', icon: Users2 },
     ],
   },
   {
@@ -174,6 +180,8 @@ const navGroups = [
       { to: '/kvalitetssikring', label: 'Kvalitet', icon: ShieldCheck },
       { to: '/sikkerhedslog', label: 'Sikkerhedslog', icon: ShieldAlert },
       { to: '/afvigelser', label: 'Afvigelser', icon: AlertOctagon },
+      { to: '/sikkerheds-tjekliste', label: 'Sikkerheds-tjekliste', icon: ClipboardCheck },
+      { to: '/kvalitetsstyring-oversigt', label: 'Kvalitetsoversigt', icon: ShieldCheck },
     ],
   },
   {

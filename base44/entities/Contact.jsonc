@@ -36,6 +36,18 @@
       ],
       "default": "Partner"
     },
+    "linked_project_id": {
+      "type": "string",
+      "title": "Knyttet projekt"
+    },
+    "linked_project_name": {
+      "type": "string",
+      "title": "Projektnavn"
+    },
+    "linked_task": {
+      "type": "string",
+      "title": "Knyttet opgave"
+    },
     "notes": {
       "type": "string",
       "title": "Noter"

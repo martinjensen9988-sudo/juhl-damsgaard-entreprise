@@ -153,6 +153,14 @@ import Udgiftsgodkendelse from '@/pages/Udgiftsgodkendelse';
 import ProjektLogbog from '@/pages/ProjektLogbog';
 import RessourcePlanlaegning from '@/pages/RessourcePlanlaegning';
 import Fakturaarkiv from '@/pages/Fakturaarkiv';
+import Brugeradministration from '@/pages/Brugeradministration';
+import OekonomiskRapport from '@/pages/OekonomiskRapport';
+import Samarbejdspartnere from '@/pages/Samarbejdspartnere';
+import Sikkerhedscheckliste from '@/pages/Sikkerhedscheckliste';
+import KvalitetsstyringOversigt from '@/pages/KvalitetsstyringOversigt';
+import Kundearkiv from '@/pages/Kundearkiv';
+import Udstyrshistorik from '@/pages/Udstyrshistorik';
+import MoedeKalender from '@/pages/MoedeKalender';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -319,6 +327,14 @@ const AuthenticatedApp = () => {
           <Route path="/projekt-logbog" element={<ProjektLogbog />} />
           <Route path="/ressource-planlaegning" element={<RessourcePlanlaegning />} />
           <Route path="/faktura-arkiv" element={<Fakturaarkiv />} />
+          <Route path="/bruger-administration" element={<Brugeradministration />} />
+          <Route path="/oekonomi-rapport" element={<OekonomiskRapport />} />
+          <Route path="/samarbejdspartnere" element={<Samarbejdspartnere />} />
+          <Route path="/sikkerheds-tjekliste" element={<Sikkerhedscheckliste />} />
+          <Route path="/kvalitetsstyring-oversigt" element={<KvalitetsstyringOversigt />} />
+          <Route path="/kundearkiv" element={<Kundearkiv />} />
+          <Route path="/udstyrs-historik" element={<Udstyrshistorik />} />
+          <Route path="/moede-kalender" element={<MoedeKalender />} />
         </Route>
         <Route element={<PortalLayout />}>
           <Route path="/portal" element={<CustomerPortal />} />
