@@ -107,11 +107,16 @@ export default function ProjektOekonomiOverview() {
 
   // Bar chart data — top 6 projekter efter budget
   const barData = projects
-    .map((p) => ({
-      name: p.name?.length > 18 ? p.name.slice(0, 16) + '…' : p.name || 'Uden navn',
-      Budget: p.budget || 0,
-      Omkostninger: costsByProject[p.id] || 0,
-    }))
+    .map((p) => {
+      const cost = costsByProject[p.id] || 0;
+      const budget = p.budget || 0;
+      return {
+        name: p.name?.length > 18 ? p.name.slice(0, 16) + '…' : p.name || 'Uden navn',
+        Budget: budget,
+        Omkostninger: cost,
+        Avance: budget - cost,
+      };
+    })
     .filter((d) => d.Budget > 0 || d.Omkostninger > 0)
     .sort((a, b) => b.Budget - a.Budget)
     .slice(0, 6);
@@ -164,16 +169,17 @@ export default function ProjektOekonomiOverview() {
 
         {barData.length > 0 && (
           <div className="border-t border-slate-100 pt-5">
-            <h3 className="text-sm font-semibold text-slate-900 mb-3">Budget vs. omkostninger pr. projekt</h3>
-            <ResponsiveContainer width="100%" height={280}>
+            <h3 className="text-sm font-semibold text-slate-900 mb-3">Forventet avance vs. faktiske omkostninger pr. projekt</h3>
+            <ResponsiveContainer width="100%" height={300}>
               <BarChart data={barData} margin={{ top: 8, right: 8, left: 8, bottom: 8 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" vertical={false} />
                 <XAxis dataKey="name" tick={{ fontSize: 11, fill: '#64748b' }} interval={0} angle={-12} textAnchor="end" height={60} />
                 <YAxis tickFormatter={(v) => v >= 1000 ? `${Math.round(v / 1000)}k` : v} tick={{ fontSize: 11, fill: '#64748b' }} />
                 <Tooltip content={<DKKTooltip />} cursor={{ fill: '#f8fafc' }} />
                 <Legend wrapperStyle={{ fontSize: 12 }} />
-                <Bar dataKey="Budget" fill="#0f172a" radius={[4, 4, 0, 0]} maxBarSize={42} />
-                <Bar dataKey="Omkostninger" fill="#f59e0b" radius={[4, 4, 0, 0]} maxBarSize={42} />
+                <Bar dataKey="Budget" fill="#0f172a" radius={[4, 4, 0, 0]} maxBarSize={38} />
+                <Bar dataKey="Omkostninger" fill="#ef4444" radius={[4, 4, 0, 0]} maxBarSize={38} />
+                <Bar dataKey="Avance" fill="#10b981" radius={[4, 4, 0, 0]} maxBarSize={38} />
               </BarChart>
             </ResponsiveContainer>
           </div>
