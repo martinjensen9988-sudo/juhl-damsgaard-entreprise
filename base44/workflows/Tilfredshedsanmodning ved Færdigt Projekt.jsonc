@@ -1,0 +1,40 @@
+{
+  "name": "Tilfredshedsanmodning ved F\u00e6rdigt Projekt",
+  "description": "Sender automatisk en anmodning om kundetilfredshed n\u00e5r et projekt markeres som f\u00e6rdigt",
+  "trigger": {
+    "config": {
+      "trigger_type": "entity",
+      "entity_name": "Project",
+      "events": [
+        "update"
+      ]
+    },
+    "condition": "${ .trigger.data.status == \"F\u00e6rdig\" and .trigger.old_data.status != \"F\u00e6rdig\" }"
+  },
+  "definition": {
+    "document": {
+      "dsl": "1.0.0",
+      "name": "feedback_request_on_finish",
+      "version": "1.0",
+      "namespace": "base44"
+    },
+    "do": [
+      {
+        "send_feedback_request": {
+          "call": "invoke_backend_function",
+          "with": {
+            "function_name": "sendFeedbackRequest",
+            "args": {
+              "project_id": "${ .trigger.entity_id }"
+            }
+          },
+          "then": "end",
+          "x-base44": {
+            "title": "Send tilfredshedsanmodning",
+            "description": "Sender email til kunden med link til feedback"
+          }
+        }
+      }
+    ]
+  }
+}
