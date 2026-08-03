@@ -7,7 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Textarea } from '@/components/ui/textarea';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import ReactMarkdown from 'react-markdown';
-import { Plus, Pencil, Trash2, Search, Eye, ThumbsUp, BookOpen } from 'lucide-react';
+import { Plus, Pencil, Trash2, Search, Eye, ThumbsUp, BookOpen, FolderOpen, Download, X } from 'lucide-react';
 
 const CATEGORIES = ['FAQ', 'Vejledning', 'Arbejdsprocedure', 'Sikkerhed', 'Teknik', 'Andet'];
 const STATUSES = ['Udkast', 'Offentliggjort', 'Arkiveret'];
@@ -22,6 +22,18 @@ const catBadge = {
 };
 
 const mdClass = "text-sm text-slate-700 space-y-3 [&_h1]:text-lg [&_h1]:font-bold [&_h2]:text-base [&_h2]:font-semibold [&_p]:leading-relaxed [&_ul]:list-disc [&_ul]:pl-5 [&_ol]:list-decimal [&_ol]:pl-5 [&_a]:text-blue-600 [&_a]:underline [&_code]:bg-slate-100 [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:rounded [&_code]:text-xs [&_pre]:bg-slate-900 [&_pre]:text-slate-100 [&_pre]:p-3 [&_pre]:rounded-lg [&_pre]:overflow-x-auto [&_pre]:text-xs";
+
+const RES_CATEGORIES = ['Personalehåndbog', 'Firma-politik', 'Sikkerhedsinstruks', 'Procedure', 'Skabelon', 'Andet'];
+const RES_BADGE = {
+  'Personalehåndbog': 'bg-blue-100 text-blue-700',
+  'Firma-politik': 'bg-purple-100 text-purple-700',
+  'Sikkerhedsinstruks': 'bg-red-100 text-red-700',
+  'Procedure': 'bg-amber-100 text-amber-700',
+  'Skabelon': 'bg-emerald-100 text-emerald-700',
+  'Andet': 'bg-slate-100 text-slate-600',
+};
+const ACCESS_BADGE = { 'Alle': 'bg-slate-100 text-slate-600', 'Ledelse': 'bg-purple-100 text-purple-700', 'Admin': 'bg-red-100 text-red-700' };
+const emptyResource = { title: '', category: 'Procedure', description: '', file_url: '', file_name: '', version: '', access_level: 'Alle', uploaded_by: '' };
 
 const emptyArticle = {
   title: '', category: 'FAQ', content: '', tags: '', author: '',
@@ -38,10 +50,16 @@ export default function Vidensbase() {
   const [editing, setEditing] = useState(null);
   const [viewing, setViewing] = useState(null);
   const [form, setForm] = useState(emptyArticle);
+  const [resources, setResources] = useState([]);
+  const [resOpen, setResOpen] = useState(false);
+  const [resEditing, setResEditing] = useState(null);
+  const [resForm, setResForm] = useState(emptyResource);
+  const [resSaving, setResSaving] = useState(false);
 
   const load = async () => {
     try {
       setArticles(await base44.entities.KnowledgeArticle.list('-updated_date'));
+      setResources(await base44.entities.CompanyResource.list('-updated_date').catch(() => []));
     } catch (e) { console.error(e); }
     finally { setLoading(false); }
   };
@@ -78,6 +96,22 @@ export default function Vidensbase() {
   };
 
   const set = (k, v) => setForm((f) => ({ ...f, [k]: v }));
+
+  const openResCreate = () => { setResEditing(null); setResForm(emptyResource); setResOpen(true); };
+  const openResEdit = (r) => { setResEditing(r); setResForm({ ...emptyResource, ...r }); setResOpen(true); };
+  const setRes = (k, v) => setResForm((f) => ({ ...f, [k]: v }));
+  const handleFile = async (file) => {
+    if (!file) return;
+    try { const { file_url } = await base44.integrations.Core.UploadFile({ file }); setResForm((f) => ({ ...f, file_url, file_name: file.name })); }
+    catch (e) { alert('Upload fejlede'); }
+  };
+  const saveRes = async () => {
+    if (!resForm.title) { alert('Angiv titel'); return; }
+    setResSaving(true);
+    try { if (resEditing) await base44.entities.CompanyResource.update(resEditing.id, resForm); else await base44.entities.CompanyResource.create(resForm); setResOpen(false); load(); }
+    catch (e) { alert('Fejl ved lagring'); } setResSaving(false);
+  };
+  const removeRes = async (r) => { if (confirm(`Slet "${r.title}"?`)) { await base44.entities.CompanyResource.delete(r.id); load(); } };
 
   const filtered = articles.filter((a) => {
     if (filterCat !== 'all' && a.category !== filterCat) return false;
@@ -150,6 +184,42 @@ export default function Vidensbase() {
         </div>
       )}
 
+      {/* Company Resources / Files section */}
+      <div className="mt-10">
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-2.5">
+            <div className="w-10 h-10 rounded-lg bg-amber-100 flex items-center justify-center"><FolderOpen className="w-5 h-5 text-amber-600" /></div>
+            <div>
+              <h2 className="text-xl font-bold text-slate-900">Firmaressourcer & Filer</h2>
+              <p className="text-sm text-slate-500">Personalehåndbøger, politikker, sikkerhedsinstrukser og skabeloner</p>
+            </div>
+          </div>
+          <Button onClick={openResCreate} variant="outline"><Plus className="w-4 h-4" /> Tilføj dokument</Button>
+        </div>
+        {resources.length === 0 ? (
+          <div className="text-center py-12 bg-white rounded-xl border border-slate-200"><FolderOpen className="w-10 h-10 text-slate-300 mx-auto mb-2" /><p className="text-slate-500">Ingen dokumenter uploadet endnu</p></div>
+        ) : (
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {resources.map((r) => (
+              <div key={r.id} className="bg-white rounded-xl border border-slate-200 p-4 hover:shadow-md transition">
+                <div className="flex items-start justify-between gap-2 mb-2">
+                  <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${RES_BADGE[r.category] || RES_BADGE['Andet']}`}>{r.category}</span>
+                  <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${ACCESS_BADGE[r.access_level] || ACCESS_BADGE['Alle']}`}>🔒 {r.access_level}</span>
+                </div>
+                <h3 className="font-semibold text-slate-900 mb-1">{r.title}</h3>
+                <p className="text-sm text-slate-500 line-clamp-2 mb-2">{r.description || '—'}</p>
+                {r.file_name && <div className="text-xs text-slate-400 mb-2 flex items-center gap-1"><Download className="w-3 h-3" /> {r.file_name}</div>}
+                <div className="flex gap-2 border-t border-slate-100 pt-2">
+                  {r.file_url && <a href={r.file_url} target="_blank" rel="noreferrer" className="flex items-center gap-1 text-xs text-amber-600 hover:underline"><Download className="w-3 h-3" /> Åbn fil</a>}
+                  <button onClick={() => openResEdit(r)} className="ml-auto text-slate-500 hover:text-slate-900"><Pencil className="w-3.5 h-3.5" /></button>
+                  <button onClick={() => removeRes(r)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5" /></button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
       <Dialog open={viewOpen} onOpenChange={setViewOpen}>
         <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto">
           <DialogHeader>
@@ -212,6 +282,27 @@ export default function Vidensbase() {
             <Button variant="outline" onClick={() => setEditOpen(false)}>Annuller</Button>
             <Button onClick={save} disabled={!form.title}>Gem</Button>
           </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={resOpen} onOpenChange={setResOpen}>
+        <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
+          <DialogHeader><DialogTitle className="flex items-center gap-2"><FolderOpen className="w-5 h-5 text-amber-600" />{resEditing ? 'Rediger dokument' : 'Nyt dokument'}</DialogTitle></DialogHeader>
+          <div className="space-y-3 py-2">
+            <div><Label>Titel *</Label><Input value={resForm.title} onChange={(e) => setRes('title', e.target.value)} /></div>
+            <div><Label>Kategori</Label><Select value={resForm.category} onValueChange={(v) => setRes('category', v)}><SelectTrigger><SelectValue /></SelectTrigger><SelectContent>{RES_CATEGORIES.map((c) => <SelectItem key={c} value={c}>{c}</SelectItem>)}</SelectContent></Select></div>
+            <div><Label>Beskrivelse</Label><Textarea value={resForm.description} onChange={(e) => setRes('description', e.target.value)} rows={2} /></div>
+            <div><Label>Adgangsniveau</Label><Select value={resForm.access_level} onValueChange={(v) => setRes('access_level', v)}><SelectTrigger><SelectValue /></SelectTrigger><SelectContent><SelectItem value="Alle">Alle</SelectItem><SelectItem value="Ledelse">Ledelse</SelectItem><SelectItem value="Admin">Admin</SelectItem></SelectContent></Select></div>
+            <div><Label>Fil</Label>
+              <div className="flex items-center gap-2">
+                <Input type="file" onChange={(e) => e.target.files[0] && handleFile(e.target.files[0])} className="text-sm file:mr-3 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:bg-amber-100 file:text-amber-700 file:font-medium" />
+                {resForm.file_url && <X className="w-4 h-4 text-red-500 cursor-pointer" onClick={() => setRes('file_url', '')} />}
+              </div>
+              {resForm.file_name && <p className="text-xs text-slate-500 mt-1">{resForm.file_name}</p>}
+            </div>
+            <div><Label>Uploadet af</Label><Input value={resForm.uploaded_by} onChange={(e) => setRes('uploaded_by', e.target.value)} /></div>
+          </div>
+          <DialogFooter><Button variant="outline" onClick={() => setResOpen(false)}>Annuller</Button><Button onClick={saveRes} disabled={resSaving}>{resSaving ? 'Gemmer...' : 'Gem'}</Button></DialogFooter>
         </DialogContent>
       </Dialog>
     </div>
