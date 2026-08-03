@@ -148,6 +148,7 @@ export default function Quotes() {
       invoice_number: invNumber,
       customer_id: q.customer_id || '',
       customer_name: q.customer_name || '',
+      customer_email: q.customer_email || '',
       project_id: q.project_id || '',
       project_name: q.project_name || '',
       quote_id: q.id,
