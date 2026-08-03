@@ -14,6 +14,10 @@
       "type": "string",
       "title": "Kunde"
     },
+    "customer_email": {
+      "type": "string",
+      "title": "Kundeemail"
+    },
     "overall_rating": {
       "type": "number",
       "title": "Samlet karakter (1-5)"
@@ -60,15 +64,18 @@
   ],
   "rls": {
     "read": {
-      "user_condition": {
-        "role": "admin"
-      }
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
     },
-    "create": {
-      "user_condition": {
-        "role": "admin"
-      }
-    },
+    "create": {},
     "update": {
       "user_condition": {
         "role": "admin"
