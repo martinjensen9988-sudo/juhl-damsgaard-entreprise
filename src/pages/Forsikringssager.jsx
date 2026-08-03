@@ -12,7 +12,7 @@ import { formatDate, formatDKK } from '@/lib/format';
 const damageTypes = ['Vandskade', 'Stormskade', 'Frostskade', 'Ildskade', 'Hærværk', 'Andet'];
 const statuses = ['Oprettet', 'Under behandling', 'Godkendt', 'Afvist', 'Afsluttet'];
 const statusColor = { Oprettet: 'bg-slate-100 text-slate-600', 'Under behandling': 'bg-blue-100 text-blue-700', Godkendt: 'bg-emerald-100 text-emerald-700', Afvist: 'bg-red-100 text-red-700', Afsluttet: 'bg-slate-200 text-slate-600' };
-const empty = { case_number: '', customer_name: '', project_name: '', insurance_company: '', policy_number: '', damage_type: 'Andet', damage_date: '', description: '', before_photo_urls: [], after_photo_urls: [], report_url: '', status: 'Oprettet', estimated_amount: '', approved_amount: '', assigned_to: '', notes: '' };
+const empty = { case_number: '', customer_name: '', project_name: '', insurance_company: '', insurance_contact: '', insurance_phone: '', insurance_email: '', policy_number: '', damage_type: 'Andet', damage_date: '', reported_date: '', address: '', description: '', damage_items: [], before_photo_urls: [], during_photo_urls: [], after_photo_urls: [], report_url: '', communication_log: [], status: 'Oprettet', estimated_amount: '', approved_amount: '', deductible: '', repair_status: 'Ikke påbegyndt', repair_start_date: '', repair_end_date: '', repair_assigned_to: '', repair_notes: '', assigned_to: '', notes: '' };
 
 export default function Forsikringssager() {
   const [cases, setCases] = useState([]);
@@ -28,7 +28,7 @@ export default function Forsikringssager() {
 
   const set = (f, v) => setForm((s) => ({ ...s, [f]: v }));
   const openCreate = () => { setEditing(null); setForm({ ...empty, case_number: `SKADE-${new Date().getFullYear()}-${String(cases.length + 1).padStart(4, '0')}`, damage_date: new Date().toISOString().split('T')[0] }); setOpen(true); };
-  const openEdit = (c) => { setEditing(c); setForm({ ...empty, ...c, before_photo_urls: c.before_photo_urls || [], after_photo_urls: c.after_photo_urls || [] }); setOpen(true); };
+  const openEdit = (c) => { setEditing(c); setForm({ ...empty, ...c, before_photo_urls: c.before_photo_urls || [], during_photo_urls: c.during_photo_urls || [], after_photo_urls: c.after_photo_urls || [], damage_items: c.damage_items || [], communication_log: c.communication_log || [] }); setOpen(true); };
 
   const upload = async (e, field) => {
     const file = e.target.files?.[0]; if (!file) return;
@@ -70,19 +70,21 @@ export default function Forsikringssager() {
           {cases.map((c) => (
             <div key={c.id} className="bg-white rounded-2xl border border-slate-200 p-5">
               <div className="flex items-start justify-between gap-2">
-                <div className="min-w-0"><div className="font-semibold text-slate-900 truncate">{c.case_number}</div>{c.customer_name && <div className="text-xs text-slate-500 truncate">{c.customer_name}</div>}</div>
+                <div className="min-w-0"><a href={`/skadesrapport?id=${c.id}`} className="font-semibold text-slate-900 truncate hover:text-blue-600 block">{c.case_number}</a>{c.customer_name && <div className="text-xs text-slate-500 truncate">{c.customer_name}</div>}</div>
                 <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${statusColor[c.status] || 'bg-slate-100'}`}>{c.status}</span>
               </div>
               <div className="flex items-center gap-2 mt-2"><span className="text-xs bg-red-50 text-red-700 px-2 py-0.5 rounded-full">{c.damage_type}</span><span className="text-xs text-slate-400">{formatDate(c.damage_date)}</span></div>
               {c.insurance_company && <div className="text-xs text-slate-500 mt-2">{c.insurance_company}{c.policy_number && ` · ${c.policy_number}`}</div>}
-              <div className="flex flex-wrap gap-3 mt-2 text-xs">
+              <div className="flex items-center gap-3 mt-2 text-xs">
                 <span className="text-slate-500">Før: {c.before_photo_urls?.length || 0}</span>
+                <span className="text-slate-500">Undervejs: {c.during_photo_urls?.length || 0}</span>
                 <span className="text-slate-500">Efter: {c.after_photo_urls?.length || 0}</span>
-                {c.report_url && <span className="text-blue-600 flex items-center gap-0.5"><FileText className="w-3 h-3" /> Rapport</span>}
+                {c.damage_items?.length > 0 && <span className="text-slate-700 font-medium">{c.damage_items.length} posteringer</span>}
                 {c.estimated_amount > 0 && <span className="text-slate-700 font-medium">Est: {formatDKK(c.estimated_amount)}</span>}
               </div>
               <div className="flex gap-2 mt-3 pt-3 border-t border-slate-100">
                 <button onClick={() => openEdit(c)} className="text-xs text-slate-500 hover:text-slate-900 flex items-center gap-1"><Pencil className="w-3 h-3" /> Rediger</button>
+                <a href={`/skadesrapport?id=${c.id}`} className="text-xs text-blue-600 hover:text-blue-800 flex items-center gap-1"><FileText className="w-3 h-3" /> Detaljer</a>
                 <button onClick={() => remove(c)} className="text-xs text-red-500 hover:text-red-700 flex items-center gap-1 ml-auto"><Trash2 className="w-3 h-3" /> Slet</button>
               </div>
             </div>

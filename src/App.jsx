@@ -147,6 +147,7 @@ import Kursusstyring from '@/pages/Kursusstyring';
 import Udstyrsudlejning from '@/pages/Udstyrsudlejning';
 import Sagsarkiv from '@/pages/Sagsarkiv';
 import Indkoebskurv from '@/pages/Indkoebskurv';
+import SkadesrapportDetalje from '@/pages/SkadesrapportDetalje';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -307,6 +308,7 @@ const AuthenticatedApp = () => {
           <Route path="/udstyrsudlejning" element={<Udstyrsudlejning />} />
           <Route path="/sagsarkiv" element={<Sagsarkiv />} />
           <Route path="/indkoebskurv" element={<Indkoebskurv />} />
+          <Route path="/skadesrapport" element={<SkadesrapportDetalje />} />
         </Route>
         <Route element={<PortalLayout />}>
           <Route path="/portal" element={<CustomerPortal />} />

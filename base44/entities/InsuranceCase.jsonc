@@ -18,6 +18,18 @@
       "type": "string",
       "title": "Forsikringsselskab"
     },
+    "insurance_contact": {
+      "type": "string",
+      "title": "Sagsbehandler hos forsikring"
+    },
+    "insurance_phone": {
+      "type": "string",
+      "title": "Telefon (forsikring)"
+    },
+    "insurance_email": {
+      "type": "string",
+      "title": "Email (forsikring)"
+    },
     "policy_number": {
       "type": "string",
       "title": "Policenummer"
@@ -40,13 +52,75 @@
       "format": "date",
       "title": "Skadesdato"
     },
+    "reported_date": {
+      "type": "string",
+      "format": "date",
+      "title": "Meldt den"
+    },
+    "address": {
+      "type": "string",
+      "title": "Skadesadresse"
+    },
     "description": {
       "type": "string",
       "title": "Skadesrapport"
     },
+    "damage_items": {
+      "type": "array",
+      "title": "Skadesposteringer",
+      "items": {
+        "type": "object",
+        "properties": {
+          "description": {
+            "type": "string",
+            "title": "Beskrivelse"
+          },
+          "location": {
+            "type": "string",
+            "title": "Lokation"
+          },
+          "severity": {
+            "type": "string",
+            "title": "Omfang",
+            "enum": [
+              "Lille",
+              "Mellem",
+              "Stor",
+              "Kritisk"
+            ],
+            "default": "Mellem"
+          },
+          "estimated_cost": {
+            "type": "number",
+            "title": "Estimeret pris (DKK)"
+          },
+          "approved_cost": {
+            "type": "number",
+            "title": "Godkendt pris (DKK)"
+          },
+          "repair_status": {
+            "type": "string",
+            "title": "Udbedringsstatus",
+            "enum": [
+              "Ikke p\u00e5begyndt",
+              "I gang",
+              "Afsluttet"
+            ],
+            "default": "Ikke p\u00e5begyndt"
+          }
+        }
+      }
+    },
     "before_photo_urls": {
       "type": "array",
       "title": "F\u00f8r-billeder",
+      "items": {
+        "type": "string"
+      }
+    },
+    "during_photo_urls": {
+      "type": "array",
+      "title": "Undervejs-billeder",
       "items": {
         "type": "string"
       }
@@ -62,14 +136,51 @@
       "type": "string",
       "title": "Rapport fil"
     },
+    "communication_log": {
+      "type": "array",
+      "title": "Kommunikationslog",
+      "items": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date",
+            "title": "Dato"
+          },
+          "type": {
+            "type": "string",
+            "title": "Type",
+            "enum": [
+              "Email",
+              "Telefon",
+              "M\u00f8de",
+              "Brev",
+              "Besigtigelse",
+              "Andet"
+            ],
+            "default": "Email"
+          },
+          "author": {
+            "type": "string",
+            "title": "Afsender"
+          },
+          "message": {
+            "type": "string",
+            "title": "Besked"
+          }
+        }
+      }
+    },
     "status": {
       "type": "string",
       "title": "Status",
       "enum": [
         "Oprettet",
+        "Anmeldt",
         "Under behandling",
         "Godkendt",
         "Afvist",
+        "Udbedres",
         "Afsluttet"
       ],
       "default": "Oprettet"
@@ -81,6 +192,39 @@
     "approved_amount": {
       "type": "number",
       "title": "Godkendt bel\u00f8b (DKK)"
+    },
+    "deductible": {
+      "type": "number",
+      "title": "Selvrisiko (DKK)"
+    },
+    "repair_status": {
+      "type": "string",
+      "title": "Udbedringsstatus",
+      "enum": [
+        "Ikke p\u00e5begyndt",
+        "Planlagt",
+        "I gang",
+        "Afsluttet"
+      ],
+      "default": "Ikke p\u00e5begyndt"
+    },
+    "repair_start_date": {
+      "type": "string",
+      "format": "date",
+      "title": "Udbedring start"
+    },
+    "repair_end_date": {
+      "type": "string",
+      "format": "date",
+      "title": "Udbedring slut"
+    },
+    "repair_assigned_to": {
+      "type": "string",
+      "title": "Udbedres af"
+    },
+    "repair_notes": {
+      "type": "string",
+      "title": "Udbedringsnoter"
     },
     "assigned_to": {
       "type": "string",
