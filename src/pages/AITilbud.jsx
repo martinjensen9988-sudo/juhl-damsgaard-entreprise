@@ -37,6 +37,7 @@ export default function AITilbud() {
   const [uploading, setUploading] = useState(false);
   const [generating, setGenerating] = useState(false);
   const [lineItems, setLineItems] = useState([]);
+  const [cleanedNotes, setCleanedNotes] = useState('');
   const [generated, setGenerated] = useState(false);
   const [saving, setSaving] = useState(false);
 
@@ -111,6 +112,7 @@ Regler:
         response_json_schema: {
           type: 'object',
           properties: {
+            cleaned_notes: { type: 'string', description: 'Den rettede og professionelt formulerede opgavebeskrivelse på korrekt dansk, uden stavefejl' },
             line_items: {
               type: 'array',
               items: {
@@ -134,6 +136,7 @@ Regler:
         unit_price: item.unit_price || 0,
       }));
       setLineItems(items);
+      setCleanedNotes(result.cleaned_notes || notes);
       setGenerated(true);
     } catch (e) {
       console.error(e);
@@ -160,7 +163,7 @@ Regler:
         date: new Date().toISOString().slice(0, 10),
         valid_until: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10),
         line_items: lineItems,
-        notes: notes || '',
+        notes: cleanedNotes || notes || '',
       });
       navigate('/tilbud');
     } catch (e) {
