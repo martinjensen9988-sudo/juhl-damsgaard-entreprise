@@ -98,10 +98,12 @@ Vejledende priser (ekskl. moms):
 - VVS: 695 kr/time · Håndvask: 1850 kr/stk · Toilet: 2200 kr/stk · Badeværelsesrenovering komplet: 1850 kr/m²
 - Elektriker: 595 kr/time · Stikkontakt/afbryder: 450 kr/stk · Armatur: 750 kr/stk · Eltavle: 6500 kr/stk
 - Gravearbejde: 580 kr/m³ · Grøftegravning: 320 kr/m · Afgravning: 145 kr/m³ · Nedrivning: 450 kr/m² · Kloakrør Ø300: 850 kr/m · Kloakbrønd: 4500 kr/stk · Asfaltering: 395 kr/m² · Betonfundament: 850 kr/m² · Beton støbning: 1150 kr/m³ · Transport: 3500 kr/fs · Maskinleje: 4500 kr/dag · Affaldsbortkørsel: 3500 kr/fs · Håndarbejde: 280 kr/time
+- Slutrengøring/byggepladsrengøring: 75 kr/m² · Glarmester (vinduespolering): 45 kr/m²
 
 Regler:
-- Vælg KUN de prislinjer der hører til det fag kunden beskriver (ved maling: kun maling/spartling/grundmaling/tapet – ingen gravemaskine, transport eller affald).
-- Estimer mængder rimeligt ud fra beskrivelsen (f.eks. maling af 53 m² lejlighed ≈ væg- og loftflade, ikke 53 m² ganget med 4 linjer).
+- VIGTIGT: Hver eneste opgave kunden nævner SKAL have mindst én linje i tilbuddet. Glem aldrig en nævnt opgave (f.eks. hvis kunden skriver "maling" skal der altid være en male-linje; "rengøring" → slutrengørings-linje; både maling og rengøring → én linje for hver).
+- Vælg KUN de prislinjer der hører til de fag kunden beskriver (ved maling: kun maling/spartling/grundmaling/tapet – ingen gravemaskine, transport eller affald).
+- Estimer mængder rimeligt ud fra beskrivelsen (f.eks. maling af 53 m² lejlighed: beregn væg- og loftflade typisk som 53 m² etagemål × ca. 3 = ca. 160 m² maleflade, opdelt i væg- og loftmaling).
 - Inkluder kun hvad opgaven reelt kræver. Undgå at tilføje unødvendige ekstra linjer.
 - Alle priser er ekskl. moms.
 - Hver linje: description, quantity, unit (stk, m², m³, time, m, fs, dag, sæt), unit_price.`;
