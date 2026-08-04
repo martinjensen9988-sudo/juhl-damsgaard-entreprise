@@ -95,6 +95,7 @@ export default function AITilbud() {
 Vejledende priser (ekskl. moms):
 - Væg-/loftmaling (incl. grund og spartling efter behov): 75 kr/m²
 - Facademaling: 95 kr/m² · Maling af træværk/vinduer: 120 kr/m² · Tapetopsætning: 85 kr/m² · Spartling/slibning: 60 kr/m² · Grundmaling: 25 kr/m²
+- Maling materiale (væg-/loftmaling): 145 kr/liter · Facademaling: 175 kr/liter · Træmaling/lak: 195 kr/liter · Grundmaling: 95 kr/liter
 - Tømrer: 495 kr/time · Gipsvæg: 245 kr/m² · Beklædning træ: 295 kr/m² · Dørmontage: 1250 kr/stk · Vindueskift: 1850 kr/stk · Gulvlægning trægulv: 245 kr/m²
 - VVS: 695 kr/time · Håndvask: 1850 kr/stk · Toilet: 2200 kr/stk · Badeværelsesrenovering komplet: 1850 kr/m²
 - Elektriker: 595 kr/time · Stikkontakt/afbryder: 450 kr/stk · Armatur: 750 kr/stk · Eltavle: 6500 kr/stk
@@ -105,6 +106,7 @@ Regler:
 - VIGTIGT: Hver eneste opgave kunden nævner SKAL have mindst én linje i tilbuddet. Glem aldrig en nævnt opgave (f.eks. hvis kunden skriver "maling" skal der altid være en male-linje; "rengøring" → slutrengørings-linje; både maling og rengøring → én linje for hver).
 - Vælg KUN de prislinjer der hører til de fag kunden beskriver (ved maling: kun maling/spartling/grundmaling/tapet – ingen gravemaskine, transport eller affald).
 - Estimer mængder rimeligt ud fra beskrivelsen (f.eks. maling af 53 m² lejlighed: beregn væg- og loftflade typisk som 53 m² etagemål × ca. 3 = ca. 160 m² maleflade, opdelt i væg- og loftmaling).
+- Ved malearbejde: beregn altid maltforbrug og tilføj en separat materialelinje for maling. Forbrug: ca. 1 liter dækker 10 m² med 1 strøg – de fleste opgaver kræver 2 strøg, så divider maleflade med 5 for at få literantal (f.eks. 160 m² ÷ 5 = 32 liter). Brug korrekt malttype ud fra opgaven (væg-/loftmaling, facademaling, træmaling el. grundmaling) med tilhørende literpris. Angiv unit "liter" og antal liter som quantity.
 - Inkluder kun hvad opgaven reelt kræver. Undgå at tilføje unødvendige ekstra linjer.
 - Alle priser er ekskl. moms.
 - Hver linje: description, quantity, unit (stk, m², m³, time, m, fs, dag, sæt), unit_price.`;
