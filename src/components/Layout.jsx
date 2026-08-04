@@ -60,6 +60,7 @@ import {
   PenLine,
   ClipboardCheck,
   GraduationCap,
+  MessageSquare,
   ChevronDown,
 } from 'lucide-react';
 
@@ -177,6 +178,7 @@ const navGroups = [
       { to: '/brugerprofil', label: 'Brugerprofil', icon: UserRound },
       { to: '/kursusstyring', label: 'Kursusstyring', icon: GraduationCap },
       { to: '/bruger-administration', label: 'Brugeradministration', icon: UserCog },
+      { to: '/medarbejder-beskeder', label: 'Medarbejderbeskeder', icon: MessageSquare },
     ],
   },
   {

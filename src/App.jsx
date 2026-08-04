@@ -177,6 +177,7 @@ import Udlaegsstyring from '@/pages/Udlaegsstyring';
 import DriftsLogbog from '@/pages/DriftsLogbog';
 import MangelListe from '@/pages/MangelListe';
 import PersonaleOversigt from '@/pages/PersonaleOversigt';
+import Medarbejderbeskeder from '@/pages/Medarbejderbeskeder';
 import MedarbejderAppLayout from '@/components/MedarbejderAppLayout';
 import MaHome from '@/pages/medarbejderapp/MaHome';
 import MaTid from '@/pages/medarbejderapp/MaTid';
@@ -373,6 +374,7 @@ const AuthenticatedApp = () => {
           <Route path="/drifts-logbog" element={<DriftsLogbog />} />
           <Route path="/mangel-liste" element={<MangelListe />} />
           <Route path="/personale-oversigt" element={<PersonaleOversigt />} />
+          <Route path="/medarbejder-beskeder" element={<Medarbejderbeskeder />} />
         </Route>
         <Route element={<PortalLayout />}>
           <Route path="/portal" element={<CustomerPortal />} />
