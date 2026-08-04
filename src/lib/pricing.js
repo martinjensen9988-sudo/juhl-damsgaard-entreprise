@@ -1,3 +1,18 @@
+// Maling: 1 liter dækker ca. 10 m² med 1 strøg. Standard 2 strøg → 5 m²/liter.
+export const PAINT_COVERAGE_M2_PER_LITER = 5;
+
+export function paintLiters(m2) {
+  return Math.max(0, Math.ceil(Number(m2) || 0 / PAINT_COVERAGE_M2_PER_LITER));
+}
+
+// Knytter hver maleservice til en forbrugsmaling med literpris.
+export const PAINT_MATERIALS = {
+  'Væg-/loftmaling': { materialName: 'Maling materiale (væg/loft)', pricePerLiter: 145 },
+  Facademaling: { materialName: 'Maling materiale (facade)', pricePerLiter: 175 },
+  'Maling af træværk/vinduer': { materialName: 'Maling materiale (træ/lak)', pricePerLiter: 195 },
+  Grundmaling: { materialName: 'Maling materiale (grunder)', pricePerLiter: 95 },
+};
+
 export const SERVICES = [
   { name: 'Gravearbejde', unit: 'm³', price: 580 },
   { name: 'Kloakrør lægning', unit: 'm', price: 850 },
@@ -52,6 +67,15 @@ export const SERVICE_CATEGORIES = [
       { name: 'Maskinleje (gravemaskine)', unit: 'dag', price: 4500 },
       { name: 'Affaldsbortkørsel', unit: 'fs', price: 3500 },
       { name: 'Håndarbejde', unit: 'time', price: 280 },
+    ],
+  },
+  {
+    category: 'Maling',
+    services: [
+      { name: 'Væg-/loftmaling', unit: 'm²', price: 75, paint: 'Væg-/loftmaling' },
+      { name: 'Facademaling', unit: 'm²', price: 95, paint: 'Facademaling' },
+      { name: 'Maling af træværk/vinduer', unit: 'm²', price: 120, paint: 'Maling af træværk/vinduer' },
+      { name: 'Grundmaling', unit: 'm²', price: 25, paint: 'Grundmaling' },
     ],
   },
 ];

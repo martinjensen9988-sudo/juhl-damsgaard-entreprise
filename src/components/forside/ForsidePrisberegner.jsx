@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { formatDKK, calcSubtotal, calcVAT, calcTotal } from '@/lib/format';
-import { SERVICE_CATEGORIES } from '@/lib/pricing';
+import { SERVICE_CATEGORIES, PAINT_MATERIALS, PAINT_COVERAGE_M2_PER_LITER } from '@/lib/pricing';
 import { Calculator, Plus, RotateCcw, ArrowRight, ChevronDown, Trash2 } from 'lucide-react';
+
+const paintLiters = (m2) => Math.max(0, Math.ceil((Number(m2) || 0) / PAINT_COVERAGE_M2_PER_LITER));
 
 export default function ForsidePrisberegner() {
   const [items, setItems] = useState([]);
@@ -12,19 +14,53 @@ export default function ForsidePrisberegner() {
   const addService = (svc) => {
     const existing = items.find((i) => i.name === svc.name);
     if (existing) {
-      setItems(items.map((i) => i.name === svc.name ? { ...i, quantity: i.quantity + 1 } : i));
+      const next = items.map((i) => i.name === svc.name ? { ...i, quantity: i.quantity + 1 } : i);
+      if (svc.paint) {
+        const mat = PAINT_MATERIALS[svc.paint];
+        const liters = paintLiters(existing.quantity + 1);
+        const matIdx = next.findIndex((i) => i.linkedTo === svc.name);
+        if (matIdx >= 0) next[matIdx] = { ...next[matIdx], quantity: liters };
+        else next.push({ name: mat.materialName, unit: 'liter', unit_price: mat.pricePerLiter, quantity: liters, linkedTo: svc.name, isPaintMaterial: true });
+      }
+      setItems(next);
     } else {
-      setItems([...items, { ...svc, quantity: 1 }]);
+      const next = [...items, { ...svc, quantity: 1 }];
+      if (svc.paint) {
+        const mat = PAINT_MATERIALS[svc.paint];
+        next.push({ name: mat.materialName, unit: 'liter', unit_price: mat.pricePerLiter, quantity: paintLiters(1), linkedTo: svc.name, isPaintMaterial: true });
+      }
+      setItems(next);
     }
   };
 
   const updateQty = (idx, qty) => {
     const next = [...items];
-    next[idx] = { ...next[idx], quantity: Math.max(0, Number(qty) || 0) };
+    const item = next[idx];
+    const newQty = Math.max(0, Number(qty) || 0);
+    next[idx] = { ...item, quantity: newQty };
+    if (item.paint) {
+      const matIdx = next.findIndex((i) => i.linkedTo === item.name);
+      if (matIdx >= 0) {
+        if (newQty === 0) next.splice(matIdx, 1);
+        else next[matIdx] = { ...next[matIdx], quantity: paintLiters(newQty) };
+      }
+    }
     setItems(next.filter((i) => i.quantity > 0));
   };
 
-  const removeItem = (idx) => setItems(items.filter((_, i) => i !== idx));
+  const removeItem = (idx) => {
+    const item = items[idx];
+    const next = items.filter((_, i) => i !== idx);
+    if (item.paint) {
+      const filtered = next.filter((i) => i.linkedTo !== item.name);
+      setItems(filtered);
+    } else if (item.isPaintMaterial) {
+      // også fjerne den tilknyttede maleservice
+      setItems(next.filter((i) => i.name !== item.linkedTo));
+    } else {
+      setItems(next);
+    }
+  };
   const reset = () => setItems([]);
   const subtotal = calcSubtotal(items);
 
