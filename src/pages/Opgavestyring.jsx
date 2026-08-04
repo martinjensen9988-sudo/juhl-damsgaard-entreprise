@@ -14,7 +14,7 @@ const STATUSES = ['Ikke startet', 'I gang', 'Afventer', 'Gennemført'];
 const PRIO_BADGE = { Lav: 'bg-slate-100 text-slate-600', Normal: 'bg-blue-100 text-blue-700', Høj: 'bg-red-100 text-red-700' };
 const STATUS_BADGE = { 'Ikke startet': 'bg-slate-100 text-slate-600', 'I gang': 'bg-blue-100 text-blue-700', Afventer: 'bg-amber-100 text-amber-700', Gennemført: 'bg-emerald-100 text-emerald-700' };
 
-const EMPTY = { title: '', description: '', assigned_to: '', status: 'Ikke startet', priority: 'Normal', due_date: '', completed_date: '' };
+const EMPTY = { title: '', description: '', assigned_to: '', assigned_user_id: '', status: 'Ikke startet', priority: 'Normal', due_date: '', completed_date: '' };
 
 export default function Opgavestyring() {
   const [items, setItems] = useState([]);
@@ -23,10 +23,18 @@ export default function Opgavestyring() {
   const [editing, setEditing] = useState(null);
   const [form, setForm] = useState(EMPTY);
   const [saving, setSaving] = useState(false);
+  const [users, setUsers] = useState([]);
 
   const load = async () => {
     setLoading(true);
-    try { setItems((await base44.entities.Task.list('-created_date', 200)) || []); } catch (e) { console.error(e); } finally { setLoading(false); }
+    try {
+      const [taskList, userList] = await Promise.all([
+        base44.entities.Task.list('-created_date', 200).catch(() => []),
+        base44.entities.User.list().catch(() => []),
+      ]);
+      setItems(taskList || []);
+      setUsers(userList || []);
+    } catch (e) { console.error(e); } finally { setLoading(false); }
   };
 
   useEffect(() => { load(); }, []);
@@ -91,7 +99,18 @@ export default function Opgavestyring() {
             <div className="space-y-1.5"><Label>Titel *</Label><Input value={form.title} onChange={set('title')} /></div>
             <div className="space-y-1.5"><Label>Beskrivelse</Label><Textarea value={form.description} onChange={set('description')} rows={3} /></div>
             <div className="grid grid-cols-2 gap-3">
-              <div className="space-y-1.5"><Label>Tildelt til</Label><Input value={form.assigned_to} onChange={set('assigned_to')} placeholder="Medarbejder" /></div>
+              <div className="space-y-1.5">
+                <Label>Tildelt til</Label>
+                <Select value={form.assigned_user_id} onValueChange={(uid) => {
+                  const u = users.find((x) => x.id === uid);
+                  setForm({ ...form, assigned_user_id: uid, assigned_to: u?.full_name || '' });
+                }}>
+                  <SelectTrigger><SelectValue placeholder="Vælg medarbejder" /></SelectTrigger>
+                  <SelectContent>
+                    {users.map((u) => <SelectItem key={u.id} value={u.id}>{u.full_name || u.email}</SelectItem>)}
+                  </SelectContent>
+                </Select>
+              </div>
               <div className="space-y-1.5"><Label>Deadline</Label><Input type="date" value={form.due_date || ''} onChange={set('due_date')} /></div>
               <div className="space-y-1.5"><Label>Prioritet</Label><Select value={form.priority} onValueChange={(v) => setForm({ ...form, priority: v })}><SelectTrigger><SelectValue /></SelectTrigger><SelectContent>{PRIORITIES.map((p) => <SelectItem key={p} value={p}>{p}</SelectItem>)}</SelectContent></Select></div>
               <div className="space-y-1.5"><Label>Status</Label><Select value={form.status} onValueChange={(v) => setForm({ ...form, status: v })}><SelectTrigger><SelectValue /></SelectTrigger><SelectContent>{STATUSES.map((s) => <SelectItem key={s} value={s}>{s}</SelectItem>)}</SelectContent></Select></div>
