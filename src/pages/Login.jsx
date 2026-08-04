@@ -24,7 +24,8 @@ export default function Login() {
     setLoading(true);
     try {
       await base44.auth.loginViaEmailPassword(email, password);
-      window.location.href = returnTo;
+      // Default to the admin dashboard, since "/" is the public front page.
+      window.location.href = returnTo === "/" ? "/dashboard" : returnTo;
     } catch (err) {
       setError(err.message || "Invalid email or password");
     } finally {
