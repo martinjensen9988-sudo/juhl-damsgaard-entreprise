@@ -47,6 +47,11 @@
       "title": "Svar fra kontoret",
       "default": false
     },
+    "is_broadcast": {
+      "type": "boolean",
+      "title": "Udsendelse til medarbejdere",
+      "default": false
+    },
     "parent_id": {
       "type": "string",
       "title": "Svar p\u00e5"
