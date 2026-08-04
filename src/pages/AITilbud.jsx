@@ -32,6 +32,7 @@ export default function AITilbud() {
 
   const [customerId, setCustomerId] = useState('');
   const [projectId, setProjectId] = useState('');
+  const [validUntil, setValidUntil] = useState('');
   const [notes, setNotes] = useState('');
   const [images, setImages] = useState([]);
   const [uploading, setUploading] = useState(false);
@@ -163,7 +164,7 @@ Regler:
         project_name: project?.name || '',
         status: 'Kladde',
         date: new Date().toISOString().slice(0, 10),
-        valid_until: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10),
+        valid_until: validUntil || new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10),
         line_items: lineItems,
         notes: cleanedNotes || notes || '',
       });
@@ -217,6 +218,16 @@ Regler:
               </SelectContent>
             </Select>
           </div>
+        </div>
+
+        <div className="space-y-1.5">
+          <Label>Udløbsdato (gyldig til)</Label>
+          <Input
+            type="date"
+            value={validUntil}
+            onChange={(e) => setValidUntil(e.target.value)}
+            placeholder="Vælg dato"
+          />
         </div>
 
         <div className="space-y-1.5">
