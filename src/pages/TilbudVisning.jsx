@@ -15,6 +15,8 @@ export default function TilbudVisning() {
   const [error, setError] = useState(null);
   const [company, setCompany] = useState({});
   const [pdfLoading, setPdfLoading] = useState(false);
+  const [signerName, setSignerName] = useState('');
+  const [confirmed, setConfirmed] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -44,11 +46,28 @@ export default function TilbudVisning() {
   };
 
   const handleAction = async (action) => {
+    if (action === 'accept' && !signerName.trim()) {
+      alert('Angiv venligst dit fulde navn for at godkende tilbuddet.');
+      return;
+    }
+    if (action === 'accept' && !confirmed) {
+      alert('Bekræft venligst at du har læst og forstået tilbuddet.');
+      return;
+    }
     setActing(true);
     try {
-      const res = await base44.functions.invoke('quoteAction', { quote_id: id, action });
+      const res = await base44.functions.invoke('quoteAction', {
+        quote_id: id,
+        action,
+        customer_name: signerName.trim(),
+      });
       if (res.data?.status) {
-        setQuote({ ...quote, status: res.data.status });
+        setQuote({
+          ...quote,
+          status: res.data.status,
+          accepted_at: res.data.accepted_at,
+          accepted_by: res.data.accepted_by,
+        });
       } else if (res.data?.error) {
         alert(res.data.error);
       }
@@ -197,13 +216,38 @@ export default function TilbudVisning() {
       )}
 
       {isPending && (
-        <div className="bg-white rounded-xl border border-slate-200 p-6">
-          <h3 className="font-semibold text-slate-900 mb-4">Vil du acceptere dette tilbud?</h3>
+        <div className="bg-white rounded-xl border border-slate-200 p-6 space-y-4">
+          <div>
+            <h3 className="font-semibold text-slate-900 mb-1">Vil du acceptere dette tilbud?</h3>
+            <p className="text-sm text-slate-500">For at godkende digitalt skal du angive dit fulde navn. Din accept registreres med dato og tidspunkt som din digitale underskrift.</p>
+          </div>
+
+          <div className="space-y-1.5">
+            <label className="text-sm font-medium text-slate-700">Fulde navn (digital underskrift)</label>
+            <input
+              type="text"
+              value={signerName}
+              onChange={(e) => setSignerName(e.target.value)}
+              placeholder="Indtast dit fulde navn"
+              className="flex h-10 w-full rounded-md border border-slate-300 bg-transparent px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+            />
+          </div>
+
+          <label className="flex items-start gap-3 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={confirmed}
+              onChange={(e) => setConfirmed(e.target.checked)}
+              className="mt-0.5 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500"
+            />
+            <span className="text-sm text-slate-600">Jeg bekræfter, at jeg har læst og forstået tilbuddet, og at min navngivning udgør min digitale godkendelse af tilbudets indhold og pris.</span>
+          </label>
+
           <div className="flex gap-3">
             <Button
               onClick={() => handleAction('accept')}
-              disabled={acting}
-              className="bg-emerald-600 hover:bg-emerald-700 flex-1"
+              disabled={acting || !signerName.trim() || !confirmed}
+              className="bg-emerald-600 hover:bg-emerald-700 flex-1 disabled:opacity-40"
             >
               <Check className="w-5 h-5 mr-2" /> Accepter tilbud
             </Button>
@@ -216,7 +260,7 @@ export default function TilbudVisning() {
               <X className="w-5 h-5 mr-2" /> Afvis
             </Button>
           </div>
-          {acting && <p className="text-sm text-slate-400 text-center mt-3">Behandler...</p>}
+          {acting && <p className="text-sm text-slate-400 text-center">Behandler...</p>}
         </div>
       )}
 
@@ -225,6 +269,12 @@ export default function TilbudVisning() {
           <CheckCircle2 className="w-10 h-10 text-emerald-500 mx-auto mb-3" />
           <p className="font-semibold text-slate-900">Tak! Tilbuddet er accepteret.</p>
           <p className="text-sm text-slate-500 mt-1">Vi kontakter dig hurtigst muligt for at planlægge opstarten.</p>
+          {quote.accepted_by && (
+            <p className="text-xs text-slate-400 mt-3">
+              Digitalt godkendt af <span className="font-medium text-slate-600">{quote.accepted_by}</span>
+              {quote.accepted_at && ` den ${formatDate(quote.accepted_at)}`}
+            </p>
+          )}
         </div>
       )}
 

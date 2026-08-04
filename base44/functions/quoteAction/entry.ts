@@ -7,7 +7,7 @@ export default async function(req) {
     if (!user) return Response.json({ error: 'Ikke logget ind' }, { status: 401 });
 
     const body = await req.json();
-    const { quote_id, action } = body;
+    const { quote_id, action, customer_name, signature_ip } = body;
 
     if (!quote_id) return Response.json({ error: 'Manglende tilbud ID' }, { status: 400 });
 
@@ -33,21 +33,38 @@ export default async function(req) {
 
     if (action === 'accept' || action === 'reject') {
       const newStatus = action === 'accept' ? 'Accepteret' : 'Afvist';
-      await base44.asServiceRole.entities.Quote.update(quote_id, {
-        status: newStatus,
-      });
+      const updatePayload = { status: newStatus };
+
+      if (action === 'accept') {
+        const signedName = (customer_name || '').trim();
+        if (!signedName) {
+          return Response.json({ error: 'Angiv venligst dit fulde navn for at godkende' }, { status: 400 });
+        }
+        updatePayload.accepted_at = new Date().toISOString();
+        updatePayload.accepted_by = signedName;
+        if (signature_ip) updatePayload.accepted_ip = signature_ip;
+      }
+
+      await base44.asServiceRole.entities.Quote.update(quote_id, updatePayload);
+
       try {
+        const signer = action === 'accept'
+          ? `${signedName || user.full_name || user.email}`
+          : user.full_name || user.email;
         await base44.asServiceRole.entities.ActivityLog.create({
           entity_type: 'Tilbud',
           entity_id: quote_id,
           entity_name: quote.quote_number || quote_id,
           action: action === 'accept' ? 'Accepteret' : 'Afvist',
           user_email: user.email,
-          user_name: user.full_name || '',
-          details: `Tilbud ${newStatus.toLowerCase()} af kunde (${user.email})`,
+          user_name: signer,
+          details: action === 'accept'
+            ? `Tilbud accepteret digitalt af ${signer} (${user.email})${signature_ip ? ` fra ${signature_ip}` : ''}`
+            : `Tilbud afvist af kunde (${user.email})`,
         });
       } catch (e) { /* log fejler ikke flow */ }
-      return Response.json({ success: true, status: newStatus });
+
+      return Response.json({ success: true, status: newStatus, accepted_by: updatePayload.accepted_by, accepted_at: updatePayload.accepted_at });
     }
 
     return Response.json({ error: 'Ukendt handling' }, { status: 400 });

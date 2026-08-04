@@ -80,6 +80,18 @@
     "viewed_at": {
       "type": "string",
       "title": "Set af kunden"
+    },
+    "accepted_at": {
+      "type": "string",
+      "title": "Accepteret den"
+    },
+    "accepted_by": {
+      "type": "string",
+      "title": "Accepteret af"
+    },
+    "accepted_ip": {
+      "type": "string",
+      "title": "Accepteret fra IP"
     }
   },
   "required": [
