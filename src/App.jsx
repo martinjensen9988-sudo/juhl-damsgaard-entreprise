@@ -177,6 +177,12 @@ import Udlaegsstyring from '@/pages/Udlaegsstyring';
 import DriftsLogbog from '@/pages/DriftsLogbog';
 import MangelListe from '@/pages/MangelListe';
 import PersonaleOversigt from '@/pages/PersonaleOversigt';
+import MedarbejderAppLayout from '@/components/MedarbejderAppLayout';
+import MaHome from '@/pages/medarbejderapp/MaHome';
+import MaTid from '@/pages/medarbejderapp/MaTid';
+import MaOpgaver from '@/pages/medarbejderapp/MaOpgaver';
+import MaBeskeder from '@/pages/medarbejderapp/MaBeskeder';
+import MaProfil from '@/pages/medarbejderapp/MaProfil';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -379,6 +385,13 @@ const AuthenticatedApp = () => {
         <Route path="/storskaerm" element={<Storskaerm />} />
         <Route path="/infotaavle" element={<InfoTaavle />} />
         <Route path="/kundeportal" element={<Kundeportal />} />
+        <Route element={<MedarbejderAppLayout />}>
+          <Route path="/app" element={<MaHome />} />
+          <Route path="/app/tid" element={<MaTid />} />
+          <Route path="/app/opgaver" element={<MaOpgaver />} />
+          <Route path="/app/beskeder" element={<MaBeskeder />} />
+          <Route path="/app/profil" element={<MaProfil />} />
+        </Route>
       </Route>
       <Route path="*" element={<PageNotFound />} />
     </Routes>
