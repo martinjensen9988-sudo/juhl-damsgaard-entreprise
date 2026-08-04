@@ -20,6 +20,7 @@ import {
 } from '@/components/ui/dialog';
 import { formatDate } from '@/lib/format';
 import { Plus, Pencil, Trash2, Clock } from 'lucide-react';
+import StemmeTidsregistrering from '@/components/StemmeTidsregistrering';
 
 const TASK_TYPES = ['Gravearbejde', 'Kørsel', 'Maskinarbejde', 'Håndarbejde', 'Møde', 'Andet'];
 
@@ -123,6 +124,8 @@ export default function Tidsregistrering() {
           <Plus className="w-4 h-4 mr-1.5" /> Registrer tid
         </Button>
       </div>
+
+      <StemmeTidsregistrering projects={projects} onEntryCreated={load} />
 
       <div className="flex items-center gap-3 flex-wrap">
         <Label className="text-sm text-slate-600">Filtrer projekt:</Label>
