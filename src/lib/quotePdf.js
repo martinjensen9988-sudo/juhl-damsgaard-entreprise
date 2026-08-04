@@ -162,9 +162,9 @@ export async function generateQuotePDF(quote, company = {}) {
   y = 92;
   const colX = {
     desc: margin,
-    qty: margin + 115,
-    unit: margin + 130,
-    price: pageW - margin - 27,
+    qty: margin + 100,
+    unit: margin + 118,
+    price: margin + 145,
     total: pageW - margin,
   };
 
@@ -176,7 +176,7 @@ export async function generateQuotePDF(quote, company = {}) {
   doc.text('BESKRIVELSE', colX.desc + 3, y + 6);
   doc.text('ANTAL', colX.qty + 8, y + 6, { align: 'right' });
   doc.text('ENHED', colX.unit, y + 6);
-  doc.text('STK. PRIS', colX.price + 25, y + 6, { align: 'right' });
+  doc.text('STK. PRIS', colX.price, y + 6, { align: 'right' });
   doc.text('BELØB', colX.total - 3, y + 6, { align: 'right' });
 
   y += 9;
@@ -194,13 +194,13 @@ export async function generateQuotePDF(quote, company = {}) {
     }
     doc.setTextColor(...SLATE);
     doc.setFont('helvetica', 'normal');
-    const descLines = doc.splitTextToSize(item.description || '', 108);
+    const descLines = doc.splitTextToSize(item.description || '', 94);
     doc.text(descLines, colX.desc + 3, y + 5);
 
     doc.setTextColor(...SLATE_LIGHT);
     doc.text(String(item.quantity || ''), colX.qty + 8, y + 5, { align: 'right' });
     doc.text(item.unit || '', colX.unit, y + 5);
-    doc.text(formatDKK(item.unit_price), colX.price + 25, y + 5, { align: 'right' });
+    doc.text(formatDKK(item.unit_price), colX.price, y + 5, { align: 'right' });
 
     doc.setTextColor(...SLATE);
     doc.setFont('helvetica', 'bold');
