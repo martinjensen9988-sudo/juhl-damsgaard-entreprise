@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { base44 } from '@/api/base44Client';
 import { Image as Img } from '@/components/ui/image';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -6,7 +7,8 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { formatDKK, calcSubtotal, calcVAT, calcTotal, formatDate } from '@/lib/format';
-import { HardHat, Camera, Calculator, Plus, Trash2, FileText, Receipt } from 'lucide-react';
+import { useToast } from '@/components/ui/use-toast';
+import { HardHat, Camera, Calculator, Plus, Trash2, FileText, Receipt, Check, ArrowUpRight } from 'lucide-react';
 
 const SERVICES = [
   { name: 'Gravearbejde', unit: 'm³', price: 580 },
@@ -22,6 +24,8 @@ const SERVICES = [
 ];
 
 export default function CustomerPortal() {
+  const navigate = useNavigate();
+  const { toast } = useToast();
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [projects, setProjects] = useState([]);
@@ -29,6 +33,24 @@ export default function CustomerPortal() {
   const [quotes, setQuotes] = useState([]);
   const [invoices, setInvoices] = useState([]);
   const [selectedProject, setSelectedProject] = useState(null);
+  const [acceptingId, setAcceptingId] = useState(null);
+
+  const acceptQuote = async (q) => {
+    setAcceptingId(q.id);
+    try {
+      const res = await base44.functions.invoke('quoteAction', { quote_id: q.id, action: 'accept' });
+      if (res.data?.status) {
+        setQuotes((prev) => prev.map((x) => (x.id === q.id ? { ...x, status: res.data.status } : x)));
+        toast({ title: 'Tilbud accepteret', description: 'Vi kontakter dig hurtigst muligt.' });
+      } else if (res.data?.error) {
+        toast({ title: 'Fejl', description: res.data.error, variant: 'destructive' });
+      }
+    } catch (e) {
+      toast({ title: 'Kunne ikke acceptere tilbud', variant: 'destructive' });
+    } finally {
+      setAcceptingId(null);
+    }
+  };
 
   // Calculator state
   const [calcItems, setCalcItems] = useState([
@@ -276,20 +298,47 @@ export default function CustomerPortal() {
                     <th className="px-4 py-3">Dato</th>
                     <th className="px-4 py-3 text-right">Beløb</th>
                     <th className="px-4 py-3">Status</th>
+                    <th className="px-4 py-3 text-right">Handling</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-50">
                   {quotes.map((q) => (
                     <tr key={q.id} className="hover:bg-slate-50">
-                      <td className="px-4 py-3 font-medium text-slate-900">{q.quote_number}</td>
+                      <td className="px-4 py-3 font-medium text-slate-900">
+                        <Link to={`/portal/tilbud/${q.id}`} className="hover:text-amber-600 inline-flex items-center gap-1">
+                          {q.quote_number} <ArrowUpRight className="w-3 h-3 opacity-50" />
+                        </Link>
+                      </td>
                       <td className="px-4 py-3 text-slate-500">{formatDate(q.date)}</td>
                       <td className="px-4 py-3 text-right font-medium text-slate-900">{formatDKK(calcTotal(q.line_items))}</td>
                       <td className="px-4 py-3">
                         <span className={`inline-flex px-2 py-0.5 rounded-full text-xs font-medium ${
                           q.status === 'Accepteret' ? 'bg-emerald-100 text-emerald-700' :
                           q.status === 'Sendt' ? 'bg-blue-100 text-blue-700' :
+                          q.status === 'Afvist' ? 'bg-red-100 text-red-700' :
                           'bg-slate-100 text-slate-500'
                         }`}>{q.status}</span>
+                      </td>
+                      <td className="px-4 py-3 text-right">
+                        {q.status === 'Sendt' ? (
+                          <Button
+                            size="sm"
+                            onClick={() => acceptQuote(q)}
+                            disabled={acceptingId === q.id}
+                            className="bg-emerald-600 hover:bg-emerald-700"
+                          >
+                            {acceptingId === q.id ? (
+                              <div className="w-3.5 h-3.5 border-2 border-white/40 border-t-white rounded-full animate-spin" />
+                            ) : (
+                              <Check className="w-4 h-4" />
+                            )}
+                            Acceptér
+                          </Button>
+                        ) : q.status === 'Accepteret' ? (
+                          <span className="text-xs text-emerald-600 inline-flex items-center gap-1"><Check className="w-3.5 h-3.5" /> Godkendt</span>
+                        ) : (
+                          <Button size="sm" variant="outline" onClick={() => navigate(`/portal/tilbud/${q.id}`)}>Åbn</Button>
+                        )}
                       </td>
                     </tr>
                   ))}
