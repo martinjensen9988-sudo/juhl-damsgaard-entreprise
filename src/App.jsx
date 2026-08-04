@@ -162,6 +162,7 @@ import Kundearkiv from '@/pages/Kundearkiv';
 import Udstyrshistorik from '@/pages/Udstyrshistorik';
 import MoedeKalender from '@/pages/MoedeKalender';
 import Forespoergsel from '@/pages/Forespoergsel';
+import Tidskalender from '@/pages/Tidskalender';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -337,6 +338,7 @@ const AuthenticatedApp = () => {
           <Route path="/kundearkiv" element={<Kundearkiv />} />
           <Route path="/udstyrs-historik" element={<Udstyrshistorik />} />
           <Route path="/moede-kalender" element={<MoedeKalender />} />
+          <Route path="/tidskalender" element={<Tidskalender />} />
         </Route>
         <Route element={<PortalLayout />}>
           <Route path="/portal" element={<CustomerPortal />} />

@@ -160,6 +160,7 @@ const navGroups = [
       { to: '/medarbejder-administration', label: 'Administration', icon: UserCog },
       { to: '/ferie-administration', label: 'Ferie', icon: Palmtree },
       { to: '/tidsregistrering', label: 'Tidsregistrering', icon: Clock },
+      { to: '/tidskalender', label: 'Tidskalender', icon: CalendarDays },
       { to: '/timeseddel-rapport', label: 'Timeseddel', icon: Timer },
       { to: '/brugerprofil', label: 'Brugerprofil', icon: UserRound },
       { to: '/kursusstyring', label: 'Kursusstyring', icon: GraduationCap },
