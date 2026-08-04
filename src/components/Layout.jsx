@@ -139,6 +139,7 @@ const navGroups = [
       { to: '/materialeliste', label: 'Materialer', icon: Package },
       { to: '/materialeindkoeb', label: 'Indkøb', icon: ShoppingCart },
       { to: '/lager-styring', label: 'Lagerstyring', icon: Warehouse },
+      { to: '/materiale-lager', label: 'Materialelager', icon: Package },
     ],
   },
   {
