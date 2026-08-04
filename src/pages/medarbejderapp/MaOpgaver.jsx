@@ -50,6 +50,22 @@ export default function MaOpgaver() {
     } catch (e) { alert('Kunne ikke opdatere'); }
   };
 
+  // Markér opgave færdig og opdatér projektstatus hvis alle opgaver er udført
+  const markDone = async (task) => {
+    try {
+      const today = new Date().toISOString().split('T')[0];
+      await base44.entities.Task.update(task.id, { status: 'Gennemført', completed_date: today });
+      if (task.project_id) {
+        const all = await base44.entities.Task.filter({ project_id: task.project_id }).catch(() => []);
+        const openLeft = (all || []).filter((t) => t.id !== task.id && t.status !== 'Gennemført');
+        if (openLeft.length === 0) {
+          await base44.entities.Project.update(task.project_id, { status: 'Færdig' }).catch(() => {});
+        }
+      }
+      load();
+    } catch (e) { alert('Kunne ikke markere færdig'); }
+  };
+
   return (
     <div className="p-4 space-y-4">
       <h1 className="text-xl font-bold text-slate-900">Mine opgaver</h1>
@@ -104,9 +120,22 @@ export default function MaOpgaver() {
                           <Calendar className="w-3 h-3" /> {t.due_date}
                         </span>
                       )}
+                      {t.project_name && (
+                        <span className="text-[11px] text-slate-500 flex items-center gap-1">
+                          <ListChecks className="w-3 h-3" /> {t.project_name}
+                        </span>
+                      )}
                     </div>
                   </div>
                 </div>
+                {!done && (
+                  <button
+                    onClick={() => markDone(t)}
+                    className="mt-3 w-full flex items-center justify-center gap-1.5 text-xs font-semibold text-white bg-emerald-600 hover:bg-emerald-700 px-3 py-2 rounded-lg transition-colors"
+                  >
+                    <Check className="w-3.5 h-3.5" /> Markér færdig
+                  </button>
+                )}
               </div>
             );
           })}

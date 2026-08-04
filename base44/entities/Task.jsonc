@@ -18,6 +18,14 @@
       "type": "string",
       "title": "Tildelt bruger-ID"
     },
+    "project_id": {
+      "type": "string",
+      "title": "Projekt"
+    },
+    "project_name": {
+      "type": "string",
+      "title": "Projektnavn"
+    },
     "status": {
       "type": "string",
       "title": "Status",
