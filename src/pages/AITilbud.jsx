@@ -86,9 +86,24 @@ export default function AITilbud() {
     if (!notes.trim() && images.length === 0) return;
     setGenerating(true);
     try {
-      const prompt = `Du er en erfaren dansk entreprenør. Lav en professionel tilbudsliste med linjeelementer${
+      const prompt = `Du er prisberegner for Juhl & Damsgaard Entreprise. Lav et vejledende tilbud med linjeelementer${
         notes ? ` baseret på denne beskrivelse: "${notes}"` : ' baseret på billederne fra byggepladsen'
-      }. Brug realistiske danske entreprenørpriser for materialer og arbejde. Hver linje skal have: description (hvad der skal laves), quantity (antal), unit (enhed: stk, m², m³, time, m, fs, dag, sæt), unit_price (pris i DKK). Vær grundig og dæk alle arbejdsopgaver.`;
+      }.
+
+Vejledende priser (ekskl. moms):
+- Væg-/loftmaling (incl. grund og spartling efter behov): 75 kr/m²
+- Facademaling: 95 kr/m² · Maling af træværk/vinduer: 120 kr/m² · Tapetopsætning: 85 kr/m² · Spartling/slibning: 60 kr/m² · Grundmaling: 25 kr/m²
+- Tømrer: 495 kr/time · Gipsvæg: 245 kr/m² · Beklædning træ: 295 kr/m² · Dørmontage: 1250 kr/stk · Vindueskift: 1850 kr/stk · Gulvlægning trægulv: 245 kr/m²
+- VVS: 695 kr/time · Håndvask: 1850 kr/stk · Toilet: 2200 kr/stk · Badeværelsesrenovering komplet: 1850 kr/m²
+- Elektriker: 595 kr/time · Stikkontakt/afbryder: 450 kr/stk · Armatur: 750 kr/stk · Eltavle: 6500 kr/stk
+- Gravearbejde: 580 kr/m³ · Grøftegravning: 320 kr/m · Afgravning: 145 kr/m³ · Nedrivning: 450 kr/m² · Kloakrør Ø300: 850 kr/m · Kloakbrønd: 4500 kr/stk · Asfaltering: 395 kr/m² · Betonfundament: 850 kr/m² · Beton støbning: 1150 kr/m³ · Transport: 3500 kr/fs · Maskinleje: 4500 kr/dag · Affaldsbortkørsel: 3500 kr/fs · Håndarbejde: 280 kr/time
+
+Regler:
+- Vælg KUN de prislinjer der hører til det fag kunden beskriver (ved maling: kun maling/spartling/grundmaling/tapet – ingen gravemaskine, transport eller affald).
+- Estimer mængder rimeligt ud fra beskrivelsen (f.eks. maling af 53 m² lejlighed ≈ væg- og loftflade, ikke 53 m² ganget med 4 linjer).
+- Inkluder kun hvad opgaven reelt kræver. Undgå at tilføje unødvendige ekstra linjer.
+- Alle priser er ekskl. moms.
+- Hver linje: description, quantity, unit (stk, m², m³, time, m, fs, dag, sæt), unit_price.`;
 
       const result = await base44.integrations.Core.InvokeLLM({
         prompt,
@@ -261,7 +276,7 @@ export default function AITilbud() {
             <span className="text-sm text-slate-400">Total: {formatDKK(calcTotal(lineItems))}</span>
           </div>
 
-          <LineItemEditor value={lineItems} onChange={setLineItems} />
+          <LineItemEditor items={lineItems} onChange={setLineItems} />
 
           {/* Totals */}
           <div className="bg-slate-50 rounded-lg p-4 space-y-1.5">
