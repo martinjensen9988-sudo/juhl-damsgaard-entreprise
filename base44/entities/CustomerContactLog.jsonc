@@ -1,0 +1,98 @@
+{
+  "name": "CustomerContactLog",
+  "type": "object",
+  "properties": {
+    "customer_name": {
+      "type": "string",
+      "title": "Kunde"
+    },
+    "customer_id": {
+      "type": "string",
+      "title": "Kunde ID"
+    },
+    "project_name": {
+      "type": "string",
+      "title": "Projekt"
+    },
+    "project_id": {
+      "type": "string",
+      "title": "Projekt ID"
+    },
+    "contact_type": {
+      "type": "string",
+      "title": "Type",
+      "enum": [
+        "Opkald",
+        "Email",
+        "M\u00f8de",
+        "SMS",
+        "Bes\u00f8g",
+        "Andet"
+      ],
+      "default": "Opkald"
+    },
+    "direction": {
+      "type": "string",
+      "title": "Retning",
+      "enum": [
+        "Indg\u00e5ende",
+        "Udg\u00e5ende"
+      ],
+      "default": "Udg\u00e5ende"
+    },
+    "date": {
+      "type": "string",
+      "format": "date",
+      "title": "Dato"
+    },
+    "subject": {
+      "type": "string",
+      "title": "Emne"
+    },
+    "summary": {
+      "type": "string",
+      "title": "Referat"
+    },
+    "handled_by": {
+      "type": "string",
+      "title": "H\u00e5ndteret af"
+    },
+    "follow_up": {
+      "type": "boolean",
+      "title": "Kr\u00e6ver opf\u00f8lgning",
+      "default": false
+    },
+    "follow_up_date": {
+      "type": "string",
+      "format": "date",
+      "title": "Opf\u00f8lgning senest"
+    }
+  },
+  "required": [
+    "customer_name",
+    "contact_type",
+    "date"
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

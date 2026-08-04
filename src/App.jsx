@@ -195,6 +195,18 @@ import LeverandoerKatalog from '@/pages/LeverandoerKatalog';
 import Afvigelsesregistrering from '@/pages/Afvigelsesregistrering';
 import CertifikatOvervaagning from '@/pages/CertifikatOvervaagning';
 import Bemandingsplan from '@/pages/Bemandingsplan';
+import FirmaProfil from '@/pages/FirmaProfil';
+import Afvigelsesstyring from '@/pages/Afvigelsesstyring';
+import Kursusoversigt from '@/pages/Kursusoversigt';
+import KundekontaktLog from '@/pages/KundekontaktLog';
+import CertifikatKontrol from '@/pages/CertifikatKontrol';
+import TimebankOversigt from '@/pages/TimebankOversigt';
+import IndkoebsStyring from '@/pages/IndkoebsStyring';
+import UdstyrBooking from '@/pages/UdstyrBooking';
+import SikkerhedApv from '@/pages/SikkerhedApv';
+import AffaldsStyring from '@/pages/AffaldsStyring';
+import IndkoebsGodkendelse from '@/pages/IndkoebsGodkendelse';
+import KompetenceMatrix from '@/pages/KompetenceMatrix';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -397,6 +409,18 @@ const AuthenticatedApp = () => {
           <Route path="/afvigelses-registrering" element={<Afvigelsesregistrering />} />
           <Route path="/certifikat-overvaagning" element={<CertifikatOvervaagning />} />
           <Route path="/bemandings-plan" element={<Bemandingsplan />} />
+          <Route path="/firma-profil" element={<FirmaProfil />} />
+          <Route path="/afvigelsesstyring" element={<Afvigelsesstyring />} />
+          <Route path="/kursus-oversigt" element={<Kursusoversigt />} />
+          <Route path="/kundekontakt-log" element={<KundekontaktLog />} />
+          <Route path="/certifikat-kontrol" element={<CertifikatKontrol />} />
+          <Route path="/timebank-oversigt" element={<TimebankOversigt />} />
+          <Route path="/indkoebs-styring" element={<IndkoebsStyring />} />
+          <Route path="/udstyr-booking" element={<UdstyrBooking />} />
+          <Route path="/sikkerhed-apv" element={<SikkerhedApv />} />
+          <Route path="/affalds-styring" element={<AffaldsStyring />} />
+          <Route path="/indkoebs-godkendelse" element={<IndkoebsGodkendelse />} />
+          <Route path="/kompetence-matrix" element={<KompetenceMatrix />} />
         </Route>
         <Route element={<PortalLayout />}>
           <Route path="/portal" element={<CustomerPortal />} />
