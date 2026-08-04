@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback } from 'react';
+import { useOutletContext } from 'react-router-dom';
 import { base44 } from '@/api/base44Client';
 import { ListChecks, Calendar, Check, Circle, Clock, AlertCircle } from 'lucide-react';
 
@@ -24,7 +25,12 @@ export default function MaOpgaver() {
     setTasks(tk || []);
   }, []);
 
+  const { markTasksRead } = useOutletContext() || {};
+
   useEffect(() => { load(); }, [load]);
+
+  // Marker opgaver som læst når siden vises
+  useEffect(() => { markTasksRead?.(); }, [markTasksRead]);
 
   const myName = user?.full_name || '';
   const myTasks = tasks.filter((t) => !t.assigned_to || t.assigned_to === myName || myName === '');

@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback } from 'react';
+import { useOutletContext } from 'react-router-dom';
 import { base44 } from '@/api/base44Client';
 import { MessageSquare, Plus, Send, ArrowDownLeft, ArrowUpRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -26,13 +27,18 @@ export default function MaBeskeder() {
     setMessages((msg || []).filter((m) => m.active !== false));
   }, []);
 
+  const { markMessagesRead } = useOutletContext() || {};
+
   useEffect(() => { load(); }, [load]);
+
+  // Marker beskeder som læst når siden vises
+  useEffect(() => { markMessagesRead?.(); }, [markMessagesRead]);
 
   // Realtime: opdater når kontoret svarer
   useEffect(() => {
-    const unsub = base44.entities.InternalMessage.subscribe(() => { load(); });
+    const unsub = base44.entities.InternalMessage.subscribe(() => { load(); markMessagesRead?.(); });
     return unsub;
-  }, [load]);
+  }, [load, markMessagesRead]);
 
   const save = async () => {
     if (!form.title || !form.message) { alert('Udfyld titel og besked'); return; }
