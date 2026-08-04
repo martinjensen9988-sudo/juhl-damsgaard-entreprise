@@ -212,6 +212,7 @@ import Kontoplan from '@/pages/Kontoplan';
 import Bogfoering from '@/pages/Bogfoering';
 import Momsangivelse from '@/pages/Momsangivelse';
 import Regnskabsrapporter from '@/pages/Regnskabsrapporter';
+import AarsoversigtPnL from '@/pages/AarsoversigtPnL';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -431,6 +432,7 @@ const AuthenticatedApp = () => {
           <Route path="/regnskab-bogfoering" element={<Bogfoering />} />
           <Route path="/regnskab-moms" element={<Momsangivelse />} />
           <Route path="/regnskab-rapporter" element={<Regnskabsrapporter />} />
+          <Route path="/regnskab-aarsoversigt" element={<AarsoversigtPnL />} />
         </Route>
         <Route element={<PortalLayout />}>
           <Route path="/portal" element={<CustomerPortal />} />

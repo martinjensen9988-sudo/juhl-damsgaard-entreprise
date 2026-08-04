@@ -64,6 +64,7 @@ import {
   ChevronDown,
   BookOpen,
   FileBarChart,
+  TrendingUp,
 } from 'lucide-react';
 
 const primaryItems = [
@@ -117,6 +118,7 @@ const navGroups = [
       { to: '/regnskab-bogfoering', label: 'Bogføring', icon: BookOpen },
       { to: '/regnskab-moms', label: 'Momsangivelse', icon: Receipt },
       { to: '/regnskab-rapporter', label: 'Årsrapport', icon: FileBarChart },
+      { to: '/regnskab-aarsoversigt', label: 'P&L årsoversigt', icon: TrendingUp },
       { to: '/daekningsbidrag', label: 'Dækningsbidrag', icon: PieChart },
       { to: '/leverandoerfakturaer', label: 'Leverandørfakturaer', icon: FileCheck },
       { to: '/udgiftsstyring', label: 'Udgiftsstyring', icon: Receipt },

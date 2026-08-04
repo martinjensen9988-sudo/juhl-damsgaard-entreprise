@@ -112,6 +112,30 @@ export function computeResultat(entries, period, aMap) {
   return { rows, drif, fin, driftsindtaegt, driftsomkostning, driftsresultat, finansielIndtaegt, finansielOmkostning, aaretsResultat };
 }
 
+export function computeMonthlyResultat(entries, year, aMap) {
+  const months = [];
+  for (let m = 1; m <= 12; m++) {
+    const period = `${year}-${String(m).padStart(2, '0')}`;
+    const byType = { Indtægt: 0, Omkostning: 0 };
+    let variable = 0;
+    (entries || []).filter((e) => e.status === 'Bogført').forEach((e) => {
+      if (e.date && e.date.slice(0, 7) !== period) return;
+      (e.lines || []).forEach((line) => {
+        const acc = aMap[line.account_number];
+        if (!acc) return;
+        const bal = lineSigned(line, aMap);
+        if (acc.type === 'Indtægt') byType.Indtægt += bal;
+        if (acc.type === 'Omkostning') byType.Omkostning += bal;
+        if (acc.type === 'Omkostning' && (line.vat_code === 'kob25' || /Vare|Forbrug|Lager|Brændstof|Material/i.test(acc.name || ''))) variable += bal;
+      });
+    });
+    months.push({ period, maaned: m, indtaegt: byType.Indtægt, omkostning: byType.Omkostning, dækningsbidrag: byType.Indtægt - byType.Omkostning, variable });
+  }
+  let cum = 0;
+  months.forEach((mm) => { cum += mm.dækningsbidrag; mm.cumulative = cum; });
+  return months;
+}
+
 export function computeBalance(entries, upToDate, aMap) {
   const byAcc = {};
   (entries || []).filter((e) => e.status === 'Bogført').forEach((e) => {
