@@ -183,6 +183,7 @@ import MaHome from '@/pages/medarbejderapp/MaHome';
 import MaTid from '@/pages/medarbejderapp/MaTid';
 import MaOpgaver from '@/pages/medarbejderapp/MaOpgaver';
 import MaBeskeder from '@/pages/medarbejderapp/MaBeskeder';
+import MaBilag from '@/pages/medarbejderapp/MaBilag';
 import MaProfil from '@/pages/medarbejderapp/MaProfil';
 import OekonomiskOversigt from '@/pages/OekonomiskOversigt';
 import UnderleverandoerListe from '@/pages/UnderleverandoerListe';
@@ -450,6 +451,7 @@ const AuthenticatedApp = () => {
           <Route path="/app/tid" element={<MaTid />} />
           <Route path="/app/opgaver" element={<MaOpgaver />} />
           <Route path="/app/beskeder" element={<MaBeskeder />} />
+          <Route path="/app/bilag" element={<MaBilag />} />
           <Route path="/app/profil" element={<MaProfil />} />
         </Route>
       </Route>

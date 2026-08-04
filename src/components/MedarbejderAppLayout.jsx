@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Outlet, NavLink, Link } from 'react-router-dom';
-import { Home, Clock, ListChecks, MessageSquare, User, LogOut, HardHat, Bell } from 'lucide-react';
+import { Home, Clock, ListChecks, MessageSquare, User, LogOut, HardHat, Bell, Receipt } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 import { BRAND_NAME_SHORT } from '@/lib/brand';
 import { useMaNotifications } from '@/hooks/useMaNotifications';
@@ -10,6 +10,7 @@ const NAV = [
   { to: '/app/tid', label: 'Tid', icon: Clock },
   { to: '/app/opgaver', label: 'Opgaver', icon: ListChecks, badgeKey: 'tasks' },
   { to: '/app/beskeder', label: 'Beskeder', icon: MessageSquare, badgeKey: 'messages' },
+  { to: '/app/bilag', label: 'Bilag', icon: Receipt },
   { to: '/app/profil', label: 'Profil', icon: User },
 ];
 
