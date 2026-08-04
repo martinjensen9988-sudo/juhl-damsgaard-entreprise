@@ -1,0 +1,82 @@
+{
+  "name": "Account",
+  "type": "object",
+  "properties": {
+    "account_number": {
+      "type": "string",
+      "title": "Kontonr."
+    },
+    "name": {
+      "type": "string",
+      "title": "Kontonavn"
+    },
+    "type": {
+      "type": "string",
+      "title": "Kontotype",
+      "enum": [
+        "Aktiv",
+        "Passiv",
+        "Indt\u00e6gt",
+        "Omkostning",
+        "Finansiel indt\u00e6gt",
+        "Finansiel omkostning"
+      ],
+      "default": "Aktiv"
+    },
+    "vat_code": {
+      "type": "string",
+      "title": "Moms kode",
+      "enum": [
+        "none",
+        "salg25",
+        "kob25"
+      ],
+      "default": "none"
+    },
+    "vat_type": {
+      "type": "string",
+      "title": "Momskonto",
+      "enum": [
+        "none",
+        "output",
+        "input"
+      ],
+      "default": "none"
+    },
+    "is_active": {
+      "type": "boolean",
+      "title": "Aktiv",
+      "default": true
+    },
+    "description": {
+      "type": "string",
+      "title": "Beskrivelse"
+    }
+  },
+  "required": [
+    "account_number",
+    "name"
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

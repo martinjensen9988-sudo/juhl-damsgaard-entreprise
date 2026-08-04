@@ -1,0 +1,88 @@
+{
+  "name": "VatReport",
+  "type": "object",
+  "properties": {
+    "period": {
+      "type": "string",
+      "title": "Periode"
+    },
+    "period_type": {
+      "type": "string",
+      "title": "Periode type",
+      "enum": [
+        "Kvartal",
+        "M\u00e5ned"
+      ],
+      "default": "Kvartal"
+    },
+    "sales_basis": {
+      "type": "number",
+      "title": "Salgsgrundlag (ekscl. moms)"
+    },
+    "output_vat": {
+      "type": "number",
+      "title": "Udg\u00e5ende moms"
+    },
+    "purchase_basis": {
+      "type": "number",
+      "title": "K\u00f8bsgrundlag (ekscl. moms)"
+    },
+    "input_vat": {
+      "type": "number",
+      "title": "Indg\u00e5ende moms"
+    },
+    "payable_vat": {
+      "type": "number",
+      "title": "Moms at betale"
+    },
+    "due_date": {
+      "type": "string",
+      "format": "date",
+      "title": "Betalingsfrist"
+    },
+    "status": {
+      "type": "string",
+      "title": "Status",
+      "enum": [
+        "Udkast",
+        "Indberettet",
+        "Betalt"
+      ],
+      "default": "Udkast"
+    },
+    "submitted_date": {
+      "type": "string",
+      "format": "date",
+      "title": "Indberettet dato"
+    },
+    "notes": {
+      "type": "string",
+      "title": "Noter"
+    }
+  },
+  "required": [
+    "period"
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

@@ -207,6 +207,11 @@ import SikkerhedApv from '@/pages/SikkerhedApv';
 import AffaldsStyring from '@/pages/AffaldsStyring';
 import IndkoebsGodkendelse from '@/pages/IndkoebsGodkendelse';
 import KompetenceMatrix from '@/pages/KompetenceMatrix';
+import RegnskabDashboard from '@/pages/RegnskabDashboard';
+import Kontoplan from '@/pages/Kontoplan';
+import Bogfoering from '@/pages/Bogfoering';
+import Momsangivelse from '@/pages/Momsangivelse';
+import Regnskabsrapporter from '@/pages/Regnskabsrapporter';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -421,6 +426,11 @@ const AuthenticatedApp = () => {
           <Route path="/affalds-styring" element={<AffaldsStyring />} />
           <Route path="/indkoebs-godkendelse" element={<IndkoebsGodkendelse />} />
           <Route path="/kompetence-matrix" element={<KompetenceMatrix />} />
+          <Route path="/regnskab-program" element={<RegnskabDashboard />} />
+          <Route path="/regnskab-kontoplan" element={<Kontoplan />} />
+          <Route path="/regnskab-bogfoering" element={<Bogfoering />} />
+          <Route path="/regnskab-moms" element={<Momsangivelse />} />
+          <Route path="/regnskab-rapporter" element={<Regnskabsrapporter />} />
         </Route>
         <Route element={<PortalLayout />}>
           <Route path="/portal" element={<CustomerPortal />} />

@@ -62,6 +62,8 @@ import {
   GraduationCap,
   MessageSquare,
   ChevronDown,
+  BookOpen,
+  FileBarChart,
 } from 'lucide-react';
 
 const primaryItems = [
@@ -111,6 +113,10 @@ const navGroups = [
       { to: '/faktura', label: 'Fakturaer', icon: Receipt },
       { to: '/faktura-arkiv', label: 'Fakturaarkiv', icon: Archive },
       { to: '/regnskab', label: 'Regnskab', icon: FileSpreadsheet },
+      { to: '/regnskab-program', label: 'Regnskabsprogram', icon: Calculator },
+      { to: '/regnskab-bogfoering', label: 'Bogføring', icon: BookOpen },
+      { to: '/regnskab-moms', label: 'Momsangivelse', icon: Receipt },
+      { to: '/regnskab-rapporter', label: 'Årsrapport', icon: FileBarChart },
       { to: '/daekningsbidrag', label: 'Dækningsbidrag', icon: PieChart },
       { to: '/leverandoerfakturaer', label: 'Leverandørfakturaer', icon: FileCheck },
       { to: '/udgiftsstyring', label: 'Udgiftsstyring', icon: Receipt },

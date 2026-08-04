@@ -1,0 +1,106 @@
+{
+  "name": "JournalEntry",
+  "type": "object",
+  "properties": {
+    "entry_number": {
+      "type": "string",
+      "title": "Bilagsnr."
+    },
+    "date": {
+      "type": "string",
+      "format": "date",
+      "title": "Dato"
+    },
+    "period": {
+      "type": "string",
+      "title": "Periode"
+    },
+    "description": {
+      "type": "string",
+      "title": "Tekst"
+    },
+    "status": {
+      "type": "string",
+      "title": "Status",
+      "enum": [
+        "Kladde",
+        "Bogf\u00f8rt"
+      ],
+      "default": "Kladde"
+    },
+    "lines": {
+      "type": "array",
+      "title": "Posteringslinjer",
+      "items": {
+        "type": "object",
+        "properties": {
+          "account_number": {
+            "type": "string",
+            "title": "Konto"
+          },
+          "account_name": {
+            "type": "string",
+            "title": "Kontonavn"
+          },
+          "debit": {
+            "type": "number",
+            "title": "Debet"
+          },
+          "credit": {
+            "type": "number",
+            "title": "Kredit"
+          },
+          "vat_code": {
+            "type": "string",
+            "title": "Moms kode",
+            "enum": [
+              "none",
+              "salg25",
+              "kob25"
+            ],
+            "default": "none"
+          },
+          "description": {
+            "type": "string",
+            "title": "Beskrivelse"
+          }
+        }
+      }
+    },
+    "attachment_url": {
+      "type": "string",
+      "title": "Bilag"
+    },
+    "posted_date": {
+      "type": "string",
+      "format": "date",
+      "title": "Bogf\u00f8rt dato"
+    }
+  },
+  "required": [
+    "entry_number",
+    "date"
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}
