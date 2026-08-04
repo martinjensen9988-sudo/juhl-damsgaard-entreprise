@@ -55,6 +55,7 @@ import {
   Tv,
   Car,
   Briefcase,
+  MapPin,
   HelpCircle,
   PenLine,
   ClipboardCheck,
@@ -140,6 +141,7 @@ const navGroups = [
       { to: '/materialeindkoeb', label: 'Indkøb', icon: ShoppingCart },
       { to: '/lager-styring', label: 'Lagerstyring', icon: Warehouse },
       { to: '/materiale-lager', label: 'Materialelager', icon: Package },
+      { to: '/materiel-lokationer', label: 'Materiellokationer', icon: MapPin },
     ],
   },
   {

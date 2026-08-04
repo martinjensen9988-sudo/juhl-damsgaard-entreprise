@@ -164,6 +164,7 @@ import MoedeKalender from '@/pages/MoedeKalender';
 import Forespoergsel from '@/pages/Forespoergsel';
 import Tidskalender from '@/pages/Tidskalender';
 import Materialelager from '@/pages/Materialelager';
+import MaterielLokation from '@/pages/MaterielLokation';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -341,6 +342,7 @@ const AuthenticatedApp = () => {
           <Route path="/moede-kalender" element={<MoedeKalender />} />
           <Route path="/tidskalender" element={<Tidskalender />} />
           <Route path="/materiale-lager" element={<Materialelager />} />
+          <Route path="/materiel-lokationer" element={<MaterielLokation />} />
         </Route>
         <Route element={<PortalLayout />}>
           <Route path="/portal" element={<CustomerPortal />} />
