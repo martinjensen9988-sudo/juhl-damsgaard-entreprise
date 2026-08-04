@@ -184,6 +184,17 @@ import MaTid from '@/pages/medarbejderapp/MaTid';
 import MaOpgaver from '@/pages/medarbejderapp/MaOpgaver';
 import MaBeskeder from '@/pages/medarbejderapp/MaBeskeder';
 import MaProfil from '@/pages/medarbejderapp/MaProfil';
+import OekonomiskOversigt from '@/pages/OekonomiskOversigt';
+import UnderleverandoerListe from '@/pages/UnderleverandoerListe';
+import Servicehistorik from '@/pages/Servicehistorik';
+import Kvalitetsrapport from '@/pages/Kvalitetsrapport';
+import ProjektBudget from '@/pages/ProjektBudget';
+import Udstyrsbooking from '@/pages/Udstyrsbooking';
+import Sikkerhedslogbog from '@/pages/Sikkerhedslogbog';
+import LeverandoerKatalog from '@/pages/LeverandoerKatalog';
+import Afvigelsesregistrering from '@/pages/Afvigelsesregistrering';
+import CertifikatOvervaagning from '@/pages/CertifikatOvervaagning';
+import Bemandingsplan from '@/pages/Bemandingsplan';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -375,6 +386,17 @@ const AuthenticatedApp = () => {
           <Route path="/mangel-liste" element={<MangelListe />} />
           <Route path="/personale-oversigt" element={<PersonaleOversigt />} />
           <Route path="/medarbejder-beskeder" element={<Medarbejderbeskeder />} />
+          <Route path="/oekonomisk-oversigt" element={<OekonomiskOversigt />} />
+          <Route path="/underleverandoerer" element={<UnderleverandoerListe />} />
+          <Route path="/servicehistorik" element={<Servicehistorik />} />
+          <Route path="/kvalitetsrapport" element={<Kvalitetsrapport />} />
+          <Route path="/projekt-budget" element={<ProjektBudget />} />
+          <Route path="/udstyrs-booking" element={<Udstyrsbooking />} />
+          <Route path="/sikkerheds-logbog" element={<Sikkerhedslogbog />} />
+          <Route path="/leverandoer-katalog" element={<LeverandoerKatalog />} />
+          <Route path="/afvigelses-registrering" element={<Afvigelsesregistrering />} />
+          <Route path="/certifikat-overvaagning" element={<CertifikatOvervaagning />} />
+          <Route path="/bemandings-plan" element={<Bemandingsplan />} />
         </Route>
         <Route element={<PortalLayout />}>
           <Route path="/portal" element={<CustomerPortal />} />
