@@ -165,6 +165,18 @@ import Forespoergsel from '@/pages/Forespoergsel';
 import Tidskalender from '@/pages/Tidskalender';
 import Materialelager from '@/pages/Materialelager';
 import MaterielLokation from '@/pages/MaterielLokation';
+import Medarbejderarkiv from '@/pages/Medarbejderarkiv';
+import VejrPlanlaegning from '@/pages/VejrPlanlaegning';
+import DokumentStyring from '@/pages/DokumentStyring';
+import VaerktoejService from '@/pages/VaerktoejService';
+import UnderleverandoerPortal from '@/pages/UnderleverandoerPortal';
+import MedarbejderCV from '@/pages/MedarbejderCV';
+import ProjektTidslinje from '@/pages/ProjektTidslinje';
+import MaterielLogistik from '@/pages/MaterielLogistik';
+import Udlaegsstyring from '@/pages/Udlaegsstyring';
+import DriftsLogbog from '@/pages/DriftsLogbog';
+import MangelListe from '@/pages/MangelListe';
+import PersonaleOversigt from '@/pages/PersonaleOversigt';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -343,6 +355,18 @@ const AuthenticatedApp = () => {
           <Route path="/tidskalender" element={<Tidskalender />} />
           <Route path="/materiale-lager" element={<Materialelager />} />
           <Route path="/materiel-lokationer" element={<MaterielLokation />} />
+          <Route path="/medarbejder-arkiv" element={<Medarbejderarkiv />} />
+          <Route path="/vejr-planlaegning" element={<VejrPlanlaegning />} />
+          <Route path="/dokument-styring" element={<DokumentStyring />} />
+          <Route path="/vaerktoej-service" element={<VaerktoejService />} />
+          <Route path="/underleverandoer-portal" element={<UnderleverandoerPortal />} />
+          <Route path="/medarbejder-cv" element={<MedarbejderCV />} />
+          <Route path="/projekt-tidslinje" element={<ProjektTidslinje />} />
+          <Route path="/materiel-logistik" element={<MaterielLogistik />} />
+          <Route path="/udlaegsstyring" element={<Udlaegsstyring />} />
+          <Route path="/drifts-logbog" element={<DriftsLogbog />} />
+          <Route path="/mangel-liste" element={<MangelListe />} />
+          <Route path="/personale-oversigt" element={<PersonaleOversigt />} />
         </Route>
         <Route element={<PortalLayout />}>
           <Route path="/portal" element={<CustomerPortal />} />

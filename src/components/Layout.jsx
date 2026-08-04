@@ -98,6 +98,8 @@ const navGroups = [
       { to: '/projekt-oekonomi', label: 'Projektøkonomi', icon: Calculator },
       { to: '/projektkalender', label: 'Projektkalender', icon: CalendarDays },
       { to: '/projekt-milepaele', label: 'Milepæle', icon: Milestone },
+      { to: '/projekt-tidslinje', label: 'Projekttidslinje', icon: Milestone },
+      { to: '/drifts-logbog', label: 'Driftslogbog', icon: ClipboardList },
     ],
   },
   {
@@ -110,6 +112,7 @@ const navGroups = [
       { to: '/daekningsbidrag', label: 'Dækningsbidrag', icon: PieChart },
       { to: '/leverandoerfakturaer', label: 'Leverandørfakturaer', icon: FileCheck },
       { to: '/udgiftsstyring', label: 'Udgiftsstyring', icon: Receipt },
+      { to: '/udlaegsstyring', label: 'Udlæg', icon: Receipt },
       { to: '/oekonomi-rapport', label: 'Økonomirapport', icon: BarChart3 },
     ],
   },
@@ -120,6 +123,7 @@ const navGroups = [
       { to: '/planlaegning', label: 'Planlægning', icon: CalendarDays },
       { to: '/ugeplanlaegning', label: 'Ugeplan', icon: CalendarDays },
       { to: '/vagtplan', label: 'Vagtplan', icon: CalendarClock },
+      { to: '/vejr-planlaegning', label: 'Vejr & planlægning', icon: CalendarDays },
       { to: '/moede-booking', label: 'Mødebooker', icon: CalendarPlus },
       { to: '/ressourceallokering', label: 'Ressource', icon: Users2 },
       { to: '/moede-kalender', label: 'Mødekalender', icon: CalendarPlus },
@@ -150,6 +154,8 @@ const navGroups = [
     items: [
       { to: '/materiel', label: 'Materiel', icon: Wrench },
       { to: '/udstyrskalender', label: 'Udstyrskalender', icon: CalendarDays },
+      { to: '/vaerktoej-service', label: 'Værktøjsservice', icon: Wrench },
+      { to: '/materiel-logistik', label: 'Materiellogistik', icon: Truck },
       { to: '/vaerksted', label: 'Værksted', icon: Wrench },
       { to: '/bilpark', label: 'Bilpark', icon: Car },
       { to: '/udstyrs-historik', label: 'Udstyrshistorik', icon: History },
@@ -160,6 +166,9 @@ const navGroups = [
     icon: Contact,
     items: [
       { to: '/medarbejdere', label: 'Medarbejdere', icon: Contact },
+      { to: '/medarbejder-arkiv', label: 'Medarbejderarkiv', icon: Contact },
+      { to: '/medarbejder-cv', label: 'Medarbejder-CV', icon: Award },
+      { to: '/personale-oversigt', label: 'Personaleoversigt', icon: Users },
       { to: '/medarbejder-administration', label: 'Administration', icon: UserCog },
       { to: '/ferie-administration', label: 'Ferie', icon: Palmtree },
       { to: '/tidsregistrering', label: 'Tidsregistrering', icon: Clock },
@@ -176,6 +185,7 @@ const navGroups = [
     items: [
       { to: '/leverandoerer', label: 'Leverandører', icon: Truck },
       { to: '/underentreprenoerer', label: 'Underentreprenører', icon: Briefcase },
+      { to: '/underleverandoer-portal', label: 'Underleverandør-portal', icon: Briefcase },
       { to: '/samarbejdspartnere', label: 'Samarbejdspartnere', icon: Users2 },
     ],
   },
@@ -187,6 +197,7 @@ const navGroups = [
       { to: '/sikkerhedslog', label: 'Sikkerhedslog', icon: ShieldAlert },
       { to: '/afvigelser', label: 'Afvigelser', icon: AlertOctagon },
       { to: '/sikkerheds-tjekliste', label: 'Sikkerheds-tjekliste', icon: ClipboardCheck },
+      { to: '/mangel-liste', label: 'Mangel-oversigt', icon: AlertOctagon },
       { to: '/kvalitetsstyring-oversigt', label: 'Kvalitetsoversigt', icon: ShieldCheck },
     ],
   },
@@ -215,6 +226,7 @@ const navGroups = [
     icon: Archive,
     items: [
       { to: '/dokumenter', label: 'Dokumenter', icon: Archive },
+      { to: '/dokument-styring', label: 'Dokumentstyring', icon: Files },
       { to: '/vidensbase', label: 'Vidensbase', icon: HelpCircle },
       { to: '/billedarkiv', label: 'Billedarkiv', icon: Images },
       { to: '/digital-signatur', label: 'Digital signatur', icon: PenLine },

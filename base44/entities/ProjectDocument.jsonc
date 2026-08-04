@@ -24,6 +24,7 @@
       "enum": [
         "Kontrakt",
         "Tegning",
+        "Tilladelse",
         "Sikkerhedsvejledning",
         "Tilbud",
         "Faktura",

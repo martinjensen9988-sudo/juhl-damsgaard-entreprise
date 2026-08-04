@@ -15,6 +15,10 @@
       "type": "string",
       "title": "Telefon"
     },
+    "address": {
+      "type": "string",
+      "title": "Adresse"
+    },
     "trade": {
       "type": "string",
       "title": "Fag",
@@ -30,9 +34,30 @@
       ],
       "default": "H\u00e5ndv\u00e6rker"
     },
+    "position": {
+      "type": "string",
+      "title": "Stillingsbetegnelse"
+    },
+    "hire_date": {
+      "type": "string",
+      "format": "date",
+      "title": "Ans\u00e6ttelsesdato"
+    },
     "hourly_rate": {
       "type": "number",
       "title": "Timepris (DKK)"
+    },
+    "certificates": {
+      "type": "string",
+      "title": "Certifikater"
+    },
+    "competencies": {
+      "type": "string",
+      "title": "Kompetencer"
+    },
+    "responsibilities": {
+      "type": "string",
+      "title": "Ansvarsomr\u00e5der"
     },
     "status": {
       "type": "string",
