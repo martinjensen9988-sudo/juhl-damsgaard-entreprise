@@ -102,10 +102,33 @@ Vejledende priser (ekskl. moms):
 - Gravearbejde: 580 kr/m³ · Grøftegravning: 320 kr/m · Afgravning: 145 kr/m³ · Nedrivning: 450 kr/m² · Kloakrør Ø300: 850 kr/m · Kloakbrønd: 4500 kr/stk · Asfaltering: 395 kr/m² · Betonfundament: 850 kr/m² · Beton støbning: 1150 kr/m³ · Transport: 3500 kr/fs · Maskinleje: 4500 kr/dag · Affaldsbortkørsel: 3500 kr/fs · Håndarbejde: 280 kr/time
 - Slutrengøring/byggepladsrengøring: 75 kr/m² · Glarmester (vinduespolering): 45 kr/m²
 
+Forbrugsmaterialer (skal altid medtages som separate linjer, når de er nødvendige for opgaven):
+- Maling: ca. 1 liter / 10 m² per strøg. Standard: 2 strøg → 1 liter / 5 m². Priser: væg-/loftmaling 145 kr/liter · facademaling 175 kr/liter · træmaling/lak 195 kr/liter · grundmaling 95 kr/liter
+- Spartlemasse: 25 kr/kg · ca. 0,5 kg/m² ved behov · Fuge/akryl: 75 kr/patron · 1 patron pr. 8 m²
+- Gipsplader: 45 kr/m² · Gipsskruer/bånd: 12 kr/m² · Vævpapir: 8 kr/m²
+- Træbeklædning materiale: 165 kr/m² · Impregneret træ: 195 kr/m² · Dørgulv/træplanker: 245 kr/m²
+- Fliser: 195 kr/m² · Fliseklæber: 45 kr/m² · Fuge: 25 kr/m² · Membran (vådrum): 95 kr/m²
+- VVS-materiale (rør, fittings, samlinger): 350 kr/sæt · Slange/afløb: 95 kr/stk
+- El-materiale (kabler, klemmer, beslag): 12 kr/m kabel · Kabelkanal: 35 kr/m
+- Betonmateriale (cement, grus, armering): 450 kr/m³ · Kloakgrus: 145 kr/ton · Støbeform: 95 kr/m²
+- Tapet: 75 kr/rulle · ca. 1 rulle pr. 5 m² · Tapetklister: 45 kg/rulle
+- Gulv materiale: Trægulv 245 kr/m² · Vinyl/klik-gulv 175 kr/m² · Gulvafslibning papir: 35 kr/m²
+
 Regler:
 - VIGTIGT: Hver eneste opgave kunden nævner SKAL have mindst én linje i tilbuddet. Glem aldrig en nævnt opgave (f.eks. hvis kunden skriver "maling" skal der altid være en male-linje; "rengøring" → slutrengørings-linje; både maling og rengøring → én linje for hver).
 - Vælg KUN de prislinjer der hører til de fag kunden beskriver (ved maling: kun maling/spartling/grundmaling/tapet – ingen gravemaskine, transport eller affald).
 - Estimer mængder rimeligt ud fra beskrivelsen (f.eks. maling af 53 m² lejlighed: beregn væg- og loftflade typisk som 53 m² etagemål × ca. 3 = ca. 160 m² maleflade, opdelt i væg- og loftmaling).
+- VIGTIGT – FORBRUGSMATERIALER: For hver arbejdsopgave skal du altid vurdere og tilføje nødvendige forbrugsmaterialer som separate linjer. Glem aldrig materialer – det sikrer at alle omkostninger er dækket.
+  • Malearbejde → maling (beregn liter: maleflade ÷ 5 for 2 strøg) + spartlemasse hvis nævnt + pensler/ruller (1 sæt pr. 50 m²)
+  • Flisearbejde → fliser + fliseklæber + fuge + membran hvis vådrum
+  • Tømrer/gips → gipsplader + skruer/bånd, eller træmateriale + beslag
+  • Beton/støbning → cement/grus/armering + støbeform
+  • Kloak → kloakgrus + rør/beslag
+  • VVS → rør/fittings/samlinger + slange/afløb
+  • El → kabler + klemmer + kabelkanal
+  • Gulv → gulvmateriale + underlag/afslibning
+  • Tapet → tapetruller + klister
+  • Generelt: pensler, ruller, slibepapir, afdækningsfolie, maskeringstape (1 sæt 75 kr pr. 50 m²)
 - Ved malearbejde: beregn altid maltforbrug og tilføj en separat materialelinje for maling. Forbrug: ca. 1 liter dækker 10 m² med 1 strøg – de fleste opgaver kræver 2 strøg, så divider maleflade med 5 for at få literantal (f.eks. 160 m² ÷ 5 = 32 liter). Brug korrekt malttype ud fra opgaven (væg-/loftmaling, facademaling, træmaling el. grundmaling) med tilhørende literpris. Angiv unit "liter" og antal liter som quantity.
 - Inkluder kun hvad opgaven reelt kræver. Undgå at tilføje unødvendige ekstra linjer.
 - Alle priser er ekskl. moms.
