@@ -2,8 +2,9 @@ import { useEffect, useState, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { base44 } from '@/api/base44Client';
 import { loadAccounts, loadPostedEntries, accountMap, computeResultat, computeBalance } from '@/lib/accounting';
-import { FileBarChart } from 'lucide-react';
+import { FileBarChart, FileDown } from 'lucide-react';
 
 function fmt(n) { return (n || 0).toLocaleString('da-DK', { minimumFractionDigits: 0 }); }
 
@@ -23,6 +24,19 @@ export default function Regnskabsrapporter() {
   const res = computeResultat(entries, year, aMap);
   const bal = computeBalance(entries, `${year}-12-31`, aMap);
 
+  const [exporting, setExporting] = useState(false);
+  const exportSkat = async () => {
+    setExporting(true);
+    try {
+      const res = await base44.functions.invoke('skatRapport', { type: 'annual', period: year });
+      const blob = new Blob([JSON.stringify(res.data, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = `aarsregnskab-${year}.json`; a.click();
+      URL.revokeObjectURL(url);
+    } catch (e) { alert('Kunne ikke generere rapport'); }
+    finally { setExporting(false); }
+  };
   const yearOptions = [];
   const now = new Date().getFullYear();
   for (let y = now + 1; y >= now - 3; y--) yearOptions.push(String(y));
@@ -36,6 +50,7 @@ export default function Regnskabsrapporter() {
         </div>
         <div className="flex items-end gap-3">
           <div><Label>Regnskabsår</Label><Select value={year} onValueChange={setYear}><SelectTrigger><SelectValue /></SelectTrigger><SelectContent>{yearOptions.map((y) => <SelectItem key={y} value={y}>{y}</SelectItem>)}</SelectContent></Select></div>
+          <Button variant="outline" onClick={exportSkat} disabled={exporting}><FileDown className="w-4 h-4" /> {exporting ? 'Genererer…' : 'SKAT-klar eksport'}</Button>
         </div>
       </div>
 

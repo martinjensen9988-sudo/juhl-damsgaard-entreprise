@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { loadAccounts, loadPostedEntries, accountMap, computeVat } from '@/lib/accounting';
-import { Receipt, Check } from 'lucide-react';
+import { Receipt, Check, FileDown } from 'lucide-react';
 
 function quarterOptions() {
   const opts = [];
@@ -53,6 +53,19 @@ export default function Momsangivelse() {
     return '';
   };
 
+  const [exporting, setExporting] = useState(false);
+  const exportSkat = async () => {
+    setExporting(true);
+    try {
+      const res = await base44.functions.invoke('skatRapport', { type: 'vat', period });
+      const blob = new Blob([JSON.stringify(res.data, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = `momsangivelse-${period}.json`; a.click();
+      URL.revokeObjectURL(url);
+    } catch (e) { alert('Kunne ikke generere rapport'); }
+    finally { setExporting(false); }
+  };
   const saveReport = async () => {
     const existing = reports.find((r) => r.period === period);
     const payload = { period, period_type: periodType, sales_basis: calc.sales_basis, output_vat: calc.output_vat, purchase_basis: calc.purchase_basis, input_vat: calc.input_vat, payable_vat: calc.payable, due_date: dueFor(period), status: 'Udkast' };
@@ -75,6 +88,7 @@ export default function Momsangivelse() {
         <div className="flex gap-3 items-end">
           <div><Label>Periode type</Label><Select value={periodType} onValueChange={(v) => setPeriodType(v)}><SelectTrigger><SelectValue /></SelectTrigger><SelectContent><SelectItem value="Kvartal">Kvartal</SelectItem><SelectItem value="Måned">Måned</SelectItem></SelectContent></Select></div>
           <div className="flex-1"><Label>Periode</Label><Select value={period} onValueChange={setPeriod}><SelectTrigger><SelectValue /></SelectTrigger><SelectContent>{options.map((o) => <SelectItem key={o} value={o}>{o}</SelectItem>)}</SelectContent></Select></div>
+          <Button variant="outline" onClick={exportSkat} disabled={exporting}><FileDown className="w-4 h-4" /> {exporting ? 'Genererer…' : 'SKAT-klar eksport'}</Button>
           <Button onClick={saveReport}>Gem som udkast</Button>
         </div>
 
