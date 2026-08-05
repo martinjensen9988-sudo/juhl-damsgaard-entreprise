@@ -62,7 +62,8 @@ export default function ForsidePrisberegner() {
     }
   };
   const reset = () => setItems([]);
-  const subtotal = calcSubtotal(items);
+  const pricedItems = items.map((i) => ({ ...i, unit_price: i.unit_price ?? i.price ?? 0 }));
+  const subtotal = calcSubtotal(pricedItems);
 
   return (
     <div className="grid lg:grid-cols-5 gap-6">
@@ -128,7 +129,7 @@ export default function ForsidePrisberegner() {
           ) : (
             <>
               <div className="space-y-3 max-h-72 overflow-y-auto mb-4 pr-1">
-                {items.map((item, i) => (
+                {pricedItems.map((item, i) => (
                   <div key={i} className="flex items-start justify-between gap-2 text-sm group">
                     <div className="flex-1 min-w-0">
                       <div className="text-slate-200">{item.name}</div>
@@ -157,7 +158,7 @@ export default function ForsidePrisberegner() {
                 </div>
                 <div className="flex justify-between text-xl font-bold pt-3 border-t border-slate-700">
                   <span>Total</span>
-                  <span className="text-amber-400">{formatDKK(calcTotal(items))}</span>
+                  <span className="text-amber-400">{formatDKK(calcTotal(pricedItems))}</span>
                 </div>
               </div>
 
@@ -167,7 +168,7 @@ export default function ForsidePrisberegner() {
             </>
           )}
 
-          <button onClick={() => items.length > 0 && navigate('/forespoergsel', { state: { items, source: 'Prisberegner' } })} disabled={items.length === 0} className="mt-5 w-full inline-flex items-center justify-center gap-2 bg-amber-400 text-slate-950 px-6 py-3 rounded-xl font-semibold hover:bg-amber-300 transition disabled:opacity-50">
+          <button onClick={() => items.length > 0 && navigate('/forespoergsel', { state: { items: pricedItems, source: 'Prisberegner' } })} disabled={items.length === 0} className="mt-5 w-full inline-flex items-center justify-center gap-2 bg-amber-400 text-slate-950 px-6 py-3 rounded-xl font-semibold hover:bg-amber-300 transition disabled:opacity-50">
             Send forespørgsel <ArrowRight className="w-4 h-4" />
           </button>
 
