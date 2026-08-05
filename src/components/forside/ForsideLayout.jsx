@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { HardHat, Menu, X } from 'lucide-react';
 import { Image } from '@/components/ui/image';
 import { BRAND_LOGO_URL } from '@/lib/brand';
+import { base44 } from '@/api/base44Client';
 
 const navLinks = [
   { to: '/tjenester', label: 'Tjenester' },
@@ -14,6 +15,9 @@ const navLinks = [
 
 export default function ForsideLayout({ children }) {
   const [open, setOpen] = useState(false);
+  const [user, setUser] = useState(null);
+
+  useEffect(() => { base44.auth.me().then(setUser).catch(() => {}); }, []);
   return (
     <div className="min-h-screen bg-white flex flex-col">
       <nav className="fixed top-0 inset-x-0 z-50 bg-slate-950/90 backdrop-blur-md border-b border-slate-800">
@@ -28,9 +32,15 @@ export default function ForsideLayout({ children }) {
             ))}
           </div>
           <div className="flex items-center gap-2">
-            <Link to="/login" className="hidden sm:inline-flex text-sm font-medium text-slate-950 bg-amber-400 px-4 py-2 rounded-lg hover:bg-amber-300 transition">
-              Log ind
-            </Link>
+            {user?.role === 'admin' ? (
+              <Link to="/dashboard" className="hidden sm:inline-flex text-sm font-medium text-slate-950 bg-amber-400 px-4 py-2 rounded-lg hover:bg-amber-300 transition">
+                Admin panel
+              </Link>
+            ) : (
+              <Link to="/login" className="hidden sm:inline-flex text-sm font-medium text-slate-950 bg-amber-400 px-4 py-2 rounded-lg hover:bg-amber-300 transition">
+                Log ind
+              </Link>
+            )}
             <button
               onClick={() => setOpen((v) => !v)}
               className="md:hidden inline-flex items-center justify-center w-10 h-10 rounded-lg text-white hover:bg-slate-800 transition"
@@ -55,9 +65,15 @@ export default function ForsideLayout({ children }) {
                   {l.label}
                 </Link>
               ))}
-              <Link to="/login" onClick={() => setOpen(false)} className="mt-2 inline-flex justify-center text-sm font-medium text-slate-950 bg-amber-400 px-4 py-2.5 rounded-lg hover:bg-amber-300 transition">
-                Log ind
-              </Link>
+              {user?.role === 'admin' ? (
+                <Link to="/dashboard" onClick={() => setOpen(false)} className="mt-2 inline-flex justify-center text-sm font-medium text-slate-950 bg-amber-400 px-4 py-2.5 rounded-lg hover:bg-amber-300 transition">
+                  Admin panel
+                </Link>
+              ) : (
+                <Link to="/login" onClick={() => setOpen(false)} className="mt-2 inline-flex justify-center text-sm font-medium text-slate-950 bg-amber-400 px-4 py-2.5 rounded-lg hover:bg-amber-300 transition">
+                  Log ind
+                </Link>
+              )}
             </div>
           </div>
         )}

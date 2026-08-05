@@ -25,7 +25,7 @@ export default function PortalLayout() {
           </Link>
           <div className="flex items-center gap-4">
             {user?.role === 'admin' && (
-              <Link to="/" className="text-sm text-slate-300 hover:text-white">Admin</Link>
+              <Link to="/dashboard" className="text-sm text-amber-400 hover:text-amber-300 font-medium">Admin panel</Link>
             )}
             <button
               onClick={() => base44.auth.logout('/login')}
