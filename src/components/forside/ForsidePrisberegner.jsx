@@ -24,7 +24,7 @@ export default function ForsidePrisberegner() {
       }
       setItems(next);
     } else {
-      const next = [...items, { ...svc, quantity: 1 }];
+      const next = [...items, { ...svc, unit_price: svc.price, quantity: 1 }];
       if (svc.paint) {
         const mat = PAINT_MATERIALS[svc.paint];
         next.push({ name: mat.materialName, unit: 'liter', unit_price: mat.pricePerLiter, quantity: paintLiters(1), linkedTo: svc.name, isPaintMaterial: true });
