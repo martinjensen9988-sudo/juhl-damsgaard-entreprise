@@ -24,7 +24,9 @@ export default function MaterielBooking() {
   const [loading, setLoading] = useState(true);
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [showDialog, setShowDialog] = useState(false);
+  const [detailBooking, setDetailBooking] = useState(null);
   const [saving, setSaving] = useState(false);
+  const [statusSaving, setStatusSaving] = useState(false);
   const [form, setForm] = useState({
     equipment_id: '',
     equipment_name: '',
@@ -115,6 +117,16 @@ export default function MaterielBooking() {
     await loadAll();
   };
 
+  const changeStatus = async (booking, newStatus) => {
+    setStatusSaving(true);
+    try {
+      await base44.entities.EquipmentBooking.update(booking.id, { status: newStatus });
+      const updated = { ...booking, status: newStatus };
+      setDetailBooking(updated);
+      await loadAll();
+    } catch (e) { console.error(e); } finally { setStatusSaving(false); }
+  };
+
   const prevMonth = () => setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1, 1));
   const nextMonth = () => setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 1));
 
@@ -181,7 +193,7 @@ export default function MaterielBooking() {
               .filter((b) => new Date(b.end_date || b.start_date) >= new Date(new Date().toDateString()))
               .sort((a, b) => new Date(a.start_date) - new Date(b.start_date))
               .map((b) => (
-                <div key={b.id} className="p-3 rounded-lg border border-slate-200 bg-white">
+                <div key={b.id} className="p-3 rounded-lg border border-slate-200 bg-white hover:border-amber-300 hover:shadow-sm cursor-pointer transition-all" onClick={() => setDetailBooking(b)}>
                   <div className="flex items-start justify-between gap-2">
                     <div className="flex-1">
                       <div className="font-medium text-sm text-slate-900">{b.equipment_name}</div>
@@ -193,7 +205,7 @@ export default function MaterielBooking() {
                     </div>
                     <div className="flex flex-col items-end gap-1">
                       <span className={`text-[10px] px-2 py-0.5 rounded-full border ${STATUS_COLORS[b.status] || 'bg-slate-100'}`}>{b.status}</span>
-                      <button onClick={() => removeBooking(b.id)} className="text-slate-300 hover:text-red-500"><Trash2 className="w-3.5 h-3.5" /></button>
+                      <button onClick={(e) => { e.stopPropagation(); removeBooking(b.id); }} className="text-slate-300 hover:text-red-500"><Trash2 className="w-3.5 h-3.5" /></button>
                     </div>
                   </div>
                 </div>
@@ -251,6 +263,66 @@ export default function MaterielBooking() {
             <Button onClick={save} disabled={saving || !form.equipment_id || !form.start_date || !form.end_date}>
               {saving && <Loader2 className="w-4 h-4 animate-spin mr-1" />} Opret booking
             </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={!!detailBooking} onOpenChange={(open) => !open && setDetailBooking(null)}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Booking detaljer</DialogTitle>
+          </DialogHeader>
+          {detailBooking && (
+            <div className="space-y-3">
+              <div className="rounded-lg bg-slate-50 p-3">
+                <div className="text-xs text-slate-500 mb-0.5">Materiel</div>
+                <div className="font-semibold text-slate-900">{detailBooking.equipment_name}</div>
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div className="rounded-lg border border-slate-200 p-3">
+                  <div className="text-xs text-slate-500 mb-0.5">Projekt</div>
+                  <div className="text-sm font-medium text-slate-900">{detailBooking.project_name || 'Ingen projekt'}</div>
+                </div>
+                <div className="rounded-lg border border-slate-200 p-3">
+                  <div className="text-xs text-slate-500 mb-0.5">Booket af</div>
+                  <div className="text-sm font-medium text-slate-900">{detailBooking.employee_name || '—'}</div>
+                </div>
+                <div className="rounded-lg border border-slate-200 p-3">
+                  <div className="text-xs text-slate-500 mb-0.5">Fra dato</div>
+                  <div className="text-sm font-medium text-slate-900">{formatDate(detailBooking.start_date)}</div>
+                </div>
+                <div className="rounded-lg border border-slate-200 p-3">
+                  <div className="text-xs text-slate-500 mb-0.5">Til dato</div>
+                  <div className="text-sm font-medium text-slate-900">{formatDate(detailBooking.end_date)}</div>
+                </div>
+              </div>
+              <div className="rounded-lg border border-slate-200 p-3">
+                <div className="text-xs text-slate-500 mb-1">Status</div>
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className={`text-xs px-2.5 py-1 rounded-full border ${STATUS_COLORS[detailBooking.status] || 'bg-slate-100'}`}>{detailBooking.status}</span>
+                  <div className="flex gap-1.5 ml-auto">
+                    {detailBooking.status === 'Reserveret' && (
+                      <Button size="sm" onClick={() => changeStatus(detailBooking, 'Udleveret')} disabled={statusSaving}>→ Udleveret</Button>
+                    )}
+                    {detailBooking.status === 'Udleveret' && (
+                      <Button size="sm" onClick={() => changeStatus(detailBooking, 'Returneret')} disabled={statusSaving}>→ Returneret</Button>
+                    )}
+                    {(detailBooking.status === 'Reserveret' || detailBooking.status === 'Udleveret') && (
+                      <Button size="sm" variant="outline" onClick={() => changeStatus(detailBooking, 'Annulleret')} disabled={statusSaving}>Annuller</Button>
+                    )}
+                  </div>
+                </div>
+              </div>
+              {detailBooking.notes && (
+                <div className="rounded-lg bg-amber-50 border border-amber-100 p-3">
+                  <div className="text-xs text-slate-500 mb-0.5">Noter</div>
+                  <div className="text-sm text-slate-700">{detailBooking.notes}</div>
+                </div>
+              )}
+            </div>
+          )}
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setDetailBooking(null)}>Luk</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
