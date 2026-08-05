@@ -23,6 +23,9 @@ export default function Leverandoerfakturaer() {
   const [projects, setProjects] = useState([]);
   const [projectFilter, setProjectFilter] = useState('all');
   const [uploading, setUploading] = useState(false);
+  const [aiScanning, setAiScanning] = useState(false);
+  const [aiMessage, setAiMessage] = useState(null);
+  const aiFileRef = React.useRef(null);
 
   const load = async () => { try { const [invData, projData] = await Promise.all([base44.entities.SupplierInvoice.list('-date'), base44.entities.Project.list('-created_date', 200)]); setInvoices(invData); setProjects(projData); } catch (e) { console.error(e); } finally { setLoading(false); } };
   useEffect(() => { load(); }, []);
@@ -33,6 +36,29 @@ export default function Leverandoerfakturaer() {
   const remove = async (id) => { if (!confirm('Slet faktura?')) return; await base44.entities.SupplierInvoice.delete(id); load(); };
   const set = (k, v) => setForm((f) => ({ ...f, [k]: v }));
   const handleUpload = async (file) => { if (!file) return; setUploading(true); try { const { file_url } = await base44.integrations.Core.UploadFile({ file }); set('file_url', file_url); } catch (e) { console.error(e); } finally { setUploading(false); } };
+  const handleAiScan = async (file) => {
+    if (!file) return;
+    setAiScanning(true);
+    setAiMessage(null);
+    try {
+      const { file_url } = await base44.integrations.Core.UploadFile({ file });
+      const res = await base44.functions.invoke('scanSupplierInvoice', { file_url });
+      const data = res?.data || res;
+      if (data?.error) { setAiMessage({ type: 'error', text: data.error }); }
+      else {
+        setAiMessage({
+          type: 'success',
+          text: `AI læste faktura${data.invoice?.invoice_number ? ' ' + data.invoice.invoice_number : ''} fra ${data.supplier_name}${data.supplier_created ? ' — ny leverandør oprettet' : ''}.`
+        });
+        await load();
+      }
+    } catch (e) {
+      setAiMessage({ type: 'error', text: e?.message || 'Kunne ikke læse faktura' });
+    } finally {
+      setAiScanning(false);
+      if (aiFileRef.current) aiFileRef.current.value = '';
+    }
+  };
 
   const setStatus = async (inv, status) => { await base44.entities.SupplierInvoice.update(inv.id, { status, ...(status === 'Godkendt' ? { approved_by: 'Admin' } : {}) }); load(); };
 
@@ -48,8 +74,20 @@ export default function Leverandoerfakturaer() {
     <div>
       <div className="flex items-center justify-between mb-6">
         <div><h1 className="text-2xl font-bold text-slate-900">Leverandørfakturaer</h1><p className="text-sm text-slate-500 mt-1">Registrering og godkendelse af fakturaer fra leverandører</p></div>
-        <Button onClick={openCreate} className="gap-2"><Plus className="w-4 h-4" /> Tilføj faktura</Button>
+        <div className="flex items-center gap-2">
+          <input ref={aiFileRef} type="file" className="hidden" accept=".pdf,.jpg,.jpeg,.png,.webp" onChange={(e) => handleAiScan(e.target.files?.[0])} disabled={aiScanning} />
+          <Button variant="outline" onClick={() => aiFileRef.current?.click()} disabled={aiScanning} className="gap-2 bg-amber-50 border-amber-300 text-amber-700 hover:bg-amber-100">
+            {aiScanning ? <><Loader2 className="w-4 h-4 animate-spin" /> AI læser...</> : <><Upload className="w-4 h-4" /> Upload & AI-læs</>}
+          </Button>
+          <Button onClick={openCreate} className="gap-2"><Plus className="w-4 h-4" /> Tilføj faktura</Button>
+        </div>
       </div>
+
+      {aiMessage && (
+        <div className={`mb-4 px-4 py-3 rounded-lg text-sm font-medium ${aiMessage.type === 'success' ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-red-50 text-red-700 border border-red-200'}`}>
+          {aiMessage.text}
+        </div>
+      )}
 
       <div className="grid grid-cols-4 gap-4 mb-6">
         <div className="bg-white rounded-xl border border-slate-200 p-5"><div className="flex items-center gap-2 text-slate-500 text-sm mb-2"><FileCheck className="w-4 h-4" /> Total</div><div className="text-2xl font-bold text-slate-900">{invoices.length}</div></div>
