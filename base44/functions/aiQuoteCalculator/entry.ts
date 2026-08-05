@@ -55,11 +55,22 @@ Entreprise/udendørs:
 
 Moms: 25% på alt. Alle priser ovenfor er ekskl. moms.
 
+MATERIALEBEREGNING (OBLIGATORISK):
+For hver arbejdsopgave skal du ALTID udregne og tilføje den nødvendige materialeforbrug som SELVSTÆNDIGE linjer, så omkostninger aldrig glemmes:
+- Malinger: 1 liter dækker ca. 10 m² med 1 strøg. Standard er 2 strøg → 5 m²/liter. Eksempel: 50 m² væg = 10 liter maling. Tilføj altid en materialetilnje "Maling materiale (væg/loft)" / "(facade)" / "(træ/lak)" / "(grunder)" med enhed "liter" og literpris (væg/loft 145 kr/liter, facade 175, træ/lak 195, grunder 95). Ved grundmaling til ført linje, tilføj både grunder-mængde og maling-mængde.
+- Beton/sand/sten: Ud fra rumfang (m³) eller areal (m² × tykkelse i m = m³). Standardbetonelement: 200 kg beton pr. m³, cement/sand-andel ca. 180 kr/m³ for materiale. Tilføj materialetilnje "Beton materiale" (enhet m³, 950 kr/m³), "Sand/malerimateriale" (200 kr/m³), "Fliseklæber" (ca. 20 kg/m² = 1 sæk/25 kg pr. 12 m², 45 kr/sæk) osv.
+- Flise/belægning: m² × 1,05 (5% spild) for fliser. Fliseklæber 5 kg/m², fugesand 3 kg/m².
+- Gipsvægge: gipsplader (1 plade = 2,4 m²), skinner (ca. 3 m/m² væg), skruer og band.
+- Armering: til støbning tilskrueses altid armeringsjern (28 kr/m) baseret på arealet.
+- Kloak: til hver kloakbrønd/pipe kræves sand til indfatning (ca. 0,5 m³ sand pr. brønd) og grus.
+- Transport: kun hvis materialer skal fragtes til projektet.
+
 Regler:
-- VÆLGT FAG: Start altid fra den type arbejde kunden beskriver (maling, tømrer, VVS, elektriker, udendørs entreprise osv.). Vælg KUN de prislinjer der hører til det pågældende fag – bliv IKKE ved med at tilføje grave-/maskinlinjer medmindre opgaven reelt kræver gravearbejde. F.eks. ved maling skal linjerne kun indeholde maling/spartling/grundmaling/tapet – ingen gravemaskine, transport eller affaldsbortkørsel.
+- VÆLGT FAG: Start altid fra den type arbejde kunden beskriver (maling, tømrer, VVS, elektriker, udendørs entreprise osv.). Vælg KUN de prislinjer der hører til det pågældende fag – bliv IKKE ved med at tilføje grave-/maskinlinjer medmindre opgaven reelt kræver gravearbejde. F.eks. ved maling skal linjerne kun indeholde maling/spartling/grundmaling/tapet + tilhørende materiale-mængder – ingen gravemaskine, transport eller affaldsbortkørsel.
 - Estimer mængder ud fra kundens beskrivelse. Vær rimelig og realistisk.
+- INKLUDER ALTID MATERIALER: Hver arbejdsopgave (maling, støbning, flise, gips mv.) skal have tilhørende materialetilnje med korrekt mængde udregnet via formlerne ovenfor. Aldrig kun arbejdsløn uden materialer.
 - Inkluder alt hvad opgaven kræver: både materialer og arbejdstid for det aktuelle fag.
-- Hvis kunden ikke giver nok info, så estimer rimeligt og forklar dine antagelser kort.
+- Hvis kunden ikke giver nok info, så estimer rimeligt og forklar dine antagelser kort, inkl. antaget m²/m³.
 - Subtotal = sum af alle linjer (ekskl. moms). Moms = subtotal × 0.25. Total = subtotal + moms.
 - Svaret skal være på dansk, professionelt og venligt.`;
 
@@ -77,7 +88,7 @@ export default async function(req) {
     }
 
     const result = await base44.asServiceRole.integrations.Core.InvokeLLM({
-      prompt: `${PRICING_CONTEXT}\n\nKunden skriver:\n"${message}"\n\nLav et vejledende tilbud. Inkluder de relevante linjer med estimerede mængder og priser. Beregn subtotal (ekskl. moms), moms (25%) og total (inkl. moms).`,
+      prompt: `${PRICING_CONTEXT}\n\nKunden skriver:\n"${message}"\n\nLav et vejledende tilbud. Tjekliste før du returnerer: (1) Har hver arbejdsopgave en tilhørende materialetilnje med udregnet mængde? (2) Er maling/liter, beton/m³, sand, fliseklæber og armering alle med som separate linjer hvor relevant? Inkluder alle relevante linjer med estimerede mængder og priser. Beregn subtotal (ekskl. moms), moms (25%) og total (inkl. moms).`,
       response_json_schema: {
         type: 'object',
         properties: {
