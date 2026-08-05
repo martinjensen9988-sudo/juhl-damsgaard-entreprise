@@ -39,6 +39,7 @@ export default function AITilbud() {
   const [generating, setGenerating] = useState(false);
   const [lineItems, setLineItems] = useState([]);
   const [cleanedNotes, setCleanedNotes] = useState('');
+  const [aiMessage, setAiMessage] = useState('');
   const [generated, setGenerated] = useState(false);
   const [saving, setSaving] = useState(false);
 
@@ -100,7 +101,7 @@ Vejledende priser (ekskl. moms):
 - VVS: 695 kr/time · Håndvask: 1850 kr/stk · Toilet: 2200 kr/stk · Badeværelsesrenovering komplet: 1850 kr/m²
 - Elektriker: 595 kr/time · Stikkontakt/afbryder: 450 kr/stk · Armatur: 750 kr/stk · Eltavle: 6500 kr/stk
 - Gravearbejde: 580 kr/m³ · Grøftegravning: 320 kr/m · Afgravning: 145 kr/m³ · Nedrivning: 450 kr/m² · Kloakrør Ø300: 850 kr/m · Kloakbrønd: 4500 kr/stk · Asfaltering: 395 kr/m² · Betonfundament: 850 kr/m² · Beton støbning: 1150 kr/m³ · Transport: 3500 kr/fs · Maskinleje: 4500 kr/dag · Affaldsbortkørsel: 3500 kr/fs · Håndarbejde: 280 kr/time
-- Teknisk isolering: Rørisolering (mineraluld) 145 kr/m · Beholderisolering 295 kr/m² · Ventilationsisolering 185 kr/m · Teknisk isolering (tag/væg) 245 kr/m² · Brandisolering 395 kr/m² · Armeringssokkel isolering 165 kr/m · Indblæsning af isolering (cellulose) 95 kr/m² · Indblæsning af isolering (mineraluld) 115 kr/m²
+- Teknisk isolering: Rørisolering (mineraluld) 145 kr/m · Beholderisolering 295 kr/m² · Ventilationsisolering 185 kr/m · Teknisk isolering (tag/væg) 245 kr/m² · Brandisolering 395 kr/m² · Armeringssokkel isolering 165 kr/m · Indblæsning af isolering – PRIS INKL. ARBEJDE OG MATERIALER (éen samlet linje pr. tykkelse, ekskl. moms): 150 mm=96 kr/m² (120 inkl. moms) · 200 mm=120 kr/m² (150 inkl. moms) · 250 mm=140 kr/m² (175 inkl. moms) · 300 mm=152 kr/m² (190 inkl. moms)
 - Slutrengøring/byggepladsrengøring: 75 kr/m² · Glarmester (vinduespolering): 45 kr/m²
 
 Forbrugsmaterialer (skal altid medtages som separate linjer, når de er nødvendige for opgaven):
@@ -116,13 +117,14 @@ Forbrugsmaterialer (skal altid medtages som separate linjer, når de er nødvend
 - Gulv materiale: Trægulv 245 kr/m² · Vinyl/klik-gulv 175 kr/m² · Gulvafslibning papir: 35 kr/m²
 - Isoleringsmateriale (hovedmateriale): Mineraluld batts/matter 85 kr/m² · EPS/XPS skum 110 kr/m² · Glasuld 75 kr/m² · Cellulose 65 kr/m²
 - Isoleringsmateriale (tilbehør): Dampspærre folie 25 kr/m² · Tape 12 kr/m · Klemmer/beslag 8 kr/stk · Afdækningsfolie 15 kr/m²
-- Indblæsningsmateriale (cellulose/mineraluld): 45 kr/m² · typisk 20-30 cm lag i hulrum/loft
 
 Regler:
 - ENHED: Hver linje SKAL have en korrekt enhed (m², m³, m, stk, time, liter, dag, fs, sæt, rulle). Aldrig tom enhed. Brug den enhed der passer til opgaven (væg = m², rør = m, beton = m³, maling = liter).
 - MINIMUM ANTAL LINJER: Et tilbud må ALDRIG have kun én linje. Hver opgave skal have mindst 2-3 linjer: (1) selve arbejdet/ydelsen, (2) hovedmaterialet, (3) tilbehørsmateriale. Hvis tilbuddet kun har 1 linje er det FEJL – tilføj altid materialelinjer.
 - VIGTIGT: Hver eneste opgave kunden nævner SKAL have mindst én arbejdslinje i tilbuddet. Glem aldrig en nævnt opgave (f.eks. hvis kunden skriver "maling" skal der altid være en male-linje; "rengøring" → slutrengørings-linje; "isolering" → isolerings-linje; både maling og isolering → én linje for hver).
 - ISOLERING KLASSEFICERES SOM TEKNISK ISOLERING (ikke tømrer): Når kunden nævner "isolering", "krybekælder", "kælder", "loft", "væg", "tag", "rør" el. lign. – brug Teknisk isolering-priserne (245 kr/m² for tag/væg-flader, 145 kr/m for rør, 185 kr/m ventilation, 395 kr/m² brand). Brug ALDRIG tømmerprisen 495 kr/time til isoleringsopgaver. Tilføj også: (a) hovedmateriale mineraluld/EPS ca. 85-110 kr/m², (b) dampspærre folie 25 kr/m², (c) tape/klemmer ca. 35 kr/m².
+- INDBLÆSNING – SPØRG OM TYKKELSE: Hvis kunden anmoder om indblæsning af isolering UDEN at angive lagtykkelse (mm), må du IKKE gætte eller lave et tilbud. Sæt "ai_message" til at bede kunden om tykkelsen, f.eks.: "For at give dig et præcist tilbud på indblæsning, skal jeg vide den ønskede lagtykkelse. Vi tilbyder: 150 mm (120 kr/m² inkl. moms), 200 mm (150 kr/m²), 250 mm (175 kr/m²) eller 300 mm (190 kr/m²). Hvilken tykkelse ønsker du?". Returner line_items som en tom liste [] og cleaned_notes tom. Når kunden angiver tykkelse, beregnes tilbuddet med den valgte tykkelse.
+- INDBLÆSNING – NÆVN TYKKELSEN I TILBUDET: Når tilbuddet beregnes med en valgt tykkelse, skal "ai_message" ALTID nævne det valgte antal mm tydeligt, f.eks. "Tilbuddet omfatter indblæsning af 250 mm isolering svarende til XX m²". Linjebeskrivelsen skal også indeholde tykkelsen, f.eks. "Indblæsning af isolering (250 mm)".
 - Vælg KUN de prislinjer der hører til de fag kunden beskriver (ved maling: kun maling/spartling/grundmaling/tapet – ingen gravemaskine, transport eller affald; ved teknisk isolering: kun isoleringslinjer + isoleringsmateriale).
 - Estimer mængder rimeligt ud fra beskrivelsen (f.eks. maling af 53 m² lejlighed: beregn væg- og loftflade typisk som 53 m² etagemål × ca. 3 = ca. 160 m² maleflade, opdelt i væg- og loftmaling).
 - VIGTIGT – FORBRUGSMATERIALER: For hver arbejdsopgave skal du altid vurdere og tilføje nødvendige forbrugsmaterialer som separate linjer. Glem aldrig materialer – det sikrer at alle omkostninger er dækket.
@@ -135,7 +137,7 @@ Regler:
   • El → kabler + klemmer + kabelkanal
   • Gulv → gulvmateriale + underlag/afslibning
   • Tapet → tapetruller + klister
-  • Teknisk isolering → 3 linjer: (1) isoleringsarbejde 245 kr/m², (2) mineraluld/EPS hovedmateriale 85-110 kr/m², (3) dampspærre folie 25 kr/m² + tape/klemmer 35 kr/m². Ved rørisolering: arbejdslinje 145 kr/m + isoleringsmateriale 85 kr/m + tape 25 kr/m. Ved indblæsning: arbejdslinje 95 kr/m² (cellulose) el. 115 kr/m² (mineraluld) + indblæsningsmateriale 45 kr/m² (m² = areal der fyldes).
+  • Teknisk isolering → 3 linjer: (1) isoleringsarbejde 245 kr/m², (2) mineraluld/EPS hovedmateriale 85-110 kr/m², (3) dampspærre folie 25 kr/m² + tape/klemmer 35 kr/m². Ved rørisolering: arbejdslinje 145 kr/m + isoleringsmateriale 85 kr/m + tape 25 kr/m. Ved indblæsning: ÉN samlet indblæsningslinje med tykkelse i beskrivelsen (f.eks. "Indblæsning af isolering (200 mm)") prissat efter tykkelse (150 mm=96, 200 mm=120, 250 mm=140, 300 mm=152 kr/m²) – ingen separat materialelinje. Tilføj dampspærre 25 kr/m² og tape/klemmer 35 kr/m² som separate linjer.
   • Generelt: pensler, ruller, slibepapir, afdækningsfolie, maskeringstape (1 sæt 75 kr pr. 50 m²)
   - Ved malearbejde: beregn altid maltforbrug og tilføj en separat materialelinje for maling. Forbrug: ca. 1 liter dækker 10 m² med 1 strøg – de fleste opgaver kræver 2 strøg, så divider maleflade med 5 for at få literantal (f.eks. 160 m² ÷ 5 = 32 liter). Brug korrekt malttype ud fra opgaven (væg-/loftmaling, facademaling, træmaling el. grundmaling) med tilhørende literpris. Angiv unit "liter" og antal liter som quantity.
   - TJEKLISTE FØR SVAR: (1) Har tilbuddet mindst 2 linjer? (2) Har hver arbejdsopgave en tilhørende materialelinje? (3) Er isolering klassificeret som teknisk isolering (ikke tømrer)? Hvis nej – ret og tilføj linjer før du returnerer.
@@ -149,6 +151,7 @@ Regler:
           type: 'object',
           properties: {
             cleaned_notes: { type: 'string', description: 'Den rettede og professionelt formulerede opgavebeskrivelse på korrekt dansk, uden stavefejl' },
+            ai_message: { type: 'string', description: 'Besked fra AI til kunden, f.eks. spørgsmål om manglende info (indblæsningstykkelse) eller forklaring af antagelser. Tom streng hvis ingen besked.' },
             line_items: {
               type: 'array',
               items: {
@@ -173,6 +176,7 @@ Regler:
       }));
       setLineItems(items);
       setCleanedNotes(result.cleaned_notes || notes);
+      setAiMessage(result.ai_message || '');
       setGenerated(true);
     } catch (e) {
       console.error(e);
@@ -325,7 +329,23 @@ Regler:
             <span className="text-sm text-slate-400">Total: {formatDKK(calcTotal(lineItems))}</span>
           </div>
 
-          <LineItemEditor items={lineItems} onChange={setLineItems} />
+          {aiMessage && (
+            <div className={`rounded-lg p-4 border ${lineItems.length === 0 ? 'bg-amber-50 border-amber-200' : 'bg-blue-50 border-blue-200'}`}>
+              <div className="flex items-start gap-2">
+                <Sparkles className="w-4 h-4 text-amber-500 mt-0.5 shrink-0" />
+                <p className="text-sm text-slate-700 whitespace-pre-wrap">{aiMessage}</p>
+              </div>
+              {lineItems.length === 0 && (
+                <p className="text-xs text-amber-600 mt-2 pl-6">Udfyld tykkelsen i noterne og klik "Generer" igen.</p>
+              )}
+            </div>
+          )}
+
+          {lineItems.length === 0 ? (
+            <p className="text-sm text-slate-400 text-center py-4">Ingen tilbudslinjer endnu – AI'en venter på mere information.</p>
+          ) : (
+            <LineItemEditor items={lineItems} onChange={setLineItems} />
+          )}
 
           {/* Totals */}
           <div className="bg-slate-50 rounded-lg p-4 space-y-1.5">
