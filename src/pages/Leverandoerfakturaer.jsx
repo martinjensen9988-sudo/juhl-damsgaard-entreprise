@@ -10,9 +10,10 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '
 import { FileCheck, Plus, Pencil, Trash2, Check, X, FileText, Clock, Upload, Paperclip, Loader2 } from 'lucide-react';
 
 const STATUSES = ['Afventer', 'Godkendt', 'Afvist', 'Betalt'];
+const CATEGORIES = ['Materialer', 'Maskiner', 'Transport', 'Lønninger', 'Brændstof', 'Forsikring', 'Værktøj', 'Kontor', 'Markedsføring', 'Andet'];
 const statusBadge = { 'Afventer': 'bg-amber-100 text-amber-700', 'Godkendt': 'bg-emerald-100 text-emerald-700', 'Afvist': 'bg-red-100 text-red-700', 'Betalt': 'bg-blue-100 text-blue-700' };
 const today = new Date().toISOString().slice(0, 10);
-const empty = { invoice_number: '', supplier_name: '', project_id: '', project_name: '', amount: 0, vat_amount: 0, date: today, due_date: '', status: 'Afventer', description: '', file_url: '', approved_by: '', notes: '' };
+const empty = { invoice_number: '', supplier_name: '', project_id: '', project_name: '', amount: 0, vat_amount: 0, date: today, due_date: '', status: 'Afventer', category: 'Materialer', description: '', file_url: '', approved_by: '', notes: '' };
 
 export default function Leverandoerfakturaer() {
   const [invoices, setInvoices] = useState([]);
@@ -60,7 +61,26 @@ export default function Leverandoerfakturaer() {
     }
   };
 
-  const setStatus = async (inv, status) => { await base44.entities.SupplierInvoice.update(inv.id, { status, ...(status === 'Godkendt' ? { approved_by: 'Admin' } : {}) }); load(); };
+  const [posting, setPosting] = useState(null);
+  const setStatus = async (inv, status) => {
+    if (status === 'Godkendt') {
+      setPosting(inv.id);
+      try {
+        const res = await base44.functions.invoke('postSupplierInvoice', { invoice_id: inv.id });
+        const data = res?.data || res;
+        if (data?.error) { setAiMessage({ type: 'error', text: data.error }); }
+        else { setAiMessage({ type: 'success', text: `Faktura ${inv.invoice_number} godkendt og bogført som bilag ${data?.journal_entry?.entry_number || ''} i regnskabet.` }); }
+      } catch (e) {
+        setAiMessage({ type: 'error', text: e?.message || 'Kunne ikke bogføre faktura' });
+      } finally {
+        setPosting(null);
+        load();
+      }
+      return;
+    }
+    await base44.entities.SupplierInvoice.update(inv.id, { status });
+    load();
+  };
 
   if (loading) return <div className="flex items-center justify-center py-20"><div className="w-8 h-8 border-4 border-slate-200 border-t-slate-800 rounded-full animate-spin" /></div>;
 
@@ -116,7 +136,9 @@ export default function Leverandoerfakturaer() {
                 <div>
                   <div className="font-semibold text-slate-900">{inv.invoice_number} — {inv.supplier_name}</div>
                   <div className="text-sm text-slate-500 mt-0.5">{inv.project_name || '—'} • {inv.date ? formatDate(inv.date) : '—'}{inv.due_date ? ` • Forfald: ${formatDate(inv.due_date)}` : ''}</div>
-                  {inv.description && <div className="text-xs text-slate-400 mt-1">{inv.description}</div>}
+                  {inv.category && <div className="text-xs text-slate-400 mt-0.5">{inv.category}</div>}
+                {inv.description && <div className="text-xs text-slate-400 mt-1">{inv.description}</div>}
+                {inv.journal_entry_id && <div className="text-xs text-emerald-600 mt-1 flex items-center gap-1"><FileText className="w-3 h-3" /> Bogført som bilag</div>}
                 </div>
               </div>
               <div className="text-right">
@@ -126,7 +148,16 @@ export default function Leverandoerfakturaer() {
               </div>
             </div>
             <div className="flex items-center gap-3 mt-3 pt-3 border-t border-slate-100">
-              {inv.status === 'Afventer' && (<><button onClick={() => setStatus(inv, 'Godkendt')} className="text-sm text-emerald-600 hover:text-emerald-700 font-medium flex items-center gap-1"><Check className="w-4 h-4" /> Godkend</button><button onClick={() => setStatus(inv, 'Afvist')} className="text-sm text-red-600 hover:text-red-700 font-medium flex items-center gap-1"><X className="w-4 h-4" /> Afvis</button></>)}
+              {inv.status === 'Afventer' && (
+                posting === inv.id ? (
+                  <span className="text-sm text-slate-500 flex items-center gap-1"><Loader2 className="w-4 h-4 animate-spin" /> Bogfører...</span>
+                ) : (
+                  <>
+                    <button onClick={() => setStatus(inv, 'Godkendt')} className="text-sm text-emerald-600 hover:text-emerald-700 font-medium flex items-center gap-1"><Check className="w-4 h-4" /> Godkend og bogfør</button>
+                    <button onClick={() => setStatus(inv, 'Afvist')} className="text-sm text-red-600 hover:text-red-700 font-medium flex items-center gap-1"><X className="w-4 h-4" /> Afvis</button>
+                  </>
+                )
+              )}
               {inv.status === 'Godkendt' && <button onClick={() => setStatus(inv, 'Betalt')} className="text-sm text-blue-600 hover:text-blue-700 font-medium flex items-center gap-1"><Check className="w-4 h-4" /> Marker betalt</button>}
               {inv.file_url && <a href={inv.file_url} target="_blank" rel="noreferrer" className="text-sm text-slate-600 hover:text-slate-900 flex items-center gap-1 ml-auto"><FileText className="w-4 h-4" /> Vis fil</a>}
               <button onClick={() => openEdit(inv)} className="text-sm text-slate-600 hover:text-slate-900 flex items-center gap-1 ml-auto"><Pencil className="w-3.5 h-3.5" /> Rediger</button>
@@ -157,6 +188,7 @@ export default function Leverandoerfakturaer() {
                 </SelectContent>
               </Select>
             </div>
+            <div><Label>Kategori</Label><Select value={form.category || 'Materialer'} onValueChange={(v) => set('category', v)}><SelectTrigger><SelectValue /></SelectTrigger><SelectContent>{CATEGORIES.map((c) => <SelectItem key={c} value={c}>{c}</SelectItem>)}</SelectContent></Select></div>
             <div><Label>Status</Label><Select value={form.status} onValueChange={(v) => set('status', v)}><SelectTrigger><SelectValue /></SelectTrigger><SelectContent>{STATUSES.map((s) => <SelectItem key={s} value={s}>{s}</SelectItem>)}</SelectContent></Select></div>
             <div className="col-span-2"><Label>Beskrivelse</Label><Textarea value={form.description} onChange={(e) => set('description', e.target.value)} rows={2} /></div>
             <div className="col-span-2">

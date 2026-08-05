@@ -20,7 +20,7 @@
     },
     "amount": {
       "type": "number",
-      "title": "Bel\u00f8b (DKK)"
+      "title": "Bel\u00f8b ekskl. moms (DKK)"
     },
     "vat_amount": {
       "type": "number",
@@ -47,6 +47,23 @@
       ],
       "default": "Afventer"
     },
+    "category": {
+      "type": "string",
+      "title": "Kategori",
+      "enum": [
+        "Materialer",
+        "Maskiner",
+        "Transport",
+        "L\u00f8nninger",
+        "Br\u00e6ndstof",
+        "Forsikring",
+        "V\u00e6rkt\u00f8j",
+        "Kontor",
+        "Markedsf\u00f8ring",
+        "Andet"
+      ],
+      "default": "Materialer"
+    },
     "description": {
       "type": "string",
       "title": "Beskrivelse"
@@ -58,6 +75,15 @@
     "approved_by": {
       "type": "string",
       "title": "Godkendt af"
+    },
+    "approved_date": {
+      "type": "string",
+      "format": "date",
+      "title": "Godkendt dato"
+    },
+    "journal_entry_id": {
+      "type": "string",
+      "title": "Bogf\u00f8rt som bilag"
     },
     "notes": {
       "type": "string",
