@@ -49,6 +49,7 @@ Entreprise/udendørs:
 - Beton støbning: 1150 kr/m³
 - Armering: 28 kr/m
 - Transport (materiale): 3500 kr/fs
+- Transport af maskiner (til pladsen og hjem): 1500 kr/fs (fast pris for kørsel af maskiner til og fra byggepladsen)
 - Maskinleje (gravemaskine): 4500 kr/dag
 - Affaldsbortkørsel: 3500 kr/fs
 - Håndarbejde: 280 kr/time (350 kr/time inkl. moms)

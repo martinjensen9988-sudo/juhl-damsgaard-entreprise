@@ -64,6 +64,7 @@ export const SERVICE_CATEGORIES = [
     category: 'Transport & Maskiner',
     services: [
       { name: 'Transport (materiale)', unit: 'fs', price: 3500 },
+      { name: 'Transport af maskiner (til pladsen og hjem)', unit: 'fs', price: 1500 },
       { name: 'Maskinleje (gravemaskine)', unit: 'dag', price: 4500 },
       { name: 'Affaldsbortkørsel', unit: 'fs', price: 3500 },
       { name: 'Håndarbejde', unit: 'time', price: 280 },
