@@ -60,6 +60,8 @@ Teknisk isolering:
 - Teknisk isolering (tag/væg): 245 kr/m²
 - Brandisolering: 395 kr/m²
 - Armeringssokkel isolering: 165 kr/m
+- Indblæsning af isolering (cellulose): 95 kr/m²
+- Indblæsning af isolering (mineraluld): 115 kr/m²
 
 Moms: 25% på alt. Alle priser ovenfor er ekskl. moms.
 
@@ -72,6 +74,7 @@ For hver arbejdsopgave skal du ALTID udregne og tilføje den nødvendige materia
 - Armering: til støbning tilskrueses altid armeringsjern (28 kr/m) baseret på arealet.
 - Kloak: til hver kloakbrønd/pipe kræves sand til indfatning (ca. 0,5 m³ sand pr. brønd) og grus.
 - Teknisk isolering: tilbehør som klemmer, tape og dampspærre (ca. 25 kr/m rør / 35 kr/m² flade). Tilføj materialetilnje "Isoleringsmateriale (tilbehør)" med enhed m eller m² og tilhørende pris.
+- Indblæsning af isolering: materialet (cellulose/mineraluld) ca. 45 kr/m². Tilføj materialetilnje "Indblæsningsmateriale (cellulose/mineraluld)" med enhed m². Typisk 20-30 cm lag i hulrum/loft.
 - Transport: kun hvis materialer skal fragtes til projektet.
 
 Regler:

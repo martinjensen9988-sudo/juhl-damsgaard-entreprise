@@ -100,7 +100,7 @@ Vejledende priser (ekskl. moms):
 - VVS: 695 kr/time · Håndvask: 1850 kr/stk · Toilet: 2200 kr/stk · Badeværelsesrenovering komplet: 1850 kr/m²
 - Elektriker: 595 kr/time · Stikkontakt/afbryder: 450 kr/stk · Armatur: 750 kr/stk · Eltavle: 6500 kr/stk
 - Gravearbejde: 580 kr/m³ · Grøftegravning: 320 kr/m · Afgravning: 145 kr/m³ · Nedrivning: 450 kr/m² · Kloakrør Ø300: 850 kr/m · Kloakbrønd: 4500 kr/stk · Asfaltering: 395 kr/m² · Betonfundament: 850 kr/m² · Beton støbning: 1150 kr/m³ · Transport: 3500 kr/fs · Maskinleje: 4500 kr/dag · Affaldsbortkørsel: 3500 kr/fs · Håndarbejde: 280 kr/time
-- Teknisk isolering: Rørisolering (mineraluld) 145 kr/m · Beholderisolering 295 kr/m² · Ventilationsisolering 185 kr/m · Teknisk isolering (tag/væg) 245 kr/m² · Brandisolering 395 kr/m² · Armeringssokkel isolering 165 kr/m
+- Teknisk isolering: Rørisolering (mineraluld) 145 kr/m · Beholderisolering 295 kr/m² · Ventilationsisolering 185 kr/m · Teknisk isolering (tag/væg) 245 kr/m² · Brandisolering 395 kr/m² · Armeringssokkel isolering 165 kr/m · Indblæsning af isolering (cellulose) 95 kr/m² · Indblæsning af isolering (mineraluld) 115 kr/m²
 - Slutrengøring/byggepladsrengøring: 75 kr/m² · Glarmester (vinduespolering): 45 kr/m²
 
 Forbrugsmaterialer (skal altid medtages som separate linjer, når de er nødvendige for opgaven):
@@ -116,6 +116,7 @@ Forbrugsmaterialer (skal altid medtages som separate linjer, når de er nødvend
 - Gulv materiale: Trægulv 245 kr/m² · Vinyl/klik-gulv 175 kr/m² · Gulvafslibning papir: 35 kr/m²
 - Isoleringsmateriale (hovedmateriale): Mineraluld batts/matter 85 kr/m² · EPS/XPS skum 110 kr/m² · Glasuld 75 kr/m² · Cellulose 65 kr/m²
 - Isoleringsmateriale (tilbehør): Dampspærre folie 25 kr/m² · Tape 12 kr/m · Klemmer/beslag 8 kr/stk · Afdækningsfolie 15 kr/m²
+- Indblæsningsmateriale (cellulose/mineraluld): 45 kr/m² · typisk 20-30 cm lag i hulrum/loft
 
 Regler:
 - ENHED: Hver linje SKAL have en korrekt enhed (m², m³, m, stk, time, liter, dag, fs, sæt, rulle). Aldrig tom enhed. Brug den enhed der passer til opgaven (væg = m², rør = m, beton = m³, maling = liter).
@@ -134,7 +135,7 @@ Regler:
   • El → kabler + klemmer + kabelkanal
   • Gulv → gulvmateriale + underlag/afslibning
   • Tapet → tapetruller + klister
-  • Teknisk isolering → 3 linjer: (1) isoleringsarbejde 245 kr/m², (2) mineraluld/EPS hovedmateriale 85-110 kr/m², (3) dampspærre folie 25 kr/m² + tape/klemmer 35 kr/m². Ved rørisolering: arbejdslinje 145 kr/m + isoleringsmateriale 85 kr/m + tape 25 kr/m.
+  • Teknisk isolering → 3 linjer: (1) isoleringsarbejde 245 kr/m², (2) mineraluld/EPS hovedmateriale 85-110 kr/m², (3) dampspærre folie 25 kr/m² + tape/klemmer 35 kr/m². Ved rørisolering: arbejdslinje 145 kr/m + isoleringsmateriale 85 kr/m + tape 25 kr/m. Ved indblæsning: arbejdslinje 95 kr/m² (cellulose) el. 115 kr/m² (mineraluld) + indblæsningsmateriale 45 kr/m² (m² = areal der fyldes).
   • Generelt: pensler, ruller, slibepapir, afdækningsfolie, maskeringstape (1 sæt 75 kr pr. 50 m²)
   - Ved malearbejde: beregn altid maltforbrug og tilføj en separat materialelinje for maling. Forbrug: ca. 1 liter dækker 10 m² med 1 strøg – de fleste opgaver kræver 2 strøg, så divider maleflade med 5 for at få literantal (f.eks. 160 m² ÷ 5 = 32 liter). Brug korrekt malttype ud fra opgaven (væg-/loftmaling, facademaling, træmaling el. grundmaling) med tilhørende literpris. Angiv unit "liter" og antal liter som quantity.
   - TJEKLISTE FØR SVAR: (1) Har tilbuddet mindst 2 linjer? (2) Har hver arbejdsopgave en tilhørende materialelinje? (3) Er isolering klassificeret som teknisk isolering (ikke tømrer)? Hvis nej – ret og tilføj linjer før du returnerer.
