@@ -133,8 +133,8 @@ export default function Materialeliste() {
     <div className="space-y-6">
       <div className="flex items-center justify-between flex-wrap gap-3">
         <div>
-          <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-slate-900">Materialeliste</h1>
-          <p className="text-slate-500 mt-1">Administrer materialer per projekt</p>
+          <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">Materialeliste</h1>
+          <p className="text-slate-500 dark:text-slate-400 mt-1">Administrer materialer per projekt</p>
         </div>
         <div className="flex gap-2">
           <Link to="/lager-overblik">
@@ -155,7 +155,7 @@ export default function Materialeliste() {
       </div>
 
       <div className="flex items-center gap-3">
-        <Label className="text-sm text-slate-600">Projekt:</Label>
+        <Label className="text-sm text-slate-600 dark:text-slate-300">Projekt:</Label>
         <Select value={filterProject} onValueChange={setFilterProject}>
           <SelectTrigger className="w-56"><SelectValue /></SelectTrigger>
           <SelectContent>
@@ -165,7 +165,7 @@ export default function Materialeliste() {
             ))}
           </SelectContent>
         </Select>
-        <Label className="text-sm text-slate-600">Kategori:</Label>
+        <Label className="text-sm text-slate-600 dark:text-slate-300">Kategori:</Label>
         <Select value={filterCategory} onValueChange={setFilterCategory}>
           <SelectTrigger className="w-44"><SelectValue /></SelectTrigger>
           <SelectContent>
@@ -175,8 +175,8 @@ export default function Materialeliste() {
             ))}
           </SelectContent>
         </Select>
-        <div className="ml-auto text-sm text-slate-500">
-          Total værdi: <span className="font-bold text-slate-900">{formatDKK(totalValue)}</span>
+        <div className="ml-auto text-sm text-slate-500 dark:text-slate-400">
+          Total værdi: <span className="font-bold text-slate-900 dark:text-slate-100">{formatDKK(totalValue)}</span>
         </div>
       </div>
 
@@ -185,16 +185,16 @@ export default function Materialeliste() {
           <div className="w-8 h-8 border-4 border-slate-200 border-t-amber-400 rounded-full animate-spin"></div>
         </div>
       ) : filtered.length === 0 ? (
-        <div className="bg-white rounded-xl border border-slate-200 py-16 text-center">
+        <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 py-16 text-center">
           <Package className="w-10 h-10 text-slate-300 mx-auto mb-3" />
-          <p className="text-slate-500">Ingen materialer fundet.</p>
+          <p className="text-slate-500 dark:text-slate-400">Ingen materialer fundet.</p>
         </div>
       ) : (
-        <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+        <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden">
           <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead className="bg-slate-50 border-b border-slate-200">
-                <tr className="text-left text-xs font-semibold text-slate-500 uppercase tracking-wide">
+            <table className="w-full text-sm mobile-cards">
+              <thead className="bg-slate-50 dark:bg-slate-800/50 border-b border-slate-200 dark:border-slate-800">
+                <tr className="text-left text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide">
                   <th className="px-4 py-3">Materiale</th>
                   <th className="px-4 py-3">Projekt</th>
                   <th className="px-4 py-3">Kategori</th>
@@ -206,31 +206,31 @@ export default function Materialeliste() {
                   <th className="px-4 py-3"></th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-50">
+              <tbody className="divide-y divide-slate-50 dark:divide-slate-800">
                 {filtered.map((m) => (
-                  <tr key={m.id} className="hover:bg-slate-50">
-                    <td className="px-4 py-3 font-medium text-slate-900">{m.name}</td>
-                    <td className="px-4 py-3 text-slate-600">{m.project_name || '—'}</td>
-                    <td className="px-4 py-3">
-                      <span className="inline-flex px-2 py-0.5 rounded text-xs font-medium bg-slate-100 text-slate-600">{m.category}</span>
+                  <tr key={m.id} className="hover:bg-slate-50 dark:hover:bg-slate-800">
+                    <td className="px-4 py-3 font-medium text-slate-900 dark:text-slate-100" data-label="Materiale">{m.name}</td>
+                    <td className="px-4 py-3 text-slate-600 dark:text-slate-300" data-label="Projekt">{m.project_name || '—'}</td>
+                    <td className="px-4 py-3" data-label="Kategori">
+                      <span className="inline-flex px-2 py-0.5 rounded text-xs font-medium bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">{m.category}</span>
                     </td>
-                    <td className="px-4 py-3 text-right text-slate-600">{m.quantity} {m.unit}</td>
-                    <td className="px-4 py-3 text-right text-slate-600">{formatDKK(m.unit_price)}</td>
-                    <td className="px-4 py-3 text-right font-medium text-slate-900">{formatDKK(calcLineTotal(m))}</td>
-                    <td className="px-4 py-3 text-slate-600">{m.supplier_name || '—'}</td>
-                    <td className="px-4 py-3">
+                    <td className="px-4 py-3 text-right text-slate-600 dark:text-slate-300" data-label="Antal">{m.quantity} {m.unit}</td>
+                    <td className="px-4 py-3 text-right text-slate-600 dark:text-slate-300" data-label="Stk. pris">{formatDKK(m.unit_price)}</td>
+                    <td className="px-4 py-3 text-right font-medium text-slate-900 dark:text-slate-100" data-label="Total">{formatDKK(calcLineTotal(m))}</td>
+                    <td className="px-4 py-3 text-slate-600 dark:text-slate-300" data-label="Leverandør">{m.supplier_name || '—'}</td>
+                    <td className="px-4 py-3" data-label="Status">
                       <button onClick={() => toggleOrdered(m)} className="flex items-center gap-1 text-xs">
                         {m.ordered ? (
                           <><CheckCircle2 className="w-4 h-4 text-emerald-500" /> <span className="text-emerald-600">Bestilt</span></>
                         ) : (
-                          <><Circle className="w-4 h-4 text-slate-300" /> <span className="text-slate-400">Ikke bestilt</span></>
+                          <><Circle className="w-4 h-4 text-slate-300" /> <span className="text-slate-400 dark:text-slate-500">Ikke bestilt</span></>
                         )}
                       </button>
                     </td>
-                    <td className="px-4 py-3">
+                    <td className="px-4 py-3" data-label="Handlinger">
                       <div className="flex justify-end gap-1">
                         <Button variant="ghost" size="icon" onClick={() => openEdit(m)}>
-                          <Pencil className="w-4 h-4 text-slate-500" />
+                          <Pencil className="w-4 h-4 text-slate-500 dark:text-slate-400" />
                         </Button>
                         <Button variant="ghost" size="icon" onClick={() => remove(m.id)}>
                           <Trash2 className="w-4 h-4 text-destructive" />

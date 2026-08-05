@@ -11,8 +11,8 @@ const STATUS_COLORS = {
   'I gang': 'bg-blue-100 text-blue-700',
   Planlægning: 'bg-amber-100 text-amber-700',
   Afsluttet: 'bg-emerald-100 text-emerald-700',
-  'På hold': 'bg-slate-200 text-slate-600',
-  Kladde: 'bg-slate-100 text-slate-500',
+  'På hold': 'bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300',
+  Kladde: 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400',
   Sendt: 'bg-blue-100 text-blue-700',
   Accepteret: 'bg-emerald-100 text-emerald-700',
   Afvist: 'bg-red-100 text-red-700',
@@ -22,7 +22,7 @@ const STATUS_COLORS = {
 
 function StatusBadge({ status }) {
   return (
-    <span className={`inline-flex px-2 py-0.5 rounded-full text-xs font-medium ${STATUS_COLORS[status] || 'bg-slate-100 text-slate-500'}`}>
+    <span className={`inline-flex px-2 py-0.5 rounded-full text-xs font-medium ${STATUS_COLORS[status] || 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400'}`}>
       {status}
     </span>
   );
@@ -86,19 +86,19 @@ export default function Dashboard() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-slate-900">Dashboard</h1>
-        <p className="text-slate-500 mt-1">Overblik over dine projekter, tilbud og fakturaer</p>
+        <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">Dashboard</h1>
+        <p className="text-slate-500 dark:text-slate-400 mt-1">Overblik over dine projekter, tilbud og fakturaer</p>
       </div>
 
       {/* KPI cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {stats.map((s) => (
-          <div key={s.label} className="bg-white rounded-xl border border-slate-200 p-5">
+          <div key={s.label} className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5">
             <div className={`w-10 h-10 rounded-lg ${s.bg} flex items-center justify-center mb-3`}>
               <s.icon className={`w-5 h-5 ${s.color}`} />
             </div>
-            <div className="text-2xl font-bold text-slate-900">{s.value}</div>
-            <div className="text-sm text-slate-500 mt-0.5">{s.label}</div>
+            <div className="text-2xl font-bold text-slate-900 dark:text-slate-100">{s.value}</div>
+            <div className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">{s.label}</div>
           </div>
         ))}
       </div>
@@ -117,24 +117,24 @@ export default function Dashboard() {
       )}
 
       {recentlyAccepted.length > 0 && (
-        <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-5">
+        <div className="bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800 rounded-xl p-5">
           <div className="flex items-center gap-2 mb-3">
             <CheckCircle2 className="w-5 h-5 text-emerald-600" />
-            <h2 className="font-semibold text-slate-900">Nyligt accepterede tilbud</h2>
+            <h2 className="font-semibold text-slate-900 dark:text-slate-100">Nyligt accepterede tilbud</h2>
             <span className="ml-auto text-xs font-medium text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-full">{acceptedQuotes.length} i alt</span>
           </div>
           <div className="divide-y divide-emerald-100">
             {recentlyAccepted.map((q) => (
               <div key={q.id} className="py-2.5 flex items-center justify-between gap-3">
                 <div className="min-w-0">
-                  <div className="font-medium text-slate-900 truncate">{q.quote_number} — {q.customer_name || '—'}</div>
-                  <div className="text-xs text-slate-600">
+                  <div className="font-medium text-slate-900 dark:text-slate-100 truncate">{q.quote_number} — {q.customer_name || '—'}</div>
+                  <div className="text-xs text-slate-600 dark:text-slate-300">
                     {q.accepted_by && `Godkendt af ${q.accepted_by}`}
                     {q.accepted_at && ` • ${formatDate(q.accepted_at)}`}
                   </div>
                 </div>
                 <div className="text-right shrink-0">
-                  <div className="text-sm font-semibold text-slate-900">{formatDKK(calcTotal(q.line_items))}</div>
+                  <div className="text-sm font-semibold text-slate-900 dark:text-slate-100">{formatDKK(calcTotal(q.line_items))}</div>
                   <Link to="/tilbud" className="text-xs text-emerald-700 hover:underline">Åbn tilbud</Link>
                 </div>
               </div>
@@ -151,73 +151,73 @@ export default function Dashboard() {
 
       <div className="grid lg:grid-cols-3 gap-6">
         {/* Recent projects */}
-        <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
-          <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100">
-            <h2 className="font-semibold text-slate-900">Seneste projekter</h2>
-            <Link to="/projekter" className="text-sm text-slate-500 hover:text-slate-900 flex items-center gap-1">
+        <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden">
+          <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100 dark:border-slate-800">
+            <h2 className="font-semibold text-slate-900 dark:text-slate-100">Seneste projekter</h2>
+            <Link to="/projekter" className="text-sm text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:text-slate-100 dark:hover:text-slate-100 flex items-center gap-1">
               Alle <ArrowRight className="w-3.5 h-3.5" />
             </Link>
           </div>
-          <div className="divide-y divide-slate-50">
+          <div className="divide-y divide-slate-50 dark:divide-slate-800">
             {projects.slice(0, 5).map((p) => (
-              <div key={p.id} className="px-5 py-3 flex items-center justify-between hover:bg-slate-50">
+              <div key={p.id} className="px-5 py-3 flex items-center justify-between hover:bg-slate-50 dark:hover:bg-slate-800">
                 <div className="min-w-0">
-                  <div className="font-medium text-slate-900 truncate">{p.name}</div>
-                  <div className="text-xs text-slate-500">{p.customer_name || '—'}</div>
+                  <div className="font-medium text-slate-900 dark:text-slate-100 truncate">{p.name}</div>
+                  <div className="text-xs text-slate-500 dark:text-slate-400">{p.customer_name || '—'}</div>
                 </div>
                 <StatusBadge status={p.status} />
               </div>
             ))}
             {projects.length === 0 && (
-              <div className="px-5 py-8 text-center text-sm text-slate-400">Ingen projekter endnu</div>
+              <div className="px-5 py-8 text-center text-sm text-slate-400 dark:text-slate-500">Ingen projekter endnu</div>
             )}
           </div>
         </div>
 
         {/* Recent quotes */}
-        <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
-          <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100">
-            <h2 className="font-semibold text-slate-900">Seneste tilbud</h2>
-            <Link to="/tilbud" className="text-sm text-slate-500 hover:text-slate-900 flex items-center gap-1">
+        <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden">
+          <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100 dark:border-slate-800">
+            <h2 className="font-semibold text-slate-900 dark:text-slate-100">Seneste tilbud</h2>
+            <Link to="/tilbud" className="text-sm text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:text-slate-100 dark:hover:text-slate-100 flex items-center gap-1">
               Alle <ArrowRight className="w-3.5 h-3.5" />
             </Link>
           </div>
-          <div className="divide-y divide-slate-50">
+          <div className="divide-y divide-slate-50 dark:divide-slate-800">
             {quotes.slice(0, 5).map((q) => (
-              <div key={q.id} className="px-5 py-3 flex items-center justify-between hover:bg-slate-50">
+              <div key={q.id} className="px-5 py-3 flex items-center justify-between hover:bg-slate-50 dark:hover:bg-slate-800">
                 <div className="min-w-0">
-                  <div className="font-medium text-slate-900 truncate">{q.quote_number}</div>
-                  <div className="text-xs text-slate-500">{formatDKK(calcTotal(q.line_items))}</div>
+                  <div className="font-medium text-slate-900 dark:text-slate-100 truncate">{q.quote_number}</div>
+                  <div className="text-xs text-slate-500 dark:text-slate-400">{formatDKK(calcTotal(q.line_items))}</div>
                 </div>
                 <StatusBadge status={q.status} />
               </div>
             ))}
             {quotes.length === 0 && (
-              <div className="px-5 py-8 text-center text-sm text-slate-400">Ingen tilbud endnu</div>
+              <div className="px-5 py-8 text-center text-sm text-slate-400 dark:text-slate-500">Ingen tilbud endnu</div>
             )}
           </div>
         </div>
 
         {/* Recent invoices */}
-        <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
-          <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100">
-            <h2 className="font-semibold text-slate-900">Seneste fakturaer</h2>
-            <Link to="/faktura" className="text-sm text-slate-500 hover:text-slate-900 flex items-center gap-1">
+        <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden">
+          <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100 dark:border-slate-800">
+            <h2 className="font-semibold text-slate-900 dark:text-slate-100">Seneste fakturaer</h2>
+            <Link to="/faktura" className="text-sm text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:text-slate-100 dark:hover:text-slate-100 flex items-center gap-1">
               Alle <ArrowRight className="w-3.5 h-3.5" />
             </Link>
           </div>
-          <div className="divide-y divide-slate-50">
+          <div className="divide-y divide-slate-50 dark:divide-slate-800">
             {invoices.slice(0, 5).map((inv) => (
-              <div key={inv.id} className="px-5 py-3 flex items-center justify-between hover:bg-slate-50">
+              <div key={inv.id} className="px-5 py-3 flex items-center justify-between hover:bg-slate-50 dark:hover:bg-slate-800">
                 <div className="min-w-0">
-                  <div className="font-medium text-slate-900 truncate">{inv.invoice_number}</div>
-                  <div className="text-xs text-slate-500">{formatDKK(calcTotal(inv.line_items))}</div>
+                  <div className="font-medium text-slate-900 dark:text-slate-100 truncate">{inv.invoice_number}</div>
+                  <div className="text-xs text-slate-500 dark:text-slate-400">{formatDKK(calcTotal(inv.line_items))}</div>
                 </div>
                 <StatusBadge status={inv.status} />
               </div>
             ))}
             {invoices.length === 0 && (
-              <div className="px-5 py-8 text-center text-sm text-slate-400">Ingen fakturaer endnu</div>
+              <div className="px-5 py-8 text-center text-sm text-slate-400 dark:text-slate-500">Ingen fakturaer endnu</div>
             )}
           </div>
         </div>

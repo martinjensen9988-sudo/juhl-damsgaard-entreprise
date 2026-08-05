@@ -103,8 +103,8 @@ export default function Customers() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-slate-900">Kunder</h1>
-          <p className="text-slate-500 mt-1">Styr dine kundeoplysninger</p>
+          <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">Kunder</h1>
+          <p className="text-slate-500 dark:text-slate-400 mt-1">Styr dine kundeoplysninger</p>
         </div>
         <Button onClick={openNew} className="bg-slate-950 hover:bg-slate-800">
           <Plus className="w-4 h-4 mr-1.5" /> Ny kunde
@@ -116,52 +116,52 @@ export default function Customers() {
           <div className="w-8 h-8 border-4 border-slate-200 border-t-amber-400 rounded-full animate-spin"></div>
         </div>
       ) : customers.length === 0 ? (
-        <div className="bg-white rounded-xl border border-slate-200 py-16 text-center">
+        <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 py-16 text-center">
           <Users className="w-10 h-10 text-slate-300 mx-auto mb-3" />
-          <p className="text-slate-500">Ingen kunder endnu. Opret din første kunde.</p>
+          <p className="text-slate-500 dark:text-slate-400">Ingen kunder endnu. Opret din første kunde.</p>
         </div>
       ) : (
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {customers.map((c) => (
-            <div key={c.id} className="bg-white rounded-xl border border-slate-200 p-5 hover:shadow-md transition-shadow">
+            <div key={c.id} className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 hover:shadow-md transition-shadow">
               <div className="flex items-start justify-between mb-3">
                 <div className="min-w-0">
-                  <div className="font-semibold text-slate-900 truncate">{c.company || c.name}</div>
-                  {c.company && <div className="text-sm text-slate-500">{c.name}</div>}
+                  <div className="font-semibold text-slate-900 dark:text-slate-100 truncate">{c.company || c.name}</div>
+                  {c.company && <div className="text-sm text-slate-500 dark:text-slate-400">{c.name}</div>}
                 </div>
                 <div className="flex gap-1">
                   <Button variant="ghost" size="icon" onClick={() => openEdit(c)}>
-                    <Pencil className="w-4 h-4 text-slate-500" />
+                    <Pencil className="w-4 h-4 text-slate-500 dark:text-slate-400" />
                   </Button>
                   <Button variant="ghost" size="icon" onClick={() => remove(c.id)}>
                     <Trash2 className="w-4 h-4 text-destructive" />
                   </Button>
                 </div>
               </div>
-              <div className="space-y-1.5 text-sm text-slate-600">
+              <div className="space-y-1.5 text-sm text-slate-600 dark:text-slate-300">
                 {c.email && (
                   <div className="flex items-center gap-2">
-                    <Mail className="w-3.5 h-3.5 text-slate-400" /> {c.email}
+                    <Mail className="w-3.5 h-3.5 text-slate-400 dark:text-slate-500" /> {c.email}
                   </div>
                 )}
                 {c.phone && (
                   <div className="flex items-center gap-2">
-                    <Phone className="w-3.5 h-3.5 text-slate-400" /> {c.phone}
+                    <Phone className="w-3.5 h-3.5 text-slate-400 dark:text-slate-500" /> {c.phone}
                   </div>
                 )}
                 {(c.address || c.city) && (
                   <div className="flex items-center gap-2">
-                    <MapPin className="w-3.5 h-3.5 text-slate-400" />
+                    <MapPin className="w-3.5 h-3.5 text-slate-400 dark:text-slate-500" />
                     <span className="truncate">
                       {[c.address, [c.postal_code, c.city].filter(Boolean).join(' ')].filter(Boolean).join(', ')}
                     </span>
                   </div>
                 )}
-                {c.cvr && <div className="text-xs text-slate-400">CVR: {c.cvr}</div>}
+                {c.cvr && <div className="text-xs text-slate-400 dark:text-slate-500">CVR: {c.cvr}</div>}
                 {c.payment_terms && (
                   <div className="flex items-center gap-2 pt-1">
-                    <Clock className="w-3.5 h-3.5 text-slate-400" />
-                    <span className="text-xs text-slate-500">{c.payment_terms}</span>
+                    <Clock className="w-3.5 h-3.5 text-slate-400 dark:text-slate-500" />
+                    <span className="text-xs text-slate-500 dark:text-slate-400">{c.payment_terms}</span>
                   </div>
                 )}
               </div>

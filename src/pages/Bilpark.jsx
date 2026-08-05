@@ -14,7 +14,7 @@ const FUEL_TYPES = ['Diesel', 'Benzin', 'El', 'Hybrid', 'Andet'];
 const STATUSES = ['Ledig', 'I brug', 'Reparation', 'Ude af drift'];
 
 const statusBadge = {
-  'Ledig': 'bg-slate-100 text-slate-700',
+  'Ledig': 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200',
   'I brug': 'bg-emerald-100 text-emerald-700',
   'Reparation': 'bg-amber-100 text-amber-700',
   'Ude af drift': 'bg-red-100 text-red-700',
@@ -71,8 +71,8 @@ export default function Bilpark() {
     <div>
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">Bilpark</h1>
-          <p className="text-sm text-slate-500 mt-1">Styring af firmaets køretøjer — service, forsikring og lokation</p>
+          <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">Bilpark</h1>
+          <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">Styring af firmaets køretøjer — service, forsikring og lokation</p>
         </div>
         <Button onClick={openCreate} className="gap-2"><Plus className="w-4 h-4" /> Tilføj køretøj</Button>
       </div>
@@ -82,44 +82,44 @@ export default function Bilpark() {
           const insDays = daysUntil(v.insurance_expiry);
           const svcDays = daysUntil(v.next_service_date);
           return (
-            <div key={v.id} className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+            <div key={v.id} className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden">
               <div className="p-5">
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex items-center gap-2">
-                    <div className="w-10 h-10 rounded-lg bg-slate-100 flex items-center justify-center">
-                      <Car className="w-5 h-5 text-slate-600" />
+                    <div className="w-10 h-10 rounded-lg bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
+                      <Car className="w-5 h-5 text-slate-600 dark:text-slate-300" />
                     </div>
                     <div>
-                      <div className="font-semibold text-slate-900">{v.name}</div>
-                      <div className="text-xs text-slate-500">{v.plate_number || '—'} • {v.type}</div>
+                      <div className="font-semibold text-slate-900 dark:text-slate-100">{v.name}</div>
+                      <div className="text-xs text-slate-500 dark:text-slate-400">{v.plate_number || '—'} • {v.type}</div>
                     </div>
                   </div>
                   <span className={`text-xs px-2 py-1 rounded-full font-medium ${statusBadge[v.status] || statusBadge['Ledig']}`}>{v.status}</span>
                 </div>
 
                 <div className="space-y-2 text-sm">
-                  <div className="flex items-center gap-2 text-slate-600">
-                    <MapPin className="w-4 h-4 text-slate-400" />
+                  <div className="flex items-center gap-2 text-slate-600 dark:text-slate-300">
+                    <MapPin className="w-4 h-4 text-slate-400 dark:text-slate-500" />
                     <span>{v.assigned_project_name || v.location || 'Ikke tildelt'}</span>
                   </div>
-                  {v.mileage > 0 && <div className="text-slate-500 text-xs">Km-stand: {v.mileage.toLocaleString('da-DK')}</div>}
+                  {v.mileage > 0 && <div className="text-slate-500 dark:text-slate-400 text-xs">Km-stand: {v.mileage.toLocaleString('da-DK')}</div>}
                 </div>
 
-                <div className="mt-4 pt-3 border-t border-slate-100 grid grid-cols-2 gap-2 text-xs">
-                  <div className={`flex items-center gap-1.5 ${insDays !== null && insDays < 30 ? 'text-amber-600' : 'text-slate-500'}`}>
+                <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 grid grid-cols-2 gap-2 text-xs">
+                  <div className={`flex items-center gap-1.5 ${insDays !== null && insDays < 30 ? 'text-amber-600' : 'text-slate-500 dark:text-slate-400'}`}>
                     <Shield className="w-3.5 h-3.5" />
                     <span>{v.insurance_expiry ? formatDate(v.insurance_expiry) : '—'}</span>
                     {insDays !== null && insDays < 30 && <AlertCircle className="w-3 h-3" />}
                   </div>
-                  <div className={`flex items-center gap-1.5 ${svcDays !== null && svcDays < 14 ? 'text-amber-600' : 'text-slate-500'}`}>
+                  <div className={`flex items-center gap-1.5 ${svcDays !== null && svcDays < 14 ? 'text-amber-600' : 'text-slate-500 dark:text-slate-400'}`}>
                     <Wrench className="w-3.5 h-3.5" />
                     <span>{v.next_service_date ? formatDate(v.next_service_date) : '—'}</span>
                   </div>
                 </div>
               </div>
-              <div className="flex border-t border-slate-100">
-                <button onClick={() => openEdit(v)} className="flex-1 py-2.5 text-sm text-slate-600 hover:bg-slate-50 flex items-center justify-center gap-1.5"><Pencil className="w-3.5 h-3.5" /> Rediger</button>
-                <button onClick={() => remove(v.id)} className="flex-1 py-2.5 text-sm text-red-600 hover:bg-red-50 flex items-center justify-center gap-1.5 border-l border-slate-100"><Trash2 className="w-3.5 h-3.5" /> Slet</button>
+              <div className="flex border-t border-slate-100 dark:border-slate-800">
+                <button onClick={() => openEdit(v)} className="flex-1 py-2.5 text-sm text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 flex items-center justify-center gap-1.5"><Pencil className="w-3.5 h-3.5" /> Rediger</button>
+                <button onClick={() => remove(v.id)} className="flex-1 py-2.5 text-sm text-red-600 hover:bg-red-50 flex items-center justify-center gap-1.5 border-l border-slate-100 dark:border-slate-800"><Trash2 className="w-3.5 h-3.5" /> Slet</button>
               </div>
             </div>
           );
@@ -127,7 +127,7 @@ export default function Bilpark() {
       </div>
 
       {vehicles.length === 0 && (
-        <div className="text-center py-16 text-slate-400">
+        <div className="text-center py-16 text-slate-400 dark:text-slate-500">
           <Car className="w-12 h-12 mx-auto mb-3 opacity-40" />
           <p>Ingen køretøjer registreret endnu</p>
         </div>
@@ -183,7 +183,7 @@ export default function Bilpark() {
           </div>
 
           <div className="border-t pt-4 mt-2">
-            <div className="text-sm font-semibold text-slate-700 mb-3 flex items-center gap-2"><Shield className="w-4 h-4 text-blue-500" /> Forsikring</div>
+            <div className="text-sm font-semibold text-slate-700 dark:text-slate-200 mb-3 flex items-center gap-2"><Shield className="w-4 h-4 text-blue-500" /> Forsikring</div>
             <div className="grid grid-cols-3 gap-4">
               <div>
                 <Label>Selskab</Label>
@@ -201,7 +201,7 @@ export default function Bilpark() {
           </div>
 
           <div className="border-t pt-4 mt-2">
-            <div className="text-sm font-semibold text-slate-700 mb-3 flex items-center gap-2"><Wrench className="w-4 h-4 text-amber-500" /> Service</div>
+            <div className="text-sm font-semibold text-slate-700 dark:text-slate-200 mb-3 flex items-center gap-2"><Wrench className="w-4 h-4 text-amber-500" /> Service</div>
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <Label>Sidste service</Label>
