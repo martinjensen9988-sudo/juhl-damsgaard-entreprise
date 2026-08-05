@@ -262,6 +262,8 @@ const AuthenticatedApp = () => {
       <Route element={<ProtectedRoute unauthenticatedElement={<Navigate to="/login" replace />} />}>
         <Route element={<Layout />}>
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/admin" element={<Dashboard />} />
+          <Route path="/admin-portal" element={<Dashboard />} />
           <Route path="/kunder" element={<Customers />} />
           <Route path="/projekter" element={<Projects />} />
           <Route path="/tilbud" element={<Quotes />} />
@@ -318,6 +320,8 @@ const AuthenticatedApp = () => {
           <Route path="/bilpark" element={<Bilpark />} />
           <Route path="/underentreprenoerer" element={<Underentreprenoerer />} />
           <Route path="/vidensbase" element={<Vidensbase />} />
+          <Route path="/portal/knowledgebase" element={<Vidensbase />} />
+          <Route path="/admin/knowledgebase" element={<Vidensbase />} />
           <Route path="/projekt-arkiv" element={<ProjektArkiv />} />
           <Route path="/indkoebsliste" element={<Indkoebsliste />} />
           <Route path="/tilbudsskabeloner" element={<Tilbudsskabeloner />} />
