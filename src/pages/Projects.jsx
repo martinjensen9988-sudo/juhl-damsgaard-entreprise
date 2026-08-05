@@ -23,6 +23,7 @@ import { Plus, Pencil, Trash2, HardHat, Calendar, MapPin, ClipboardList, LayoutG
 import ArbejdsseddelDialog from '@/components/ArbejdsseddelDialog';
 import TidsregistreringDialog from '@/components/TidsregistreringDialog';
 import ProjectKanban from '@/components/ProjectKanban';
+import ProjectDetailDialog from '@/components/ProjectDetailDialog';
 import { useToast } from '@/components/ui/use-toast';
 
 const PROJECT_TYPES = ['Gravearbejde', 'Kloak', 'Asfalt', 'Beton', 'Nedrivning', 'Anlæg', 'Andet'];
@@ -58,6 +59,7 @@ export default function Projects() {
   const [saving, setSaving] = useState(false);
   const [worksheetProject, setWorksheetProject] = useState(null);
   const [timeProject, setTimeProject] = useState(null);
+  const [detailProject, setDetailProject] = useState(null);
   const [view, setView] = useState('list');
 
   const moveStatus = async (id, status) => {
@@ -199,7 +201,7 @@ export default function Projects() {
       ) : (
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
           {projects.map((p) => (
-            <div key={p.id} className="bg-white rounded-xl border border-slate-200 p-5 hover:shadow-md transition-shadow">
+            <div key={p.id} className="bg-white rounded-xl border border-slate-200 p-5 hover:shadow-md transition-shadow cursor-pointer" onClick={() => setDetailProject(p)}>
               <div className="flex items-start justify-between mb-2">
                 <div className="min-w-0 flex-1">
                   <div className="font-semibold text-slate-900 truncate">{p.name}</div>
@@ -237,13 +239,13 @@ export default function Projects() {
                   <span className="font-semibold text-slate-900">{formatDKK(p.budget)}</span>
                 </div>
               )}
-              <Button variant="outline" size="sm" className="w-full mb-2" onClick={() => setTimeProject(p)}>
+              <Button variant="outline" size="sm" className="w-full mb-2" onClick={(e) => { e.stopPropagation(); setTimeProject(p); }}>
                 <Clock className="w-4 h-4 mr-1.5" /> Tidsregistrering
               </Button>
-              <Button variant="outline" size="sm" className="w-full mb-2" onClick={() => setWorksheetProject(p)}>
+              <Button variant="outline" size="sm" className="w-full mb-2" onClick={(e) => { e.stopPropagation(); setWorksheetProject(p); }}>
                 <ClipboardList className="w-4 h-4 mr-1.5" /> Arbejdsseddel
               </Button>
-              <div className="grid grid-cols-2 gap-2 mb-2">
+              <div className="grid grid-cols-2 gap-2 mb-2" onClick={(e) => e.stopPropagation()}>
                 <Button
                   variant="outline"
                   size="sm"
@@ -262,7 +264,7 @@ export default function Projects() {
                   <Send className="w-4 h-4 mr-1.5" /> Send faktura
                 </Button>
               </div>
-              <div className="flex justify-end gap-1">
+              <div className="flex justify-end gap-1" onClick={(e) => e.stopPropagation()}>
                 <Button variant="ghost" size="icon" onClick={() => openEdit(p)}>
                   <Pencil className="w-4 h-4 text-slate-500" />
                 </Button>
@@ -346,6 +348,7 @@ export default function Projects() {
 
       <ArbejdsseddelDialog project={worksheetProject} onClose={() => setWorksheetProject(null)} />
       <TidsregistreringDialog project={timeProject} onClose={() => setTimeProject(null)} />
+      <ProjectDetailDialog project={detailProject} onClose={() => setDetailProject(null)} onUpdated={load} />
     </div>
   );
 }
