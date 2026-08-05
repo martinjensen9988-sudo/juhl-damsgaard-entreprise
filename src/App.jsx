@@ -214,6 +214,12 @@ import Bogfoering from '@/pages/Bogfoering';
 import Momsangivelse from '@/pages/Momsangivelse';
 import Regnskabsrapporter from '@/pages/Regnskabsrapporter';
 import AarsoversigtPnL from '@/pages/AarsoversigtPnL';
+import ProjektOversigt from '@/pages/ProjektOversigt';
+import UnderleverandoerOversigt from '@/pages/UnderleverandoerOversigt';
+import Driftsoekonomi from '@/pages/Driftsoekonomi';
+import ProjektTidsplan from '@/pages/ProjektTidsplan';
+import ArkivOversigt from '@/pages/ArkivOversigt';
+import VaerktoejLogbog from '@/pages/VaerktoejLogbog';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -434,6 +440,12 @@ const AuthenticatedApp = () => {
           <Route path="/regnskab-moms" element={<Momsangivelse />} />
           <Route path="/regnskab-rapporter" element={<Regnskabsrapporter />} />
           <Route path="/regnskab-aarsoversigt" element={<AarsoversigtPnL />} />
+          <Route path="/projekt-oversigt" element={<ProjektOversigt />} />
+          <Route path="/underleverandoer-oversigt" element={<UnderleverandoerOversigt />} />
+          <Route path="/driftsoekonomi" element={<Driftsoekonomi />} />
+          <Route path="/projekt-tidsplan" element={<ProjektTidsplan />} />
+          <Route path="/arkiv-oversigt" element={<ArkivOversigt />} />
+          <Route path="/vaerktoej-logbog" element={<VaerktoejLogbog />} />
         </Route>
         <Route element={<PortalLayout />}>
           <Route path="/portal" element={<CustomerPortal />} />
