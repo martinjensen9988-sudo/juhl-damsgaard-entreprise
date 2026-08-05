@@ -288,6 +288,8 @@ const AuthenticatedApp = () => {
           <Route path="/ai-tilbud" element={<AITilbud />} />
           <Route path="/ugeplanlaegning" element={<Ugeplanlaegning />} />
           <Route path="/materiel" element={<Materielstyring />} />
+          <Route path="/udstyr" element={<Materielstyring />} />
+          <Route path="/maskinpark" element={<Materielstyring />} />
           <Route path="/salgs-pipeline" element={<SalgsPipeline />} />
           <Route path="/projekt-milepaele" element={<ProjektMilepaele />} />
           <Route path="/kundesupport" element={<KundeSupport />} />
