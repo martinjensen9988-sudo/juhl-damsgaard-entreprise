@@ -371,32 +371,32 @@ export default function Layout() {
         </div>
       </aside>
 
-      {/* Mobile top bar */}
-      <div className="md:hidden sticky top-0 z-30 bg-slate-950 text-white px-4 py-3 flex items-center gap-2 safe-pt safe-px">
-        <div className="w-8 h-8 rounded-lg bg-amber-400 flex items-center justify-center">
-          <Building2 className="w-4 h-4 text-slate-950" />
+      {/* Mobile header (title + nav) — single safe-area-aware sticky block */}
+      <div className="md:hidden sticky top-0 z-30 bg-slate-950 safe-pt safe-px">
+        <div className="px-4 py-3 flex items-center gap-2 text-white">
+          <div className="w-8 h-8 rounded-lg bg-amber-400 flex items-center justify-center">
+            <Building2 className="w-4 h-4 text-slate-950" />
+          </div>
+          <span className="font-bold tracking-tight">Juhl & Damsgaard</span>
         </div>
-        <span className="font-bold tracking-tight">Juhl & Damsgaard</span>
+        <nav className="bg-white border-b flex overflow-x-auto px-2 py-2 gap-1">
+          {allItems.map((item) => (
+            <NavLink
+              key={item.to}
+              to={item.to}
+              end={item.end}
+              className={({ isActive }) =>
+                `flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-colors ${
+                  isActive ? 'bg-slate-950 text-amber-400' : 'text-slate-600 hover:bg-slate-100'
+                }`
+              }
+            >
+              <item.icon className="w-3.5 h-3.5" />
+              {item.label}
+            </NavLink>
+          ))}
+        </nav>
       </div>
-
-      {/* Mobile nav */}
-      <nav className="md:hidden sticky top-[52px] z-20 bg-white border-b flex overflow-x-auto px-2 py-2 gap-1">
-        {allItems.map((item) => (
-          <NavLink
-            key={item.to}
-            to={item.to}
-            end={item.end}
-            className={({ isActive }) =>
-              `flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-colors ${
-                isActive ? 'bg-slate-950 text-amber-400' : 'text-slate-600 hover:bg-slate-100'
-              }`
-            }
-          >
-            <item.icon className="w-3.5 h-3.5" />
-            {item.label}
-          </NavLink>
-        ))}
-      </nav>
 
       {/* Main content */}
       <div className="md:ml-64">
