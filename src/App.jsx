@@ -220,6 +220,17 @@ import Driftsoekonomi from '@/pages/Driftsoekonomi';
 import ProjektTidsplan from '@/pages/ProjektTidsplan';
 import ArkivOversigt from '@/pages/ArkivOversigt';
 import VaerktoejLogbog from '@/pages/VaerktoejLogbog';
+import FakturaScan from '@/pages/FakturaScan';
+import TekniskIsoleringBeregner from '@/pages/TekniskIsoleringBeregner';
+import Indkoebsordre from '@/pages/Indkoebsordre';
+import LoenseddelOversigt from '@/pages/LoenseddelOversigt';
+import VaerktoejListe from '@/pages/VaerktoejListe';
+import LeverandoerStyring from '@/pages/LeverandoerStyring';
+import LagerStatus from '@/pages/LagerStatus';
+import Driftsrapport from '@/pages/Driftsrapport';
+import OekonomiskStatus from '@/pages/OekonomiskStatus';
+import RessourceKalender from '@/pages/RessourceKalender';
+import MomsSkat from '@/pages/MomsSkat';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -455,6 +466,17 @@ const AuthenticatedApp = () => {
           <Route path="/projekt-tidsplan" element={<ProjektTidsplan />} />
           <Route path="/arkiv-oversigt" element={<ArkivOversigt />} />
           <Route path="/vaerktoej-logbog" element={<VaerktoejLogbog />} />
+          <Route path="/faktura-scan" element={<FakturaScan />} />
+          <Route path="/teknisk-isolering-beregner" element={<TekniskIsoleringBeregner />} />
+          <Route path="/indkoebsordre" element={<Indkoebsordre />} />
+          <Route path="/loenseddel-oversigt" element={<LoenseddelOversigt />} />
+          <Route path="/vaerktoej-liste" element={<VaerktoejListe />} />
+          <Route path="/leverandoer-styring" element={<LeverandoerStyring />} />
+          <Route path="/lager-status" element={<LagerStatus />} />
+          <Route path="/drifts-rapport" element={<Driftsrapport />} />
+          <Route path="/oekonomisk-status" element={<OekonomiskStatus />} />
+          <Route path="/ressource-kalender" element={<RessourceKalender />} />
+          <Route path="/moms-regnskab" element={<MomsSkat />} />
         </Route>
         <Route element={<PortalLayout />}>
           <Route path="/portal" element={<CustomerPortal />} />
