@@ -132,8 +132,26 @@ export default function Forsikringssager() {
               <div><Label>Status</Label><Select value={form.status} onValueChange={(v) => set('status', v)}><SelectTrigger><SelectValue /></SelectTrigger><SelectContent>{statuses.map((s) => <SelectItem key={s} value={s}>{s}</SelectItem>)}</SelectContent></Select></div>
             </div>
             <div><Label>Skadesrapport</Label><Textarea value={form.description} onChange={(e) => set('description', e.target.value)} rows={3} /></div>
-            <div className="grid grid-cols-2 gap-3">
-              {[['Før-billeder', 'before_photo_urls'], ['Efter-billeder', 'after_photo_urls']].map(([label, field]) => (
+            <div>
+              <Label className="text-sm font-semibold">Skadesposteringer</Label>
+              <div className="space-y-2 mt-1.5">
+                {(form.damage_items || []).map((item, idx) => (
+                  <div key={idx} className="grid grid-cols-12 gap-2 items-start p-2 rounded-lg border border-slate-200 bg-slate-50">
+                    <input className="col-span-12 sm:col-span-4 rounded-md border border-slate-300 px-2 py-1.5 text-sm" placeholder="Beskrivelse" value={item.description || ''} onChange={(e) => { const arr = [...form.damage_items]; arr[idx] = { ...arr[idx], description: e.target.value }; set('damage_items', arr); }} />
+                    <input className="col-span-6 sm:col-span-3 rounded-md border border-slate-300 px-2 py-1.5 text-sm" placeholder="Lokation" value={item.location || ''} onChange={(e) => { const arr = [...form.damage_items]; arr[idx] = { ...arr[idx], location: e.target.value }; set('damage_items', arr); }} />
+                    <select className="col-span-6 sm:col-span-2 rounded-md border border-slate-300 px-1.5 py-1.5 text-sm" value={item.severity || 'Mellem'} onChange={(e) => { const arr = [...form.damage_items]; arr[idx] = { ...arr[idx], severity: e.target.value }; set('damage_items', arr); }}>
+                      <option value="Lille">Lille</option><option value="Mellem">Mellem</option><option value="Stor">Stor</option><option value="Kritisk">Kritisk</option>
+                    </select>
+                    <input type="number" className="col-span-8 sm:col-span-2 rounded-md border border-slate-300 px-2 py-1.5 text-sm" placeholder="Est. pris" value={item.estimated_cost || ''} onChange={(e) => { const arr = [...form.damage_items]; arr[idx] = { ...arr[idx], estimated_cost: e.target.value ? Number(e.target.value) : '' }; set('damage_items', arr); }} />
+                    <button type="button" onClick={() => set('damage_items', form.damage_items.filter((_, i) => i !== idx))} className="col-span-4 sm:col-span-1 flex items-center justify-center text-red-500 hover:text-red-700"><Trash2 className="w-4 h-4" /></button>
+                  </div>
+                ))}
+                <button type="button" onClick={() => set('damage_items', [...(form.damage_items || []), { description: '', location: '', severity: 'Mellem', estimated_cost: '' }])} className="text-sm text-blue-600 hover:text-blue-800 flex items-center gap-1"><Plus className="w-3.5 h-3.5" /> Tilføj skadespostering</button>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              {[['Før-billeder', 'before_photo_urls'], ['Undervejs-billeder', 'during_photo_urls'], ['Efter-billeder', 'after_photo_urls']].map(([label, field]) => (
                 <div key={field}>
                   <Label>{label}</Label>
                   <div className="space-y-1.5">
@@ -164,6 +182,23 @@ export default function Forsikringssager() {
                   <input type="file" className="hidden" onChange={(e) => upload(e, 'report')} />
                 </label>
               )}
+            </div>
+            <div>
+              <Label className="text-sm font-semibold">Kommunikationslog</Label>
+              <div className="space-y-2 mt-1.5">
+                {(form.communication_log || []).map((entry, idx) => (
+                  <div key={idx} className="grid grid-cols-12 gap-2 items-start p-2 rounded-lg border border-slate-200 bg-slate-50">
+                    <input type="date" className="col-span-6 sm:col-span-3 rounded-md border border-slate-300 px-2 py-1.5 text-sm" value={entry.date || ''} onChange={(e) => { const arr = [...form.communication_log]; arr[idx] = { ...arr[idx], date: e.target.value }; set('communication_log', arr); }} />
+                    <select className="col-span-6 sm:col-span-3 rounded-md border border-slate-300 px-1.5 py-1.5 text-sm" value={entry.type || 'Email'} onChange={(e) => { const arr = [...form.communication_log]; arr[idx] = { ...arr[idx], type: e.target.value }; set('communication_log', arr); }}>
+                      <option value="Email">Email</option><option value="Telefon">Telefon</option><option value="Møde">Møde</option><option value="Brev">Brev</option><option value="Besigtigelse">Besigtigelse</option><option value="Andet">Andet</option>
+                    </select>
+                    <input className="col-span-12 sm:col-span-3 rounded-md border border-slate-300 px-2 py-1.5 text-sm" placeholder="Afsender" value={entry.author || ''} onChange={(e) => { const arr = [...form.communication_log]; arr[idx] = { ...arr[idx], author: e.target.value }; set('communication_log', arr); }} />
+                    <input className="col-span-10 sm:col-span-2 rounded-md border border-slate-300 px-2 py-1.5 text-sm" placeholder="Besked" value={entry.message || ''} onChange={(e) => { const arr = [...form.communication_log]; arr[idx] = { ...arr[idx], message: e.target.value }; set('communication_log', arr); }} />
+                    <button type="button" onClick={() => set('communication_log', form.communication_log.filter((_, i) => i !== idx))} className="col-span-2 sm:col-span-1 flex items-center justify-center text-red-500 hover:text-red-700"><Trash2 className="w-4 h-4" /></button>
+                  </div>
+                ))}
+                <button type="button" onClick={() => set('communication_log', [...(form.communication_log || []), { date: new Date().toISOString().split('T')[0], type: 'Email', author: '', message: '' }])} className="text-sm text-blue-600 hover:text-blue-800 flex items-center gap-1"><Plus className="w-3.5 h-3.5" /> Tilføj log-entry</button>
+              </div>
             </div>
             <div><Label>Noter</Label><Textarea value={form.notes} onChange={(e) => set('notes', e.target.value)} rows={2} /></div>
           </div>

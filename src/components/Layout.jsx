@@ -218,6 +218,7 @@ const navGroups = [
       { to: '/sikkerhed-apv', label: 'Sikkerhed & APV', icon: ShieldCheck },
       { to: '/sikkerheds-tjekliste', label: 'Sikkerheds-tjekliste', icon: ClipboardCheck },
       { to: '/mangel-liste', label: 'Mangel-oversigt', icon: AlertOctagon },
+      { to: '/forsikringssager', label: 'Forsikringssager', icon: ShieldAlert },
       { to: '/kvalitetsstyring-oversigt', label: 'Kvalitetsoversigt', icon: ShieldCheck },
     ],
   },
