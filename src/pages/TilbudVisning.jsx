@@ -67,6 +67,7 @@ export default function TilbudVisning() {
           status: res.data.status,
           accepted_at: res.data.accepted_at,
           accepted_by: res.data.accepted_by,
+          accepted_ip: res.data.accepted_ip,
         });
       } else if (res.data?.error) {
         alert(res.data.error);
@@ -273,6 +274,7 @@ export default function TilbudVisning() {
             <p className="text-xs text-slate-400 mt-3">
               Digitalt godkendt af <span className="font-medium text-slate-600">{quote.accepted_by}</span>
               {quote.accepted_at && ` den ${formatDate(quote.accepted_at)}`}
+              {quote.accepted_ip && ` fra IP ${quote.accepted_ip}`}
             </p>
           )}
         </div>

@@ -42,7 +42,12 @@ export default async function(req) {
         }
         updatePayload.accepted_at = new Date().toISOString();
         updatePayload.accepted_by = signedName;
-        if (signature_ip) updatePayload.accepted_ip = signature_ip;
+        const clientIp = signature_ip
+          || req.headers.get('x-forwarded-for')?.split(',')[0]?.trim()
+          || req.headers.get('x-real-ip')
+          || req.headers.get('cf-connecting-ip')
+          || '';
+        if (clientIp) updatePayload.accepted_ip = clientIp;
       }
 
       await base44.asServiceRole.entities.Quote.update(quote_id, updatePayload);
@@ -64,7 +69,7 @@ export default async function(req) {
         });
       } catch (e) { /* log fejler ikke flow */ }
 
-      return Response.json({ success: true, status: newStatus, accepted_by: updatePayload.accepted_by, accepted_at: updatePayload.accepted_at });
+      return Response.json({ success: true, status: newStatus, accepted_by: updatePayload.accepted_by, accepted_at: updatePayload.accepted_at, accepted_ip: updatePayload.accepted_ip });
     }
 
     return Response.json({ error: 'Ukendt handling' }, { status: 400 });

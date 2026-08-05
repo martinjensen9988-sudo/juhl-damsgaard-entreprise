@@ -68,7 +68,7 @@ export default function CustomerPortal() {
           base44.entities.Invoice.list('-created_date', 50),
         ]);
         setProjects(p);
-        setQuotes(q);
+        setQuotes(q.filter((x) => x.customer_email === u.email));
         setInvoices(i);
         // Load images for each project
         const imgMap = {};
