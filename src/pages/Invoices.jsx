@@ -220,7 +220,7 @@ export default function Invoices() {
       ) : (
         <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
           <div className="overflow-x-auto">
-            <table className="w-full text-sm">
+            <table className="w-full text-sm mobile-cards">
               <thead className="bg-slate-50 border-b border-slate-200">
                 <tr className="text-left text-xs font-semibold text-slate-500 uppercase tracking-wide">
                   <th className="px-4 py-3">Fakturanr.</th>
@@ -235,17 +235,17 @@ export default function Invoices() {
               <tbody className="divide-y divide-slate-50">
                 {invoices.map((inv) => (
                   <tr key={inv.id} className="hover:bg-slate-50">
-                    <td className="px-4 py-3 font-medium text-slate-900">{inv.invoice_number}</td>
-                    <td className="px-4 py-3 text-slate-600">{inv.customer_name || '—'}</td>
-                    <td className="px-4 py-3 text-slate-500">{formatDate(inv.date)}</td>
-                    <td className="px-4 py-3 text-slate-500">{formatDate(inv.due_date)}</td>
-                    <td className="px-4 py-3 text-right font-medium text-slate-900">{formatDKK(calcTotal(inv.line_items))}</td>
-                    <td className="px-4 py-3">
+                    <td className="px-4 py-3 font-medium text-slate-900" data-label="Fakturanr.">{inv.invoice_number}</td>
+                    <td className="px-4 py-3 text-slate-600" data-label="Kunde">{inv.customer_name || '—'}</td>
+                    <td className="px-4 py-3 text-slate-500" data-label="Dato">{formatDate(inv.date)}</td>
+                    <td className="px-4 py-3 text-slate-500" data-label="Forfald">{formatDate(inv.due_date)}</td>
+                    <td className="px-4 py-3 text-right font-medium text-slate-900" data-label="Beløb">{formatDKK(calcTotal(inv.line_items))}</td>
+                    <td className="px-4 py-3" data-label="Status">
                       <span className={`inline-flex px-2 py-0.5 rounded-full text-xs font-medium ${STATUS_BADGE[inv.status] || 'bg-slate-100 text-slate-500'}`}>
                         {inv.status}
                       </span>
                     </td>
-                    <td className="px-4 py-3">
+                    <td className="px-4 py-3" data-label="Handlinger">
                       <div className="flex justify-end gap-1">
                         <Button
                           variant="ghost"

@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
+import { useAuth } from '@/lib/AuthContext';
 import { formatDate } from '@/lib/format';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { UserRound, HardHat, ListChecks, Save, Mail, Clock, MapPin, Calendar } from 'lucide-react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from '@/components/ui/dialog';
+import { UserRound, HardHat, ListChecks, Save, Mail, Clock, MapPin, Calendar, Trash2, AlertTriangle, LogOut } from 'lucide-react';
 
 const statusBadge = {
   'I gang': 'bg-emerald-100 text-emerald-700',
@@ -19,6 +21,26 @@ export default function Brugerprofil() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [prefs, setPrefs] = useState({ phone_number: '', preferred_language: 'Dansk', notification_email: true, notification_sms: false });
+  const [deleteOpen, setDeleteOpen] = useState(false);
+  const [confirmText, setConfirmText] = useState('');
+  const [deleting, setDeleting] = useState(false);
+  const { logout } = useAuth();
+
+  const handleDeleteAccount = async () => {
+    setDeleting(true);
+    try {
+      await base44.functions.invoke('deleteMyAccount', {});
+      setDeleteOpen(false);
+      // Personal data wiped + account flagged for removal; clear session and leave.
+      logout(false);
+      window.location.href = '/login';
+    } catch (e) {
+      console.error(e);
+      alert('Kunne ikke slette kontoen: ' + (e.message || 'Ukendt fejl'));
+    } finally {
+      setDeleting(false);
+    }
+  };
 
   const load = async () => {
     try {
@@ -125,6 +147,40 @@ export default function Brugerprofil() {
         </div>
         <Button onClick={savePrefs} disabled={saving} className="gap-2 mt-4"><Save className="w-4 h-4" /> {saving ? 'Gemmer...' : 'Gem præferencer'}</Button>
       </div>
+
+      <div className="bg-white rounded-xl border border-red-200 p-6 mt-6">
+        <h2 className="font-semibold text-red-700 mb-2 flex items-center gap-2"><AlertTriangle className="w-5 h-5" /> Slet konto</h2>
+        <p className="text-sm text-slate-500 mb-4">
+          Sletning fjerner permanent din konto og alle tilknyttede personlige data (tidsregistreringer, opgaver, beskeder og mere).
+          Handlingen kan ikke fortrydes.
+        </p>
+        <Button variant="destructive" onClick={() => { setDeleteOpen(true); setConfirmText(''); }} className="gap-2">
+          <Trash2 className="w-4 h-4" /> Slet min konto
+        </Button>
+      </div>
+
+      <Dialog open={deleteOpen} onOpenChange={(o) => !deleting && setDeleteOpen(o)}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2 text-red-700"><AlertTriangle className="w-5 h-5" /> Bekræft sletning af konto</DialogTitle>
+            <DialogDescription className="text-slate-500">
+              Dette sletter permanent din konto og alle personlige data. Handlingen kan ikke fortrydes.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-3 py-2">
+            <p className="text-sm text-slate-600">
+              For at bekræfte, skriv <span className="font-semibold text-slate-900">SLET</span> i feltet nedenfor:
+            </p>
+            <Input value={confirmText} onChange={(e) => setConfirmText(e.target.value)} placeholder="SLET" className="text-center font-semibold tracking-widest" />
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setDeleteOpen(false)} disabled={deleting}>Annuller</Button>
+            <Button variant="destructive" onClick={handleDeleteAccount} disabled={deleting || confirmText.trim().toUpperCase() !== 'SLET'} className="gap-2">
+              {deleting ? <><div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> Sletter...</> : <><Trash2 className="w-4 h-4" /> Slet konto permanent</>}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

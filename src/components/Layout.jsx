@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { NavLink, Outlet, useLocation } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
+import AnimatedOutlet from '@/components/AnimatedOutlet';
 import { Image } from '@/components/ui/image';
 import { BRAND_LOGO_URL } from '@/lib/brand';
 import {
@@ -371,7 +372,7 @@ export default function Layout() {
       </aside>
 
       {/* Mobile top bar */}
-      <div className="md:hidden sticky top-0 z-30 bg-slate-950 text-white px-4 py-3 flex items-center gap-2">
+      <div className="md:hidden sticky top-0 z-30 bg-slate-950 text-white px-4 py-3 flex items-center gap-2 safe-pt safe-px">
         <div className="w-8 h-8 rounded-lg bg-amber-400 flex items-center justify-center">
           <Building2 className="w-4 h-4 text-slate-950" />
         </div>
@@ -400,7 +401,7 @@ export default function Layout() {
       {/* Main content */}
       <div className="md:ml-64">
         <main className="p-4 md:p-8 max-w-7xl mx-auto">
-          <Outlet />
+          <AnimatedOutlet />
         </main>
       </div>
     </div>

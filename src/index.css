@@ -88,5 +88,118 @@
 
   body {
     @apply bg-background text-foreground font-body;
+    overscroll-behavior: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Safe-area variables for native WebView notches/home indicators */
+  :root {
+    --safe-top: env(safe-area-inset-top, 0px);
+    --safe-right: env(safe-area-inset-right, 0px);
+    --safe-bottom: env(safe-area-inset-bottom, 0px);
+    --safe-left: env(safe-area-inset-left, 0px);
+  }
+
+  /* Apply safe-area padding to main scrolling surfaces */
+  .safe-pt { padding-top: var(--safe-top); }
+  .safe-pb { padding-bottom: var(--safe-bottom); }
+  .safe-px { padding-left: var(--safe-left); padding-right: var(--safe-right); }
+  .safe-area {
+    padding-top: var(--safe-top);
+    padding-right: var(--safe-right);
+    padding-bottom: var(--safe-bottom);
+    padding-left: var(--safe-left);
+  }
+
+  /* Prevent rubber-band / chained overscroll on scroll containers */
+  .scroll-area, main, nav, [role="navigation"], .overflow-y-auto, .overflow-auto {
+    overscroll-behavior: contain;
+  }
+}
+
+@layer base {
+  /* Disable text selection on UI chrome; keep it for content areas */
+  button,
+  a,
+  nav,
+  header,
+  [role="tab"],
+  [role="tablist"],
+  [role="button"],
+  [role="navigation"],
+  .lucide,
+  svg,
+  .no-select,
+  [data-slot="accordion-trigger"] {
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Re-enable selection for content that users need to copy/read */
+  article,
+  main p,
+  td,
+  th,
+  table,
+  [contenteditable="true"],
+  input,
+  textarea,
+  .select-text,
+  .prose,
+  [data-content] {
+    -webkit-user-select: text;
+    user-select: text;
+  }
+
+  /* Minimum 44x44px tap targets on touch devices (App Store HIG) */
+  @media (pointer: coarse) {
+    button,
+    [role="button"],
+    a[role="button"],
+    .tap-target {
+      min-height: 44px;
+      min-width: 44px;
+    }
+  }
+}
+
+@layer components {
+  /* Opt-in responsive table → cards on mobile. Add class "mobile-cards" to <table>
+     and data-label="…" to each <td> to label rows on small screens. */
+  @media (max-width: 639px) {
+    table.mobile-cards thead {
+      display: none;
+    }
+    table.mobile-cards,
+    table.mobile-cards tbody {
+      display: block;
+      width: 100%;
+    }
+    table.mobile-cards tr {
+      display: block;
+      border: 1px solid hsl(var(--border));
+      border-radius: 0.75rem;
+      padding: 0.75rem;
+      margin-bottom: 0.75rem;
+      background: hsl(var(--card));
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+    }
+    table.mobile-cards td {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.35rem 0;
+      border: none;
+      text-align: right;
+      white-space: normal;
+    }
+    table.mobile-cards td::before {
+      content: attr(data-label);
+      font-weight: 600;
+      color: hsl(var(--muted-foreground));
+      text-align: left;
+    }
   }
 }

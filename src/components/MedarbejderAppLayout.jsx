@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
-import { Outlet, NavLink, Link } from 'react-router-dom';
+import { NavLink, Link } from 'react-router-dom';
 import { Home, Clock, ListChecks, MessageSquare, User, LogOut, HardHat, Bell, Receipt } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 import { BRAND_NAME_SHORT } from '@/lib/brand';
 import { useMaNotifications } from '@/hooks/useMaNotifications';
+import AnimatedOutlet from '@/components/AnimatedOutlet';
 
 const NAV = [
   { to: '/app', label: 'Hjem', icon: Home, end: true },
@@ -44,7 +45,7 @@ export default function MedarbejderAppLayout() {
   return (
     <div className="min-h-screen bg-slate-100 flex flex-col max-w-md mx-auto shadow-xl relative">
       {/* Top bar */}
-      <header className="bg-slate-950 text-white sticky top-0 z-30 px-4 py-3 flex items-center justify-between">
+      <header className="bg-slate-950 text-white sticky top-0 z-30 px-4 py-3 flex items-center justify-between safe-pt safe-px">
         <Link to="/app" className="flex items-center gap-2.5">
           <div className="w-9 h-9 rounded-lg bg-amber-400 flex items-center justify-center">
             <HardHat className="w-5 h-5 text-slate-950" />
@@ -72,11 +73,11 @@ export default function MedarbejderAppLayout() {
 
       {/* Content */}
       <main className="flex-1 overflow-y-auto pb-20">
-        <Outlet context={{ user, syncClock, clockedIn, markMessagesRead, markTasksRead }} />
+        <AnimatedOutlet context={{ user, syncClock, clockedIn, markMessagesRead, markTasksRead }} />
       </main>
 
       {/* Bottom navigation */}
-      <nav className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-md bg-slate-950 border-t border-slate-800 z-40">
+      <nav className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-md bg-slate-950 border-t border-slate-800 z-40 safe-pb">
         <div className="flex">
           {NAV.map(({ to, label, icon: Icon, end, badgeKey }) => {
             const count = badgeKey ? badges[badgeKey] : 0;

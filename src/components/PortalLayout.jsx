@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
-import { Outlet, Link, NavLink } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import { Building2, LogOut, HardHat, Calculator, LayoutDashboard, Home, Heart } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
+import AnimatedOutlet from '@/components/AnimatedOutlet';
 
 export default function PortalLayout() {
   const [user, setUser] = useState(null);
@@ -12,8 +13,8 @@ export default function PortalLayout() {
 
   return (
     <div className="min-h-screen bg-slate-50">
-      <header className="bg-slate-950 text-white sticky top-0 z-30">
-        <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
+      <header className="bg-slate-950 text-white sticky top-0 z-30 safe-pt">
+        <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between safe-px">
           <Link to="/portal" className="flex items-center gap-2.5">
             <div className="w-9 h-9 rounded-lg bg-amber-400 flex items-center justify-center">
               <Building2 className="w-5 h-5 text-slate-950" />
@@ -56,7 +57,7 @@ export default function PortalLayout() {
         </div>
       </div>
       <main className="max-w-5xl mx-auto px-4 py-8">
-        <Outlet />
+        <AnimatedOutlet />
       </main>
     </div>
   );
