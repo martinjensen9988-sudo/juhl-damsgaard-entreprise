@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { base44 } from '@/api/base44Client';
 import { formatDKK, calcSubtotal, calcVAT, calcTotal, formatDate } from '@/lib/format';
 import { Button } from '@/components/ui/button';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { ClipboardList, Clock, Package, TrendingUp, CheckCircle2, AlertTriangle } from 'lucide-react';
 
 export default function Arbejdsedler() {
@@ -78,24 +79,23 @@ export default function Arbejdsedler() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-slate-900">Arbejdssedler</h1>
+        <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">Arbejdssedler</h1>
         <p className="text-slate-500 mt-1">Samlet dokumentation pr. sag med dækningsgradsberegning</p>
       </div>
 
       {/* Project selector */}
       <div className="flex items-center gap-3">
         <label className="text-sm font-medium text-slate-600">Vælg sag:</label>
-        <select
-          value={selectedId}
-          onChange={(e) => setSelectedId(e.target.value)}
-          className="border border-slate-200 rounded-lg px-3 py-2 text-sm bg-white max-w-md"
-        >
-          {projects.map((p) => <option key={p.id} value={p.id}>{p.name} – {p.customer_name || ''}</option>)}
-        </select>
+        <Select value={selectedId} onValueChange={setSelectedId}>
+          <SelectTrigger className="max-w-md"><SelectValue placeholder="Vælg sag" /></SelectTrigger>
+          <SelectContent>
+            {projects.map((p) => <SelectItem key={p.id} value={p.id}>{p.name} – {p.customer_name || ''}</SelectItem>)}
+          </SelectContent>
+        </Select>
       </div>
 
       {!project ? (
-        <div className="bg-white rounded-xl border border-slate-200 py-16 text-center">
+        <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 py-16 text-center">
           <ClipboardList className="w-10 h-10 text-slate-300 mx-auto mb-3" />
           <p className="text-slate-500">Vælg et projekt for at se arbejdseddel.</p>
         </div>
@@ -103,26 +103,26 @@ export default function Arbejdsedler() {
         <>
           {/* KPI cards */}
           <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
-            <div className="bg-white rounded-xl border border-slate-200 p-4">
+            <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-4">
               <div className="flex items-center gap-2 text-slate-500 text-sm mb-1"><TrendingUp className="w-4 h-4" /> Omsætning</div>
-              <div className="text-lg font-bold text-slate-900">{formatDKK(revenue)}</div>
+              <div className="text-lg font-bold text-slate-900 dark:text-slate-100">{formatDKK(revenue)}</div>
             </div>
-            <div className="bg-white rounded-xl border border-slate-200 p-4">
+            <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-4">
               <div className="flex items-center gap-2 text-slate-500 text-sm mb-1"><Clock className="w-4 h-4" /> Timeløn</div>
-              <div className="text-lg font-bold text-slate-900">{formatDKK(laborCost)}</div>
+              <div className="text-lg font-bold text-slate-900 dark:text-slate-100">{formatDKK(laborCost)}</div>
               <div className="text-xs text-slate-400">{totalHours} timer</div>
             </div>
-            <div className="bg-white rounded-xl border border-slate-200 p-4">
+            <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-4">
               <div className="flex items-center gap-2 text-slate-500 text-sm mb-1"><Package className="w-4 h-4" /> Materialer</div>
-              <div className="text-lg font-bold text-slate-900">{formatDKK(materialCost)}</div>
+              <div className="text-lg font-bold text-slate-900 dark:text-slate-100">{formatDKK(materialCost)}</div>
             </div>
-            <div className="bg-white rounded-xl border border-slate-200 p-4">
+            <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-4">
               <div className="text-slate-500 text-sm mb-1">Dækningsgrad</div>
               <div className={`text-lg font-bold ${dækningsgrad === null ? 'text-slate-400' : dækningsgrad >= 0 ? 'text-emerald-600' : 'text-red-600'}`}>
                 {dækningsgrad === null ? '—' : `${dækningsgrad}%`}
               </div>
             </div>
-            <div className="bg-white rounded-xl border border-slate-200 p-4">
+            <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-4">
               <div className="text-slate-500 text-sm mb-1">Resultat</div>
               <div className={`text-lg font-bold ${profit >= 0 ? 'text-emerald-600' : 'text-red-600'}`}>{formatDKK(profit)}</div>
             </div>
@@ -130,18 +130,18 @@ export default function Arbejdsedler() {
 
           <div className="grid lg:grid-cols-2 gap-6">
             {/* Time entries */}
-            <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+            <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden">
               <div className="px-5 py-4 border-b border-slate-100 flex items-center gap-2">
                 <Clock className="w-5 h-5 text-slate-400" />
-                <h2 className="font-semibold text-slate-900">Tidsregistreringer</h2>
+                <h2 className="font-semibold text-slate-900 dark:text-slate-100">Tidsregistreringer</h2>
                 <span className="ml-auto text-sm text-slate-400">{totalHours} timer</span>
               </div>
               {timeEntries.length === 0 ? (
                 <div className="px-5 py-8 text-center text-sm text-slate-400">Ingen timer registreret</div>
               ) : (
                 <div className="overflow-x-auto">
-                  <table className="w-full text-sm">
-                    <thead className="bg-slate-50 border-b border-slate-100">
+                  <table className="w-full text-sm mobile-cards">
+                    <thead className="bg-slate-50 dark:bg-slate-800/50 border-b border-slate-100 dark:border-slate-800">
                       <tr className="text-left text-xs font-semibold text-slate-500 uppercase">
                         <th className="px-4 py-2">Dato</th>
                         <th className="px-4 py-2">Medarbejder</th>
@@ -152,12 +152,12 @@ export default function Arbejdsedler() {
                     </thead>
                     <tbody className="divide-y divide-slate-50">
                       {timeEntries.map((t) => (
-                        <tr key={t.id} className="hover:bg-slate-50">
-                          <td className="px-4 py-2 text-slate-600">{formatDate(t.date)}</td>
-                          <td className="px-4 py-2 text-slate-900 font-medium">{t.user_name}</td>
-                          <td className="px-4 py-2 text-slate-500">{t.task_type}</td>
-                          <td className="px-4 py-2 text-right text-slate-700">{t.hours}</td>
-                          <td className="px-4 py-2 text-right text-slate-700">{formatDKK((t.hours || 0) * empRate(t.user_name))}</td>
+                        <tr key={t.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/50">
+                          <td className="px-4 py-2 text-slate-600 dark:text-slate-300" data-label="Dato">{formatDate(t.date)}</td>
+                          <td className="px-4 py-2 text-slate-900 dark:text-slate-100 font-medium" data-label="Medarbejder">{t.user_name}</td>
+                          <td className="px-4 py-2 text-slate-500 dark:text-slate-400" data-label="Type">{t.task_type}</td>
+                          <td className="px-4 py-2 text-right text-slate-700 dark:text-slate-200" data-label="Timer">{t.hours}</td>
+                          <td className="px-4 py-2 text-right text-slate-700 dark:text-slate-200" data-label="Løn">{formatDKK((t.hours || 0) * empRate(t.user_name))}</td>
                         </tr>
                       ))}
                     </tbody>
@@ -167,18 +167,18 @@ export default function Arbejdsedler() {
             </div>
 
             {/* Materials */}
-            <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+            <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden">
               <div className="px-5 py-4 border-b border-slate-100 flex items-center gap-2">
                 <Package className="w-5 h-5 text-slate-400" />
-                <h2 className="font-semibold text-slate-900">Materialer</h2>
+                <h2 className="font-semibold text-slate-900 dark:text-slate-100">Materialer</h2>
                 <span className="ml-auto text-sm text-slate-400">{formatDKK(materialCost)}</span>
               </div>
               {materials.length === 0 ? (
                 <div className="px-5 py-8 text-center text-sm text-slate-400">Ingen materialer registreret</div>
               ) : (
                 <div className="overflow-x-auto">
-                  <table className="w-full text-sm">
-                    <thead className="bg-slate-50 border-b border-slate-100">
+                  <table className="w-full text-sm mobile-cards">
+                    <thead className="bg-slate-50 dark:bg-slate-800/50 border-b border-slate-100 dark:border-slate-800">
                       <tr className="text-left text-xs font-semibold text-slate-500 uppercase">
                         <th className="px-4 py-2">Materiale</th>
                         <th className="px-4 py-2 text-right">Antal</th>
@@ -188,11 +188,11 @@ export default function Arbejdsedler() {
                     </thead>
                     <tbody className="divide-y divide-slate-50">
                       {materials.map((m) => (
-                        <tr key={m.id} className="hover:bg-slate-50">
-                          <td className="px-4 py-2 text-slate-900 font-medium">{m.name}</td>
-                          <td className="px-4 py-2 text-right text-slate-500">{m.quantity} {m.unit}</td>
-                          <td className="px-4 py-2 text-right text-slate-500">{formatDKK(m.unit_price || 0)}</td>
-                          <td className="px-4 py-2 text-right text-slate-700 font-medium">{formatDKK((m.quantity || 0) * (m.unit_price || 0))}</td>
+                        <tr key={m.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/50">
+                          <td className="px-4 py-2 text-slate-900 dark:text-slate-100 font-medium" data-label="Materiale">{m.name}</td>
+                          <td className="px-4 py-2 text-right text-slate-500 dark:text-slate-400" data-label="Antal">{m.quantity} {m.unit}</td>
+                          <td className="px-4 py-2 text-right text-slate-500 dark:text-slate-400" data-label="Pris">{formatDKK(m.unit_price || 0)}</td>
+                          <td className="px-4 py-2 text-right text-slate-700 dark:text-slate-200 font-medium" data-label="Total">{formatDKK((m.quantity || 0) * (m.unit_price || 0))}</td>
                         </tr>
                       ))}
                     </tbody>
@@ -204,10 +204,10 @@ export default function Arbejdsedler() {
 
           {/* Images */}
           {images.length > 0 && (
-            <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+            <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden">
               <div className="px-5 py-4 border-b border-slate-100 flex items-center gap-2">
                 <ClipboardList className="w-5 h-5 text-slate-400" />
-                <h2 className="font-semibold text-slate-900">Dokumentationsbilleder</h2>
+                <h2 className="font-semibold text-slate-900 dark:text-slate-100">Dokumentationsbilleder</h2>
               </div>
               <div className="p-5 grid grid-cols-2 md:grid-cols-4 gap-3">
                 {images.map((img) => (
@@ -230,7 +230,7 @@ export default function Arbejdsedler() {
                 <CheckCircle2 className="w-6 h-6 text-emerald-500" />
               )}
               <div>
-                <div className="font-semibold text-slate-900">
+                <div className="font-semibold text-slate-900 dark:text-slate-100">
                   Dækningsgrad: {dækningsgrad === null ? 'Ingen omsætning registreret' : `${dækningsgrad}%`}
                 </div>
                 <div className="text-sm text-slate-500">

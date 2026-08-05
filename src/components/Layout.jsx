@@ -317,7 +317,7 @@ export default function Layout() {
   const isGroupOpen = (label) => openGroups[label] || activeGroup === label;
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950">
       {/* Desktop sidebar */}
       <aside className="hidden md:flex w-64 flex-col bg-slate-950 text-slate-300 fixed inset-y-0 left-0 z-30">
         <div className="flex items-center gap-3 px-6 py-6 border-b border-slate-800">

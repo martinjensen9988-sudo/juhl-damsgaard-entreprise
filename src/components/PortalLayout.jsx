@@ -12,7 +12,7 @@ export default function PortalLayout() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950">
       <header className="bg-slate-950 text-white sticky top-0 z-30 safe-pt">
         <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between safe-px">
           <Link to="/portal" className="flex items-center gap-2.5">

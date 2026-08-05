@@ -19,6 +19,7 @@ import {
   DialogFooter,
 } from '@/components/ui/dialog';
 import LineItemEditor from '@/components/LineItemEditor';
+import { useDialogHistory } from '@/hooks/useDialogHistory';
 import SendTilbudDialog from '@/components/SendTilbudDialog';
 import { generateQuotePDF } from '@/lib/quotePdf';
 import { formatDKK, calcSubtotal, calcVAT, calcTotal, formatDate } from '@/lib/format';
@@ -61,6 +62,8 @@ export default function Quotes() {
   const [pdfLoading, setPdfLoading] = useState(null);
   const [sendOpen, setSendOpen] = useState(false);
   const [sendQuote, setSendQuote] = useState(null);
+
+  useDialogHistory(dialogOpen, setDialogOpen);
 
   const load = async () => {
     setLoading(true);
@@ -245,8 +248,8 @@ export default function Quotes() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-slate-900">Tilbud</h1>
-          <p className="text-slate-500 mt-1">Opret og send tilbud til dine kunder</p>
+          <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">Tilbud</h1>
+          <p className="text-slate-500 dark:text-slate-400 mt-1">Opret og send tilbud til dine kunder</p>
         </div>
         <Button onClick={openNew} className="bg-slate-950 hover:bg-slate-800" disabled={!form && quotes.length > 0 ? false : false}>
           <Plus className="w-4 h-4 mr-1.5" /> Nyt tilbud
@@ -258,15 +261,15 @@ export default function Quotes() {
           <div className="w-8 h-8 border-4 border-slate-200 border-t-amber-400 rounded-full animate-spin"></div>
         </div>
       ) : quotes.length === 0 ? (
-        <div className="bg-white rounded-xl border border-slate-200 py-16 text-center">
+        <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 py-16 text-center">
           <FileText className="w-10 h-10 text-slate-300 mx-auto mb-3" />
           <p className="text-slate-500">Ingen tilbud endnu. Opret dit første tilbud.</p>
         </div>
       ) : (
-        <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+        <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden">
           <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead className="bg-slate-50 border-b border-slate-200">
+            <table className="w-full text-sm mobile-cards">
+              <thead className="bg-slate-50 dark:bg-slate-800/50 border-b border-slate-200 dark:border-slate-800">
                 <tr className="text-left text-xs font-semibold text-slate-500 uppercase tracking-wide">
                   <th className="px-4 py-3">Tilbudsnr.</th>
                   <th className="px-4 py-3">Kunde</th>
@@ -276,14 +279,14 @@ export default function Quotes() {
                   <th className="px-4 py-3 text-right">Handlinger</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-50">
+              <tbody className="divide-y divide-slate-50 dark:divide-slate-800">
                 {quotes.map((q) => (
-                  <tr key={q.id} className="hover:bg-slate-50">
-                    <td className="px-4 py-3 font-medium text-slate-900">{q.quote_number}</td>
-                    <td className="px-4 py-3 text-slate-600">{q.customer_name || '—'}</td>
-                    <td className="px-4 py-3 text-slate-500">{formatDate(q.date)}</td>
-                    <td className="px-4 py-3 text-right font-medium text-slate-900">{formatDKK(calcTotal(q.line_items))}</td>
-                    <td className="px-4 py-3">
+                  <tr key={q.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/50">
+                    <td className="px-4 py-3 font-medium text-slate-900 dark:text-slate-100" data-label="Tilbudsnr.">{q.quote_number}</td>
+                    <td className="px-4 py-3 text-slate-600 dark:text-slate-300" data-label="Kunde">{q.customer_name || '—'}</td>
+                    <td className="px-4 py-3 text-slate-500 dark:text-slate-400" data-label="Dato">{formatDate(q.date)}</td>
+                    <td className="px-4 py-3 text-right font-medium text-slate-900 dark:text-slate-100" data-label="Beløb">{formatDKK(calcTotal(q.line_items))}</td>
+                    <td className="px-4 py-3" data-label="Status">
                       <span className={`inline-flex px-2 py-0.5 rounded-full text-xs font-medium ${STATUS_BADGE[q.status] || 'bg-slate-100 text-slate-500'}`}>
                         {q.status}
                       </span>
@@ -291,7 +294,7 @@ export default function Quotes() {
                         <span className="block text-xs text-blue-500 mt-1">Set {formatDate(q.viewed_at.slice(0, 10))}</span>
                       )}
                     </td>
-                    <td className="px-4 py-3">
+                    <td className="px-4 py-3" data-label="Handlinger">
                       <div className="flex justify-end gap-1">
                         {q.status !== 'Accepteret' && (
                           <Button
@@ -416,16 +419,16 @@ export default function Quotes() {
                 />
               </div>
 
-              <div className="bg-slate-50 rounded-lg p-4 space-y-2">
-                <div className="flex justify-between text-sm text-slate-600">
+              <div className="bg-slate-50 dark:bg-slate-800/50 rounded-lg p-4 space-y-2">
+                <div className="flex justify-between text-sm text-slate-600 dark:text-slate-300">
                   <span>Subtotal</span>
                   <span>{formatDKK(calcSubtotal(form.line_items))}</span>
                 </div>
-                <div className="flex justify-between text-sm text-slate-600">
+                <div className="flex justify-between text-sm text-slate-600 dark:text-slate-300">
                   <span>Moms (25%)</span>
                   <span>{formatDKK(calcVAT(calcSubtotal(form.line_items)))}</span>
                 </div>
-                <div className="flex justify-between text-base font-bold text-slate-900 pt-2 border-t border-slate-200">
+                <div className="flex justify-between text-base font-bold text-slate-900 dark:text-slate-100 pt-2 border-t border-slate-200 dark:border-slate-700">
                   <span>Total</span>
                   <span>{formatDKK(calcTotal(form.line_items))}</span>
                 </div>
@@ -462,7 +465,7 @@ export default function Quotes() {
             </DialogTitle>
           </DialogHeader>
           <div className="space-y-3 py-2">
-            <p className="text-sm text-slate-500">
+            <p className="text-sm text-slate-500 dark:text-slate-400">
               Beskriv opgaven, så genererer AI'en forslag til linjeelementer med danske priser. Du kan herefter tilpasse linjerne manuelt.
             </p>
             <Textarea

@@ -43,7 +43,7 @@ export default function MedarbejderAppLayout() {
   const badges = { tasks: unreadTasks, messages: unreadMessages };
 
   return (
-    <div className="min-h-screen bg-slate-100 flex flex-col max-w-md mx-auto shadow-xl relative">
+    <div className="min-h-screen bg-slate-100 dark:bg-slate-950 flex flex-col max-w-md mx-auto shadow-xl relative">
       {/* Top bar */}
       <header className="bg-slate-950 text-white sticky top-0 z-30 px-4 py-3 flex items-center justify-between safe-pt safe-px">
         <Link to="/app" className="flex items-center gap-2.5">

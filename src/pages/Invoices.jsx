@@ -20,6 +20,7 @@ import {
 } from '@/components/ui/dialog';
 import LineItemEditor from '@/components/LineItemEditor';
 import SendFakturaDialog from '@/components/SendFakturaDialog';
+import { useDialogHistory } from '@/hooks/useDialogHistory';
 import SupplierInvoiceScanner from '@/components/SupplierInvoiceScanner';
 import { generateInvoicePDF } from '@/lib/invoicePdf';
 import { formatDKK, calcSubtotal, calcVAT, calcTotal, formatDate } from '@/lib/format';
@@ -58,6 +59,8 @@ export default function Invoices() {
   const [pdfLoading, setPdfLoading] = useState(null);
   const [sendOpen, setSendOpen] = useState(false);
   const [sendInvoice, setSendInvoice] = useState(null);
+
+  useDialogHistory(dialogOpen, setDialogOpen);
 
   const load = async () => {
     setLoading(true);
@@ -186,8 +189,8 @@ export default function Invoices() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-slate-900">Fakturaer</h1>
-          <p className="text-slate-500 mt-1">Opret og følg op på dine fakturaer</p>
+          <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">Fakturaer</h1>
+          <p className="text-slate-500 dark:text-slate-400 mt-1">Opret og følg op på dine fakturaer</p>
         </div>
         <Button onClick={openNew} className="bg-slate-950 hover:bg-slate-800">
           <Plus className="w-4 h-4 mr-1.5" /> Ny faktura
@@ -213,15 +216,15 @@ export default function Invoices() {
           <div className="w-8 h-8 border-4 border-slate-200 border-t-amber-400 rounded-full animate-spin"></div>
         </div>
       ) : invoices.length === 0 ? (
-        <div className="bg-white rounded-xl border border-slate-200 py-16 text-center">
+        <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 py-16 text-center">
           <Receipt className="w-10 h-10 text-slate-300 mx-auto mb-3" />
           <p className="text-slate-500">Ingen fakturaer endnu. Opret din første faktura.</p>
         </div>
       ) : (
-        <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+        <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-sm mobile-cards">
-              <thead className="bg-slate-50 border-b border-slate-200">
+              <thead className="bg-slate-50 dark:bg-slate-800/50 border-b border-slate-200 dark:border-slate-800">
                 <tr className="text-left text-xs font-semibold text-slate-500 uppercase tracking-wide">
                   <th className="px-4 py-3">Fakturanr.</th>
                   <th className="px-4 py-3">Kunde</th>
@@ -232,14 +235,14 @@ export default function Invoices() {
                   <th className="px-4 py-3 text-right">Handlinger</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-50">
+              <tbody className="divide-y divide-slate-50 dark:divide-slate-800">
                 {invoices.map((inv) => (
-                  <tr key={inv.id} className="hover:bg-slate-50">
-                    <td className="px-4 py-3 font-medium text-slate-900" data-label="Fakturanr.">{inv.invoice_number}</td>
-                    <td className="px-4 py-3 text-slate-600" data-label="Kunde">{inv.customer_name || '—'}</td>
-                    <td className="px-4 py-3 text-slate-500" data-label="Dato">{formatDate(inv.date)}</td>
-                    <td className="px-4 py-3 text-slate-500" data-label="Forfald">{formatDate(inv.due_date)}</td>
-                    <td className="px-4 py-3 text-right font-medium text-slate-900" data-label="Beløb">{formatDKK(calcTotal(inv.line_items))}</td>
+                  <tr key={inv.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/50">
+                    <td className="px-4 py-3 font-medium text-slate-900 dark:text-slate-100" data-label="Fakturanr.">{inv.invoice_number}</td>
+                    <td className="px-4 py-3 text-slate-600 dark:text-slate-300" data-label="Kunde">{inv.customer_name || '—'}</td>
+                    <td className="px-4 py-3 text-slate-500 dark:text-slate-400" data-label="Dato">{formatDate(inv.date)}</td>
+                    <td className="px-4 py-3 text-slate-500 dark:text-slate-400" data-label="Forfald">{formatDate(inv.due_date)}</td>
+                    <td className="px-4 py-3 text-right font-medium text-slate-900 dark:text-slate-100" data-label="Beløb">{formatDKK(calcTotal(inv.line_items))}</td>
                     <td className="px-4 py-3" data-label="Status">
                       <span className={`inline-flex px-2 py-0.5 rounded-full text-xs font-medium ${STATUS_BADGE[inv.status] || 'bg-slate-100 text-slate-500'}`}>
                         {inv.status}
@@ -346,16 +349,16 @@ export default function Invoices() {
                 />
               </div>
 
-              <div className="bg-slate-50 rounded-lg p-4 space-y-2">
-                <div className="flex justify-between text-sm text-slate-600">
+              <div className="bg-slate-50 dark:bg-slate-800/50 rounded-lg p-4 space-y-2">
+                <div className="flex justify-between text-sm text-slate-600 dark:text-slate-300">
                   <span>Subtotal</span>
                   <span>{formatDKK(calcSubtotal(form.line_items))}</span>
                 </div>
-                <div className="flex justify-between text-sm text-slate-600">
+                <div className="flex justify-between text-sm text-slate-600 dark:text-slate-300">
                   <span>Moms (25%)</span>
                   <span>{formatDKK(calcVAT(calcSubtotal(form.line_items)))}</span>
                 </div>
-                <div className="flex justify-between text-base font-bold text-slate-900 pt-2 border-t border-slate-200">
+                <div className="flex justify-between text-base font-bold text-slate-900 dark:text-slate-100 pt-2 border-t border-slate-200 dark:border-slate-700">
                   <span>Total</span>
                   <span>{formatDKK(calcTotal(form.line_items))}</span>
                 </div>

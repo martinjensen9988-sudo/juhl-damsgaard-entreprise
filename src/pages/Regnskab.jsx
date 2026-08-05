@@ -96,15 +96,15 @@ export default function Regnskab() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-slate-900">Regnskabsintegration</h1>
-        <p className="text-slate-500 mt-1">Eksportér fakturaer til dit regnskabssystem</p>
+        <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">Regnskabsintegration</h1>
+        <p className="text-slate-500 dark:text-slate-400 mt-1">Eksportér fakturaer til dit regnskabssystem</p>
       </div>
 
       {/* System selector */}
-      <div className="bg-white rounded-xl border border-slate-200 p-5">
+      <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5">
         <div className="flex items-center gap-2 mb-3">
           <Settings className="w-5 h-5 text-slate-400" />
-          <h2 className="font-semibold text-slate-900">Regnskabssystem</h2>
+          <h2 className="font-semibold text-slate-900 dark:text-slate-100">Regnskabssystem</h2>
         </div>
         <div className="flex gap-3 flex-wrap">
           {[
@@ -126,7 +126,7 @@ export default function Regnskab() {
         <div className="mt-4 flex items-start gap-2 text-sm text-slate-500 bg-slate-50 rounded-lg p-3">
           <ExternalLink className="w-4 h-4 mt-0.5 shrink-0" />
           <div>
-            <p className="font-medium text-slate-700 mb-1">Sådan eksporterer du:</p>
+            <p className="font-medium text-slate-700 dark:text-slate-300 mb-1">Sådan eksporterer du:</p>
             <ol className="list-decimal list-inside space-y-0.5">
               <li>Vælg fakturaer nedenfor og klik "Eksportér valgte"</li>
               <li>CSV-filen downloades med semikolon-separerede værdier</li>
@@ -138,8 +138,8 @@ export default function Regnskab() {
 
       {/* Export bar */}
       <div className="flex items-center justify-between flex-wrap gap-3">
-        <div className="text-sm text-slate-500">
-          <span className="font-medium text-slate-700">{selected.size}</span> valgt af {invoices.length} fakturaer
+        <div className="text-sm text-slate-500 dark:text-slate-400">
+          <span className="font-medium text-slate-700 dark:text-slate-300">{selected.size}</span> valgt af {invoices.length} fakturaer
           <span className="ml-2">({exportableInvoices.length} eksportable)</span>
         </div>
         <div className="flex gap-2">
@@ -158,15 +158,15 @@ export default function Regnskab() {
           <div className="w-8 h-8 border-4 border-slate-200 border-t-amber-400 rounded-full animate-spin"></div>
         </div>
       ) : invoices.length === 0 ? (
-        <div className="bg-white rounded-xl border border-slate-200 py-16 text-center">
+        <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 py-16 text-center">
           <FileSpreadsheet className="w-10 h-10 text-slate-300 mx-auto mb-3" />
-          <p className="text-slate-500">Ingen fakturaer at eksportere.</p>
+          <p className="text-slate-500 dark:text-slate-400">Ingen fakturaer at eksportere.</p>
         </div>
       ) : (
-        <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+        <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden">
           <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead className="bg-slate-50 border-b border-slate-200">
+            <table className="w-full text-sm mobile-cards">
+              <thead className="bg-slate-50 dark:bg-slate-800/50 border-b border-slate-200 dark:border-slate-800">
                 <tr className="text-left text-xs font-semibold text-slate-500 uppercase tracking-wide">
                   <th className="px-4 py-3 w-10">
                     <input
@@ -183,10 +183,10 @@ export default function Regnskab() {
                   <th className="px-4 py-3">Status</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-50">
+              <tbody className="divide-y divide-slate-50 dark:divide-slate-800">
                 {invoices.map((inv) => (
-                  <tr key={inv.id} className="hover:bg-slate-50">
-                    <td className="px-4 py-3">
+                  <tr key={inv.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/50">
+                    <td className="px-4 py-3" data-label="Vælg">
                       <input
                         type="checkbox"
                         checked={selected.has(inv.id)}
@@ -194,11 +194,11 @@ export default function Regnskab() {
                         className="w-4 h-4 rounded border-slate-300 accent-slate-900"
                       />
                     </td>
-                    <td className="px-4 py-3 font-medium text-slate-900">{inv.invoice_number}</td>
-                    <td className="px-4 py-3 text-slate-600">{inv.customer_name || '—'}</td>
-                    <td className="px-4 py-3 text-slate-500">{formatDate(inv.date)}</td>
-                    <td className="px-4 py-3 text-right font-medium text-slate-900">{formatDKK(calcTotal(inv.line_items))}</td>
-                    <td className="px-4 py-3">
+                    <td className="px-4 py-3 font-medium text-slate-900 dark:text-slate-100" data-label="Fakturanr.">{inv.invoice_number}</td>
+                    <td className="px-4 py-3 text-slate-600 dark:text-slate-300" data-label="Kunde">{inv.customer_name || '—'}</td>
+                    <td className="px-4 py-3 text-slate-500 dark:text-slate-400" data-label="Dato">{formatDate(inv.date)}</td>
+                    <td className="px-4 py-3 text-right font-medium text-slate-900 dark:text-slate-100" data-label="Beløb">{formatDKK(calcTotal(inv.line_items))}</td>
+                    <td className="px-4 py-3" data-label="Status">
                       <span className={`inline-flex px-2 py-0.5 rounded-full text-xs font-medium ${STATUS_BADGE[inv.status] || 'bg-slate-100 text-slate-500'}`}>
                         {inv.status}
                       </span>
