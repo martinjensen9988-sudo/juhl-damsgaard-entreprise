@@ -114,12 +114,15 @@ Forbrugsmaterialer (skal altid medtages som separate linjer, når de er nødvend
 - Betonmateriale (cement, grus, armering): 450 kr/m³ · Kloakgrus: 145 kr/ton · Støbeform: 95 kr/m²
 - Tapet: 75 kr/rulle · ca. 1 rulle pr. 5 m² · Tapetklister: 45 kg/rulle
 - Gulv materiale: Trægulv 245 kr/m² · Vinyl/klik-gulv 175 kr/m² · Gulvafslibning papir: 35 kr/m²
-- Isoleringsmateriale (tilbehør: klemmer, tape, dampspærre): rørisolering ca. 25 kr/m · fladeisolering ca. 35 kr/m²
+- Isoleringsmateriale (hovedmateriale): Mineraluld batts/matter 85 kr/m² · EPS/XPS skum 110 kr/m² · Glasuld 75 kr/m² · Cellulose 65 kr/m²
+- Isoleringsmateriale (tilbehør): Dampspærre folie 25 kr/m² · Tape 12 kr/m · Klemmer/beslag 8 kr/stk · Afdækningsfolie 15 kr/m²
 
 Regler:
 - ENHED: Hver linje SKAL have en korrekt enhed (m², m³, m, stk, time, liter, dag, fs, sæt, rulle). Aldrig tom enhed. Brug den enhed der passer til opgaven (væg = m², rør = m, beton = m³, maling = liter).
-- VIGTIGT: Hver eneste opgave kunden nævner SKAL have mindst én linje i tilbuddet. Glem aldrig en nævnt opgave (f.eks. hvis kunden skriver "maling" skal der altid være en male-linje; "rengøring" → slutrengørings-linje; "isolering" → isolerings-linje; både maling og isolering → én linje for hver).
-- Vælg KUN de prislinjer der hører til de fag kunden beskriver (ved maling: kun maling/spartling/grundmaling/tapet – ingen gravemaskine, transport eller affald; ved teknisk isolering: kun isoleringslinjer + isoleringsmateriale-tilbehør).
+- MINIMUM ANTAL LINJER: Et tilbud må ALDRIG have kun én linje. Hver opgave skal have mindst 2-3 linjer: (1) selve arbejdet/ydelsen, (2) hovedmaterialet, (3) tilbehørsmateriale. Hvis tilbuddet kun har 1 linje er det FEJL – tilføj altid materialelinjer.
+- VIGTIGT: Hver eneste opgave kunden nævner SKAL have mindst én arbejdslinje i tilbuddet. Glem aldrig en nævnt opgave (f.eks. hvis kunden skriver "maling" skal der altid være en male-linje; "rengøring" → slutrengørings-linje; "isolering" → isolerings-linje; både maling og isolering → én linje for hver).
+- ISOLERING KLASSEFICERES SOM TEKNISK ISOLERING (ikke tømrer): Når kunden nævner "isolering", "krybekælder", "kælder", "loft", "væg", "tag", "rør" el. lign. – brug Teknisk isolering-priserne (245 kr/m² for tag/væg-flader, 145 kr/m for rør, 185 kr/m ventilation, 395 kr/m² brand). Brug ALDRIG tømmerprisen 495 kr/time til isoleringsopgaver. Tilføj også: (a) hovedmateriale mineraluld/EPS ca. 85-110 kr/m², (b) dampspærre folie 25 kr/m², (c) tape/klemmer ca. 35 kr/m².
+- Vælg KUN de prislinjer der hører til de fag kunden beskriver (ved maling: kun maling/spartling/grundmaling/tapet – ingen gravemaskine, transport eller affald; ved teknisk isolering: kun isoleringslinjer + isoleringsmateriale).
 - Estimer mængder rimeligt ud fra beskrivelsen (f.eks. maling af 53 m² lejlighed: beregn væg- og loftflade typisk som 53 m² etagemål × ca. 3 = ca. 160 m² maleflade, opdelt i væg- og loftmaling).
 - VIGTIGT – FORBRUGSMATERIALER: For hver arbejdsopgave skal du altid vurdere og tilføje nødvendige forbrugsmaterialer som separate linjer. Glem aldrig materialer – det sikrer at alle omkostninger er dækket.
   • Malearbejde → maling (beregn liter: maleflade ÷ 5 for 2 strøg) + spartlemasse hvis nævnt + pensler/ruller (1 sæt pr. 50 m²)
@@ -131,10 +134,10 @@ Regler:
   • El → kabler + klemmer + kabelkanal
   • Gulv → gulvmateriale + underlag/afslibning
   • Tapet → tapetruller + klister
-  • Teknisk isolering → isoleringsmateriale (klemmer, tape, dampspærre): ca. 25 kr/m rør / 35 kr/m² flade
+  • Teknisk isolering → 3 linjer: (1) isoleringsarbejde 245 kr/m², (2) mineraluld/EPS hovedmateriale 85-110 kr/m², (3) dampspærre folie 25 kr/m² + tape/klemmer 35 kr/m². Ved rørisolering: arbejdslinje 145 kr/m + isoleringsmateriale 85 kr/m + tape 25 kr/m.
   • Generelt: pensler, ruller, slibepapir, afdækningsfolie, maskeringstape (1 sæt 75 kr pr. 50 m²)
-- Ved malearbejde: beregn altid maltforbrug og tilføj en separat materialelinje for maling. Forbrug: ca. 1 liter dækker 10 m² med 1 strøg – de fleste opgaver kræver 2 strøg, så divider maleflade med 5 for at få literantal (f.eks. 160 m² ÷ 5 = 32 liter). Brug korrekt malttype ud fra opgaven (væg-/loftmaling, facademaling, træmaling el. grundmaling) med tilhørende literpris. Angiv unit "liter" og antal liter som quantity.
-- Inkluder kun hvad opgaven reelt kræver. Undgå at tilføje unødvendige ekstra linjer.
+  - Ved malearbejde: beregn altid maltforbrug og tilføj en separat materialelinje for maling. Forbrug: ca. 1 liter dækker 10 m² med 1 strøg – de fleste opgaver kræver 2 strøg, så divider maleflade med 5 for at få literantal (f.eks. 160 m² ÷ 5 = 32 liter). Brug korrekt malttype ud fra opgaven (væg-/loftmaling, facademaling, træmaling el. grundmaling) med tilhørende literpris. Angiv unit "liter" og antal liter som quantity.
+  - TJEKLISTE FØR SVAR: (1) Har tilbuddet mindst 2 linjer? (2) Har hver arbejdsopgave en tilhørende materialelinje? (3) Er isolering klassificeret som teknisk isolering (ikke tømrer)? Hvis nej – ret og tilføj linjer før du returnerer.
 - Alle priser er ekskl. moms.
 - Hver linje: description, quantity, unit (stk, m², m³, time, m, fs, dag, sæt), unit_price.`;
 
