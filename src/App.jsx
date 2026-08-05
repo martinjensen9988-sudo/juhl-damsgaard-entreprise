@@ -432,6 +432,7 @@ const AuthenticatedApp = () => {
           <Route path="/indkoebs-styring" element={<IndkoebsStyring />} />
           <Route path="/udstyr-booking" element={<UdstyrBooking />} />
           <Route path="/sikkerhed-apv" element={<SikkerhedApv />} />
+          <Route path="/SikkerhedApv" element={<Sikkerhedscheckliste />} />
           <Route path="/affalds-styring" element={<AffaldsStyring />} />
           <Route path="/indkoebs-godkendelse" element={<IndkoebsGodkendelse />} />
           <Route path="/kompetence-matrix" element={<KompetenceMatrix />} />
