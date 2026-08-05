@@ -96,6 +96,7 @@ export default function AITilbud() {
 Vejledende priser (ekskl. moms):
 - Væg-/loftmaling (incl. grund og spartling efter behov): 75 kr/m²
 - Facademaling: 95 kr/m² · Maling af træværk/vinduer: 120 kr/m² · Tapetopsætning: 85 kr/m² · Spartling/slibning: 60 kr/m² · Grundmaling: 25 kr/m²
+- Vandskuring (højtryksspuling af facade/flade): 65 kr/m² (inkl. arbejde) · Afdækning før vandskuring: 15 kr/m² · Rengøringsmiddel til vandskuring: 95 kr/sæt
 - Maling materiale (væg-/loftmaling): 145 kr/liter · Facademaling: 175 kr/liter · Træmaling/lak: 195 kr/liter · Grundmaling: 95 kr/liter
 - Tømrer: 495 kr/time · Gipsvæg: 245 kr/m² · Beklædning træ: 295 kr/m² · Dørmontage: 1250 kr/stk · Vindueskift: 1850 kr/stk · Gulvlægning trægulv: 245 kr/m²
 - VVS: 695 kr/time · Håndvask: 1850 kr/stk · Toilet: 2200 kr/stk · Badeværelsesrenovering komplet: 1850 kr/m²
@@ -119,6 +120,7 @@ Forbrugsmaterialer (skal altid medtages som separate linjer, når de er nødvend
 - Isoleringsmateriale (tilbehør): Dampspærre folie 25 kr/m² · Tape 12 kr/m · Klemmer/beslag 8 kr/stk · Afdækningsfolie 15 kr/m²
 
 Regler:
+- VANDSKURING ≠ MALING: Vandskuring er højtryksspuling/rengøring af en flade (facade, væg, terrasse, indkørsel) – IKKE maling. Hvis kunden beder om "vandskuring", må du ALDRIG tilføje malelinjer (facademaling, grundmaling, spartling, maling materiale). Generer i stedet: (1) Vandskuring/arbejdsløn (65 kr/m²), (2) Afdækning (15 kr/m²), og evt. (3) rengøringsmiddel/tilbehør (sæt). Enhed = m² (arbejde/afdækning) og stk/sæt (tilbehør). Kun hvis kunden udtrykkeligt også beder om maling, tilføjes malelinjer.
 - ENHED: Hver linje SKAL have en korrekt enhed (m², m³, m, stk, time, liter, dag, fs, sæt, rulle). Aldrig tom enhed. Brug den enhed der passer til opgaven (væg = m², rør = m, beton = m³, maling = liter).
 - MINIMUM ANTAL LINJER: Et tilbud må ALDRIG have kun én linje. Hver opgave skal have mindst 2-3 linjer: (1) selve arbejdet/ydelsen, (2) hovedmaterialet, (3) tilbehørsmateriale. Hvis tilbuddet kun har 1 linje er det FEJL – tilføj altid materialelinjer.
 - VIGTIGT: Hver eneste opgave kunden nævner SKAL have mindst én arbejdslinje i tilbuddet. Glem aldrig en nævnt opgave (f.eks. hvis kunden skriver "maling" skal der altid være en male-linje; "rengøring" → slutrengørings-linje; "isolering" → isolerings-linje; både maling og isolering → én linje for hver).
