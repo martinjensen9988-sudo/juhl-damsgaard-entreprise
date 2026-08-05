@@ -6,7 +6,8 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Plus, Pencil, Trash2, ShieldCheck } from 'lucide-react';
+import { Plus, Pencil, Trash2, ShieldCheck, ClipboardCheck, ArrowRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const CATS = ['Arbejdsmiljø', 'Sikkerhedsprotokol', 'Vejledning', 'Riskikovurdering', 'Værneudstyr', 'Andet'];
 const RISK = { Lav: 'bg-emerald-100 text-emerald-700', Mellem: 'bg-amber-100 text-amber-700', Høj: 'bg-orange-100 text-orange-700', Kritisk: 'bg-red-100 text-red-700' };
@@ -41,6 +42,17 @@ export default function SikkerhedApv() {
         </div>
         <Button onClick={openNew}><Plus className="w-4 h-4" /> Ny protokol</Button>
       </div>
+
+      <Link to="/sikkerheds-tjekliste" className="block rounded-lg border border-blue-200 bg-blue-50 p-4 hover:bg-blue-100 transition-colors">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center"><ClipboardCheck className="w-5 h-5 text-blue-600" /></div>
+          <div className="flex-1">
+            <div className="font-semibold text-slate-900">Sikkerhedscheckliste (tjekliste)</div>
+            <div className="text-sm text-slate-600">Opret tjeklister med flere tjekpunkter, afkrydsning, status og udfyldt-af</div>
+          </div>
+          <ArrowRight className="w-5 h-5 text-blue-600" />
+        </div>
+      </Link>
 
       <div className="grid gap-3">
         {items.length === 0 && <p className="text-sm text-muted-foreground">Ingen protokoller.</p>}
