@@ -24,9 +24,17 @@ const UNITS = [
   { value: 'km', label: 'km' },
   { value: 'dag', label: 'dag' },
   { value: 'mnd', label: 'mnd' },
+  { value: 'liter', label: 'liter' },
+  { value: 'rulle', label: 'rulle' },
+  { value: 'patron', label: 'patron' },
+  { value: 'time', label: 'time' },
 ];
 
 export default function LineItemEditor({ items = [], onChange }) {
+  const knownUnits = new Set(UNITS.map((u) => u.value));
+  const extraUnits = Array.from(new Set(items.map((i) => i.unit).filter((u) => u && !knownUnits.has(u))));
+  const unitOptions = [...UNITS, ...extraUnits.map((u) => ({ value: u, label: u }))];
+
   const update = (index, field, value) => {
     const next = [...items];
     next[index] = { ...next[index], [field]: value };
@@ -75,7 +83,7 @@ export default function LineItemEditor({ items = [], onChange }) {
               <SelectValue placeholder="stk" />
             </SelectTrigger>
             <SelectContent>
-              {UNITS.map((u) => (
+              {unitOptions.map((u) => (
                 <SelectItem key={u.value} value={u.value}>{u.label}</SelectItem>
               ))}
             </SelectContent>
