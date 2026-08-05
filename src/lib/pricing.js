@@ -87,8 +87,10 @@ export const SERVICE_CATEGORIES = [
       { name: 'Teknisk isolering (tag/væg)', unit: 'm²', price: 245 },
       { name: 'Brandisolering', unit: 'm²', price: 395 },
       { name: 'Armeringssokkel isolering', unit: 'm', price: 165 },
-      { name: 'Indblæsning af isolering (cellulose)', unit: 'm²', price: 95 },
-      { name: 'Indblæsning af isolering (mineraluld)', unit: 'm²', price: 115 },
+      { name: 'Indblæsning af isolering (150 mm)', unit: 'm²', price: 120 },
+      { name: 'Indblæsning af isolering (200 mm)', unit: 'm²', price: 150 },
+      { name: 'Indblæsning af isolering (250 mm)', unit: 'm²', price: 175 },
+      { name: 'Indblæsning af isolering (300 mm)', unit: 'm²', price: 190 },
     ],
   },
 ];

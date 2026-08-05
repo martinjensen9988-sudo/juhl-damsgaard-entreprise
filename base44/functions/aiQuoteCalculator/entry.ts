@@ -60,8 +60,12 @@ Teknisk isolering:
 - Teknisk isolering (tag/væg): 245 kr/m²
 - Brandisolering: 395 kr/m²
 - Armeringssokkel isolering: 165 kr/m
-- Indblæsning af isolering (cellulose): 95 kr/m²
-- Indblæsning af isolering (mineraluld): 115 kr/m²
+- Indblæsning af isolering – PRIS INKL. ARBEJDE OG MATERIALER (én samlet linje pr. tykkelse, ekskl. moms):
+  * 150 mm: 96 kr/m² (120 kr/m² inkl. moms)
+  * 200 mm: 120 kr/m² (150 kr/m² inkl. moms)
+  * 250 mm: 140 kr/m² (175 kr/m² inkl. moms)
+  * 300 mm: 152 kr/m² (190 kr/m² inkl. moms)
+  Vælg tykkelse ud fra kundens ønske eller standard 200 mm. TILFØJ KUN ÉN indblæsningslinje (arbejde+materiale samlet) – ikke separat materialelinje. Tilføj stadig dampspærre/tape som tilbehør.
 
 Moms: 25% på alt. Alle priser ovenfor er ekskl. moms.
 
@@ -74,13 +78,13 @@ For hver arbejdsopgave skal du ALTID udregne og tilføje den nødvendige materia
 - Armering: til støbning tilskrueses altid armeringsjern (28 kr/m) baseret på arealet.
 - Kloak: til hver kloakbrønd/pipe kræves sand til indfatning (ca. 0,5 m³ sand pr. brønd) og grus.
 - Teknisk isolering: tilbehør som klemmer, tape og dampspærre (ca. 25 kr/m rør / 35 kr/m² flade). Tilføj materialetilnje "Isoleringsmateriale (tilbehør)" med enhed m eller m² og tilhørende pris.
-- Indblæsning af isolering: materialet (cellulose/mineraluld) ca. 45 kr/m². Tilføj materialetilnje "Indblæsningsmateriale (cellulose/mineraluld)" med enhed m². Typisk 20-30 cm lag i hulrum/loft.
+- Indblæsning af isolering: SAMLET pris (arbejde + materiale) afhænger af tykkelse – se priser ovenfor. Tilføj KUN ÉN indblæsningslinje med tykkelse i beskrivelsen (f.eks. "Indblæsning af isolering (200 mm)") – ingen separat materialelinje. Tilføj tilbehør (dampspærre 25 kr/m², tape/klemmer 35 kr/m²) som separate linjer.
 - Transport: kun hvis materialer skal fragtes til projektet.
 
 Regler:
 - ENHED: Hver linje skal ALTID have en korrekt enhed (m², m³, m, stk, time, liter, dag, fs). Brug den enhed der matcher opgaven og materialerne. Aldrig tom eller "stk" hvor m²/m gælder. Væg/loft/flade = m², rør/kanal = m, beton/rumfang = m³, maling = liter, timer = time.
 - MINIMUM ANTAL LINJER: Et tilbud må ALDRIG have kun én linje. Hver opgave skal have mindst 2-3 linjer: (1) selve arbejdet/ydelsen, (2) hovedmaterialet, (3) tilbehørsmateriale. Hvis tilbuddet kun har 1 linje er det FEJL – tilføj altid materialelinjer.
-- ISOLERING = TEKNISK ISOLERING (ikke tømrer): Når kunden nævner "isolering", "krybekælder", "kælder", "loft", "væg", "tag", "rør", "indblæsning" el. lign. – brug Teknisk isolering-priserne (245 kr/m² tag/væg-flader, 145 kr/m rør, 185 kr/m ventilation, 395 kr/m² brand, 95 kr/m² indblæsning cellulose, 115 kr/m² indblæsning mineraluld). Brug ALDRIG tømrerprisen 495 kr/time til isoleringsopgaver. Tilføj også: (a) hovedmateriale (mineraluld/EPS 85-110 kr/m², indblæsningsmateriale 45 kr/m²), (b) dampspærre folie 25 kr/m², (c) tape/klemmer 35 kr/m².
+- ISOLERING = TEKNISK ISOLERING (ikke tømrer): Når kunden nævner "isolering", "krybekælder", "kælder", "loft", "væg", "tag", "rør", "indblæsning" el. lign. – brug Teknisk isolering-priserne (245 kr/m² tag/væg-flader, 145 kr/m rør, 185 kr/m ventilation, 395 kr/m² brand). Indblæsning prissættes efter tykkelse: 150 mm=96, 200 mm=120, 250 mm=140, 300 mm=152 kr/m² (ekskl. moms, inkl. arbejde+materiale). Brug ALDRIG tømrerprisen 495 kr/time til isoleringsopgaver. Tilføj også: (a) dampspærre folie 25 kr/m², (b) tape/klemmer 35 kr/m².
 - VÆLGT FAG: Start altid fra den type arbejde kunden beskriver (maling, tømrer, VVS, elektriker, teknisk isolering, udendørs entreprise osv.). Vælg KUN de prislinjer der hører til det pågældende fag – bliv IKKE ved med at tilføje grave-/maskinlinjer medmindre opgaven reelt kræver gravearbejde. F.eks. ved maling skal linjerne kun indeholde maling/spartling/grundmaling/tapet + tilhørende materiale-mængder – ingen gravemaskine, transport eller affaldsbortkørsel. Ved teknisk isolering vælges kun isoleringslinjer + tilbehørsmateriale.
 - Estimer mængder ud fra kundens beskrivelse. Vær rimelig og realistisk.
 - INKLUDER ALTID MATERIALER: Hver arbejdsopgave (maling, støbning, flise, gips mv.) skal have tilhørende materialetilnje med korrekt mængde udregnet via formlerne ovenfor. Aldrig kun arbejdsløn uden materialer.
