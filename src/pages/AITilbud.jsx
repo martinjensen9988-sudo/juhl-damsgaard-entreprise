@@ -100,6 +100,7 @@ Vejledende priser (ekskl. moms):
 - VVS: 695 kr/time · Håndvask: 1850 kr/stk · Toilet: 2200 kr/stk · Badeværelsesrenovering komplet: 1850 kr/m²
 - Elektriker: 595 kr/time · Stikkontakt/afbryder: 450 kr/stk · Armatur: 750 kr/stk · Eltavle: 6500 kr/stk
 - Gravearbejde: 580 kr/m³ · Grøftegravning: 320 kr/m · Afgravning: 145 kr/m³ · Nedrivning: 450 kr/m² · Kloakrør Ø300: 850 kr/m · Kloakbrønd: 4500 kr/stk · Asfaltering: 395 kr/m² · Betonfundament: 850 kr/m² · Beton støbning: 1150 kr/m³ · Transport: 3500 kr/fs · Maskinleje: 4500 kr/dag · Affaldsbortkørsel: 3500 kr/fs · Håndarbejde: 280 kr/time
+- Teknisk isolering: Rørisolering (mineraluld) 145 kr/m · Beholderisolering 295 kr/m² · Ventilationsisolering 185 kr/m · Teknisk isolering (tag/væg) 245 kr/m² · Brandisolering 395 kr/m² · Armeringssokkel isolering 165 kr/m
 - Slutrengøring/byggepladsrengøring: 75 kr/m² · Glarmester (vinduespolering): 45 kr/m²
 
 Forbrugsmaterialer (skal altid medtages som separate linjer, når de er nødvendige for opgaven):
@@ -113,10 +114,12 @@ Forbrugsmaterialer (skal altid medtages som separate linjer, når de er nødvend
 - Betonmateriale (cement, grus, armering): 450 kr/m³ · Kloakgrus: 145 kr/ton · Støbeform: 95 kr/m²
 - Tapet: 75 kr/rulle · ca. 1 rulle pr. 5 m² · Tapetklister: 45 kg/rulle
 - Gulv materiale: Trægulv 245 kr/m² · Vinyl/klik-gulv 175 kr/m² · Gulvafslibning papir: 35 kr/m²
+- Isoleringsmateriale (tilbehør: klemmer, tape, dampspærre): rørisolering ca. 25 kr/m · fladeisolering ca. 35 kr/m²
 
 Regler:
-- VIGTIGT: Hver eneste opgave kunden nævner SKAL have mindst én linje i tilbuddet. Glem aldrig en nævnt opgave (f.eks. hvis kunden skriver "maling" skal der altid være en male-linje; "rengøring" → slutrengørings-linje; både maling og rengøring → én linje for hver).
-- Vælg KUN de prislinjer der hører til de fag kunden beskriver (ved maling: kun maling/spartling/grundmaling/tapet – ingen gravemaskine, transport eller affald).
+- ENHED: Hver linje SKAL have en korrekt enhed (m², m³, m, stk, time, liter, dag, fs, sæt, rulle). Aldrig tom enhed. Brug den enhed der passer til opgaven (væg = m², rør = m, beton = m³, maling = liter).
+- VIGTIGT: Hver eneste opgave kunden nævner SKAL have mindst én linje i tilbuddet. Glem aldrig en nævnt opgave (f.eks. hvis kunden skriver "maling" skal der altid være en male-linje; "rengøring" → slutrengørings-linje; "isolering" → isolerings-linje; både maling og isolering → én linje for hver).
+- Vælg KUN de prislinjer der hører til de fag kunden beskriver (ved maling: kun maling/spartling/grundmaling/tapet – ingen gravemaskine, transport eller affald; ved teknisk isolering: kun isoleringslinjer + isoleringsmateriale-tilbehør).
 - Estimer mængder rimeligt ud fra beskrivelsen (f.eks. maling af 53 m² lejlighed: beregn væg- og loftflade typisk som 53 m² etagemål × ca. 3 = ca. 160 m² maleflade, opdelt i væg- og loftmaling).
 - VIGTIGT – FORBRUGSMATERIALER: For hver arbejdsopgave skal du altid vurdere og tilføje nødvendige forbrugsmaterialer som separate linjer. Glem aldrig materialer – det sikrer at alle omkostninger er dækket.
   • Malearbejde → maling (beregn liter: maleflade ÷ 5 for 2 strøg) + spartlemasse hvis nævnt + pensler/ruller (1 sæt pr. 50 m²)
@@ -128,6 +131,7 @@ Regler:
   • El → kabler + klemmer + kabelkanal
   • Gulv → gulvmateriale + underlag/afslibning
   • Tapet → tapetruller + klister
+  • Teknisk isolering → isoleringsmateriale (klemmer, tape, dampspærre): ca. 25 kr/m rør / 35 kr/m² flade
   • Generelt: pensler, ruller, slibepapir, afdækningsfolie, maskeringstape (1 sæt 75 kr pr. 50 m²)
 - Ved malearbejde: beregn altid maltforbrug og tilføj en separat materialelinje for maling. Forbrug: ca. 1 liter dækker 10 m² med 1 strøg – de fleste opgaver kræver 2 strøg, så divider maleflade med 5 for at få literantal (f.eks. 160 m² ÷ 5 = 32 liter). Brug korrekt malttype ud fra opgaven (væg-/loftmaling, facademaling, træmaling el. grundmaling) med tilhørende literpris. Angiv unit "liter" og antal liter som quantity.
 - Inkluder kun hvad opgaven reelt kræver. Undgå at tilføje unødvendige ekstra linjer.

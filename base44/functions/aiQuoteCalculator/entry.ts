@@ -53,6 +53,14 @@ Entreprise/udendørs:
 - Affaldsbortkørsel: 3500 kr/fs
 - Håndarbejde: 280 kr/time (350 kr/time inkl. moms)
 
+Teknisk isolering:
+- Rørisolering (mineraluld): 145 kr/m
+- Beholderisolering: 295 kr/m²
+- Ventilationsisolering: 185 kr/m
+- Teknisk isolering (tag/væg): 245 kr/m²
+- Brandisolering: 395 kr/m²
+- Armeringssokkel isolering: 165 kr/m
+
 Moms: 25% på alt. Alle priser ovenfor er ekskl. moms.
 
 MATERIALEBEREGNING (OBLIGATORISK):
@@ -63,10 +71,12 @@ For hver arbejdsopgave skal du ALTID udregne og tilføje den nødvendige materia
 - Gipsvægge: gipsplader (1 plade = 2,4 m²), skinner (ca. 3 m/m² væg), skruer og band.
 - Armering: til støbning tilskrueses altid armeringsjern (28 kr/m) baseret på arealet.
 - Kloak: til hver kloakbrønd/pipe kræves sand til indfatning (ca. 0,5 m³ sand pr. brønd) og grus.
+- Teknisk isolering: tilbehør som klemmer, tape og dampspærre (ca. 25 kr/m rør / 35 kr/m² flade). Tilføj materialetilnje "Isoleringsmateriale (tilbehør)" med enhed m eller m² og tilhørende pris.
 - Transport: kun hvis materialer skal fragtes til projektet.
 
 Regler:
-- VÆLGT FAG: Start altid fra den type arbejde kunden beskriver (maling, tømrer, VVS, elektriker, udendørs entreprise osv.). Vælg KUN de prislinjer der hører til det pågældende fag – bliv IKKE ved med at tilføje grave-/maskinlinjer medmindre opgaven reelt kræver gravearbejde. F.eks. ved maling skal linjerne kun indeholde maling/spartling/grundmaling/tapet + tilhørende materiale-mængder – ingen gravemaskine, transport eller affaldsbortkørsel.
+- ENHED: Hver linje skal ALTID have en korrekt enhed (m², m³, m, stk, time, liter, dag, fs). Brug den enhed der matcher opgaven og materialerne. Aldrig tom eller "stk" hvor m²/m gælder.
+- VÆLGT FAG: Start altid fra den type arbejde kunden beskriver (maling, tømrer, VVS, elektriker, teknisk isolering, udendørs entreprise osv.). Vælg KUN de prislinjer der hører til det pågældende fag – bliv IKKE ved med at tilføje grave-/maskinlinjer medmindre opgaven reelt kræver gravearbejde. F.eks. ved maling skal linjerne kun indeholde maling/spartling/grundmaling/tapet + tilhørende materiale-mængder – ingen gravemaskine, transport eller affaldsbortkørsel. Ved teknisk isolering vælges kun isoleringslinjer + tilbehørsmateriale.
 - Estimer mængder ud fra kundens beskrivelse. Vær rimelig og realistisk.
 - INKLUDER ALTID MATERIALER: Hver arbejdsopgave (maling, støbning, flise, gips mv.) skal have tilhørende materialetilnje med korrekt mængde udregnet via formlerne ovenfor. Aldrig kun arbejdsløn uden materialer.
 - Inkluder alt hvad opgaven kræver: både materialer og arbejdstid for det aktuelle fag.

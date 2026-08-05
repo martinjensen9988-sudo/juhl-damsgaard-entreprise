@@ -78,4 +78,15 @@ export const SERVICE_CATEGORIES = [
       { name: 'Grundmaling', unit: 'm²', price: 25, paint: 'Grundmaling' },
     ],
   },
+  {
+    category: 'Teknisk isolering',
+    services: [
+      { name: 'Rørisolering (mineraluld)', unit: 'm', price: 145 },
+      { name: 'Beholderisolering', unit: 'm²', price: 295 },
+      { name: 'Ventilationsisolering', unit: 'm', price: 185 },
+      { name: 'Teknisk isolering (tag/væg)', unit: 'm²', price: 245 },
+      { name: 'Brandisolering', unit: 'm²', price: 395 },
+      { name: 'Armeringssokkel isolering', unit: 'm', price: 165 },
+    ],
+  },
 ];
