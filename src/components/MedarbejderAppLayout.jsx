@@ -72,7 +72,7 @@ export default function MedarbejderAppLayout() {
       </header>
 
       {/* Content */}
-      <main className="flex-1 overflow-y-auto pb-20">
+      <main className="flex-1 overflow-y-auto pb-20 safe-pb">
         <AnimatedOutlet context={{ user, syncClock, clockedIn, markMessagesRead, markTasksRead }} />
       </main>
 

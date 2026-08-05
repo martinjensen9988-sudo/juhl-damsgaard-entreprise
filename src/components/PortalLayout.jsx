@@ -56,7 +56,7 @@ export default function PortalLayout() {
           </NavLink>
         </div>
       </div>
-      <main className="max-w-5xl mx-auto px-4 py-8">
+      <main className="max-w-5xl mx-auto px-4 py-8 safe-pb">
         <AnimatedOutlet />
       </main>
     </div>

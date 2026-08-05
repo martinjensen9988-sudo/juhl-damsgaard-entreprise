@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import AnimatedOutlet from '@/components/AnimatedOutlet';
+import BackHeader from '@/components/BackHeader';
 import { Image } from '@/components/ui/image';
 import { BRAND_LOGO_URL } from '@/lib/brand';
 import {
@@ -316,6 +317,9 @@ export default function Layout() {
 
   const isGroupOpen = (label) => openGroups[label] || activeGroup === label;
 
+  const backTitle = allItems.find((i) => i.to === location.pathname)?.label || '';
+  const showBack = !['/dashboard', '/admin', '/admin-portal'].includes(location.pathname);
+
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950">
       {/* Desktop sidebar */}
@@ -400,7 +404,8 @@ export default function Layout() {
 
       {/* Main content */}
       <div className="md:ml-64">
-        <main className="p-4 md:p-8 max-w-7xl mx-auto">
+        <main className="p-4 md:p-8 max-w-7xl mx-auto safe-pb">
+          {showBack && <BackHeader title={backTitle} to="/dashboard" />}
           <AnimatedOutlet />
         </main>
       </div>

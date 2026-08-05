@@ -20,6 +20,7 @@ import {
 } from '@/components/ui/dialog';
 import { Plus, Pencil, Trash2, ListChecks, Loader2, Calendar, User } from 'lucide-react';
 import { formatDate } from '@/lib/format';
+import PullToRefresh from '@/components/PullToRefresh';
 
 const STATUSES = ['Ikke startet', 'I gang', 'Afventer', 'Gennemført'];
 const PRIORITIES = ['Lav', 'Normal', 'Høj'];
@@ -77,6 +78,19 @@ export default function Opgaveliste() {
     load();
   }, []);
 
+  const refresh = async () => {
+    try {
+      const [t, e] = await Promise.all([
+        base44.entities.Task.list('-created_date', 200),
+        base44.entities.Employee.list('-created_date', 100),
+      ]);
+      setTasks(t);
+      setEmployees(e);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   const openNew = () => {
     setForm(EMPTY);
     setEditing(null);
@@ -109,14 +123,28 @@ export default function Opgaveliste() {
 
   const remove = async (id) => {
     if (!confirm('Slet denne opgave?')) return;
-    await base44.entities.Task.delete(id);
-    load();
+    const prev = tasks;
+    setTasks(tasks.filter((t) => t.id !== id));
+    try {
+      await base44.entities.Task.delete(id);
+    } catch (err) {
+      console.error(err);
+      setTasks(prev);
+      alert('Kunne ikke slette opgaven');
+    }
   };
 
   const quickStatus = async (task, status) => {
-    const payload = { status, completed_date: status === 'Gennemført' ? new Date().toISOString().slice(0, 10) : '' };
-    await base44.entities.Task.update(task.id, payload);
-    load();
+    const completed_date = status === 'Gennemført' ? new Date().toISOString().slice(0, 10) : '';
+    const prev = tasks;
+    setTasks(tasks.map((t) => (t.id === task.id ? { ...t, status, completed_date } : t)));
+    try {
+      await base44.entities.Task.update(task.id, { status, completed_date });
+    } catch (err) {
+      console.error(err);
+      setTasks(prev);
+      alert('Kunne ikke opdatere status');
+    }
   };
 
   const set = (field) => (e) => setForm({ ...form, [field]: e.target.value });
@@ -126,6 +154,7 @@ export default function Opgaveliste() {
   const stats = STATUSES.map((s) => ({ status: s, count: tasks.filter((t) => t.status === s).length }));
 
   return (
+    <PullToRefresh onRefresh={refresh}>
     <div className="space-y-6">
       <div className="flex items-center justify-between flex-wrap gap-3">
         <div>
@@ -270,5 +299,6 @@ export default function Opgaveliste() {
         </DialogContent>
       </Dialog>
     </div>
+    </PullToRefresh>
   );
 }

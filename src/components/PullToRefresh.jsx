@@ -27,7 +27,8 @@ export default function PullToRefresh({ onRefresh, children, className = '' }) {
 
   const onTouchStart = (e) => {
     const sp = scrollParent.current;
-    if (!sp || sp.scrollTop > 0 || refreshing) { startY.current = null; return; }
+    const top = sp ? sp.scrollTop : (window.scrollY || document.documentElement.scrollTop);
+    if (top > 0 || refreshing) { startY.current = null; return; }
     startY.current = e.touches[0].clientY;
   };
   const onTouchMove = (e) => {

@@ -21,6 +21,7 @@ import {
 import { formatDate } from '@/lib/format';
 import { Plus, Pencil, Trash2, Clock } from 'lucide-react';
 import StemmeTidsregistrering from '@/components/StemmeTidsregistrering';
+import PullToRefresh from '@/components/PullToRefresh';
 
 const TASK_TYPES = ['Gravearbejde', 'Kørsel', 'Maskinarbejde', 'Håndarbejde', 'Møde', 'Andet'];
 
@@ -63,6 +64,19 @@ export default function Tidsregistrering() {
   useEffect(() => {
     load();
   }, []);
+
+  const refresh = async () => {
+    try {
+      const [e, p] = await Promise.all([
+        base44.entities.TimeEntry.list('-created_date', 200),
+        base44.entities.Project.list('-created_date', 200),
+      ]);
+      setEntries(e);
+      setProjects(p);
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   const filtered = filterProject === 'all'
     ? entries
@@ -107,13 +121,21 @@ export default function Tidsregistrering() {
 
   const remove = async (id) => {
     if (!confirm('Slet denne tidsregistrering?')) return;
-    await base44.entities.TimeEntry.delete(id);
-    load();
+    const prev = entries;
+    setEntries(entries.filter((e) => e.id !== id));
+    try {
+      await base44.entities.TimeEntry.delete(id);
+    } catch (err) {
+      console.error(err);
+      setEntries(prev);
+      alert('Kunne ikke slette registreringen');
+    }
   };
 
   const set = (field) => (e) => setForm({ ...form, [field]: e.target.value });
 
   return (
+    <PullToRefresh onRefresh={refresh}>
     <div className="space-y-6">
       <div className="flex items-center justify-between flex-wrap gap-3">
         <div>
@@ -247,5 +269,6 @@ export default function Tidsregistrering() {
         </DialogContent>
       </Dialog>
     </div>
+    </PullToRefresh>
   );
 }
