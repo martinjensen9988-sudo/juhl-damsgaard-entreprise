@@ -20,6 +20,7 @@ import {
 } from '@/components/ui/dialog';
 import LineItemEditor from '@/components/LineItemEditor';
 import SendFakturaDialog from '@/components/SendFakturaDialog';
+import SupplierInvoiceScanner from '@/components/SupplierInvoiceScanner';
 import { generateInvoicePDF } from '@/lib/invoicePdf';
 import { formatDKK, calcSubtotal, calcVAT, calcTotal, formatDate } from '@/lib/format';
 import { Plus, Pencil, Trash2, Receipt, Download, Send } from 'lucide-react';
@@ -192,6 +193,8 @@ export default function Invoices() {
           <Plus className="w-4 h-4 mr-1.5" /> Ny faktura
         </Button>
       </div>
+
+      <SupplierInvoiceScanner />
 
       {/* Summary */}
       <div className="grid grid-cols-2 gap-4">
