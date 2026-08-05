@@ -78,13 +78,16 @@ For hver arbejdsopgave skal du ALTID udregne og tilføje den nødvendige materia
 - Transport: kun hvis materialer skal fragtes til projektet.
 
 Regler:
-- ENHED: Hver linje skal ALTID have en korrekt enhed (m², m³, m, stk, time, liter, dag, fs). Brug den enhed der matcher opgaven og materialerne. Aldrig tom eller "stk" hvor m²/m gælder.
+- ENHED: Hver linje skal ALTID have en korrekt enhed (m², m³, m, stk, time, liter, dag, fs). Brug den enhed der matcher opgaven og materialerne. Aldrig tom eller "stk" hvor m²/m gælder. Væg/loft/flade = m², rør/kanal = m, beton/rumfang = m³, maling = liter, timer = time.
+- MINIMUM ANTAL LINJER: Et tilbud må ALDRIG have kun én linje. Hver opgave skal have mindst 2-3 linjer: (1) selve arbejdet/ydelsen, (2) hovedmaterialet, (3) tilbehørsmateriale. Hvis tilbuddet kun har 1 linje er det FEJL – tilføj altid materialelinjer.
+- ISOLERING = TEKNISK ISOLERING (ikke tømrer): Når kunden nævner "isolering", "krybekælder", "kælder", "loft", "væg", "tag", "rør", "indblæsning" el. lign. – brug Teknisk isolering-priserne (245 kr/m² tag/væg-flader, 145 kr/m rør, 185 kr/m ventilation, 395 kr/m² brand, 95 kr/m² indblæsning cellulose, 115 kr/m² indblæsning mineraluld). Brug ALDRIG tømrerprisen 495 kr/time til isoleringsopgaver. Tilføj også: (a) hovedmateriale (mineraluld/EPS 85-110 kr/m², indblæsningsmateriale 45 kr/m²), (b) dampspærre folie 25 kr/m², (c) tape/klemmer 35 kr/m².
 - VÆLGT FAG: Start altid fra den type arbejde kunden beskriver (maling, tømrer, VVS, elektriker, teknisk isolering, udendørs entreprise osv.). Vælg KUN de prislinjer der hører til det pågældende fag – bliv IKKE ved med at tilføje grave-/maskinlinjer medmindre opgaven reelt kræver gravearbejde. F.eks. ved maling skal linjerne kun indeholde maling/spartling/grundmaling/tapet + tilhørende materiale-mængder – ingen gravemaskine, transport eller affaldsbortkørsel. Ved teknisk isolering vælges kun isoleringslinjer + tilbehørsmateriale.
 - Estimer mængder ud fra kundens beskrivelse. Vær rimelig og realistisk.
 - INKLUDER ALTID MATERIALER: Hver arbejdsopgave (maling, støbning, flise, gips mv.) skal have tilhørende materialetilnje med korrekt mængde udregnet via formlerne ovenfor. Aldrig kun arbejdsløn uden materialer.
 - Inkluder alt hvad opgaven kræver: både materialer og arbejdstid for det aktuelle fag.
 - Hvis kunden ikke giver nok info, så estimer rimeligt og forklar dine antagelser kort, inkl. antaget m²/m³.
 - Subtotal = sum af alle linjer (ekskl. moms). Moms = subtotal × 0.25. Total = subtotal + moms.
+- TJEKLISTE FØR SVAR: (1) Har tilbuddet mindst 2 linjer pr. opgave? (2) Har hver arbejdsopgave en tilhørende materialelinje med korrekt enhed? (3) Er isolering klassificeret som teknisk isolering (ikke tømrer)? Hvis nej – ret og tilføj linjer før du returnerer.
 - Svaret skal være på dansk, professionelt og venligt.`;
 
 export default async function(req) {
