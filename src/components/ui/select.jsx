@@ -5,8 +5,28 @@ import * as SelectPrimitive from "@radix-ui/react-select"
 import { Check, ChevronDown, ChevronUp } from "lucide-react"
 
 import { cn } from "@/lib/utils"
+import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from "@/components/ui/drawer"
 
-const Select = SelectPrimitive.Root
+const isTouchDevice = () =>
+  typeof window !== "undefined" &&
+  ((window.matchMedia && window.matchMedia("(pointer: coarse)").matches) || window.innerWidth < 640)
+
+// Syncs the mobile bottom-sheet open state between Select and SelectContent.
+const MobileSelectContext = React.createContext({ open: false, setOpen: () => {}, mobile: false })
+
+const Select = React.forwardRef((props, ref) => {
+  const [open, setOpen] = React.useState(false)
+  const [mobile] = React.useState(isTouchDevice)
+  if (!mobile) {
+    return <SelectPrimitive.Root ref={ref} {...props} />
+  }
+  return (
+    <MobileSelectContext.Provider value={{ open, setOpen, mobile }}>
+      <SelectPrimitive.Root ref={ref} open={open} onOpenChange={setOpen} {...props} />
+    </MobileSelectContext.Provider>
+  )
+})
+Select.displayName = "Select"
 
 const SelectGroup = SelectPrimitive.Group
 
@@ -49,28 +69,45 @@ const SelectScrollDownButton = React.forwardRef(({ className, ...props }, ref) =
 SelectScrollDownButton.displayName =
   SelectPrimitive.ScrollDownButton.displayName
 
-const SelectContent = React.forwardRef(({ className, children, position = "popper", ...props }, ref) => (
-  <SelectPrimitive.Portal>
-    <SelectPrimitive.Content
-      ref={ref}
-      className={cn(
-        "relative z-50 max-h-96 min-w-[8rem] overflow-hidden rounded-md border bg-popover text-popover-foreground shadow-md data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
-        position === "popper" &&
-          "data-[side=bottom]:translate-y-1 data-[side=left]:-translate-x-1 data-[side=right]:translate-x-1 data-[side=top]:-translate-y-1",
-        className
-      )}
-      position={position}
-      {...props}>
-      <SelectScrollUpButton />
-      <SelectPrimitive.Viewport
-        className={cn("p-1", position === "popper" &&
-          "h-[var(--radix-select-trigger-height)] w-full min-w-[var(--radix-select-trigger-width)]")}>
-        {children}
-      </SelectPrimitive.Viewport>
-      <SelectScrollDownButton />
-    </SelectPrimitive.Content>
-  </SelectPrimitive.Portal>
-))
+const SelectContent = React.forwardRef(({ className, children, position = "popper", ...props }, ref) => {
+  const ctx = React.useContext(MobileSelectContext)
+  if (ctx.mobile) {
+    return (
+      <Drawer open={ctx.open} onOpenChange={ctx.setOpen}>
+        <DrawerContent className="max-h-[80vh]">
+          <DrawerHeader className="pb-2">
+            <DrawerTitle className="text-sm text-muted-foreground text-left">Vælg</DrawerTitle>
+          </DrawerHeader>
+          <div className="px-1 pb-4 max-h-[70vh] overflow-y-auto">
+            {children}
+          </div>
+        </DrawerContent>
+      </Drawer>
+    )
+  }
+  return (
+    <SelectPrimitive.Portal>
+      <SelectPrimitive.Content
+        ref={ref}
+        className={cn(
+          "relative z-50 max-h-96 min-w-[8rem] overflow-hidden rounded-md border bg-popover text-popover-foreground shadow-md data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
+          position === "popper" &&
+            "data-[side=bottom]:translate-y-1 data-[side=left]:-translate-x-1 data-[side=right]:translate-x-1 data-[side=top]:-translate-y-1",
+          className
+        )}
+        position={position}
+        {...props}>
+        <SelectScrollUpButton />
+        <SelectPrimitive.Viewport
+          className={cn("p-1", position === "popper" &&
+            "h-[var(--radix-select-trigger-height)] w-full min-w-[var(--radix-select-trigger-width)]")}>
+          {children}
+        </SelectPrimitive.Viewport>
+        <SelectScrollDownButton />
+      </SelectPrimitive.Content>
+    </SelectPrimitive.Portal>
+  )
+})
 SelectContent.displayName = SelectPrimitive.Content.displayName
 
 const SelectLabel = React.forwardRef(({ className, ...props }, ref) => (

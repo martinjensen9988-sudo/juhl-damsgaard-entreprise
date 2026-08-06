@@ -5,6 +5,7 @@ import { base44 } from '@/api/base44Client';
 import { BRAND_NAME_SHORT } from '@/lib/brand';
 import { useMaNotifications } from '@/hooks/useMaNotifications';
 import AnimatedOutlet from '@/components/AnimatedOutlet';
+import PullToRefresh from '@/components/PullToRefresh';
 
 const NAV = [
   { to: '/app', label: 'Hjem', icon: Home, end: true },
@@ -73,7 +74,9 @@ export default function MedarbejderAppLayout() {
 
       {/* Content */}
       <main className="flex-1 overflow-y-auto pb-20 safe-pb">
-        <AnimatedOutlet context={{ user, syncClock, clockedIn, markMessagesRead, markTasksRead }} />
+        <PullToRefresh onRefresh={() => window.location.reload()}>
+          <AnimatedOutlet context={{ user, syncClock, clockedIn, markMessagesRead, markTasksRead }} />
+        </PullToRefresh>
       </main>
 
       {/* Bottom navigation */}

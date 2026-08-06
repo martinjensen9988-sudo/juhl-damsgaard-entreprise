@@ -3,6 +3,7 @@ import { Link, NavLink } from 'react-router-dom';
 import { Building2, LogOut, HardHat, Calculator, LayoutDashboard, Home, Heart } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 import AnimatedOutlet from '@/components/AnimatedOutlet';
+import PullToRefresh from '@/components/PullToRefresh';
 
 export default function PortalLayout() {
   const [user, setUser] = useState(null);
@@ -57,7 +58,9 @@ export default function PortalLayout() {
         </div>
       </div>
       <main className="max-w-5xl mx-auto px-4 py-8 safe-pb">
-        <AnimatedOutlet />
+        <PullToRefresh onRefresh={() => window.location.reload()}>
+          <AnimatedOutlet />
+        </PullToRefresh>
       </main>
     </div>
   );

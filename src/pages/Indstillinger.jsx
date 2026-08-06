@@ -4,7 +4,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { User, Building2, Save } from 'lucide-react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
+import { User, Building2, Save, Trash2, AlertTriangle } from 'lucide-react';
 
 export default function Indstillinger() {
   const [user, setUser] = useState(null);
@@ -14,6 +15,23 @@ export default function Indstillinger() {
   const [settings, setSettings] = useState(null);
   const [settingsId, setSettingsId] = useState(null);
   const [savingSettings, setSavingSettings] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+
+  const handleDeleteAccount = async () => {
+    setDeleting(true);
+    try {
+      await base44.functions.invoke('deleteMyAccount', {});
+      setDeleteOpen(false);
+      // Clear tokens and redirect to login.
+      base44.auth.logout('/login');
+    } catch (e) {
+      console.error(e);
+      alert('Kunne ikke slette kontoen: ' + (e.message || 'Ukendt fejl'));
+    } finally {
+      setDeleting(false);
+    }
+  };
 
   useEffect(() => {
     (async () => {
@@ -116,6 +134,16 @@ export default function Indstillinger() {
               <Save className="w-4 h-4 mr-1.5" /> {savingProfile ? 'Gemmer...' : 'Gem profil'}
             </Button>
           </div>
+
+          <div className="bg-white rounded-xl border border-red-200 p-6 max-w-lg">
+            <h2 className="font-semibold text-red-700 mb-2 flex items-center gap-2"><AlertTriangle className="w-5 h-5" /> Slet konto</h2>
+            <p className="text-sm text-slate-500 mb-4">
+              Sletning fjerner permanent din konto og alle personlige data, herunder tidsregistreringer, udgifter og personlige oplysninger. Handlingen kan ikke fortrydes.
+            </p>
+            <Button variant="destructive" onClick={() => setDeleteOpen(true)} className="gap-2">
+              <Trash2 className="w-4 h-4" /> Slet konto
+            </Button>
+          </div>
         </TabsContent>
 
         <TabsContent value="company" className="mt-4">
@@ -178,6 +206,24 @@ export default function Indstillinger() {
           )}
         </TabsContent>
       </Tabs>
+
+      <Dialog open={deleteOpen} onOpenChange={(o) => !deleting && setDeleteOpen(o)}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2 text-red-700"><AlertTriangle className="w-5 h-5" /> Bekræft sletning af konto</DialogTitle>
+            <DialogDescription>
+              Dette sletter permanent din konto. Alle tidsregistreringer, udgifter og personlige oplysninger går tabt og kan ikke gendannes.
+            </DialogDescription>
+          </DialogHeader>
+          <p className="text-sm text-slate-600">Er du sikker på, at du vil fortsætte? Handlingen kan ikke fortrydes.</p>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setDeleteOpen(false)} disabled={deleting}>Annuller</Button>
+            <Button variant="destructive" onClick={handleDeleteAccount} disabled={deleting} className="gap-2">
+              {deleting ? <><div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> Sletter...</> : <><Trash2 className="w-4 h-4" /> Ja, slet konto</>}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
