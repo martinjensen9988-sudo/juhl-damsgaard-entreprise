@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
-import { User, Building2, Save, Trash2, AlertTriangle, Upload, Smartphone } from 'lucide-react';
+import { User, Building2, Save, Trash2, AlertTriangle, Smartphone } from 'lucide-react';
 
 export default function Indstillinger() {
   const [user, setUser] = useState(null);
@@ -36,7 +36,7 @@ export default function Indstillinger() {
   const [appReleaseId, setAppReleaseId] = useState(null);
   const [apkVersion, setApkVersion] = useState('');
   const [apkUrl, setApkUrl] = useState('');
-  const [uploadingApk, setUploadingApk] = useState(false);
+  const [savingApk, setSavingApk] = useState(false);
 
   const loadAppRelease = async () => {
     try {
@@ -53,37 +53,26 @@ export default function Indstillinger() {
 
   useEffect(() => { loadAppRelease(); }, []);
 
-  const handleUploadApk = async (e) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    setUploadingApk(true);
+  const saveApk = async () => {
+    if (!apkUrl.trim()) {
+      alert('Indsæt en offentlig download-URL til APK-filen');
+      return;
+    }
+    setSavingApk(true);
     try {
-      const { file_url } = await base44.integrations.Core.UploadFile({ file });
-      const payload = { platform: 'android', version: apkVersion || '1.0', file_url };
+      const payload = { platform: 'android', version: apkVersion || '1.0', file_url: apkUrl.trim() };
       if (appReleaseId) {
         await base44.entities.AppRelease.update(appReleaseId, payload);
       } else {
         const saved = await base44.entities.AppRelease.create(payload);
         setAppReleaseId(saved.id);
       }
-      setApkUrl(file_url);
-      alert('APK uploadet og klar til download på forsiden');
-    } catch (err) {
-      console.error(err);
-      alert('Kunne ikke uploade APK: ' + (err.message || 'Ukendt fejl'));
-    } finally {
-      setUploadingApk(false);
-      e.target.value = '';
-    }
-  };
-
-  const saveApkVersion = async () => {
-    if (!appReleaseId) return;
-    try {
-      await base44.entities.AppRelease.update(appReleaseId, { version: apkVersion });
-      alert('Version gemt');
+      alert('APK-link gemt — download-knappen vises nu på forsiden');
     } catch (e) {
       console.error(e);
+      alert('Kunne ikke gemme: ' + (e.message || 'Ukendt fejl'));
+    } finally {
+      setSavingApk(false);
     }
   };
 
@@ -278,29 +267,22 @@ export default function Indstillinger() {
               <h2 className="font-semibold text-slate-900">Android-app (APK)</h2>
             </div>
             <p className="text-sm text-slate-500">
-              Upload din APK-fil. Den bliver tilgængelig til download på forsiden under "Hent appen", så ansatte kan installere den direkte.
+              Indsæt en offentlig download-URL til din APK-fil (f.eks. et direkte Google Drive- eller Dropbox-link). Den bliver tilgængelig på forsiden under "Hent appen". Bemærk: Base44's fil-upload tillader ikke .apk-filer, så filen skal hostes et andet sted.
             </p>
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-1.5">
                 <Label>Version</Label>
                 <Input value={apkVersion} onChange={(e) => setApkVersion(e.target.value)} placeholder="f.eks. 1.0.0" />
               </div>
-              <div className="space-y-1.5 flex items-end">
-                <Button variant="outline" onClick={saveApkVersion} disabled={!appReleaseId} className="w-full">
-                  <Save className="w-4 h-4 mr-1.5" /> Gem version
-                </Button>
+              <div className="space-y-1.5">
+                <Label>APK download-URL</Label>
+                <Input value={apkUrl} onChange={(e) => setApkUrl(e.target.value)} placeholder="https://...fil.apk" />
               </div>
             </div>
-            {apkUrl && (
-              <div className="text-xs text-slate-500 bg-slate-50 rounded-lg p-3 break-all">
-                Aktiv APK: <a href={apkUrl} target="_blank" rel="noreferrer" className="text-amber-600 underline">{apkUrl}</a>
-              </div>
-            )}
             <div className="flex flex-wrap gap-2">
-              <label className="inline-flex items-center gap-2 bg-slate-950 text-white px-4 py-2 rounded-md cursor-pointer hover:bg-slate-800">
-                <Upload className="w-4 h-4" /> {uploadingApk ? 'Uploader...' : (apkUrl ? 'Skift APK-fil' : 'Vælg APK-fil')}
-                <input type="file" accept=".apk,application/vnd.android.package-archive" className="hidden" onChange={handleUploadApk} disabled={uploadingApk} />
-              </label>
+              <Button onClick={saveApk} disabled={savingApk} className="bg-slate-950 hover:bg-slate-800">
+                <Save className="w-4 h-4 mr-1.5" /> {savingApk ? 'Gemmer...' : 'Gem APK-link'}
+              </Button>
               {appReleaseId && (
                 <Button variant="destructive" onClick={deleteApk} className="gap-2">
                   <Trash2 className="w-4 h-4" /> Slet APK

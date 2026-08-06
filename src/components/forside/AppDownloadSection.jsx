@@ -38,6 +38,8 @@ export default function AppDownloadSection() {
           <a
             href={release.file_url}
             download
+            target="_blank"
+            rel="noreferrer"
             className="inline-flex items-center gap-2 bg-amber-400 text-slate-950 px-6 py-3.5 rounded-xl font-semibold hover:bg-amber-300 transition shadow-lg shadow-amber-400/20 shrink-0"
           >
             <Download className="w-5 h-5" /> Download APK
