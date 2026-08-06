@@ -6,6 +6,7 @@ import {
 import ForsideLayout from '@/components/forside/ForsideLayout';
 import InteraktivtHus from '@/components/forside/InteraktivtHus';
 import { stats, allServices, faqItems } from '@/components/forside/forsideData';
+import AppDownloadSection from '@/components/forside/AppDownloadSection';
 
 export default function Forside() {
   return (
@@ -189,6 +190,8 @@ export default function Forside() {
           </div>
         </div>
       </section>
+
+      <AppDownloadSection />
     </ForsideLayout>
   );
 }

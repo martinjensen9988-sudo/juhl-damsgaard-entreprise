@@ -1,0 +1,45 @@
+{
+  "name": "AppRelease",
+  "type": "object",
+  "properties": {
+    "platform": {
+      "type": "string",
+      "title": "Platform",
+      "default": "android"
+    },
+    "version": {
+      "type": "string",
+      "title": "Version"
+    },
+    "file_url": {
+      "type": "string",
+      "title": "APK fil-URL"
+    },
+    "notes": {
+      "type": "string",
+      "title": "Noter"
+    }
+  },
+  "required": [
+    "platform",
+    "file_url"
+  ],
+  "rls": {
+    "read": {},
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

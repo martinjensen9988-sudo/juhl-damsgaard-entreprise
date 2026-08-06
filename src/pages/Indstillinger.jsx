@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
-import { User, Building2, Save, Trash2, AlertTriangle } from 'lucide-react';
+import { User, Building2, Save, Trash2, AlertTriangle, Upload, Smartphone } from 'lucide-react';
 
 export default function Indstillinger() {
   const [user, setUser] = useState(null);
@@ -30,6 +30,73 @@ export default function Indstillinger() {
       alert('Kunne ikke slette kontoen: ' + (e.message || 'Ukendt fejl'));
     } finally {
       setDeleting(false);
+    }
+  };
+
+  const [appReleaseId, setAppReleaseId] = useState(null);
+  const [apkVersion, setApkVersion] = useState('');
+  const [apkUrl, setApkUrl] = useState('');
+  const [uploadingApk, setUploadingApk] = useState(false);
+
+  const loadAppRelease = async () => {
+    try {
+      const res = await base44.entities.AppRelease.filter({ platform: 'android' }, '-updated_date', 1);
+      if (res.length > 0) {
+        setAppReleaseId(res[0].id);
+        setApkVersion(res[0].version || '');
+        setApkUrl(res[0].file_url || '');
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  useEffect(() => { loadAppRelease(); }, []);
+
+  const handleUploadApk = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploadingApk(true);
+    try {
+      const { file_url } = await base44.integrations.Core.UploadFile({ file });
+      const payload = { platform: 'android', version: apkVersion || '1.0', file_url };
+      if (appReleaseId) {
+        await base44.entities.AppRelease.update(appReleaseId, payload);
+      } else {
+        const saved = await base44.entities.AppRelease.create(payload);
+        setAppReleaseId(saved.id);
+      }
+      setApkUrl(file_url);
+      alert('APK uploadet og klar til download på forsiden');
+    } catch (err) {
+      console.error(err);
+      alert('Kunne ikke uploade APK: ' + (err.message || 'Ukendt fejl'));
+    } finally {
+      setUploadingApk(false);
+      e.target.value = '';
+    }
+  };
+
+  const saveApkVersion = async () => {
+    if (!appReleaseId) return;
+    try {
+      await base44.entities.AppRelease.update(appReleaseId, { version: apkVersion });
+      alert('Version gemt');
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const deleteApk = async () => {
+    if (!appReleaseId) return;
+    if (!confirm('Slet APK-download fra forsiden?')) return;
+    try {
+      await base44.entities.AppRelease.delete(appReleaseId);
+      setAppReleaseId(null);
+      setApkUrl('');
+      setApkVersion('');
+    } catch (e) {
+      console.error(e);
     }
   };
 
@@ -204,6 +271,43 @@ export default function Indstillinger() {
               </Button>
             </div>
           )}
+
+          <div className="bg-white rounded-xl border border-slate-200 p-6 max-w-2xl space-y-4">
+            <div className="flex items-center gap-2">
+              <Smartphone className="w-5 h-5 text-amber-600" />
+              <h2 className="font-semibold text-slate-900">Android-app (APK)</h2>
+            </div>
+            <p className="text-sm text-slate-500">
+              Upload din APK-fil. Den bliver tilgængelig til download på forsiden under "Hent appen", så ansatte kan installere den direkte.
+            </p>
+            <div className="grid grid-cols-2 gap-3">
+              <div className="space-y-1.5">
+                <Label>Version</Label>
+                <Input value={apkVersion} onChange={(e) => setApkVersion(e.target.value)} placeholder="f.eks. 1.0.0" />
+              </div>
+              <div className="space-y-1.5 flex items-end">
+                <Button variant="outline" onClick={saveApkVersion} disabled={!appReleaseId} className="w-full">
+                  <Save className="w-4 h-4 mr-1.5" /> Gem version
+                </Button>
+              </div>
+            </div>
+            {apkUrl && (
+              <div className="text-xs text-slate-500 bg-slate-50 rounded-lg p-3 break-all">
+                Aktiv APK: <a href={apkUrl} target="_blank" rel="noreferrer" className="text-amber-600 underline">{apkUrl}</a>
+              </div>
+            )}
+            <div className="flex flex-wrap gap-2">
+              <label className="inline-flex items-center gap-2 bg-slate-950 text-white px-4 py-2 rounded-md cursor-pointer hover:bg-slate-800">
+                <Upload className="w-4 h-4" /> {uploadingApk ? 'Uploader...' : (apkUrl ? 'Skift APK-fil' : 'Vælg APK-fil')}
+                <input type="file" accept=".apk,application/vnd.android.package-archive" className="hidden" onChange={handleUploadApk} disabled={uploadingApk} />
+              </label>
+              {appReleaseId && (
+                <Button variant="destructive" onClick={deleteApk} className="gap-2">
+                  <Trash2 className="w-4 h-4" /> Slet APK
+                </Button>
+              )}
+            </div>
+          </div>
         </TabsContent>
       </Tabs>
 
