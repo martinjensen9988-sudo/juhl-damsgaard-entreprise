@@ -75,7 +75,7 @@ export default async function(req) {
     // Log til aktivitetslog
     try {
       await base44.asServiceRole.entities.ActivityLog.create({
-        entity_type: 'InventoryItem',
+        entity_type: 'Lager',
         entity_id: '',
         entity_name: 'Lagerovervågning',
         action: 'Lageradvarsel',

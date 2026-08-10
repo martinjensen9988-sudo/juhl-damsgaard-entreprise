@@ -13,6 +13,7 @@
         "Abonnement",
         "Indk\u00f8bsordre",
         "Sikkerhed",
+        "Lager",
         "Andet"
       ],
       "default": "Andet"
@@ -36,8 +37,11 @@
         "Afvist",
         "Godkendt",
         "Sendt",
+        "Oprettet og sendt",
         "Betalt",
         "Status\u00e6ndring",
+        "Lageradvarsel",
+        "Feedback anmodning sendt",
         "Andet"
       ],
       "default": "Andet"
