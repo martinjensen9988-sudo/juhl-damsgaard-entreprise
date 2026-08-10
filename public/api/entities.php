@@ -3,7 +3,6 @@ declare(strict_types=1);
 require __DIR__ . '/bootstrap.php';
 
 $pdo = db($config);
-$user = require_user($pdo);
 $entity = (string)($_GET['entity'] ?? '');
 $id = $_GET['id'] ?? null;
 $sort = $_GET['sort'] ?? null;
@@ -11,6 +10,12 @@ $limit = min(1000, max(1, (int)($_GET['limit'] ?? 200)));
 $definition = entity_config($entityMap, $entity);
 $table = $definition['table'];
 $method = $_SERVER['REQUEST_METHOD'];
+$publicReadEntities = ['AppRelease'];
+$user = current_user($pdo);
+
+if (!$user && !($method === 'GET' && in_array($entity, $publicReadEntities, true))) {
+  respond(['error' => 'Unauthorized'], 401);
+}
 
 if ($method === 'GET' && $id) {
   respond(entity_get($pdo, $entityMap, $entity, (string)$id));
