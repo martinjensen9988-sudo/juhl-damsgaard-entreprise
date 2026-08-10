@@ -5,7 +5,7 @@ require __DIR__ . '/bootstrap.php';
 try {
   db($config)->query('SELECT 1');
   $openaiConfigured = !empty($config['openai']['api_key']) || (bool)getenv('OPENAI_API_KEY');
-  respond(['ok' => true, 'database' => true, 'openai' => $openaiConfigured]);
+  respond(['ok' => true, 'database' => true, 'openai' => $openaiConfigured, 'smtp' => smtp_configured($config)]);
 } catch (Throwable $e) {
   respond(['ok' => false, 'database' => false, 'error' => $e->getMessage()], 500);
 }

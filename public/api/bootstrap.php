@@ -187,3 +187,89 @@ function money_total(array $items): float {
 function require_admin(array $user): void {
   if (($user['role'] ?? '') !== 'admin') respond(['error' => 'Kun admin'], 403);
 }
+
+function smtp_configured(array $config): bool {
+  return !empty($config['smtp']['username']) && !empty($config['smtp']['password']);
+}
+
+function smtp_read($socket): string {
+  $data = '';
+  while (($line = fgets($socket, 515)) !== false) {
+    $data .= $line;
+    if (strlen($line) >= 4 && $line[3] === ' ') break;
+  }
+  return $data;
+}
+
+function smtp_expect($socket, array $codes): string {
+  $response = smtp_read($socket);
+  $code = (int)substr($response, 0, 3);
+  if (!in_array($code, $codes, true)) {
+    throw new RuntimeException('SMTP error: ' . trim($response));
+  }
+  return $response;
+}
+
+function smtp_command($socket, string $command, array $codes): string {
+  fwrite($socket, $command . "\r\n");
+  return smtp_expect($socket, $codes);
+}
+
+function mail_header_value(string $value): string {
+  return trim(str_replace(["\r", "\n"], ' ', $value));
+}
+
+function send_smtp_mail(array $config, string $to, string $subject, string $body, ?string $fromName = null): array {
+  if (!filter_var($to, FILTER_VALIDATE_EMAIL)) {
+    throw new InvalidArgumentException('Invalid recipient email');
+  }
+  if (!smtp_configured($config)) {
+    return ['sent' => false, 'pending' => true, 'reason' => 'SMTP is not configured'];
+  }
+  $smtp = $config['smtp'];
+  $host = (string)($smtp['host'] ?? 'websmtp.simply.com');
+  $port = (int)($smtp['port'] ?? 587);
+  $username = (string)$smtp['username'];
+  $password = (string)$smtp['password'];
+  $from = (string)($smtp['from'] ?? $username);
+  $fromName = mail_header_value($fromName ?: (string)($smtp['from_name'] ?? 'Juhl & Damsgaard'));
+  if (!filter_var($from, FILTER_VALIDATE_EMAIL)) {
+    throw new InvalidArgumentException('Invalid sender email');
+  }
+
+  $socket = fsockopen($host, $port, $errno, $errstr, 20);
+  if (!$socket) throw new RuntimeException("Could not connect to SMTP server: $errstr");
+  stream_set_timeout($socket, 30);
+  try {
+    smtp_expect($socket, [220]);
+    smtp_command($socket, 'EHLO ' . ($_SERVER['HTTP_HOST'] ?? 'localhost'), [250]);
+    smtp_command($socket, 'STARTTLS', [220]);
+    if (!stream_socket_enable_crypto($socket, true, STREAM_CRYPTO_METHOD_TLS_CLIENT)) {
+      throw new RuntimeException('Could not enable SMTP TLS');
+    }
+    smtp_command($socket, 'EHLO ' . ($_SERVER['HTTP_HOST'] ?? 'localhost'), [250]);
+    smtp_command($socket, 'AUTH LOGIN', [334]);
+    smtp_command($socket, base64_encode($username), [334]);
+    smtp_command($socket, base64_encode($password), [235]);
+    smtp_command($socket, 'MAIL FROM:<' . $from . '>', [250]);
+    smtp_command($socket, 'RCPT TO:<' . $to . '>', [250, 251]);
+    smtp_command($socket, 'DATA', [354]);
+
+    $headers = [
+      'From: ' . sprintf('"%s" <%s>', addcslashes($fromName, '"\\'), $from),
+      'To: <' . $to . '>',
+      'Subject: ' . mail_header_value($subject),
+      'MIME-Version: 1.0',
+      'Content-Type: text/plain; charset=UTF-8',
+      'Content-Transfer-Encoding: 8bit',
+    ];
+    $message = implode("\r\n", $headers) . "\r\n\r\n" . str_replace(["\r\n", "\r"], "\n", $body);
+    $message = str_replace("\n.", "\n..", $message);
+    fwrite($socket, str_replace("\n", "\r\n", $message) . "\r\n.\r\n");
+    smtp_expect($socket, [250]);
+    smtp_command($socket, 'QUIT', [221]);
+  } finally {
+    fclose($socket);
+  }
+  return ['sent' => true, 'pending' => false];
+}

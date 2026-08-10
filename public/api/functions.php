@@ -262,20 +262,37 @@ if ($name === 'sendInvoiceReminders') {
   $invoices = entity_filter($pdo, $entityMap, 'Invoice', ['status' => ['$in' => ['Sendt', 'Forfalden']], '-created_date', 1000);
   $checked = 0;
   $marked = 0;
+  $sent = 0;
+  $errors = [];
   foreach ($invoices as $invoice) {
     if (($invoice['due_date'] ?? '') !== $targetDate || !empty($invoice['reminder_sent'])) continue;
     $checked++;
-    entity_update($pdo, $entityMap, 'Invoice', $invoice['id'], ['reminder_sent' => true, 'reminder_pending_email' => true]);
+    $email = (string)($invoice['customer_email'] ?? '');
+    $mailResult = ['sent' => false, 'pending' => true];
+    if ($email !== '') {
+      try {
+        $mailResult = send_smtp_mail(
+          $config,
+          $email,
+          'Betalingspåmindelse - faktura ' . ($invoice['invoice_number'] ?? ''),
+          "Hej " . ($invoice['customer_name'] ?? '') . "\n\nVi kan se, at faktura " . ($invoice['invoice_number'] ?? '') . " med forfaldsdato " . ($invoice['due_date'] ?? '') . " endnu ikke er registreret betalt.\n\nKontakt os endelig, hvis betalingen allerede er sendt eller hvis du har spørgsmål.\n\nMed venlig hilsen\nJuhl & Damsgaard"
+        );
+      } catch (Throwable $e) {
+        $errors[] = ['invoice_id' => $invoice['id'], 'error' => $e->getMessage()];
+      }
+    }
+    if (!empty($mailResult['sent'])) $sent++;
+    else $marked++;
+    entity_update($pdo, $entityMap, 'Invoice', $invoice['id'], ['reminder_sent' => true, 'reminder_pending_email' => empty($mailResult['sent'])]);
     create_activity($pdo, $entityMap, $user, [
       'entity_type' => 'Faktura',
       'entity_id' => $invoice['id'],
       'entity_name' => $invoice['invoice_number'] ?? $invoice['id'],
       'action' => 'Sendt',
-      'details' => 'Betalingspåmindelse markeret til afsendelse. SMTP-mail kræver Simply mailkonto.',
+      'details' => !empty($mailResult['sent']) ? 'Betalingspåmindelse sendt til ' . $email : 'Betalingspåmindelse markeret til afsendelse. SMTP-mail mangler eller fejlede.',
     ]);
-    $marked++;
   }
-  respond(['success' => true, 'sent' => 0, 'marked_pending_email' => $marked, 'checked' => $checked, 'note' => 'SMTP afsendelse kræver mailkonto på Simply.']);
+  respond(['success' => true, 'sent' => $sent, 'marked_pending_email' => $marked, 'checked' => $checked, 'errors' => $errors]);
 }
 
 if ($name === 'sendFeedbackRequest') {
@@ -285,14 +302,33 @@ if ($name === 'sendFeedbackRequest') {
   $project = entity_get($pdo, $entityMap, 'Project', $projectId);
   if (!$project) respond(['error' => 'Projekt ikke fundet'], 404);
   if (empty($project['customer_email'])) respond(['error' => 'Projektet har ingen kundeemail', 'skipped' => true]);
+  try {
+    $mailResult = send_smtp_mail(
+      $config,
+      (string)$project['customer_email'],
+      'Hvordan gik projektet? - Juhl & Damsgaard',
+      "Hej " . ($project['customer_name'] ?? '') . "\n\nTak for samarbejdet omkring " . ($project['name'] ?? 'projektet') . ".\n\nVi vil meget gerne høre din feedback, så vi kan følge op og forbedre vores arbejde.\n\nMed venlig hilsen\nJuhl & Damsgaard"
+    );
+  } catch (Throwable $e) {
+    $mailResult = ['sent' => false, 'pending' => true, 'error' => $e->getMessage()];
+  }
   create_activity($pdo, $entityMap, $user, [
     'entity_type' => 'Projekt',
     'entity_id' => $project['id'],
     'entity_name' => $project['name'] ?? $projectId,
     'action' => 'Feedback anmodning sendt',
-    'details' => 'Feedbackanmodning markeret til afsendelse til ' . $project['customer_email'] . '. SMTP-mail kræver Simply mailkonto.',
+    'details' => !empty($mailResult['sent']) ? 'Feedbackanmodning sendt til ' . $project['customer_email'] : 'Feedbackanmodning markeret til afsendelse til ' . $project['customer_email'] . '. SMTP-mail mangler eller fejlede.',
   ]);
-  respond(['success' => true, 'sent_to' => $project['customer_email'], 'pending_email' => true]);
+  respond(['success' => true, 'sent_to' => $project['customer_email'], 'sent' => !empty($mailResult['sent']), 'pending_email' => empty($mailResult['sent']), 'mail' => $mailResult]);
+}
+
+if ($name === 'sendEmail') {
+  require_admin($user);
+  $to = trim((string)($body['to'] ?? ''));
+  $subject = trim((string)($body['subject'] ?? ''));
+  $message = trim((string)($body['body'] ?? $body['message'] ?? ''));
+  if ($to === '' || $subject === '' || $message === '') respond(['error' => 'to, subject og body er påkrævet'], 400);
+  respond(['success' => true, 'mail' => send_smtp_mail($config, $to, $subject, $message)]);
 }
 
 if ($name === 'skatRapport') {

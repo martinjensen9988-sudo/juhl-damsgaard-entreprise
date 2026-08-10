@@ -74,8 +74,14 @@ if ($action === 'forgot-password') {
       $stmt->execute([hash('sha256', $token), $user['id']]);
       $origin = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https://' : 'http://') . ($_SERVER['HTTP_HOST'] ?? '');
       $resetUrl = $origin . '/reset-password?token=' . urlencode($token);
+      $mail = send_smtp_mail(
+        $config,
+        $email,
+        'Nulstil adgangskode - Juhl & Damsgaard',
+        "Hej\n\nDu har bedt om at nulstille din adgangskode til Juhl & Damsgaard systemet.\n\nBrug linket her:\n$resetUrl\n\nLinket udløber om 2 timer.\n\nHvis du ikke har bedt om dette, kan du ignorere denne mail."
+      );
       if (($config['expose_reset_links'] ?? false) === true) {
-        respond(['ok' => true, 'reset_url' => $resetUrl]);
+        respond(['ok' => true, 'reset_url' => $resetUrl, 'mail' => $mail]);
       }
     }
   }

@@ -66,8 +66,8 @@ export const simplyClient = {
         }
         return data;
       },
-      async SendEmail() {
-        throw new Error('SMTP email is not enabled on Simply yet');
+      async SendEmail(payload) {
+        return request('/functions.php?name=sendEmail', { method: 'POST', body: payload });
       },
       async InvokeLLM() {
         throw new Error('LLM integration is not enabled on Simply yet');

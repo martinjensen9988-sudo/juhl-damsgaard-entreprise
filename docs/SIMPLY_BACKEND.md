@@ -31,6 +31,14 @@ return [
     'api_key' => 'sk-proj-...',
     'quote_model' => 'gpt-4.1-mini',
   ],
+  'smtp' => [
+    'host' => 'websmtp.simply.com',
+    'port' => 587,
+    'username' => 'mailbox@example.com',
+    'password' => 'mailbox-password',
+    'from' => 'mailbox@example.com',
+    'from_name' => 'Juhl & Damsgaard',
+  ],
 ];
 ```
 
@@ -68,8 +76,10 @@ Covered:
 - `createInvoiceFromQuote`
 - `createInvoiceFromHours`
 - `quoteAction`
-- `sendInvoiceReminders` as pending-mail marking
-- `sendFeedbackRequest` as pending-mail marking
+- `sendInvoiceReminders` through Simply SMTP with pending fallback
+- `sendFeedbackRequest` through Simply SMTP with pending fallback
+- Password reset links through Simply SMTP
+- Generic `SendEmail` integration through Simply SMTP
 - `postSupplierInvoice`
 - `skatRapport`
 - `aiQuoteCalculator` through OpenAI Responses API with deterministic fallback
@@ -77,7 +87,6 @@ Covered:
 Still to migrate:
 
 - Google login
-- Mail sending through `websmtp.simply.com`
 - OCR/AI document scanning for `scanSupplierInvoice`
 - Server-side PDF generation for `generateAsbestCertificate`
 
