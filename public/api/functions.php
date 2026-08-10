@@ -7,6 +7,111 @@ $user = require_user($pdo);
 $name = (string)($_GET['name'] ?? '');
 $body = json_body();
 
+function deterministic_quote_estimate(string $message): array {
+  $lower = mb_strtolower($message);
+  preg_match('/(\d+(?:[,.]\d+)?)\s*(m2|m²|kvm|kvadratmeter|m3|m³|meter|m|timer|time|stk)/u', $lower, $match);
+  $qty = isset($match[1]) ? (float)str_replace(',', '.', $match[1]) : 1.0;
+  $unitRaw = $match[2] ?? '';
+  $unit = in_array($unitRaw, ['m2', 'm²', 'kvm', 'kvadratmeter'], true) ? 'm²' : (in_array($unitRaw, ['m3', 'm³'], true) ? 'm³' : (str_starts_with($unitRaw, 'time') ? 'time' : ($unitRaw === 'stk' ? 'stk' : 'm')));
+  $desc = 'Entreprisearbejde';
+  $price = 280;
+  if (str_contains($lower, 'maling') || str_contains($lower, 'male')) { $desc = 'Malerarbejde'; $unit = 'm²'; $price = 75; }
+  elseif (str_contains($lower, 'isolering') || str_contains($lower, 'indblæs')) { $desc = 'Teknisk isolering'; $unit = 'm²'; $price = str_contains($lower, '300') ? 152 : (str_contains($lower, '250') ? 140 : (str_contains($lower, '150') ? 96 : 120)); }
+  elseif (str_contains($lower, 'grave')) { $desc = 'Gravearbejde'; $unit = 'm³'; $price = 580; }
+  elseif (str_contains($lower, 'kloak')) { $desc = 'Kloakarbejde'; $unit = 'm'; $price = 850; }
+  elseif (str_contains($lower, 'asfalt')) { $desc = 'Asfaltering'; $unit = 'm²'; $price = 395; }
+  elseif (str_contains($lower, 'beton')) { $desc = 'Betonarbejde'; $unit = 'm³'; $price = 1150; }
+  elseif (str_contains($lower, 'tømrer') || str_contains($lower, 'gips')) { $desc = 'Tømrerarbejde'; $unit = str_contains($lower, 'gips') ? 'm²' : 'time'; $price = str_contains($lower, 'gips') ? 245 : 495; }
+  $lineItems = [
+    ['description' => $desc, 'quantity' => $qty, 'unit' => $unit, 'unit_price' => $price, 'line_total' => $qty * $price],
+    ['description' => 'Materialer og tilbehør', 'quantity' => $qty, 'unit' => $unit, 'unit_price' => round($price * 0.35, 2), 'line_total' => round($qty * $price * 0.35, 2)],
+  ];
+  $subtotal = money_total($lineItems);
+  return ['message' => 'Vejledende Simply-beregning. OpenAI API er ikke aktiv, så fallback-beregneren blev brugt.', 'line_items' => $lineItems, 'subtotal' => $subtotal, 'vat' => round($subtotal * 0.25, 2), 'total' => round($subtotal * 1.25, 2), 'ai_provider' => 'fallback'];
+}
+
+function extract_openai_text(array $response): string {
+  if (isset($response['output_text']) && is_string($response['output_text'])) return $response['output_text'];
+  $chunks = [];
+  foreach (($response['output'] ?? []) as $output) {
+    foreach (($output['content'] ?? []) as $content) {
+      if (isset($content['text']) && is_string($content['text'])) $chunks[] = $content['text'];
+    }
+  }
+  return trim(implode("\n", $chunks));
+}
+
+function normalize_quote_payload(array $payload): array {
+  $lineItems = [];
+  foreach (($payload['line_items'] ?? []) as $item) {
+    if (!is_array($item)) continue;
+    $qty = (float)($item['quantity'] ?? 0);
+    $unitPrice = (float)($item['unit_price'] ?? 0);
+    if ($qty <= 0 || $unitPrice < 0) continue;
+    $lineItems[] = [
+      'description' => trim((string)($item['description'] ?? 'Arbejde')),
+      'quantity' => $qty,
+      'unit' => trim((string)($item['unit'] ?? 'stk')),
+      'unit_price' => round($unitPrice, 2),
+      'line_total' => round($qty * $unitPrice, 2),
+    ];
+  }
+  if (!$lineItems) throw new RuntimeException('OpenAI returned no quote lines');
+  $subtotal = money_total($lineItems);
+  return [
+    'message' => trim((string)($payload['message'] ?? 'Her er et vejledende AI-estimat baseret på din beskrivelse.')),
+    'line_items' => $lineItems,
+    'subtotal' => round($subtotal, 2),
+    'vat' => round($subtotal * 0.25, 2),
+    'total' => round($subtotal * 1.25, 2),
+    'assumptions' => array_values(array_filter($payload['assumptions'] ?? [], 'is_string')),
+    'ai_provider' => 'openai',
+  ];
+}
+
+function openai_quote_estimate(array $config, string $message): ?array {
+  $apiKey = (string)($config['openai']['api_key'] ?? getenv('OPENAI_API_KEY') ?: '');
+  if ($apiKey === '') return null;
+  if (!function_exists('curl_init')) throw new RuntimeException('PHP cURL extension is not enabled');
+
+  $model = (string)($config['openai']['quote_model'] ?? getenv('OPENAI_QUOTE_MODEL') ?: 'gpt-4.1-mini');
+  $system = "Du er tilbudsberegner for en dansk entreprenørvirksomhed. Lav et realistisk vejledende tilbud på dansk. Returner KUN gyldig JSON med keys: message, line_items, assumptions. line_items skal være array af {description, quantity, unit, unit_price}. Brug DKK ekskl. moms i unit_price. Tilføj separate linjer for arbejde, materialer, maskiner/transport og risikotillæg når relevant. Moms beregnes af systemet bagefter.";
+  $payload = [
+    'model' => $model,
+    'input' => [
+      ['role' => 'system', 'content' => $system],
+      ['role' => 'user', 'content' => $message],
+    ],
+    'temperature' => 0.2,
+    'max_output_tokens' => 1200,
+  ];
+
+  $ch = curl_init('https://api.openai.com/v1/responses');
+  curl_setopt_array($ch, [
+    CURLOPT_POST => true,
+    CURLOPT_RETURNTRANSFER => true,
+    CURLOPT_TIMEOUT => 30,
+    CURLOPT_HTTPHEADER => [
+      'Content-Type: application/json',
+      'Authorization: Bearer ' . $apiKey,
+    ],
+    CURLOPT_POSTFIELDS => json_encode($payload, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES),
+  ]);
+  $raw = curl_exec($ch);
+  $status = (int)curl_getinfo($ch, CURLINFO_RESPONSE_CODE);
+  $error = curl_error($ch);
+  curl_close($ch);
+  if ($raw === false || $status < 200 || $status >= 300) {
+    throw new RuntimeException($error ?: "OpenAI API returned HTTP $status");
+  }
+  $response = json_decode($raw, true);
+  if (!is_array($response)) throw new RuntimeException('OpenAI returned invalid JSON');
+  $text = extract_openai_text($response);
+  $decoded = json_decode($text, true);
+  if (!is_array($decoded)) throw new RuntimeException('OpenAI response was not valid quote JSON');
+  return normalize_quote_payload($decoded);
+}
+
 if ($name === 'getEmployeeProfile') {
   $employee = entity_config($entityMap, 'Employee');
   $table = $employee['table'];
@@ -296,26 +401,15 @@ if ($name === 'aiQuoteCalculator') {
   $message = trim((string)($body['message'] ?? ''));
   if ($message === '') respond(['error' => 'Besked mangler'], 400);
   if (mb_strlen($message) > 2000) respond(['error' => 'Beskeden er for lang (max 2000 tegn)'], 400);
-  $lower = mb_strtolower($message);
-  preg_match('/(\d+(?:[,.]\d+)?)\s*(m2|m²|kvm|kvadratmeter|m3|m³|meter|m|timer|time|stk)/u', $lower, $match);
-  $qty = isset($match[1]) ? (float)str_replace(',', '.', $match[1]) : 1.0;
-  $unitRaw = $match[2] ?? '';
-  $unit = in_array($unitRaw, ['m2', 'm²', 'kvm', 'kvadratmeter'], true) ? 'm²' : (in_array($unitRaw, ['m3', 'm³'], true) ? 'm³' : (str_starts_with($unitRaw, 'time') ? 'time' : ($unitRaw === 'stk' ? 'stk' : 'm')));
-  $desc = 'Entreprisearbejde';
-  $price = 280;
-  if (str_contains($lower, 'maling') || str_contains($lower, 'male')) { $desc = 'Malerarbejde'; $unit = 'm²'; $price = 75; }
-  elseif (str_contains($lower, 'isolering') || str_contains($lower, 'indblæs')) { $desc = 'Teknisk isolering'; $unit = 'm²'; $price = str_contains($lower, '300') ? 152 : (str_contains($lower, '250') ? 140 : (str_contains($lower, '150') ? 96 : 120)); }
-  elseif (str_contains($lower, 'grave')) { $desc = 'Gravearbejde'; $unit = 'm³'; $price = 580; }
-  elseif (str_contains($lower, 'kloak')) { $desc = 'Kloakarbejde'; $unit = 'm'; $price = 850; }
-  elseif (str_contains($lower, 'asfalt')) { $desc = 'Asfaltering'; $unit = 'm²'; $price = 395; }
-  elseif (str_contains($lower, 'beton')) { $desc = 'Betonarbejde'; $unit = 'm³'; $price = 1150; }
-  elseif (str_contains($lower, 'tømrer') || str_contains($lower, 'gips')) { $desc = 'Tømrerarbejde'; $unit = str_contains($lower, 'gips') ? 'm²' : 'time'; $price = str_contains($lower, 'gips') ? 245 : 495; }
-  $lineItems = [
-    ['description' => $desc, 'quantity' => $qty, 'unit' => $unit, 'unit_price' => $price, 'line_total' => $qty * $price],
-    ['description' => 'Materialer og tilbehør', 'quantity' => $qty, 'unit' => $unit, 'unit_price' => round($price * 0.35, 2), 'line_total' => round($qty * $price * 0.35, 2)],
-  ];
-  $subtotal = money_total($lineItems);
-  respond(['message' => 'Vejledende Simply-beregning. AI-fortolkning kan tilkobles senere med en LLM API-nøgle.', 'line_items' => $lineItems, 'subtotal' => $subtotal, 'vat' => round($subtotal * 0.25, 2), 'total' => round($subtotal * 1.25, 2)]);
+  try {
+    $estimate = openai_quote_estimate($config, $message);
+    if ($estimate) respond($estimate);
+  } catch (Throwable $e) {
+    $fallback = deterministic_quote_estimate($message);
+    $fallback['openai_error'] = $e->getMessage();
+    respond($fallback);
+  }
+  respond(deterministic_quote_estimate($message));
 }
 
 if (in_array($name, ['scanSupplierInvoice', 'generateAsbestCertificate'], true)) {

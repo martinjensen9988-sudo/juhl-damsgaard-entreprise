@@ -15,6 +15,27 @@ On Simply.com:
 
 Do not commit real database credentials to the repository.
 
+Example:
+
+```php
+<?php
+return [
+  'db' => [
+    'host' => 'mysql45.unoeuro.com',
+    'port' => 3306,
+    'name' => 'your_database',
+    'user' => 'your_user',
+    'password' => 'your_password',
+  ],
+  'openai' => [
+    'api_key' => 'sk-proj-...',
+    'quote_model' => 'gpt-4.1-mini',
+  ],
+];
+```
+
+The OpenAI key must stay in `private/simply-config.php` or an `OPENAI_API_KEY` server environment variable. Never put it in a Vite `.env` file because that would expose it in the browser.
+
 ## Build For Simply API
 
 ```bash
@@ -51,7 +72,7 @@ Covered:
 - `sendFeedbackRequest` as pending-mail marking
 - `postSupplierInvoice`
 - `skatRapport`
-- `aiQuoteCalculator` deterministic fallback
+- `aiQuoteCalculator` through OpenAI Responses API with deterministic fallback
 
 Still to migrate:
 
@@ -59,7 +80,6 @@ Still to migrate:
 - Mail sending through `websmtp.simply.com`
 - OCR/AI document scanning for `scanSupplierInvoice`
 - Server-side PDF generation for `generateAsbestCertificate`
-- Full LLM-backed AI pricing, if wanted instead of the deterministic fallback
 
 ## Simply WAF
 
