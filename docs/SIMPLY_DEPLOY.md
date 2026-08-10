@@ -59,5 +59,7 @@ Refresh each page directly in the browser. If refresh works, the `.htaccess` rou
 
 ## Known Limitations
 
-- If the app needs Base44 functions, the Simply-hosted frontend must still call the hosted Base44 backend.
-- If the whole system must be independent from Base44, the next project phase is backend migration: database schema, auth, file storage and every `base44/functions/*` endpoint.
+- A Simply PHP/MySQL backend layer exists in `public/api`.
+- See `docs/SIMPLY_BACKEND.md` for backend status.
+- The frontend can be built against the Simply API with `VITE_API_MODE=simply`.
+- File storage, Google login, mail sending and several backend functions still need dedicated migration work before Base44 can be fully removed.

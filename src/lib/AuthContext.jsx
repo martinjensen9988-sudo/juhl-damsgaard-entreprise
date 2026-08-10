@@ -4,6 +4,7 @@ import { appParams } from '@/lib/app-params';
 import { createAxiosClient } from '@base44/sdk/dist/utils/axios-client';
 
 const AuthContext = createContext();
+const useSimplyApi = import.meta.env.VITE_API_MODE === 'simply';
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
@@ -22,6 +23,13 @@ export const AuthProvider = ({ children }) => {
     try {
       setIsLoadingPublicSettings(true);
       setAuthError(null);
+
+      if (useSimplyApi) {
+        setAppPublicSettings({ id: 'simply', public_settings: { auth_required: true } });
+        setIsLoadingPublicSettings(false);
+        await checkUserAuth();
+        return;
+      }
       
       // First, check app public settings (with token if available)
       // This will tell us if auth is required, user not registered, etc.
