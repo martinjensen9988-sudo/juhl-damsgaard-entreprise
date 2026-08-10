@@ -26,6 +26,17 @@ CREATE TABLE IF NOT EXISTS jd_sessions (
   INDEX idx_jd_sessions_expires_at (expires_at)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+CREATE TABLE IF NOT EXISTS jd_password_resets (
+  token_hash CHAR(64) PRIMARY KEY,
+  user_id VARCHAR(36) NOT NULL,
+  expires_at DATETIME NOT NULL,
+  used_at DATETIME NULL,
+  created_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES jd_users(id) ON DELETE CASCADE,
+  INDEX idx_jd_password_resets_user_id (user_id),
+  INDEX idx_jd_password_resets_expires_at (expires_at)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 CREATE TABLE IF NOT EXISTS jd_account (
   id VARCHAR(36) PRIMARY KEY,
   data JSON NOT NULL,

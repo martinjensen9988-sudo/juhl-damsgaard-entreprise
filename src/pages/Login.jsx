@@ -9,6 +9,8 @@ import AuthLayout from "@/components/AuthLayout";
 import GoogleIcon from "@/components/GoogleIcon";
 import { safeReturnTo } from "@/lib/authReturnTo";
 
+const useSimplyApi = import.meta.env.VITE_API_MODE === "simply";
+
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -27,7 +29,7 @@ export default function Login() {
       // Default to the admin dashboard, since "/" is the public front page.
       window.location.href = returnTo === "/" ? "/dashboard" : returnTo;
     } catch (err) {
-      setError(err.message || "Invalid email or password");
+      setError(err.message || "Forkert email eller adgangskode");
     } finally {
       setLoading(false);
     }
@@ -40,37 +42,41 @@ export default function Login() {
   return (
     <AuthLayout
       icon={LogIn}
-      title="Welcome back"
-      subtitle="Log in to your account"
+      title="Log ind"
+      subtitle="Adgang til Juhl & Damsgaard systemet"
       footer={
         <>
-          Don't have an account?{" "}
+          Har du ikke en bruger?{" "}
           <Link
             to={"/register" + (returnTo !== "/" ? "?returnTo=" + encodeURIComponent(returnTo) : "")}
             className="text-primary font-medium hover:underline"
           >
-            Create one
+            Opret bruger
           </Link>
         </>
       }
     >
-      <Button
-        variant="outline"
-        className="w-full h-12 text-sm font-medium mb-6"
-        onClick={handleGoogle}
-      >
-        <GoogleIcon className="w-5 h-5 mr-2" />
-        Continue with Google
-      </Button>
+      {!useSimplyApi && (
+        <>
+          <Button
+            variant="outline"
+            className="w-full h-12 text-sm font-medium mb-6"
+            onClick={handleGoogle}
+          >
+            <GoogleIcon className="w-5 h-5 mr-2" />
+            Fortsæt med Google
+          </Button>
 
-      <div className="relative mb-6">
-        <div className="absolute inset-0 flex items-center">
-          <div className="w-full border-t border-border" />
-        </div>
-        <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-card px-3 text-muted-foreground">or</span>
-        </div>
-      </div>
+          <div className="relative mb-6">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-border" />
+            </div>
+            <div className="relative flex justify-center text-xs uppercase">
+              <span className="bg-white px-3 text-muted-foreground">eller</span>
+            </div>
+          </div>
+        </>
+      )}
 
       {error && (
         <div className="mb-4 p-3 rounded-lg bg-destructive/10 text-destructive text-sm">
@@ -88,7 +94,7 @@ export default function Login() {
               type="email"
               autoComplete="email"
               autoFocus
-              placeholder="you@example.com"
+              placeholder="navn@firma.dk"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="pl-10 h-12"
@@ -98,9 +104,9 @@ export default function Login() {
         </div>
         <div className="space-y-2">
           <div className="flex items-center justify-between">
-            <Label htmlFor="password">Password</Label>
+            <Label htmlFor="password">Adgangskode</Label>
             <Link to="/forgot-password" className="text-xs text-primary hover:underline">
-              Forgot password?
+              Glemt adgangskode?
             </Link>
           </div>
           <div className="relative">
@@ -121,10 +127,10 @@ export default function Login() {
           {loading ? (
             <>
               <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-              Logging in...
+              Logger ind...
             </>
           ) : (
-            "Log in"
+            "Log ind"
           )}
         </Button>
       </form>

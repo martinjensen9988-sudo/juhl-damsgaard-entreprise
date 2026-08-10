@@ -11,6 +11,8 @@ import GoogleIcon from "@/components/GoogleIcon";
 import { toast } from "@/components/ui/use-toast";
 import { safeReturnTo } from "@/lib/authReturnTo";
 
+const useSimplyApi = import.meta.env.VITE_API_MODE === "simply";
+
 export default function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -24,15 +26,20 @@ export default function Register() {
     e.preventDefault();
     setError("");
     if (password !== confirmPassword) {
-      setError("Passwords do not match");
+      setError("Adgangskoderne er ikke ens");
       return;
     }
     setLoading(true);
     try {
       await base44.auth.register({ email, password });
+      if (useSimplyApi) {
+        const returnTo = safeReturnTo();
+        window.location.href = returnTo === "/" ? "/dashboard" : returnTo;
+        return;
+      }
       setShowOtp(true);
     } catch (err) {
-      setError(err.message || "Registration failed");
+      setError(err.message || "Brugeren kunne ikke oprettes");
     } finally {
       setLoading(false);
     }
@@ -48,7 +55,7 @@ export default function Register() {
       }
       window.location.href = safeReturnTo();
     } catch (err) {
-      setError(err.message || "Invalid verification code");
+      setError(err.message || "Ugyldig bekræftelseskode");
     } finally {
       setLoading(false);
     }
@@ -59,11 +66,11 @@ export default function Register() {
     try {
       await base44.auth.resendOtp(email);
       toast({
-        title: "Code sent",
-        description: "Check your email for the new code.",
+        title: "Kode sendt",
+        description: "Tjek din mail for den nye kode.",
       });
     } catch (err) {
-      setError(err.message || "Failed to resend code");
+      setError(err.message || "Koden kunne ikke sendes igen");
     }
   };
 
@@ -75,8 +82,8 @@ export default function Register() {
     return (
       <AuthLayout
         icon={Mail}
-        title="Verify your email"
-        subtitle={`We sent a code to ${email}`}
+        title="Bekræft din email"
+        subtitle={`Vi har sendt en kode til ${email}`}
       >
         {error && (
           <div className="mb-4 p-3 rounded-lg bg-destructive/10 text-destructive text-sm">
@@ -109,16 +116,16 @@ export default function Register() {
           {loading ? (
             <>
               <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-              Verifying...
+              Bekræfter...
             </>
           ) : (
-            "Verify"
+            "Bekræft"
           )}
         </Button>
         <p className="text-center text-sm text-muted-foreground mt-4">
-          Didn't receive the code?{" "}
+          Modtog du ikke koden?{" "}
           <button onClick={handleResend} className="text-primary font-medium hover:underline">
-            Resend
+            Send igen
           </button>
         </p>
       </AuthLayout>
@@ -128,37 +135,41 @@ export default function Register() {
   return (
     <AuthLayout
       icon={UserPlus}
-      title="Create your account"
-      subtitle="Sign up to get started"
+      title="Opret bruger"
+      subtitle="Opret adgang til Juhl & Damsgaard systemet"
       footer={
         <>
-          Already have an account?{" "}
+          Har du allerede en bruger?{" "}
           <Link
             to={"/login" + (safeReturnTo() !== "/" ? "?returnTo=" + encodeURIComponent(safeReturnTo()) : "")}
             className="text-primary font-medium hover:underline"
           >
-            Log in
+            Log ind
           </Link>
         </>
       }
     >
-      <Button
-        variant="outline"
-        className="w-full h-12 text-sm font-medium mb-6"
-        onClick={handleGoogle}
-      >
-        <GoogleIcon className="w-5 h-5 mr-2" />
-        Continue with Google
-      </Button>
+      {!useSimplyApi && (
+        <>
+          <Button
+            variant="outline"
+            className="w-full h-12 text-sm font-medium mb-6"
+            onClick={handleGoogle}
+          >
+            <GoogleIcon className="w-5 h-5 mr-2" />
+            Fortsæt med Google
+          </Button>
 
-      <div className="relative mb-6">
-        <div className="absolute inset-0 flex items-center">
-          <div className="w-full border-t border-border" />
-        </div>
-        <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-card px-3 text-muted-foreground">or</span>
-        </div>
-      </div>
+          <div className="relative mb-6">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-border" />
+            </div>
+            <div className="relative flex justify-center text-xs uppercase">
+              <span className="bg-white px-3 text-muted-foreground">eller</span>
+            </div>
+          </div>
+        </>
+      )}
 
       {error && (
         <div className="mb-4 p-3 rounded-lg bg-destructive/10 text-destructive text-sm">
@@ -176,7 +187,7 @@ export default function Register() {
               type="email"
               autoComplete="email"
               autoFocus
-              placeholder="you@example.com"
+              placeholder="navn@firma.dk"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="pl-10 h-12"
@@ -185,7 +196,7 @@ export default function Register() {
           </div>
         </div>
         <div className="space-y-2">
-          <Label htmlFor="password">Password</Label>
+          <Label htmlFor="password">Adgangskode</Label>
           <div className="relative">
             <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" aria-hidden="true" />
             <Input
@@ -201,7 +212,7 @@ export default function Register() {
           </div>
         </div>
         <div className="space-y-2">
-          <Label htmlFor="confirm">Confirm Password</Label>
+          <Label htmlFor="confirm">Gentag adgangskode</Label>
           <div className="relative">
             <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" aria-hidden="true" />
             <Input
@@ -220,10 +231,10 @@ export default function Register() {
           {loading ? (
             <>
               <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-              Creating account...
+              Opretter...
             </>
           ) : (
-            "Create account"
+            "Opret bruger"
           )}
         </Button>
       </form>

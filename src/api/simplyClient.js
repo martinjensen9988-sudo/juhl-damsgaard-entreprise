@@ -96,6 +96,12 @@ export const simplyClient = {
     async resendOtp() {
       return { ok: true };
     },
+    async resetPasswordRequest(email) {
+      return request('/auth.php?action=forgot-password', { method: 'POST', body: { email } });
+    },
+    async resetPassword({ resetToken, newPassword }) {
+      return request('/auth.php?action=reset-password', { method: 'POST', body: { resetToken, newPassword } });
+    },
     async logout() {
       await request('/auth.php?action=logout', { method: 'POST' }).catch(() => null);
       localStorage.removeItem(TOKEN_KEY);
