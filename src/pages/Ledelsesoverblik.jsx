@@ -1,11 +1,11 @@
 import { useEffect, useState, useMemo } from 'react';
 import { base44 } from '@/api/base44Client';
-import { formatDKK, calcTotal, formatDate } from '@/lib/format';
+import { formatDKK, calcTotal } from '@/lib/format';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
-  PieChart, Pie, Cell, Legend,
+  PieChart, Pie, Cell,
 } from 'recharts';
-import { TrendingUp, FileText, Receipt, Clock, Trophy, AlertCircle } from 'lucide-react';
+import { TrendingUp, FileText, Receipt, Clock, Trophy } from 'lucide-react';
 
 const PIE_COLORS = ['#3b82f6', '#f59e0b', '#10b981', '#8b5cf6', '#ef4444', '#64748b', '#ec4899'];
 

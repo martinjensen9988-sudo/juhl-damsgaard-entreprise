@@ -10,7 +10,7 @@ import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription,
 } from '@/components/ui/dialog';
 import { useToast } from '@/components/ui/use-toast';
-import { UserPlus, Search, Trash2, Shield, Mail, Calendar } from 'lucide-react';
+import { UserPlus, Search, Trash2, Shield, Mail } from 'lucide-react';
 
 export default function Brugeradministration() {
   const [users, setUsers] = useState([]);

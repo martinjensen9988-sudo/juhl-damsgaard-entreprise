@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { base44 } from '@/api/base44Client';
-import { Button } from '@/components/ui/button';
-import { HardHat, Images, Receipt, Building2, Clock, CheckCircle2, MapPin } from 'lucide-react';
+import { HardHat, Images, Receipt, Building2, Clock, MapPin } from 'lucide-react';
 import { Image } from '@/components/ui/image';
 
 const STATUS_STYLE = {

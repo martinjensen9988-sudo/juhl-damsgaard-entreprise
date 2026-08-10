@@ -6,9 +6,8 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/components/ui/use-toast';
 import {
-  Wrench, Search, Plus, Pencil, Trash2, Package, MapPin, CheckCircle2,
+  Wrench, Search, Plus, Pencil, Trash2, Package, MapPin,
 } from 'lucide-react';
-import { formatDate } from '@/lib/format';
 
 const categories = ['Maskine', 'Værktøj', 'Køretøj', 'Stillads', 'Container', 'Andet'];
 const statuses = ['Ledig', 'I brug', 'Reparation', 'Ude af drift'];

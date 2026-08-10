@@ -7,7 +7,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { formatDate } from '@/lib/format';
-import { Plus, Pencil, Trash2, Search, FolderOpen, Download, Upload, X } from 'lucide-react';
+import { Plus, Pencil, Trash2, Search, FolderOpen, Download, X } from 'lucide-react';
 
 const categoryColors = {
   Personalehåndbog: 'bg-blue-100 text-blue-700',

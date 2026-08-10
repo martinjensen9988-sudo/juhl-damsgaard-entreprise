@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { base44 } from '@/api/base44Client';
-import { formatDKK, formatDate } from '@/lib/format';
+import { formatDate } from '@/lib/format';
 import Clock from '@/components/storskaerm/Clock';
 import Panel from '@/components/storskaerm/Panel';
 import Metrics from '@/components/storskaerm/Metrics';

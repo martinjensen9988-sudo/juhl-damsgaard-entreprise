@@ -19,7 +19,7 @@ import {
   DialogTitle,
   DialogFooter,
 } from '@/components/ui/dialog';
-import { formatDKK, calcTotal, formatDate } from '@/lib/format';
+import { formatDKK, formatDate } from '@/lib/format';
 import { Plus, Pencil, Trash2, Target, TrendingUp } from 'lucide-react';
 
 const STAGES = [

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { base44 } from '@/api/base44Client';
 import { Button } from '@/components/ui/button';
-import { Mic, MicOff, Square, Play, Loader2 } from 'lucide-react';
+import { Mic, MicOff, Square, Loader2 } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 
 const TASK_TYPES = ['Gravearbejde', 'Kørsel', 'Maskinarbejde', 'Håndarbejde', 'Møde', 'Andet'];
@@ -115,7 +115,7 @@ export default function StemmeTidsregistrering({ projects, onEntryCreated }) {
     return () => {
       try { rec.abort(); } catch {}
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, [projects]);
 
   // Ticking timer

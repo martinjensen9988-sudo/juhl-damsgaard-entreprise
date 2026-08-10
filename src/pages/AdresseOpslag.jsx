@@ -5,7 +5,6 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import AddressLookup from '@/components/AddressLookup';
 import { MapPin, Search, UserPlus, Users, Phone, Mail, Building2, CheckCircle2 } from 'lucide-react';
-import { formatDate } from '@/lib/format';
 
 export default function AdresseOpslag() {
   const [addr, setAddr] = useState({ address: '', postal_code: '', city: '', lat: null, lng: null });

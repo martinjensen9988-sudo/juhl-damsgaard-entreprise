@@ -1,7 +1,7 @@
 import { useEffect, useState, useMemo } from 'react';
 import { base44 } from '@/api/base44Client';
 import { Button } from '@/components/ui/button';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Select, SelectContent, SelectItem, SelectTrigger } from '@/components/ui/select';
 import { ChevronLeft, ChevronRight, CalendarDays, Clock, User, HardHat, Users, Layers } from 'lucide-react';
 import {
   startOfWeek, endOfWeek, addDays, format, isSameDay, isWithinInterval,
@@ -103,7 +103,7 @@ export default function Tidskalender() {
       } catch {}
     });
     return map;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, [weekEntries, rows, view, weekStart]);
 
   // Row totals
@@ -116,7 +116,7 @@ export default function Tidskalender() {
       }, 0);
     });
     return t;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, [matrix, rows, weekStart]);
 
   // Day totals
@@ -130,7 +130,7 @@ export default function Tidskalender() {
       }, 0);
     });
     return t;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, [matrix, rows, weekStart]);
 
   // Employee totals (for summary regardless of view)

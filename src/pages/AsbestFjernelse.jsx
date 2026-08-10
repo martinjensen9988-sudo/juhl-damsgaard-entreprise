@@ -6,8 +6,8 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
-import { formatDKK, formatDate } from '@/lib/format';
-import { Plus, Pencil, Trash2, AlertTriangle, FileCheck, ShieldAlert, Search, Upload, X, Award, Loader2, Download } from 'lucide-react';
+import { formatDate } from '@/lib/format';
+import { Plus, Pencil, Trash2, AlertTriangle, FileCheck, ShieldAlert, Search, X, Award, Download } from 'lucide-react';
 import { generateAsbestCertificate } from '@/lib/asbestCertificate';
 
 const statusColors = {

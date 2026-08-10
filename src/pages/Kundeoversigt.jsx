@@ -2,13 +2,8 @@ import { useEffect, useState } from 'react';
 import { base44 } from '@/api/base44Client';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
+
+
 import { Users, Mail, Phone, MapPin, HardHat, FileText, Receipt, Loader2, Search, ArrowLeft } from 'lucide-react';
 import { formatDate, formatDKK } from '@/lib/format';
 

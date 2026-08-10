@@ -5,7 +5,6 @@ import { Image as Img } from '@/components/ui/image';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Label } from '@/components/ui/label';
 import { formatDKK, calcSubtotal, calcVAT, calcTotal, formatDate } from '@/lib/format';
 import { useToast } from '@/components/ui/use-toast';
 import { HardHat, Camera, Calculator, Plus, Trash2, FileText, Receipt, Check, ArrowUpRight } from 'lucide-react';

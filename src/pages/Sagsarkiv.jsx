@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { base44 } from '@/api/base44Client';
-import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Archive, FolderOpen, FileText, Receipt, Image as ImageIcon, Calendar, MapPin, User } from 'lucide-react';
 import { formatDate, formatDKK } from '@/lib/format';

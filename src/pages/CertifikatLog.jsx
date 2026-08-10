@@ -7,7 +7,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { formatDate } from '@/lib/format';
-import { Plus, Pencil, Trash2, Search, Award, AlertTriangle, CheckCircle2, Calendar, Upload, X } from 'lucide-react';
+import { Plus, Pencil, Trash2, Search, Award, AlertTriangle, Calendar, X } from 'lucide-react';
 
 const typeColors = { Gravemaskineførerbevis: 'bg-amber-100 text-amber-700', Håndværksuddannelse: 'bg-blue-100 text-blue-700', Førstehjælp: 'bg-red-100 text-red-700', Arbejdsmiljø: 'bg-emerald-100 text-emerald-700', Brandtilsyn: 'bg-orange-100 text-orange-700', Elektriker: 'bg-purple-100 text-purple-700', Svejsebevis: 'bg-slate-100 text-slate-700', Andet: 'bg-gray-100 text-gray-600' };
 const empty = { employee_name: '', certificate_type: 'Andet', certificate_number: '', issue_date: '', expiry_date: '', issuer: '', file_url: '', status: 'Gyldig', notes: '' };

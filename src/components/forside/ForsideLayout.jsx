@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { HardHat, Menu, X } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 import { Image } from '@/components/ui/image';
 import { BRAND_LOGO_URL } from '@/lib/brand';
 import { base44 } from '@/api/base44Client';

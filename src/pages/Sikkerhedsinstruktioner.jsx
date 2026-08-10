@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { base44 } from '@/api/base44Client';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Search, ShieldCheck, AlertTriangle, FileText, Download, ChevronDown, ChevronUp, HardHat } from 'lucide-react';
+import { Search, ShieldCheck, AlertTriangle, FileText, Download, ChevronDown, ChevronUp } from 'lucide-react';
 import { formatDate } from '@/lib/format';
 
 const categoryColors = {

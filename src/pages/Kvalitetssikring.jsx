@@ -18,8 +18,7 @@ import {
   DialogTitle,
   DialogFooter,
 } from '@/components/ui/dialog';
-import { formatDate } from '@/lib/format';
-import { Plus, Pencil, Trash2, ShieldCheck, Check, X, GripVertical } from 'lucide-react';
+import { Plus, Pencil, Trash2, ShieldCheck, Check, X } from 'lucide-react';
 
 const TYPES = ['Færdigmelding', 'AR-bevis', 'Sikkerhedsinspektion', 'Selvangivelse', 'Varmeinstallation', 'Andet'];
 const STATUSES = ['Ikke startet', 'I gang', 'Godkendt', 'Afvigelse'];

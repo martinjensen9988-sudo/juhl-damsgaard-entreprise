@@ -8,7 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Image as ImageComponent } from '@/components/ui/image';
 import {
   ArrowLeft, Save, FileDown, Plus, Trash2, Upload, ShieldAlert,
-  Camera, Wrench, MessageSquare, ClipboardList, Phone, Mail,
+  Camera, Wrench, MessageSquare, ClipboardList,
 } from 'lucide-react';
 import { formatDate, formatDKK } from '@/lib/format';
 import { generateDamageReportPDF } from '@/lib/damageReportPdf';

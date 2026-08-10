@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { base44 } from '@/api/base44Client';
 import { formatDKK, formatDate } from '@/lib/format';
-import { Eye, Calendar, MapPin, HardHat } from 'lucide-react';
+import { Eye, Calendar, MapPin } from 'lucide-react';
 
 const STATUS_STYLE = {
   'Planlægning': 'bg-amber-50 border-amber-200 text-amber-700',

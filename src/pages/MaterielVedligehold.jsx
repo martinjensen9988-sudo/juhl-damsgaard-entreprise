@@ -7,7 +7,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { formatDKK, formatDate } from '@/lib/format';
-import { Plus, Pencil, Trash2, Search, Wrench, Calendar, AlertTriangle, CheckCircle2, Clock } from 'lucide-react';
+import { Plus, Pencil, Trash2, Search, Wrench, Calendar, AlertTriangle } from 'lucide-react';
 
 const typeColors = { Gravemaskine: 'bg-amber-100 text-amber-700', Lastbil: 'bg-blue-100 text-blue-700', Varebil: 'bg-slate-100 text-slate-700', Kompressor: 'bg-purple-100 text-purple-700', Sav: 'bg-emerald-100 text-emerald-700', Andet: 'bg-gray-100 text-gray-600' };
 const statusColors = { Planlagt: 'bg-blue-100 text-blue-700', Gennemført: 'bg-emerald-100 text-emerald-700', Forsinket: 'bg-red-100 text-red-700', Aflyst: 'bg-slate-100 text-slate-600' };

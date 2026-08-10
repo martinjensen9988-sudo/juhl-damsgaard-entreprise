@@ -1,10 +1,9 @@
 import { useEffect, useState } from 'react';
 import { base44 } from '@/api/base44Client';
 import { Card } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { ShieldCheck, Loader2, Check, X, FileText, Search, CheckCircle2, AlertCircle, Clock } from 'lucide-react';
+import { ShieldCheck, Loader2, Check, FileText, Search, CheckCircle2, AlertCircle, Clock } from 'lucide-react';
 import { formatDate } from '@/lib/format';
 
 const TYPES = ['Færdigmelding', 'AR-bevis', 'Sikkerhedsinspektion', 'Selvangivelse', 'Varmeinstallation', 'Andet'];

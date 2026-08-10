@@ -1,19 +1,15 @@
 import { useEffect, useState } from 'react';
 import { base44 } from '@/api/base44Client';
-import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogFooter,
 } from '@/components/ui/dialog';
 import { Image as Img } from '@/components/ui/image';
 import { formatDKK, formatDate } from '@/lib/format';
-import { Camera, Upload, Trash2, MapPin, Calendar, X, Plus } from 'lucide-react';
+import { Camera, Upload, Trash2, MapPin } from 'lucide-react';
 
 const COLUMNS = [
   { key: 'Planlægning', color: 'bg-amber-100 text-amber-700', border: 'border-amber-200' },

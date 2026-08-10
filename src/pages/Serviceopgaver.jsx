@@ -6,7 +6,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
-import { Plus, Pencil, Trash2, Wrench, Snowflake, MapPin, CheckCircle2 } from 'lucide-react';
+import { Plus, Pencil, Trash2, Wrench, Snowflake, MapPin } from 'lucide-react';
 import { formatDate } from '@/lib/format';
 
 const types = ['Snerydning', 'Vicevært', 'Skadeservice', 'Drift', 'Andet'];

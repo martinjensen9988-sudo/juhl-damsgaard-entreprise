@@ -7,7 +7,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { useToast } from '@/components/ui/use-toast';
-import { Plus, Pencil, Trash2, Recycle, Upload, Loader2, CheckCircle2, FileText } from 'lucide-react';
+import { Plus, Pencil, Trash2, Recycle, Loader2, CheckCircle2, FileText } from 'lucide-react';
 
 const TYPES = ['Beton', 'Træ', 'Metal', 'Blandet', 'Farligt affald', 'Jord', 'Gips', 'Andet'];
 const METHODS = ['Genanvendelse', 'Forbrænding', 'Deponi', 'Farligt affald centrret', 'Andet'];

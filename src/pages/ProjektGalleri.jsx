@@ -4,7 +4,6 @@ import { Image as Img } from '@/components/ui/image';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
 import {
   Select,
   SelectContent,
@@ -20,7 +19,7 @@ import {
   DialogFooter,
 } from '@/components/ui/dialog';
 import { formatDate } from '@/lib/format';
-import { Plus, Trash2, Upload, Images, Camera } from 'lucide-react';
+import { Plus, Trash2, Upload, Images } from 'lucide-react';
 
 const PHASES = [
   { key: 'all', label: 'Alle' },
