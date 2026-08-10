@@ -3,8 +3,10 @@ Options -MultiViews
 RewriteEngine On
 RewriteBase /
 
-# Force HTTPS when SSL is enabled for the domain.
+# Force HTTPS on the real domain when SSL is enabled.
+# Simply.com's temporary linux/unoeuro URL must stay on HTTP.
 RewriteCond %{HTTPS} !=on
+RewriteCond %{HTTP_HOST} !\.unoeuro-server\.com$ [NC]
 RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
 # Serve real files and folders directly.
