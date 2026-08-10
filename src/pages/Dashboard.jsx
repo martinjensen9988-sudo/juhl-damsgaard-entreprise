@@ -68,6 +68,17 @@ export default function Dashboard() {
     .reduce((sum, inv) => sum + calcTotal(inv.line_items), 0);
   const outstanding = unpaidInvoices.reduce((sum, inv) => sum + calcTotal(inv.line_items), 0);
 
+  // Reference-dato for "i dag"-markør: nyeste aktivitet i demo-data (faktura/tilbud),
+  // men aldrig tidligere end den reelle dato. Gør tidslinjen uafhængig af browserens ur.
+  const refToday = (() => {
+    const candidates = [
+      ...invoices.map((i) => (i.date ? new Date(i.date).getTime() : NaN)),
+      ...quotes.map((q) => (q.date ? new Date(q.date).getTime() : NaN)),
+    ].filter((t) => !isNaN(t));
+    const latest = candidates.length ? Math.max(...candidates) : 0;
+    return new Date(Math.max(Date.now(), latest));
+  })();
+
   if (loading) {
     return (
       <div className="flex items-center justify-center py-32">
@@ -147,7 +158,7 @@ export default function Dashboard() {
 
       <ProjektOekonomiOverview />
 
-      <ProjectTimeline projects={projects} />
+      <ProjectTimeline projects={projects} today={refToday} />
 
       <div className="grid lg:grid-cols-3 gap-6">
         {/* Recent projects */}

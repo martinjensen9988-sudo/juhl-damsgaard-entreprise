@@ -34,11 +34,15 @@ export default function DashboardCharts() {
           base44.entities.Project.list('-created_date', 100).catch(() => []),
         ]);
 
-        // 1. Månedlig omsætning (betalte + sendte fakturaer, seneste 8 mdr)
-        const now = new Date();
+        // 1. Månedlig omsætning (betalte + sendte fakturaer, seneste 12 mdr)
+        // Anker til nyeste fakturadato så hele demo-perioden vises uanset browserens ur.
+        const invoiceTimes = (invoices || [])
+          .map((inv) => (inv.date ? new Date(inv.date).getTime() : NaN))
+          .filter((t) => !isNaN(t));
+        const anchor = invoiceTimes.length ? new Date(Math.max(...invoiceTimes, Date.now())) : new Date();
         const buckets = {};
-        for (let i = 7; i >= 0; i--) {
-          const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+        for (let i = 11; i >= 0; i--) {
+          const d = new Date(anchor.getFullYear(), anchor.getMonth() - i, 1);
           buckets[`${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`] = 0;
         }
         (invoices || []).forEach((inv) => {
@@ -114,7 +118,7 @@ export default function DashboardCharts() {
         <div className="flex items-center gap-2 mb-4">
           <TrendingUp className="w-5 h-5 text-emerald-600" />
           <h2 className="font-semibold text-slate-900">Månedlig omsætning</h2>
-          <span className="ml-auto text-xs text-slate-400">Seneste 8 måneder (betalte + sendte fakturaer)</span>
+          <span className="ml-auto text-xs text-slate-400">Seneste 12 måneder (betalte + sendte fakturaer)</span>
         </div>
         {hasRevenue ? (
           <ResponsiveContainer width="100%" height={260}>

@@ -8,7 +8,7 @@ const STATUS_BAR = {
   'På hold': 'bg-slate-400',
 };
 
-export default function ProjectTimeline({ projects }) {
+export default function ProjectTimeline({ projects, today: todayProp }) {
   const withDates = projects
     .filter((p) => {
       if (!p.start_date || !p.end_date) return false;
@@ -37,7 +37,7 @@ export default function ProjectTimeline({ projects }) {
   const maxDate = new Date(Math.max(...timestamps) + 86400000);
   const totalRange = maxDate.getTime() - minDate.getTime();
 
-  const today = new Date();
+  const today = todayProp ? new Date(todayProp) : new Date();
   const todayPct =
     today >= minDate && today <= maxDate
       ? ((today.getTime() - minDate.getTime()) / totalRange) * 100
