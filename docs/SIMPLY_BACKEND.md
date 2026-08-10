@@ -41,22 +41,25 @@ Covered:
 - Email/password auth
 - Sessions
 - Generic CRUD for all 67 Base44 entities
+- File upload to `public_html/uploads`
 - `getEmployeeProfile`
 - `checkLowStock`
+- `createInvoiceFromQuote`
+- `createInvoiceFromHours`
+- `quoteAction`
+- `sendInvoiceReminders` as pending-mail marking
+- `sendFeedbackRequest` as pending-mail marking
+- `postSupplierInvoice`
+- `skatRapport`
+- `aiQuoteCalculator` deterministic fallback
 
 Still to migrate:
 
-- File upload/storage
 - Google login
 - Mail sending through `websmtp.simply.com`
-- Remaining Base44 functions:
-  - `aiQuoteCalculator`
-  - `createInvoiceFromHours`
-  - `deleteMyAccount`
-  - `postSupplierInvoice`
-  - `quoteAction`
-  - `scanSupplierInvoice`
-  - `skatRapport`
+- OCR/AI document scanning for `scanSupplierInvoice`
+- Server-side PDF generation for `generateAsbestCertificate`
+- Full LLM-backed AI pricing, if wanted instead of the deterministic fallback
 
 ## Simply WAF
 

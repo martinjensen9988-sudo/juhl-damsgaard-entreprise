@@ -90,3 +90,100 @@ function sort_sql(?string $sort): string {
   }
   return "JSON_UNQUOTE(JSON_EXTRACT(data, '$.\"$field\"')) $direction";
 }
+
+function entity_table(array $entityMap, string $entity): string {
+  return entity_config($entityMap, $entity)['table'];
+}
+
+function entity_get(PDO $pdo, array $entityMap, string $entity, string $id): ?array {
+  $table = entity_table($entityMap, $entity);
+  $stmt = $pdo->prepare("SELECT * FROM $table WHERE id = ?");
+  $stmt->execute([$id]);
+  $row = $stmt->fetch();
+  return $row ? flatten_row($row) : null;
+}
+
+function entity_filter(PDO $pdo, array $entityMap, string $entity, array $filter = [], ?string $sort = null, int $limit = 200): array {
+  $table = entity_table($entityMap, $entity);
+  $where = [];
+  $params = [];
+  foreach ($filter as $key => $value) {
+    if (is_array($value) && isset($value['$in']) && is_array($value['$in'])) {
+      $placeholders = implode(',', array_fill(0, count($value['$in']), '?'));
+      $where[] = "JSON_UNQUOTE(JSON_EXTRACT(data, '$.\"$key\"')) IN ($placeholders)";
+      foreach ($value['$in'] as $entry) $params[] = (string)$entry;
+      continue;
+    }
+    if (is_array($value) && array_key_exists('$ne', $value)) {
+      $where[] = "(JSON_UNQUOTE(JSON_EXTRACT(data, '$.\"$key\"')) IS NULL OR JSON_UNQUOTE(JSON_EXTRACT(data, '$.\"$key\"')) <> ?)";
+      $params[] = (string)$value['$ne'];
+      continue;
+    }
+    $where[] = "JSON_UNQUOTE(JSON_EXTRACT(data, '$.\"$key\"')) = ?";
+    $params[] = (string)$value;
+  }
+  $sql = "SELECT * FROM $table";
+  if ($where) $sql .= ' WHERE ' . implode(' AND ', $where);
+  $sql .= ' ORDER BY ' . sort_sql($sort) . ' LIMIT ' . max(1, min(1000, $limit));
+  $stmt = $pdo->prepare($sql);
+  $stmt->execute($params);
+  return array_map('flatten_row', $stmt->fetchAll());
+}
+
+function entity_create(PDO $pdo, array $entityMap, string $entity, array $data, array $user): array {
+  $table = entity_table($entityMap, $entity);
+  $id = (string)($data['id'] ?? uuidv4());
+  unset($data['id'], $data['created_date'], $data['updated_date']);
+  $stmt = $pdo->prepare("INSERT INTO $table (id, data, created_by, created_by_id) VALUES (?, ?, ?, ?)");
+  $stmt->execute([$id, json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES), $user['email'] ?? null, $user['id'] ?? null]);
+  return array_merge($data, ['id' => $id, 'created_by' => $user['email'] ?? null, 'created_by_id' => $user['id'] ?? null]);
+}
+
+function entity_update(PDO $pdo, array $entityMap, string $entity, string $id, array $patch): array {
+  $current = entity_get($pdo, $entityMap, $entity, $id);
+  if (!$current) respond(['error' => "$entity not found"], 404);
+  $data = $current;
+  unset($data['id'], $data['created_by'], $data['created_by_id'], $data['created_date'], $data['updated_date']);
+  $data = array_merge($data, $patch);
+  $table = entity_table($entityMap, $entity);
+  $stmt = $pdo->prepare("UPDATE $table SET data = ? WHERE id = ?");
+  $stmt->execute([json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES), $id]);
+  return array_merge($data, ['id' => $id]);
+}
+
+function next_invoice_number(PDO $pdo, array $entityMap): string {
+  $year = date('Y');
+  $prefix = "FAK-$year-";
+  $invoices = entity_filter($pdo, $entityMap, 'Invoice', [], '-created_date', 1000);
+  $max = 0;
+  foreach ($invoices as $invoice) {
+    $num = (string)($invoice['invoice_number'] ?? '');
+    if (str_starts_with($num, $prefix)) {
+      $parsed = (int)preg_replace('/\D/', '', substr($num, strlen($prefix)));
+      if ($parsed > $max) $max = $parsed;
+    }
+  }
+  return $prefix . str_pad((string)($max + 1), 4, '0', STR_PAD_LEFT);
+}
+
+function create_activity(PDO $pdo, array $entityMap, array $user, array $entry): void {
+  try {
+    entity_create($pdo, $entityMap, 'ActivityLog', array_merge([
+      'user_email' => $user['email'] ?? '',
+      'user_name' => $user['name'] ?: ($user['email'] ?? 'System'),
+    ], $entry), $user);
+  } catch (Throwable $e) {
+  }
+}
+
+function money_total(array $items): float {
+  $sum = 0.0;
+  foreach ($items as $item) {
+    $sum += ((float)($item['quantity'] ?? 0)) * ((float)($item['unit_price'] ?? 0));
+  }
+  return $sum;
+}
+
+function require_admin(array $user): void {
+  if (($user['role'] ?? '') !== 'admin') respond(['error' => 'Kun admin'], 403);
+}

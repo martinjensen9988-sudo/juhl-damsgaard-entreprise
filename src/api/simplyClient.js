@@ -46,6 +46,31 @@ export const simplyClient = {
   functions: {
     invoke: (name, body = {}) => request(`/functions.php?name=${encodeURIComponent(name)}`, { method: 'POST', body }),
   },
+  integrations: {
+    Core: {
+      async UploadFile({ file }) {
+        const token = localStorage.getItem(TOKEN_KEY);
+        const formData = new FormData();
+        formData.append('file', file);
+        const response = await fetch(`${API_ROOT}/upload.php`, {
+          method: 'POST',
+          headers: token ? { Authorization: `Bearer ${token}` } : {},
+          body: formData,
+        });
+        const data = await response.json().catch(() => null);
+        if (!response.ok) {
+          throw new Error(data?.error || `Upload failed (${response.status})`);
+        }
+        return data;
+      },
+      async SendEmail() {
+        throw new Error('SMTP email is not enabled on Simply yet');
+      },
+      async InvokeLLM() {
+        throw new Error('LLM integration is not enabled on Simply yet');
+      },
+    },
+  },
   auth: {
     async me() {
       const user = await request('/auth.php?action=me');
