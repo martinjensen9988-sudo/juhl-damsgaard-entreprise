@@ -63,6 +63,7 @@ import {
   ChevronDown,
   BookOpen,
   Menu as MenuIcon,
+  LogOut,
 } from 'lucide-react';
 
 const primaryItems = [
@@ -281,7 +282,7 @@ function NavLinkRow({ item }) {
 
 export default function Layout() {
   const location = useLocation();
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const [openGroups, setOpenGroups] = useState({});
   const [menuOpen, setMenuOpen] = useState(false);
   const visibleGroups = navGroups.filter((group) => hasModuleAccess(user, group.permission));
@@ -353,8 +354,24 @@ export default function Layout() {
             Kundeportal
           </a>
         </div>
-        <div className="px-6 py-4 border-t border-slate-800 text-xs text-slate-600">
-          © 2026 Juhl & Damsgaard
+        <div className="px-3 py-4 border-t border-slate-800">
+          <div className="px-3 pb-3">
+            <div className="text-xs font-medium text-slate-500">Logget ind som</div>
+            <div className="mt-1 truncate text-sm font-semibold text-white">
+              {user?.full_name || user?.name || user?.email || 'Bruger'}
+            </div>
+          </div>
+          <button
+            type="button"
+            onClick={() => logout(true)}
+            className="flex w-full items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-semibold text-red-300 hover:bg-red-950/40 hover:text-red-100 transition-all"
+          >
+            <LogOut className="w-[18px] h-[18px]" />
+            Log ud
+          </button>
+          <div className="px-3 pt-3 text-xs text-slate-600">
+            © 2026 Juhl & Damsgaard
+          </div>
         </div>
       </aside>
 
@@ -426,6 +443,16 @@ export default function Layout() {
               <a href="/portal" onClick={() => setMenuOpen(false)} className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-amber-600 hover:bg-slate-100">
                 <ExternalLink className="w-4 h-4" /> Kundeportal
               </a>
+              <button
+                type="button"
+                onClick={() => {
+                  setMenuOpen(false);
+                  logout(true);
+                }}
+                className="flex w-full items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-semibold text-red-600 hover:bg-red-50"
+              >
+                <LogOut className="w-4 h-4" /> Log ud
+              </button>
             </div>
           </div>
         </DrawerContent>
