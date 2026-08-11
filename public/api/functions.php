@@ -7,7 +7,79 @@ $name = (string)($_GET['name'] ?? '');
 $body = json_body();
 $user = $name === 'aiQuoteCalculator' ? current_user($pdo) : require_user($pdo);
 
+function first_area_near(string $lower, array $keywords): float {
+  foreach ($keywords as $keyword) {
+    if (preg_match('/(\d+(?:[,.]\d+)?)\s*(m2|m²|kvm|kvadratmeter)[^,\n\r.]{0,30}' . preg_quote($keyword, '/') . '/u', $lower, $match)) {
+      return (float)str_replace(',', '.', $match[1]);
+    }
+    if (preg_match('/' . preg_quote($keyword, '/') . '[^,\n\r.]{0,30}(\d+(?:[,.]\d+)?)\s*(m2|m²|kvm|kvadratmeter)/u', $lower, $match)) {
+      return (float)str_replace(',', '.', $match[1]);
+    }
+  }
+  return 0.0;
+}
+
+function is_new_garage_project(string $message): bool {
+  $lower = mb_strtolower($message);
+  if (!str_contains($lower, 'garage')) return false;
+  return (bool)preg_match('/\b(lav|laves|lave|byg|bygges|bygge|opfør|opføres|opførelse|ny|etabler)\b/u', $lower);
+}
+
+function garage_quote_estimate(string $message): array {
+  $lower = mb_strtolower($message);
+  $garageArea = first_area_near($lower, ['garage']);
+  if ($garageArea <= 0) $garageArea = 80.0;
+  $shedArea = first_area_near($lower, ['skur', 'udhus']);
+  $floorConcreteM3 = round($garageArea * 0.10, 1);
+  $insulationArea = round($garageArea * 2.8, 1);
+  $constructionHours = max(140, (int)ceil($garageArea * 3.5));
+  $demolitionHours = $shedArea > 0 ? max(6, (int)ceil($shedArea * 1.0)) : 0;
+
+  $lineItems = [];
+  if ($shedArea > 0) {
+    $lineItems[] = ['description' => "Nedrivning af eksisterende skur ({$shedArea} m²)", 'quantity' => $shedArea, 'unit' => 'm²', 'unit_price' => 450];
+    $lineItems[] = ['description' => 'Arbejdstimer til nedrivning og sortering (350 kr/time inkl. moms)', 'quantity' => $demolitionHours, 'unit' => 'time', 'unit_price' => 280];
+    $lineItems[] = ['description' => 'Miljøscreening/asbestrisiko ved eksisterende skur', 'quantity' => 1, 'unit' => 'fs', 'unit_price' => 2500];
+  }
+  $lineItems = array_merge($lineItems, [
+    ['description' => "Udgravning, afretning og bortkørsel af jord til garage ({$garageArea} m²)", 'quantity' => $garageArea, 'unit' => 'm²', 'unit_price' => 220],
+    ['description' => 'Bundopbygning med stabilgrus, sand, komprimering og afretning', 'quantity' => $garageArea, 'unit' => 'm²', 'unit_price' => 320],
+    ['description' => 'Fundament/sokkel inkl. forskalling og støbearbejde', 'quantity' => $garageArea, 'unit' => 'm²', 'unit_price' => 850],
+    ['description' => 'Armering, armeringsnet, afstandsholdere og kantarmering', 'quantity' => $garageArea, 'unit' => 'm²', 'unit_price' => 95],
+    ['description' => "Beton til gulv/fundament, ca. {$floorConcreteM3} m³", 'quantity' => $floorConcreteM3, 'unit' => 'm³', 'unit_price' => 1150],
+    ['description' => 'Betonpumpe/levering og ekstra håndtering af beton', 'quantity' => 1, 'unit' => 'fs', 'unit_price' => 6500],
+    ['description' => 'Vægkonstruktion, træ/stål, plader, beklædning og fastgørelse', 'quantity' => 1, 'unit' => 'fs', 'unit_price' => 95000],
+    ['description' => 'Tagkonstruktion, undertag, tagbelægning, stern og inddækninger', 'quantity' => 1, 'unit' => 'fs', 'unit_price' => 85000],
+    ['description' => 'Tagrender og nedløb', 'quantity' => 1, 'unit' => 'fs', 'unit_price' => 12000],
+    ['description' => "Isolering af gulv, vægge og loft/tagflader, anslået {$insulationArea} m²", 'quantity' => $insulationArea, 'unit' => 'm²', 'unit_price' => 245],
+    ['description' => 'Dampspærre, tape, klemmer og isoleringstilbehør', 'quantity' => $insulationArea, 'unit' => 'm²', 'unit_price' => 60],
+    ['description' => 'Garageport, yderdør, vinduer og montagebeslag', 'quantity' => 1, 'unit' => 'fs', 'unit_price' => 45000],
+    ['description' => 'El-installation basis: tavletilslutning, lys, stikkontakter og føringsveje', 'quantity' => 1, 'unit' => 'fs', 'unit_price' => 25000],
+    ['description' => 'Afvanding/regnvand/faskine vurderet som nødvendigt grundlag', 'quantity' => 1, 'unit' => 'fs', 'unit_price' => 18000],
+    ['description' => 'Stillads/lift, maskiner, byggepladsdrift og materialelevering', 'quantity' => 1, 'unit' => 'fs', 'unit_price' => 30000],
+    ['description' => 'Affalds-, sorterings- og modtagegebyrer', 'quantity' => 1, 'unit' => 'fs', 'unit_price' => 12000],
+    ['description' => 'Tegninger, statik og myndighedsbehandling/byggetilladelse', 'quantity' => 1, 'unit' => 'fs', 'unit_price' => 25000],
+    ['description' => 'Arbejdstimer til opførelse af garage (350 kr/time inkl. moms)', 'quantity' => $constructionHours, 'unit' => 'time', 'unit_price' => 280],
+  ]);
+
+  foreach ($lineItems as &$item) {
+    $item['line_total'] = round((float)$item['quantity'] * (float)$item['unit_price'], 2);
+  }
+  unset($item);
+  $subtotal = money_total($lineItems);
+  $description = "Opgaven omfatter nedrivning/rydning efter behov og opførelse af en garage på ca. {$garageArea} m² med udgravning, bortkørsel, bundopbygning, fundament/sokkel, armering, beton, vægge, tag, tagrender, isolering af gulv, vægge og loft/tag, port/døre/vinduer, el, afvanding, maskiner, materialelevering og affaldshåndtering.";
+  $assumptions = [
+    "Garageareal er sat til {$garageArea} m² ud fra kundens beskrivelse.",
+    "En garage/sekundær bebyggelse over samlet 50 m² kræver normalt byggetilladelse og myndighedsbehandling.",
+    "Eksisterende skur bør screenes for asbest eller andre miljøfarlige materialer før nedrivning.",
+    "Endelig pris afhænger af adgangsforhold, jordbund, materialevalg, konstruktionstype og kommunens krav.",
+  ];
+  $messageText = $description . ' Tilbuddet er et vejledende entrepriseoverslag og skal kvalitetstjekkes før endelig pris.';
+  return ['message' => $messageText, 'task_description' => $description, 'cleaned_notes' => $description, 'ai_message' => $messageText, 'line_items' => $lineItems, 'subtotal' => round($subtotal, 2), 'vat' => round($subtotal * 0.25, 2), 'total' => round($subtotal * 1.25, 2), 'assumptions' => $assumptions, 'hourly_rate_incl_vat' => 350, 'hourly_rate_excl_vat' => 280, 'ai_provider' => 'rules'];
+}
+
 function deterministic_quote_estimate(string $message): array {
+  if (is_new_garage_project($message)) return garage_quote_estimate($message);
   $lower = mb_strtolower($message);
   preg_match('/(\d+(?:[,.]\d+)?)\s*(m2|m²|kvm|kvadratmeter|m3|m³|meter|m|timer|time|stk)/u', $lower, $match);
   $qty = isset($match[1]) ? (float)str_replace(',', '.', $match[1]) : 1.0;
@@ -43,7 +115,10 @@ function extract_openai_text(array $response): string {
   return trim(implode("\n", $chunks));
 }
 
-function normalize_quote_payload(array $payload): array {
+function normalize_quote_payload(array $payload, string $sourceMessage = ''): array {
+  if (is_new_garage_project($sourceMessage)) {
+    return garage_quote_estimate($sourceMessage);
+  }
   $lineItems = [];
   foreach (($payload['line_items'] ?? []) as $item) {
     if (!is_array($item)) continue;
@@ -94,7 +169,7 @@ function openai_quote_estimate(array $config, string $message): ?array {
   if (!function_exists('curl_init')) throw new RuntimeException('PHP cURL extension is not enabled');
 
   $model = 'gpt-4o-mini';
-  $system = "Du er tilbudsberegner for Juhl & Damsgaard Entreprise. Lav et realistisk vejledende tilbud på dansk. Returner KUN gyldig JSON med keys: message, task_description, cleaned_notes, ai_message, line_items, assumptions. task_description/cleaned_notes skal være en professionel beskrivelse af opgaven på korrekt dansk. line_items skal være array af {description, quantity, unit, unit_price}. VIGTIGT: Systemet beregner moms bagefter, så alle unit_price skal være DKK ekskl. moms. Firmaets timepris er 350 kr/time inkl. moms, dvs. 280 kr/time ekskl. moms. Alle timebaserede arbejdslinjer skal derfor bruge unit='time' og unit_price=280, og beskrivelsen må gerne nævne 350 kr/time inkl. moms. Hvert tilbud skal have alle relevante materialer med som separate materialelinjer. Et tilbud må aldrig kun have arbejdslinjer. Tilføj også nødvendige forbrugsmaterialer/afdækning/tilbehør når det er relevant. Opdel i arbejde, hovedmaterialer, forbrugsmaterialer, maskiner/transport og affald/risiko hvor relevant. Hvis kunden nævner flere opgaver, skal hver opgave have arbejdslinje og materialelinjer. Hvis mængder mangler, lav realistiske antagelser og skriv dem i assumptions.";
+  $system = "Du er tilbudsberegner for Juhl & Damsgaard Entreprise. Lav et realistisk vejledende tilbud på dansk. Returner KUN gyldig JSON med keys: message, task_description, cleaned_notes, ai_message, line_items, assumptions. task_description/cleaned_notes skal være en professionel beskrivelse af opgaven på korrekt dansk. line_items skal være array af {description, quantity, unit, unit_price}. VIGTIGT: Systemet beregner moms bagefter, så alle unit_price skal være DKK ekskl. moms. Firmaets timepris er 350 kr/time inkl. moms, dvs. 280 kr/time ekskl. moms. Alle timebaserede arbejdslinjer skal derfor bruge unit='time' og unit_price=280. Hvert tilbud skal have alle relevante materialer med som separate materialelinjer. Et tilbud må aldrig kun have arbejdslinjer. Opdel i arbejde, hovedmaterialer, forbrugsmaterialer, maskiner/transport, affald/gebyrer og risiko hvor relevant. Hvis kunden nævner flere opgaver, skal hver opgave have arbejdslinje og materialelinjer. STØRRE BYGGERI/GARAGE: Hvis kunden vil opføre garage, carport, udhus eller tilbygning, må du aldrig lave én samlet m²-linje som 'opførelse'. Tilføj altid relevante linjer for udgravning, bortkørsel af jord, bundopbygning, fundament/sokkel, armering, beton, betonpumpe, vægge, tagkonstruktion, tagbelægning, tagrender, isolering af gulv/vægge/loft, garageporte, døre, vinduer, maskiner, stillads/lift, materialelevering, affalds- og modtagegebyrer, tegninger, statik, myndighedsbehandling, el, afvanding/faskine og risici som asbest i eksisterende skur. Ved garage over 50 m² skal assumptions nævne, at sekundær bebyggelse over samlet 50 m² normalt kræver byggetilladelse. Arbejdstimer til opførelse af garage må ikke være urealistisk lave: brug som minimum ca. 3,5 timer pr. m² for en ny isoleret garage, plus timer til nedrivning hvis relevant. Hvis mængder mangler, lav realistiske antagelser og skriv dem i assumptions.";
   $payload = [
     'model' => $model,
     'messages' => [
@@ -102,7 +177,7 @@ function openai_quote_estimate(array $config, string $message): ?array {
       ['role' => 'user', 'content' => $message],
     ],
     'temperature' => 0.2,
-    'max_tokens' => 800,
+    'max_tokens' => 2200,
     'response_format' => ['type' => 'json_object'],
   ];
 
@@ -131,7 +206,7 @@ function openai_quote_estimate(array $config, string $message): ?array {
   if ($text === '') $text = extract_openai_text($response);
   $decoded = json_decode($text, true);
   if (!is_array($decoded)) throw new RuntimeException('OpenAI response was not valid quote JSON');
-  return normalize_quote_payload($decoded);
+  return normalize_quote_payload($decoded, $message);
 }
 
 if ($name === 'getEmployeeProfile') {

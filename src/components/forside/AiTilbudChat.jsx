@@ -128,6 +128,19 @@ export default function AiTilbudChat() {
                     {estimateDescription}
                   </div>
                 )}
+                {Array.isArray(estimate.assumptions) && estimate.assumptions.length > 0 && (
+                  <div className="rounded-lg bg-amber-400/10 border border-amber-400/20 p-3">
+                    <div className="text-xs font-semibold text-amber-300 mb-2">Antagelser og forbehold</div>
+                    <ul className="space-y-1 text-xs text-amber-100/90">
+                      {estimate.assumptions.map((item, index) => (
+                        <li key={index} className="flex gap-2">
+                          <span aria-hidden="true">-</span>
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
                 <div className="text-xs text-slate-500">
                   Timepris: 350 kr/time inkl. moms. Tilbudslinjer vises ekskl. moms, og moms lægges på nederst.
                 </div>

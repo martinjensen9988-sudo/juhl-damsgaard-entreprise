@@ -42,6 +42,7 @@ export default function AITilbud() {
   const [lineItems, setLineItems] = useState([]);
   const [cleanedNotes, setCleanedNotes] = useState('');
   const [aiMessage, setAiMessage] = useState('');
+  const [assumptions, setAssumptions] = useState([]);
   const [generated, setGenerated] = useState(false);
   const [saving, setSaving] = useState(false);
 
@@ -104,6 +105,7 @@ export default function AITilbud() {
         setLineItems(items);
         setCleanedNotes(result.task_description || result.cleaned_notes || result.message || notes);
         setAiMessage(result.ai_message || result.message || '');
+        setAssumptions(Array.isArray(result.assumptions) ? result.assumptions : []);
         setGenerated(true);
         return;
       }
@@ -142,6 +144,7 @@ Forbrugsmaterialer (skal altid medtages som separate linjer, når de er nødvend
 - Isoleringsmateriale (tilbehør): Dampspærre folie 25 kr/m² · Tape 12 kr/m · Klemmer/beslag 8 kr/stk · Afdækningsfolie 15 kr/m²
 
 Regler:
+- STØRRE BYGGERI/GARAGE: Hvis kunden vil opføre garage, carport, udhus eller tilbygning, må du aldrig lave én samlet m²-linje som "opførelse". En garage på f.eks. 80 m² skal opdeles i udgravning, bortkørsel af jord, bundopbygning, fundament/sokkel, armering, beton, evt. betonpumpe, vægge, tagkonstruktion, tagbelægning, tagrender, isolering af gulv/vægge/loft, garageporte, døre, vinduer, maskiner, stillads/lift, materialelevering, affalds- og modtagegebyrer, tegninger/statik/myndighedsbehandling, el og evt. afvanding/faskine. Hvis der skal nedrives eksisterende skur, tilføj nedrivning, affald og risiko for asbest/miljøscreening. En garage over samlet 50 m² sekundær bebyggelse kræver normalt byggetilladelse; nævn det i ai_message/assumptions. Arbejdstimer til ny isoleret garage må aldrig være 10 timer; brug som minimum ca. 3,5 time pr. m² plus nedrivning og koordinering.
 - VANDSKURING ≠ MALING: Vandskuring er skuring/reputning af murværk (fugerne bearbejdes med mørtel) – IKKE maling eller højtryksspuling. Hvis kunden beder om "vandskuring", må du ALDRIG tilføje malelinjer (facademaling, grundmaling, spartling). Vælg vandskuringspris ud fra forhold (250/400/650 kr/m²) baseret på højde og besværlighed. Tilføj forarbejdslinjer KUN hvis relevant (algeafrensning 35-70 kr/m², sandblæsning 100-180 kr/m², omfugning 500-1000 kr/m²). Tilføj altid faste gebyrer når de gælder: stilladsleje 10.000-15.000 kr ved højde over 2,2 m / 1,5-2 plan, opstartsgebyr 2.500 kr ved areal under 50 m², affaldshåndtering 1.500-3.000 kr, og murstensudskiftning 100 kr/sten hvis frostsprængte sten nævnes. Enhed = m² for arbejde/forarbejde, stk for mursten, fs for faste gebyrer. Kun hvis kunden udtrykkeligt også beder om maling, tilføjes malelinjer.
 - ENHED: Hver linje SKAL have en korrekt enhed (m², m³, m, stk, time, liter, dag, fs, sæt, rulle). Aldrig tom enhed. Brug den enhed der passer til opgaven (væg = m², rør = m, beton = m³, maling = liter).
 - MINIMUM ANTAL LINJER: Et tilbud må ALDRIG have kun én linje. Hver opgave skal have mindst 2-3 linjer: (1) selve arbejdet/ydelsen, (2) hovedmaterialet, (3) tilbehørsmateriale. Hvis tilbuddet kun har 1 linje er det FEJL – tilføj altid materialelinjer.
@@ -177,6 +180,7 @@ Regler:
           properties: {
             cleaned_notes: { type: 'string', description: 'Den rettede og professionelt formulerede opgavebeskrivelse på korrekt dansk, uden stavefejl' },
             ai_message: { type: 'string', description: 'Besked fra AI til kunden, f.eks. spørgsmål om manglende info (indblæsningstykkelse) eller forklaring af antagelser. Tom streng hvis ingen besked.' },
+            assumptions: { type: 'array', items: { type: 'string' }, description: 'Vigtige antagelser, forbehold, myndighedskrav og risici' },
             line_items: {
               type: 'array',
               items: {
@@ -202,6 +206,7 @@ Regler:
       setLineItems(items);
       setCleanedNotes(result.cleaned_notes || notes);
       setAiMessage(result.ai_message || '');
+      setAssumptions(Array.isArray(result.assumptions) ? result.assumptions : []);
       setGenerated(true);
     } catch (e) {
       console.error(e);
@@ -228,7 +233,7 @@ Regler:
         date: new Date().toISOString().slice(0, 10),
         valid_until: validUntil || new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10),
         line_items: lineItems,
-        notes: cleanedNotes || notes || '',
+        notes: [cleanedNotes || notes || '', assumptions.length ? `Antagelser/forbehold:\n- ${assumptions.join('\n- ')}` : ''].filter(Boolean).join('\n\n'),
       });
       navigate('/tilbud');
     } catch (e) {
@@ -363,6 +368,20 @@ Regler:
               {lineItems.length === 0 && (
                 <p className="text-xs text-amber-600 mt-2 pl-6">Udfyld tykkelsen i noterne og klik "Generer" igen.</p>
               )}
+            </div>
+          )}
+
+          {assumptions.length > 0 && (
+            <div className="rounded-lg border border-amber-200 bg-amber-50 p-4">
+              <h3 className="text-sm font-semibold text-amber-900 mb-2">Antagelser og forbehold</h3>
+              <ul className="space-y-1 text-sm text-amber-900">
+                {assumptions.map((item, index) => (
+                  <li key={index} className="flex gap-2">
+                    <span aria-hidden="true">-</span>
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
             </div>
           )}
 
