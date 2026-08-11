@@ -14,6 +14,9 @@ RewriteCond %{REQUEST_FILENAME} -f [OR]
 RewriteCond %{REQUEST_FILENAME} -d
 RewriteRule ^ - [L]
 
+# Missing hashed assets must return 404 instead of the React HTML fallback.
+RewriteRule ^assets/ - [R=404,L]
+
 # React Router fallback for deep links and page refreshes.
 RewriteRule ^ index.html [L]
 
