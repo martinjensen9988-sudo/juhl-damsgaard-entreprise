@@ -33,29 +33,29 @@ export default function Forside() {
           <img
             src="https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=1800&q=85"
             alt="Entreprenørarbejde på byggeplads med maskiner og rå byggematerialer"
-            className="w-full h-full object-cover opacity-42"
+            className="w-full h-full object-cover opacity-45"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#1c1714]/96 via-[#1c1714]/90 to-[#3d2a21]/74" />
-          <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-stone-50 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#100d0b]/98 via-[#1c1714]/92 to-[#3d2a21]/82" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#100d0b]/92 via-transparent to-[#100d0b]/34" />
         </div>
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6">
           <div className="grid lg:grid-cols-[1.05fr_0.95fr] gap-10 items-center">
-            <div className="max-w-3xl">
+            <div className="max-w-3xl rounded-lg bg-[#100d0b]/58 border border-white/10 p-4 sm:p-6 shadow-2xl backdrop-blur-[2px]">
               <Image
                 src={BRAND_LOGO_FULL_URL}
                 fittingType="fit"
                 className="h-24 w-24 sm:h-28 sm:w-28 rounded-lg bg-stone-50 ring-1 ring-white/20 shadow-2xl mb-7 overflow-hidden"
                 alt="Juhl & Damsgaard Entreprise logo"
               />
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-md bg-[#d9a17f]/14 border border-[#d9a17f]/30 text-[#f1c4a5] text-sm font-semibold mb-5">
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-md bg-[#1c1714]/88 border border-[#d9a17f]/60 text-[#ffd1b1] text-sm font-semibold mb-5 shadow-sm">
                 <ShieldCheck className="w-4 h-4" />
                 Entreprenør, byggeri og service samlet ét sted
               </div>
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-[1.03] max-w-3xl">
                 Juhl & Damsgaard Entreprise
               </h1>
-              <p className="text-lg sm:text-xl text-stone-200 mt-6 max-w-2xl leading-relaxed">
+              <p className="text-lg sm:text-xl text-white mt-6 max-w-2xl leading-relaxed drop-shadow">
                 Vi løser bygge- og anlægsopgaver fra første spadetag til færdig aflevering:
                 gravearbejde, kloak, beton, tømrer, VVS, el, skadeservice og totalentreprise.
               </p>
@@ -66,15 +66,15 @@ export default function Forside() {
                 <Link to="/kontakt" className="inline-flex items-center gap-2 bg-white text-zinc-950 px-6 py-3.5 rounded-md font-bold hover:bg-stone-100 transition">
                   Kontakt os <Phone className="w-4 h-4" />
                 </Link>
-                <Link to="/tjenester" className="inline-flex items-center gap-2 border border-white/25 text-white px-6 py-3.5 rounded-md font-bold hover:bg-white/10 transition">
+                <Link to="/tjenester" className="inline-flex items-center gap-2 border border-white/60 bg-[#100d0b]/40 text-white px-6 py-3.5 rounded-md font-bold hover:bg-white/10 transition">
                   Se tjenester <ArrowRight className="w-4 h-4" />
                 </Link>
               </div>
               <div className="grid grid-cols-3 gap-3 mt-10 max-w-2xl">
                 {heroStats.map((item) => (
-                  <div key={item.label} className="border-l border-[#d9a17f]/40 pl-3">
+                  <div key={item.label} className="border-l border-[#d9a17f]/70 bg-[#100d0b]/48 rounded-r-md px-3 py-2">
                     <div className="text-white font-black text-lg sm:text-xl leading-tight">{item.value}</div>
-                    <div className="text-stone-300 text-xs sm:text-sm mt-1">{item.label}</div>
+                    <div className="text-stone-100 text-xs sm:text-sm mt-1">{item.label}</div>
                   </div>
                 ))}
               </div>
