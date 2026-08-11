@@ -207,6 +207,7 @@ export default function Brugeradministration() {
                       <SelectContent>
                         <SelectItem value="admin">Administrator</SelectItem>
                         <SelectItem value="user">Bruger</SelectItem>
+                        {useSimplyApi && <SelectItem value="customer">Kundeportal</SelectItem>}
                       </SelectContent>
                     </Select>
                   </td>
@@ -227,14 +228,14 @@ export default function Brugeradministration() {
 
       <Dialog open={showInvite} onOpenChange={setShowInvite}>
         <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Inviter ny bruger</DialogTitle>
-            <DialogDescription>
-              {useSimplyApi
-                ? 'Opret medarbejderadgang direkte. Brugeren kan ændre adgangskode senere via glemt adgangskode.'
+            <DialogHeader>
+              <DialogTitle>Inviter ny bruger</DialogTitle>
+              <DialogDescription>
+                {useSimplyApi
+                ? 'Opret medarbejder- eller kundeadgang direkte. Brugeren kan ændre adgangskode senere via glemt adgangskode.'
                 : 'Brugeren modtager en email med invitation og opretter selv sin adgangskode.'}
-            </DialogDescription>
-          </DialogHeader>
+              </DialogDescription>
+            </DialogHeader>
           <form onSubmit={handleInvite} className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
@@ -285,10 +286,11 @@ export default function Brugeradministration() {
                     <span className="flex items-center gap-2"><Shield className="w-4 h-4" /> Administrator</span>
                   </SelectItem>
                   <SelectItem value="user">Bruger</SelectItem>
+                  {useSimplyApi && <SelectItem value="customer">Kundeportal</SelectItem>}
                 </SelectContent>
               </Select>
               <p className="text-xs text-slate-500">
-                Administrator har fuld adgang. Bruger har begrænset adgang.
+                Administrator har fuld adgang. Bruger har intern adgang. Kundeportal kan kun bruge kundeportalen.
               </p>
             </div>
             {error && <div className="text-sm text-red-600">{error}</div>}

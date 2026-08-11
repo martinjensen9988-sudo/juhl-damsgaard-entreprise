@@ -31,7 +31,7 @@ function public_user(array $user): array {
 }
 
 function normalize_role(string $role): string {
-  return $role === 'admin' ? 'admin' : 'user';
+  return in_array($role, ['admin', 'user', 'customer'], true) ? $role : 'user';
 }
 
 if ($action === 'me') {

@@ -27,7 +27,11 @@ export default function KundeDashboard() {
   }, []);
 
   const acceptQuote = async (q) => {
-    await base44.entities.Quote.update(q.id, { status: 'Accepteret' });
+    await base44.functions.invoke('quoteAction', {
+      quote_id: q.id,
+      action: 'accept',
+      customer_name: q.customer_name || q.customer_email || 'Kunde',
+    });
     setData((d) => ({ ...d, quotes: d.quotes.map((x) => x.id === q.id ? { ...x, status: 'Accepteret' } : x) }));
   };
 

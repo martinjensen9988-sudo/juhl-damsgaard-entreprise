@@ -15,6 +15,7 @@ import MedarbejderAppLayout from '@/components/MedarbejderAppLayout';
 
 // Auth pages
 const Login = lazy(() => import('@/pages/Login'));
+const KundeLogin = lazy(() => import('@/pages/KundeLogin'));
 const Register = lazy(() => import('@/pages/Register'));
 const ForgotPassword = lazy(() => import('@/pages/ForgotPassword'));
 const ResetPassword = lazy(() => import('@/pages/ResetPassword'));
@@ -251,7 +252,7 @@ const PageSpinner = () => (
 );
 
 const AuthenticatedApp = () => {
-  const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
+  const { isLoadingAuth, isLoadingPublicSettings, authError } = useAuth();
 
   // Show loading spinner while checking app public settings or auth
   if (isLoadingPublicSettings || isLoadingAuth) {
@@ -266,10 +267,6 @@ const AuthenticatedApp = () => {
   if (authError) {
     if (authError.type === 'user_not_registered') {
       return <UserNotRegisteredError />;
-    } else if (authError.type === 'auth_required') {
-      // Redirect to login automatically
-      navigateToLogin();
-      return null;
     }
   }
 
@@ -294,10 +291,19 @@ const AuthenticatedApp = () => {
         <Route path="/faq" element={<FAQ />} />
         <Route path="/kontakt" element={<Kontakt />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/kunde-login" element={<KundeLogin />} />
         <Route path="/register" element={<Register />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password" element={<ResetPassword />} />
-        <Route element={<ProtectedRoute unauthenticatedElement={<Navigate to="/login" replace />} />}>
+        <Route
+          element={(
+            <ProtectedRoute
+              unauthenticatedElement={<Navigate to="/login" replace />}
+              unauthorizedElement={<Navigate to="/portal" replace />}
+              allowedRoles={['admin', 'user']}
+            />
+          )}
+        >
           <Route element={<Layout />}>
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/admin" element={<Dashboard />} />
@@ -505,17 +511,8 @@ const AuthenticatedApp = () => {
             <Route path="/ressource-kalender" element={<RessourceKalender />} />
             <Route path="/moms-regnskab" element={<MomsSkat />} />
           </Route>
-          <Route element={<PortalLayout />}>
-            <Route path="/portal" element={<CustomerPortal />} />
-            <Route path="/prisberegner" element={<Prisberegner />} />
-            <Route path="/kunde-forside" element={<KundeForside />} />
-            <Route path="/kunde-dashboard" element={<KundeDashboard />} />
-            <Route path="/portal/tilbud/:id" element={<TilbudVisning />} />
-            <Route path="/portal/tilfredshed" element={<Tilfredshedskema />} />
-          </Route>
           <Route path="/storskaerm" element={<Storskaerm />} />
           <Route path="/infotaavle" element={<InfoTaavle />} />
-          <Route path="/kundeportal" element={<Kundeportal />} />
           <Route element={<MedarbejderAppLayout />}>
             <Route path="/app" element={<MaHome />} />
             <Route path="/app/tid" element={<MaTid />} />
@@ -524,6 +521,25 @@ const AuthenticatedApp = () => {
             <Route path="/app/bilag" element={<MaBilag />} />
             <Route path="/app/profil" element={<MaProfil />} />
           </Route>
+        </Route>
+        <Route
+          element={(
+            <ProtectedRoute
+              unauthenticatedElement={<Navigate to="/kunde-login" replace />}
+              unauthorizedElement={<Navigate to="/login" replace />}
+              allowedRoles={['admin', 'customer']}
+            />
+          )}
+        >
+          <Route element={<PortalLayout />}>
+            <Route path="/portal" element={<CustomerPortal />} />
+            <Route path="/prisberegner" element={<Prisberegner />} />
+            <Route path="/kunde-forside" element={<KundeForside />} />
+            <Route path="/kunde-dashboard" element={<KundeDashboard />} />
+            <Route path="/portal/tilbud/:id" element={<TilbudVisning />} />
+            <Route path="/portal/tilfredshed" element={<Tilfredshedskema />} />
+          </Route>
+          <Route path="/kundeportal" element={<Kundeportal />} />
         </Route>
         <Route path="*" element={<PageNotFound />} />
       </Routes>

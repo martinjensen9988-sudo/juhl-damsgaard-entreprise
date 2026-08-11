@@ -17,17 +17,104 @@ if (!$user && !($method === 'GET' && in_array($entity, $publicReadEntities, true
   respond(['error' => 'Unauthorized'], 401);
 }
 
+function customer_email(array $user): string {
+  return strtolower(trim((string)($user['email'] ?? '')));
+}
+
+function customer_context(PDO $pdo, array $entityMap, array $user): array {
+  $email = customer_email($user);
+  $customerIds = [];
+  $projectIds = [];
+
+  if ($email !== '') {
+    foreach (entity_filter($pdo, $entityMap, 'Customer', ['email' => $email], '-created_date', 1000) as $customer) {
+      if (!empty($customer['id'])) $customerIds[(string)$customer['id']] = true;
+    }
+  }
+
+  $projects = entity_filter($pdo, $entityMap, 'Project', [], '-created_date', 1000);
+  foreach ($projects as $project) {
+    $matchesEmail = strtolower(trim((string)($project['customer_email'] ?? ''))) === $email;
+    $matchesCustomerId = !empty($project['customer_id']) && isset($customerIds[(string)$project['customer_id']]);
+    if ($email !== '' && ($matchesEmail || $matchesCustomerId)) {
+      $projectIds[(string)$project['id']] = true;
+    }
+  }
+
+  return [
+    'email' => $email,
+    'customer_ids' => $customerIds,
+    'project_ids' => $projectIds,
+  ];
+}
+
+function item_matches_customer(array $item, array $ctx): bool {
+  $email = $ctx['email'];
+  if ($email !== '') {
+    foreach (['customer_email', 'email', 'contact_email'] as $field) {
+      if (strtolower(trim((string)($item[$field] ?? ''))) === $email) return true;
+    }
+  }
+
+  if (!empty($item['customer_id']) && isset($ctx['customer_ids'][(string)$item['customer_id']])) return true;
+  if (!empty($item['project_id']) && isset($ctx['project_ids'][(string)$item['project_id']])) return true;
+
+  return false;
+}
+
+function customer_can_read_entity(string $entity): bool {
+  return in_array($entity, [
+    'CompanySettings',
+    'Invoice',
+    'PortalSetting',
+    'Project',
+    'ProjectDocument',
+    'ProjectImage',
+    'QualityCheck',
+    'Quote',
+    'SupportTicket',
+  ], true);
+}
+
+function customer_filter_rows(PDO $pdo, array $entityMap, string $entity, array $rows, array $user): array {
+  if (($user['role'] ?? '') !== 'customer') return $rows;
+  if (!customer_can_read_entity($entity)) respond(['error' => 'Forbidden'], 403);
+  if (in_array($entity, ['CompanySettings', 'PortalSetting'], true)) return $rows;
+
+  $ctx = customer_context($pdo, $entityMap, $user);
+  return array_values(array_filter($rows, fn($row) => item_matches_customer($row, $ctx)));
+}
+
+function customer_assert_can_read(PDO $pdo, array $entityMap, string $entity, ?array $row, array $user): void {
+  if (($user['role'] ?? '') !== 'customer') return;
+  if (!customer_can_read_entity($entity)) respond(['error' => 'Forbidden'], 403);
+  if (!$row || in_array($entity, ['CompanySettings', 'PortalSetting'], true)) return;
+  $ctx = customer_context($pdo, $entityMap, $user);
+  if (!item_matches_customer($row, $ctx)) respond(['error' => "$entity not found"], 404);
+}
+
+function customer_assert_can_write(string $entity, array $user): void {
+  if (($user['role'] ?? '') !== 'customer') return;
+  if ($entity === 'SupportTicket' && $_SERVER['REQUEST_METHOD'] === 'POST') return;
+  respond(['error' => 'Forbidden'], 403);
+}
+
 if ($method === 'GET' && $id) {
-  respond(entity_get($pdo, $entityMap, $entity, (string)$id));
+  $row = entity_get($pdo, $entityMap, $entity, (string)$id);
+  if ($user) customer_assert_can_read($pdo, $entityMap, $entity, $row, $user);
+  respond($row);
 }
 
 if ($method === 'GET') {
   $filter = json_decode((string)($_GET['filter'] ?? '{}'), true);
   if (!is_array($filter)) $filter = [];
-  respond(entity_filter($pdo, $entityMap, $entity, $filter, $sort, $limit));
+  $rows = entity_filter($pdo, $entityMap, $entity, $filter, $sort, $limit);
+  if ($user) $rows = customer_filter_rows($pdo, $entityMap, $entity, $rows, $user);
+  respond($rows);
 }
 
 if ($method === 'POST') {
+  customer_assert_can_write($entity, $user);
   $body = json_body();
   $rows = isset($body[0]) && is_array($body[0]) ? $body : [$body];
   $created = [];
@@ -38,10 +125,12 @@ if ($method === 'POST') {
 }
 
 if ($method === 'PATCH' && $id) {
+  customer_assert_can_write($entity, $user);
   respond(entity_update($pdo, $entityMap, $entity, (string)$id, json_body()));
 }
 
 if ($method === 'DELETE' && $id) {
+  customer_assert_can_write($entity, $user);
   $stmt = $pdo->prepare("DELETE FROM $table WHERE id = ?");
   $stmt->execute([$id]);
   respond(['ok' => true]);
