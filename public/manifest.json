@@ -1,23 +1,23 @@
 {
   "name": "Juhl & Damsgaard Entreprise",
   "short_name": "Juhl & Damsgaard",
-  "description": "Digitalt system til tilbud, projekter, økonomi og medarbejderstyring.",
+  "description": "Entreprenørarbejde, gravearbejde, kloak, beton, tømrer, VVS, elektriker og totalentreprise.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
-  "background_color": "#0f172a",
-  "theme_color": "#fbbf24",
+  "background_color": "#1c1714",
+  "theme_color": "#9f5f3b",
   "icons": [
     {
-      "src": "https://media.base44.com/images/public/6a6e0c3236befff59044cd90/8845d169e_generated_image.png",
+      "src": "/assets/juhl-damsgaard-logo.jpeg",
       "sizes": "192x192",
-      "type": "image/png",
+      "type": "image/jpeg",
       "purpose": "any maskable"
     },
     {
-      "src": "https://media.base44.com/images/public/6a6e0c3236befff59044cd90/8845d169e_generated_image.png",
+      "src": "/assets/juhl-damsgaard-logo.jpeg",
       "sizes": "512x512",
-      "type": "image/png",
+      "type": "image/jpeg",
       "purpose": "any maskable"
     }
   ]

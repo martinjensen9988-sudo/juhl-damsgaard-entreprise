@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://juhldamsgaard.dk/</loc>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://juhldamsgaard.dk/tjenester</loc>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://juhldamsgaard.dk/beregn-tilbud</loc>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://juhldamsgaard.dk/om-os</loc>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://juhldamsgaard.dk/faq</loc>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://juhldamsgaard.dk/kontakt</loc>
+    <priority>0.8</priority>
+  </url>
+</urlset>
