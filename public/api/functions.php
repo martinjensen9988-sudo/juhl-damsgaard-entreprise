@@ -3,9 +3,9 @@ declare(strict_types=1);
 require __DIR__ . '/bootstrap.php';
 
 $pdo = db($config);
-$user = require_user($pdo);
 $name = (string)($_GET['name'] ?? '');
 $body = json_body();
+$user = $name === 'aiQuoteCalculator' ? current_user($pdo) : require_user($pdo);
 
 function deterministic_quote_estimate(string $message): array {
   $lower = mb_strtolower($message);
@@ -21,13 +21,15 @@ function deterministic_quote_estimate(string $message): array {
   elseif (str_contains($lower, 'kloak')) { $desc = 'Kloakarbejde'; $unit = 'm'; $price = 850; }
   elseif (str_contains($lower, 'asfalt')) { $desc = 'Asfaltering'; $unit = 'm²'; $price = 395; }
   elseif (str_contains($lower, 'beton')) { $desc = 'Betonarbejde'; $unit = 'm³'; $price = 1150; }
-  elseif (str_contains($lower, 'tømrer') || str_contains($lower, 'gips')) { $desc = 'Tømrerarbejde'; $unit = str_contains($lower, 'gips') ? 'm²' : 'time'; $price = str_contains($lower, 'gips') ? 245 : 495; }
+  elseif (str_contains($lower, 'tømrer') || str_contains($lower, 'gips')) { $desc = 'Tømrerarbejde'; $unit = str_contains($lower, 'gips') ? 'm²' : 'time'; $price = str_contains($lower, 'gips') ? 245 : 280; }
   $lineItems = [
-    ['description' => $desc, 'quantity' => $qty, 'unit' => $unit, 'unit_price' => $price, 'line_total' => $qty * $price],
-    ['description' => 'Materialer og tilbehør', 'quantity' => $qty, 'unit' => $unit, 'unit_price' => round($price * 0.35, 2), 'line_total' => round($qty * $price * 0.35, 2)],
+    ['description' => $desc . ($unit === 'time' ? ' (350 kr/time inkl. moms)' : ''), 'quantity' => $qty, 'unit' => $unit, 'unit_price' => $price, 'line_total' => $qty * $price],
+    ['description' => 'Materialer til opgaven', 'quantity' => $qty, 'unit' => $unit, 'unit_price' => round($price * 0.35, 2), 'line_total' => round($qty * $price * 0.35, 2)],
+    ['description' => 'Forbrugsmaterialer, afdækning og småtilbehør', 'quantity' => 1, 'unit' => 'sæt', 'unit_price' => 175, 'line_total' => 175],
   ];
   $subtotal = money_total($lineItems);
-  return ['message' => 'Vejledende Simply-beregning. OpenAI API er ikke aktiv, så fallback-beregneren blev brugt.', 'line_items' => $lineItems, 'subtotal' => $subtotal, 'vat' => round($subtotal * 0.25, 2), 'total' => round($subtotal * 1.25, 2), 'ai_provider' => 'fallback'];
+  $description = 'Opgaven omfatter ' . mb_strtolower($desc) . ' baseret på kundens beskrivelse. Tilbuddet er opdelt i arbejdsløn, materialer og nødvendige forbrugsmaterialer.';
+  return ['message' => $description, 'task_description' => $description, 'cleaned_notes' => $description, 'ai_message' => $description, 'line_items' => $lineItems, 'subtotal' => $subtotal, 'vat' => round($subtotal * 0.25, 2), 'total' => round($subtotal * 1.25, 2), 'hourly_rate_incl_vat' => 350, 'hourly_rate_excl_vat' => 280, 'ai_provider' => 'fallback'];
 }
 
 function extract_openai_text(array $response): string {
@@ -58,13 +60,30 @@ function normalize_quote_payload(array $payload): array {
   }
   if (!$lineItems) throw new RuntimeException('OpenAI returned no quote lines');
   $subtotal = money_total($lineItems);
+  $taskDescription = trim((string)($payload['task_description'] ?? $payload['cleaned_notes'] ?? $payload['message'] ?? ''));
+  if ($taskDescription === '') {
+    $taskDescription = 'Vejledende tilbud baseret på kundens opgavebeskrivelse.';
+  }
+  $message = trim((string)($payload['message'] ?? $payload['ai_message'] ?? $taskDescription));
+  $assumptions = $payload['assumptions'] ?? [];
+  if (is_string($assumptions)) {
+    $assumptions = [$assumptions];
+  }
+  if (!is_array($assumptions)) {
+    $assumptions = [];
+  }
   return [
-    'message' => trim((string)($payload['message'] ?? 'Her er et vejledende AI-estimat baseret på din beskrivelse.')),
+    'message' => $message,
+    'ai_message' => $message,
+    'task_description' => $taskDescription,
+    'cleaned_notes' => $taskDescription,
     'line_items' => $lineItems,
     'subtotal' => round($subtotal, 2),
     'vat' => round($subtotal * 0.25, 2),
     'total' => round($subtotal * 1.25, 2),
-    'assumptions' => array_values(array_filter($payload['assumptions'] ?? [], 'is_string')),
+    'assumptions' => array_values(array_filter($assumptions, 'is_string')),
+    'hourly_rate_incl_vat' => 350,
+    'hourly_rate_excl_vat' => 280,
     'ai_provider' => 'openai',
   ];
 }
@@ -74,23 +93,25 @@ function openai_quote_estimate(array $config, string $message): ?array {
   if ($apiKey === '') return null;
   if (!function_exists('curl_init')) throw new RuntimeException('PHP cURL extension is not enabled');
 
-  $model = (string)($config['openai']['quote_model'] ?? getenv('OPENAI_QUOTE_MODEL') ?: 'gpt-4.1-mini');
-  $system = "Du er tilbudsberegner for en dansk entreprenørvirksomhed. Lav et realistisk vejledende tilbud på dansk. Returner KUN gyldig JSON med keys: message, line_items, assumptions. line_items skal være array af {description, quantity, unit, unit_price}. Brug DKK ekskl. moms i unit_price. Tilføj separate linjer for arbejde, materialer, maskiner/transport og risikotillæg når relevant. Moms beregnes af systemet bagefter.";
+  $model = 'gpt-4o-mini';
+  $system = "Du er tilbudsberegner for Juhl & Damsgaard Entreprise. Lav et realistisk vejledende tilbud på dansk. Returner KUN gyldig JSON med keys: message, task_description, cleaned_notes, ai_message, line_items, assumptions. task_description/cleaned_notes skal være en professionel beskrivelse af opgaven på korrekt dansk. line_items skal være array af {description, quantity, unit, unit_price}. VIGTIGT: Systemet beregner moms bagefter, så alle unit_price skal være DKK ekskl. moms. Firmaets timepris er 350 kr/time inkl. moms, dvs. 280 kr/time ekskl. moms. Alle timebaserede arbejdslinjer skal derfor bruge unit='time' og unit_price=280, og beskrivelsen må gerne nævne 350 kr/time inkl. moms. Hvert tilbud skal have alle relevante materialer med som separate materialelinjer. Et tilbud må aldrig kun have arbejdslinjer. Tilføj også nødvendige forbrugsmaterialer/afdækning/tilbehør når det er relevant. Opdel i arbejde, hovedmaterialer, forbrugsmaterialer, maskiner/transport og affald/risiko hvor relevant. Hvis kunden nævner flere opgaver, skal hver opgave have arbejdslinje og materialelinjer. Hvis mængder mangler, lav realistiske antagelser og skriv dem i assumptions.";
   $payload = [
     'model' => $model,
-    'input' => [
+    'messages' => [
       ['role' => 'system', 'content' => $system],
       ['role' => 'user', 'content' => $message],
     ],
     'temperature' => 0.2,
-    'max_output_tokens' => 1200,
+    'max_tokens' => 800,
+    'response_format' => ['type' => 'json_object'],
   ];
 
-  $ch = curl_init('https://api.openai.com/v1/responses');
+  $ch = curl_init('https://api.openai.com/v1/chat/completions');
   curl_setopt_array($ch, [
     CURLOPT_POST => true,
     CURLOPT_RETURNTRANSFER => true,
-    CURLOPT_TIMEOUT => 30,
+    CURLOPT_CONNECTTIMEOUT => 3,
+    CURLOPT_TIMEOUT => 8,
     CURLOPT_HTTPHEADER => [
       'Content-Type: application/json',
       'Authorization: Bearer ' . $apiKey,
@@ -106,7 +127,8 @@ function openai_quote_estimate(array $config, string $message): ?array {
   }
   $response = json_decode($raw, true);
   if (!is_array($response)) throw new RuntimeException('OpenAI returned invalid JSON');
-  $text = extract_openai_text($response);
+  $text = (string)($response['choices'][0]['message']['content'] ?? '');
+  if ($text === '') $text = extract_openai_text($response);
   $decoded = json_decode($text, true);
   if (!is_array($decoded)) throw new RuntimeException('OpenAI response was not valid quote JSON');
   return normalize_quote_payload($decoded);
@@ -259,7 +281,7 @@ if ($name === 'quoteAction') {
 if ($name === 'sendInvoiceReminders') {
   require_admin($user);
   $targetDate = date('Y-m-d', time() - 3 * 86400);
-  $invoices = entity_filter($pdo, $entityMap, 'Invoice', ['status' => ['$in' => ['Sendt', 'Forfalden']], '-created_date', 1000);
+  $invoices = entity_filter($pdo, $entityMap, 'Invoice', ['status' => ['$in' => ['Sendt', 'Forfalden']]], '-created_date', 1000);
   $checked = 0;
   $marked = 0;
   $sent = 0;

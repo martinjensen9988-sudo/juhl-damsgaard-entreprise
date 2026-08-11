@@ -69,8 +69,21 @@ export const simplyClient = {
       async SendEmail(payload) {
         return request('/functions.php?name=sendEmail', { method: 'POST', body: payload });
       },
-      async InvokeLLM() {
-        throw new Error('LLM integration is not enabled on Simply yet');
+      async InvokeLLM({ prompt } = {}) {
+        const data = await request('/functions.php?name=aiQuoteCalculator', {
+          method: 'POST',
+          body: { message: prompt || '' },
+        });
+        const taskDescription = data.task_description || data.cleaned_notes || data.message || '';
+        const aiMessage = data.ai_message || data.message || '';
+        return {
+          ...data,
+          cleaned_notes: taskDescription,
+          task_description: taskDescription,
+          ai_message: aiMessage,
+          line_items: data.line_items || [],
+          assumptions: data.assumptions || [],
+        };
       },
     },
   },

@@ -6,13 +6,14 @@ import { Send, Loader2, Bot, User, Calculator, ArrowRight, Sparkles } from 'luci
 
 export default function AiTilbudChat() {
   const [messages, setMessages] = useState([
-    { role: 'assistant', content: 'Hej! Jeg er Juhl & Damsgaards AI-tilbudsberegner. Beskriv din opgave, så udregner jeg et vejledende tilbud med materialer og alt hvad det kræver. Du kan f.eks. skrive: "Jeg skal have gravet og støbt et fundament på 50 m² og lagt asfalt på indkørslen på 80 m²."' }
+    { role: 'assistant', content: 'Hej! Jeg er Juhl & Damsgaards AI-tilbudsberegner. Beskriv din opgave, så udregner jeg et vejledende tilbud med materialer og alt hvad det kræver. Timeprisen er 350 kr/time inkl. moms. Du kan f.eks. skrive: "Jeg skal have gravet og støbt et fundament på 50 m² og lagt asfalt på indkørslen på 80 m²."' }
   ]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
   const [estimate, setEstimate] = useState(null);
   const scrollRef = useRef(null);
   const navigate = useNavigate();
+  const estimateDescription = estimate?.task_description || estimate?.cleaned_notes || estimate?.message || '';
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -122,6 +123,14 @@ export default function AiTilbudChat() {
           ) : (
             <>
               <div className="flex-1 space-y-3 overflow-y-auto mb-4 pr-1">
+                {estimateDescription && (
+                  <div className="rounded-lg bg-slate-900 border border-slate-800 p-3 text-sm text-slate-300 leading-relaxed">
+                    {estimateDescription}
+                  </div>
+                )}
+                <div className="text-xs text-slate-500">
+                  Timepris: 350 kr/time inkl. moms. Tilbudslinjer vises ekskl. moms, og moms lægges på nederst.
+                </div>
                 {estimate.line_items?.map((item, i) => (
                   <div key={i} className="flex items-start justify-between gap-2 text-sm">
                     <div className="flex-1 min-w-0">

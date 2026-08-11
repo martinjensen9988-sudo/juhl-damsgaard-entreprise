@@ -40,7 +40,7 @@ export default function Forespoergsel() {
   const vat = state.estimate ? Number(state.estimate.vat) || calcVAT(subtotal) : calcVAT(subtotal);
   const total = state.estimate ? Number(state.estimate.total) || calcTotal(lineItems) : calcTotal(lineItems);
   const source = state.source || (state.estimate ? 'AI tilbudschat' : 'Prisberegner');
-  const requestSummary = state.estimate?.message || '';
+  const requestSummary = state.estimate?.task_description || state.estimate?.cleaned_notes || state.estimate?.message || '';
 
   const [form, setForm] = useState({ name: '', email: '', phone: '', address: '', project_type: 'Andet', description: '' });
   const [sending, setSending] = useState(false);
