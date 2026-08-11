@@ -24,6 +24,10 @@ export default function KundeLogin() {
         setError("Denne adgang er ikke til kundeportalen.");
         return;
       }
+      if (result?.user?.must_change_password) {
+        window.location.href = "/change-password?returnTo=%2Fportal";
+        return;
+      }
       window.location.href = "/portal";
     } catch (err) {
       setError(err.message || "Forkert email eller adgangskode");

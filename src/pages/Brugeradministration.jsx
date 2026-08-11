@@ -13,7 +13,7 @@ import {
 import { useAuth } from '@/lib/AuthContext';
 import { PERMISSION_MODULES, normalizePermissions } from '@/lib/permissions';
 import { useToast } from '@/components/ui/use-toast';
-import { KeyRound, Mail, Search, Shield, Trash2, UserPlus } from 'lucide-react';
+import { Mail, Search, Shield, Trash2, UserPlus } from 'lucide-react';
 
 const useSimplyApi = import.meta.env.VITE_API_MODE === 'simply';
 
@@ -24,7 +24,6 @@ export default function Brugeradministration() {
   const [showInvite, setShowInvite] = useState(false);
   const [inviteEmail, setInviteEmail] = useState('');
   const [inviteName, setInviteName] = useState('');
-  const [invitePassword, setInvitePassword] = useState('');
   const [inviteRole, setInviteRole] = useState('user');
   const [invitePermissions, setInvitePermissions] = useState(PERMISSION_MODULES.map((p) => p.id));
   const [permissionUser, setPermissionUser] = useState(null);
@@ -94,11 +93,13 @@ export default function Brugeradministration() {
         await base44.users.createUser({
           email: inviteEmail.trim(),
           name: inviteName.trim(),
-          password: invitePassword,
           role: inviteRole,
           permissions: inviteRole === 'user' ? invitePermissions : [],
         });
-        toast({ title: 'Bruger oprettet', description: `${inviteEmail} kan nu logge ind` });
+        toast({
+          title: 'Bruger oprettet',
+          description: `Midlertidig adgangskode er sendt til ${inviteEmail}`,
+        });
       } else {
         await base44.users.inviteUser(inviteEmail.trim(), inviteRole);
         toast({ title: 'Invitation sendt', description: `Invitation sendt til ${inviteEmail}` });
@@ -106,7 +107,6 @@ export default function Brugeradministration() {
       setShowInvite(false);
       setInviteEmail('');
       setInviteName('');
-      setInvitePassword('');
       setInviteRole('user');
       setInvitePermissions(PERMISSION_MODULES.map((p) => p.id));
       await load();
@@ -285,7 +285,7 @@ export default function Brugeradministration() {
               <DialogTitle>Inviter ny bruger</DialogTitle>
               <DialogDescription>
                 {useSimplyApi
-                ? 'Opret medarbejder- eller kundeadgang direkte. Brugeren kan ændre adgangskode senere via glemt adgangskode.'
+                ? 'Opret medarbejder- eller kundeadgang direkte. Systemet sender en midlertidig adgangskode, som brugeren skal ændre ved første login.'
                 : 'Brugeren modtager en email med invitation og opretter selv sin adgangskode.'}
               </DialogDescription>
             </DialogHeader>
@@ -312,21 +312,9 @@ export default function Brugeradministration() {
                     placeholder="Medarbejdernavn"
                   />
                 </div>
-                <div className="space-y-2">
-                  <Label htmlFor="password">Midlertidig adgangskode</Label>
-                  <div className="relative">
-                    <KeyRound className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-                    <Input
-                      id="password"
-                      type="password"
-                      required
-                      minLength={8}
-                      value={invitePassword}
-                      onChange={(e) => setInvitePassword(e.target.value)}
-                      className="pl-9"
-                      placeholder="Mindst 8 tegn"
-                    />
-                  </div>
+                <div className="rounded-lg border border-amber-200 bg-amber-50 p-3 text-sm leading-6 text-amber-950">
+                  Systemet laver automatisk en midlertidig adgangskode og sender den til brugeren på mail.
+                  Brugeren skal vælge sin egen adgangskode ved første login.
                 </div>
               </>
             )}

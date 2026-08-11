@@ -19,6 +19,7 @@ const KundeLogin = lazy(() => import('@/pages/KundeLogin'));
 const Register = lazy(() => import('@/pages/Register'));
 const ForgotPassword = lazy(() => import('@/pages/ForgotPassword'));
 const ResetPassword = lazy(() => import('@/pages/ResetPassword'));
+const ChangePassword = lazy(() => import('@/pages/ChangePassword'));
 
 // Core pages
 const Dashboard = lazy(() => import('@/pages/Dashboard'));
@@ -295,6 +296,7 @@ const AuthenticatedApp = () => {
         <Route path="/register" element={<Register />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password" element={<ResetPassword />} />
+        <Route path="/change-password" element={<ChangePassword />} />
         <Route
           element={(
             <ProtectedRoute

@@ -42,13 +42,18 @@ function db(array $config): PDO {
   return $pdo;
 }
 
-function ensure_user_permissions_column(PDO $pdo): void {
+function ensure_user_auth_columns(PDO $pdo): void {
   static $checked = false;
   if ($checked) return;
   $stmt = $pdo->prepare("SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'jd_users' AND COLUMN_NAME = 'permissions'");
   $stmt->execute();
   if ((int)$stmt->fetchColumn() === 0) {
     $pdo->exec("ALTER TABLE jd_users ADD COLUMN permissions JSON NULL AFTER role");
+  }
+  $stmt = $pdo->prepare("SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'jd_users' AND COLUMN_NAME = 'must_change_password'");
+  $stmt->execute();
+  if ((int)$stmt->fetchColumn() === 0) {
+    $pdo->exec("ALTER TABLE jd_users ADD COLUMN must_change_password TINYINT(1) NOT NULL DEFAULT 0 AFTER password_hash");
   }
   $checked = true;
 }
@@ -63,9 +68,9 @@ function uuidv4(): string {
 function current_user(PDO $pdo): ?array {
   $header = $_SERVER['HTTP_AUTHORIZATION'] ?? '';
   if (!preg_match('/Bearer\s+(.+)/i', $header, $m)) return null;
-  ensure_user_permissions_column($pdo);
+  ensure_user_auth_columns($pdo);
   $hash = hash('sha256', $m[1]);
-  $stmt = $pdo->prepare('SELECT u.id, u.email, u.name, u.role, u.permissions FROM jd_sessions s JOIN jd_users u ON u.id = s.user_id WHERE s.token_hash = ? AND s.expires_at > UTC_TIMESTAMP()');
+  $stmt = $pdo->prepare('SELECT u.id, u.email, u.name, u.role, u.permissions, u.must_change_password FROM jd_sessions s JOIN jd_users u ON u.id = s.user_id WHERE s.token_hash = ? AND s.expires_at > UTC_TIMESTAMP()');
   $stmt->execute([$hash]);
   return $stmt->fetch() ?: null;
 }

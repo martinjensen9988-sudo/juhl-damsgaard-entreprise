@@ -17,6 +17,10 @@ if (!$user && !($method === 'GET' && in_array($entity, $publicReadEntities, true
   respond(['error' => 'Unauthorized'], 401);
 }
 
+if ($user && !empty($user['must_change_password'])) {
+  respond(['error' => 'Adgangskoden skal ændres før systemet kan bruges', 'must_change_password' => true], 403);
+}
+
 function user_permissions(?array $user): ?array {
   if (!$user || !array_key_exists('permissions', $user) || $user['permissions'] === null || $user['permissions'] === '') return null;
   $decoded = json_decode((string)$user['permissions'], true);

@@ -25,7 +25,11 @@ export default function Login() {
     setError("");
     setLoading(true);
     try {
-      await base44.auth.loginViaEmailPassword(email.trim(), password);
+      const result = await base44.auth.loginViaEmailPassword(email.trim(), password);
+      if (result?.user?.must_change_password) {
+        window.location.href = "/change-password" + (returnTo !== "/" ? "?returnTo=" + encodeURIComponent(returnTo) : "");
+        return;
+      }
       // Default to the admin dashboard, since "/" is the public front page.
       window.location.href = returnTo === "/" ? "/dashboard" : returnTo;
     } catch (err) {

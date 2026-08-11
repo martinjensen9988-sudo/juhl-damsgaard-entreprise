@@ -7,7 +7,7 @@ $action = $_GET['action'] ?? '';
 $body = json_body();
 
 function ensure_auth_tables(PDO $pdo): void {
-  ensure_user_permissions_column($pdo);
+  ensure_user_auth_columns($pdo);
 
   $pdo->exec("CREATE TABLE IF NOT EXISTS jd_password_resets (
     token_hash CHAR(64) PRIMARY KEY,
@@ -34,6 +34,7 @@ function public_user(array $user): array {
     'full_name' => $user['name'] ?? null,
     'role' => $user['role'],
     'permissions' => $permissions,
+    'must_change_password' => !empty($user['must_change_password']),
     'created_date' => $user['created_date'] ?? null,
   ];
 }
@@ -65,6 +66,15 @@ function normalize_permissions($permissions): array {
   return array_values(array_intersect($allowed, array_values(array_unique(array_map('strval', $permissions)))));
 }
 
+function temporary_password(): string {
+  $alphabet = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789!@#$%';
+  $password = '';
+  for ($i = 0; $i < 14; $i++) {
+    $password .= $alphabet[random_int(0, strlen($alphabet) - 1)];
+  }
+  return $password;
+}
+
 ensure_auth_tables($pdo);
 
 if ($action === 'me') {
@@ -94,7 +104,7 @@ if ($action === 'register') {
 if ($action === 'users') {
   $admin = require_user($pdo);
   require_admin($admin);
-  $stmt = $pdo->query('SELECT id, email, name, role, permissions, created_date FROM jd_users ORDER BY created_date DESC');
+  $stmt = $pdo->query('SELECT id, email, name, role, permissions, must_change_password, created_date FROM jd_users ORDER BY created_date DESC');
   respond(array_map('public_user', $stmt->fetchAll()));
 }
 
@@ -102,24 +112,39 @@ if ($action === 'create-user') {
   $admin = require_user($pdo);
   require_admin($admin);
   $email = strtolower(trim((string)($body['email'] ?? '')));
-  $password = (string)($body['password'] ?? '');
   $name = trim((string)($body['name'] ?? ''));
   $role = normalize_role((string)($body['role'] ?? 'user'));
   $permissions = $role === 'user' ? normalize_permissions($body['permissions'] ?? []) : [];
-  if (!filter_var($email, FILTER_VALIDATE_EMAIL) || strlen($password) < 8) {
-    respond(['error' => 'Gyldig email og mindst 8 tegns adgangskode kræves'], 400);
+  $password = trim((string)($body['password'] ?? ''));
+  $generatedPassword = $password === '' ? temporary_password() : $password;
+  if (!filter_var($email, FILTER_VALIDATE_EMAIL) || strlen($generatedPassword) < 8) {
+    respond(['error' => 'Gyldig email kræves'], 400);
   }
   $id = uuidv4();
   try {
-    $stmt = $pdo->prepare('INSERT INTO jd_users (id, email, name, role, permissions, password_hash) VALUES (?, ?, ?, ?, ?, ?)');
-    $stmt->execute([$id, $email, $name !== '' ? $name : null, $role, json_encode($permissions, JSON_UNESCAPED_SLASHES), password_hash($password, PASSWORD_DEFAULT)]);
+    $stmt = $pdo->prepare('INSERT INTO jd_users (id, email, name, role, permissions, password_hash, must_change_password) VALUES (?, ?, ?, ?, ?, ?, 1)');
+    $stmt->execute([$id, $email, $name !== '' ? $name : null, $role, json_encode($permissions, JSON_UNESCAPED_SLASHES), password_hash($generatedPassword, PASSWORD_DEFAULT)]);
   } catch (PDOException $e) {
     if ($e->getCode() === '23000') respond(['error' => 'Brugeren findes allerede'], 409);
     throw $e;
   }
-  $stmt = $pdo->prepare('SELECT id, email, name, role, permissions, created_date FROM jd_users WHERE id = ?');
+  $origin = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https://' : 'http://') . ($_SERVER['HTTP_HOST'] ?? '');
+  $loginUrl = $origin . ($role === 'customer' ? '/kunde-login' : '/login');
+  try {
+    $mail = send_smtp_mail(
+      $config,
+      $email,
+      'Din adgang til Juhl & Damsgaard',
+      "Hej " . ($name !== '' ? $name : '') . "\n\nDu er oprettet i Juhl & Damsgaard systemet.\n\nLog ind her:\n$loginUrl\n\nEmail: $email\nMidlertidig adgangskode: $generatedPassword\n\nDu bliver bedt om at vælge din egen adgangskode første gang du logger ind.\n\nMed venlig hilsen\nJuhl & Damsgaard"
+    );
+  } catch (Throwable $e) {
+    $stmt = $pdo->prepare('DELETE FROM jd_users WHERE id = ?');
+    $stmt->execute([$id]);
+    respond(['error' => 'Brugeren blev ikke oprettet, fordi mailen med adgangskoden ikke kunne sendes: ' . $e->getMessage()], 500);
+  }
+  $stmt = $pdo->prepare('SELECT id, email, name, role, permissions, must_change_password, created_date FROM jd_users WHERE id = ?');
   $stmt->execute([$id]);
-  respond(public_user($stmt->fetch()), 201);
+  respond(array_merge(public_user($stmt->fetch()), ['mail' => $mail]), 201);
 }
 
 if ($action === 'update-user') {
@@ -136,7 +161,7 @@ if ($action === 'update-user') {
   }
   $stmt = $pdo->prepare('UPDATE jd_users SET role = ?, permissions = ? WHERE id = ?');
   $stmt->execute([$role, json_encode($permissions, JSON_UNESCAPED_SLASHES), $id]);
-  $stmt = $pdo->prepare('SELECT id, email, name, role, permissions, created_date FROM jd_users WHERE id = ?');
+  $stmt = $pdo->prepare('SELECT id, email, name, role, permissions, must_change_password, created_date FROM jd_users WHERE id = ?');
   $stmt->execute([$id]);
   $user = $stmt->fetch();
   if (!$user) respond(['error' => 'Bruger ikke fundet'], 404);
@@ -202,7 +227,7 @@ if ($action === 'reset-password') {
   if (!$reset) respond(['error' => 'Reset link is invalid or expired'], 400);
   $pdo->beginTransaction();
   try {
-    $stmt = $pdo->prepare('UPDATE jd_users SET password_hash = ? WHERE id = ?');
+    $stmt = $pdo->prepare('UPDATE jd_users SET password_hash = ?, must_change_password = 0 WHERE id = ?');
     $stmt->execute([password_hash($password, PASSWORD_DEFAULT), $reset['user_id']]);
     $stmt = $pdo->prepare('UPDATE jd_password_resets SET used_at = UTC_TIMESTAMP() WHERE token_hash = ?');
     $stmt->execute([$reset['token_hash']]);
@@ -213,6 +238,26 @@ if ($action === 'reset-password') {
     $pdo->rollBack();
     throw $e;
   }
+  respond(['ok' => true]);
+}
+
+if ($action === 'change-password') {
+  $user = require_user($pdo);
+  $currentPassword = trim((string)($body['currentPassword'] ?? ''));
+  $newPassword = (string)($body['newPassword'] ?? '');
+  if ($currentPassword === '' || strlen($newPassword) < 8) {
+    respond(['error' => 'Nuværende adgangskode og mindst 8 tegn kræves'], 400);
+  }
+  $stmt = $pdo->prepare('SELECT password_hash FROM jd_users WHERE id = ? LIMIT 1');
+  $stmt->execute([$user['id']]);
+  $row = $stmt->fetch();
+  if (!$row || !password_verify($currentPassword, $row['password_hash'])) {
+    respond(['error' => 'Nuværende adgangskode er forkert'], 401);
+  }
+  $stmt = $pdo->prepare('UPDATE jd_users SET password_hash = ?, must_change_password = 0 WHERE id = ?');
+  $stmt->execute([password_hash($newPassword, PASSWORD_DEFAULT), $user['id']]);
+  $stmt = $pdo->prepare('DELETE FROM jd_sessions WHERE user_id = ?');
+  $stmt->execute([$user['id']]);
   respond(['ok' => true]);
 }
 

@@ -7,6 +7,10 @@ $name = (string)($_GET['name'] ?? '');
 $body = json_body();
 $user = $name === 'aiQuoteCalculator' ? current_user($pdo) : require_user($pdo);
 
+if ($user && !empty($user['must_change_password']) && $name !== 'aiQuoteCalculator') {
+  respond(['error' => 'Adgangskoden skal ændres før systemet kan bruges', 'must_change_password' => true], 403);
+}
+
 function first_area_near(string $lower, array $keywords): float {
   foreach ($keywords as $keyword) {
     if (preg_match('/(\d+(?:[,.]\d+)?)\s*(m2|m²|kvm|kvadratmeter)[^,\n\r.]{0,30}' . preg_quote($keyword, '/') . '/u', $lower, $match)) {

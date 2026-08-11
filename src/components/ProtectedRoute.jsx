@@ -1,7 +1,6 @@
 import { useEffect } from 'react';
-import { Outlet } from 'react-router-dom';
+import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import { useAuth } from '@/lib/AuthContext';
-import { useLocation } from 'react-router-dom';
 import { routePermissionForPath } from '@/components/Layout';
 import { hasModuleAccess } from '@/lib/permissions';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
@@ -44,6 +43,10 @@ export default function ProtectedRoute({
 
   if (allowedRoles?.length && !allowedRoles.includes(user?.role)) {
     return unauthorizedElement;
+  }
+
+  if (user?.must_change_password && location.pathname !== '/change-password') {
+    return <Navigate to={`/change-password?returnTo=${encodeURIComponent(location.pathname)}`} replace />;
   }
 
   const routePermission = routePermissionForPath(location.pathname);
