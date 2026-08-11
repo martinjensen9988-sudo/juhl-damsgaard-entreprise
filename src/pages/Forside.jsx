@@ -8,7 +8,6 @@ import { Image } from '@/components/ui/image';
 import ForsideLayout from '@/components/forside/ForsideLayout';
 import InteraktivtHus from '@/components/forside/InteraktivtHus';
 import { stats, allServices, faqItems } from '@/components/forside/forsideData';
-import AppDownloadSection from '@/components/forside/AppDownloadSection';
 import { BRAND_LOGO_FULL_URL } from '@/lib/brand';
 
 const heroStats = [
@@ -91,8 +90,8 @@ export default function Forside() {
                     <p className="text-xs uppercase tracking-[0.24em] text-[#9f5f3b] font-bold">Projektklar</p>
                     <h2 className="text-2xl font-black text-zinc-950 mt-1">Alt det praktiske samlet</h2>
                     <p className="text-zinc-600 text-sm mt-2 leading-relaxed">
-                      Brug AI-tilbudsberegneren, send billeder og få en opgavebeskrivelse med arbejdsløn,
-                      materialer og moms opdelt tydeligt.
+                      Beskriv din opgave og få et hurtigt prisgrundlag med arbejdsløn,
+                      materialer, moms og en tydelig beskrivelse af arbejdet.
                     </p>
                   </div>
                 </div>
@@ -141,8 +140,8 @@ export default function Forside() {
                 Én entreprenør til hele opgaven
               </h2>
               <p className="text-zinc-600 mt-4 leading-relaxed">
-                Forsiden er bygget til at rangere på de konkrete ydelser kunder søger efter:
-                gravearbejde, kloak, beton, tømrer, VVS, el, skadeservice og totalentreprise.
+                Vi udfører både enkeltopgaver og samlede entrepriser for private, foreninger
+                og erhverv: gravearbejde, kloak, beton, tømrer, VVS, el, skadeservice og totalentreprise.
               </p>
               <Link to="/beregn-tilbud" className="mt-7 inline-flex items-center gap-2 bg-[#1c1714] text-white px-5 py-3 rounded-md font-bold hover:bg-[#2d241f] transition">
                 Beregn pris <ArrowRight className="w-4 h-4" />
@@ -230,7 +229,6 @@ export default function Forside() {
         </div>
       </section>
 
-      <AppDownloadSection />
     </ForsideLayout>
   );
 }
