@@ -22,6 +22,11 @@ RewriteRule ^ index.html [L]
   Header set Referrer-Policy "strict-origin-when-cross-origin"
   Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
   Header set Content-Security-Policy "upgrade-insecure-requests"
+  <FilesMatch "^(index\.html|manifest\.json)$">
+    Header set Cache-Control "no-store, no-cache, must-revalidate, max-age=0"
+    Header set Pragma "no-cache"
+    Header set Expires "0"
+  </FilesMatch>
 </IfModule>
 
 <IfModule mod_expires.c>
