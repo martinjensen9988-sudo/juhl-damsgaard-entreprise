@@ -294,7 +294,7 @@ export const faqItems = [
   {
     category: 'Betaling',
     q: 'Hvordan betaler jeg?',
-    a: 'Du modtager en faktura med de aftalte betalingsbetingelser. Vi tilbyder fleksible betalingsvilkår efter aftale — også acconto på større opgaver.',
+    a: 'Ved større opgaver tager vi som udgangspunkt 50% i aconto ved opstart. Det gør vi for at sikre materialer, maskiner, levering og planlægning af de fag der skal bruges. Resten aftales tydeligt i tilbuddet, og du er altid velkommen til at ringe og tage en snak med os, så finder vi en løsning der passer til opgaven.',
   },
   {
     category: 'Aflevering',
@@ -449,7 +449,7 @@ export const faqItems = [
   {
     category: 'Betaling',
     q: 'Skal der betales aconto?',
-    a: 'Ved større opgaver kan aconto være relevant, især hvis der skal bestilles mange materialer eller reserveres flere fag over en længere periode. Det aftales tydeligt i tilbuddet.',
+    a: 'Ja, ved større opgaver tager vi som udgangspunkt 50% i aconto første gang. Det dækker blandt andet materialer, maskiner, levering og reservation af de fag der skal bruges. Ring gerne og tag en snak med os, så gennemgår vi opgaven og aftaler betalingsplanen tydeligt i tilbuddet.',
   },
   {
     category: 'Betaling',
