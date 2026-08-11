@@ -20,7 +20,7 @@ export default function ForsideLayout({ children }) {
   useEffect(() => { base44.auth.me().then(setUser).catch(() => {}); }, []);
   return (
     <div className="min-h-screen bg-stone-50 flex flex-col text-zinc-950">
-      <nav className="fixed top-0 inset-x-0 z-50 bg-stone-50/92 backdrop-blur-xl border-b border-stone-200/80 shadow-sm">
+      <nav className="fixed top-0 inset-x-0 z-50 bg-stone-50 border-b border-stone-200 shadow-md">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between gap-4">
           <Link to="/" className="flex items-center gap-3 min-w-0">
             <Image src={BRAND_LOGO_URL} fittingType="fit" className="h-12 w-12 rounded-md overflow-hidden bg-white ring-1 ring-stone-200 flex-shrink-0" alt="Juhl & Damsgaard Entreprise logo" />

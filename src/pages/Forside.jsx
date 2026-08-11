@@ -35,7 +35,7 @@ export default function Forside() {
             alt="Entreprenørarbejde på byggeplads med maskiner og rå byggematerialer"
             className="w-full h-full object-cover opacity-42"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#1c1714] via-[#1c1714]/88 to-[#3d2a21]/58" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#1c1714]/96 via-[#1c1714]/90 to-[#3d2a21]/74" />
           <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-stone-50 to-transparent" />
         </div>
 
@@ -81,7 +81,7 @@ export default function Forside() {
             </div>
 
             <div className="relative">
-              <div className="bg-stone-50/96 border border-white/50 rounded-lg p-5 sm:p-6 shadow-2xl">
+              <div className="bg-stone-50 border border-stone-200 rounded-lg p-5 sm:p-6 shadow-2xl">
                 <div className="flex items-start gap-4 pb-5 border-b border-stone-200">
                   <div className="w-12 h-12 rounded-md bg-[#1c1714] flex items-center justify-center flex-shrink-0">
                     <HardHat className="w-6 h-6 text-[#d9a17f]" />
@@ -89,7 +89,7 @@ export default function Forside() {
                   <div>
                     <p className="text-xs uppercase tracking-[0.24em] text-[#9f5f3b] font-bold">Projektklar</p>
                     <h2 className="text-2xl font-black text-zinc-950 mt-1">Alt det praktiske samlet</h2>
-                    <p className="text-zinc-600 text-sm mt-2 leading-relaxed">
+                    <p className="text-zinc-700 text-sm mt-2 leading-relaxed">
                       Beskriv din opgave og få et hurtigt prisgrundlag med arbejdsløn,
                       materialer, moms og en tydelig beskrivelse af arbejdet.
                     </p>
@@ -97,7 +97,7 @@ export default function Forside() {
                 </div>
                 <div className="grid sm:grid-cols-2 gap-3 mt-5">
                   {focusAreas.map((area) => (
-                    <div key={area} className="flex items-center gap-2 text-sm font-semibold text-zinc-800">
+                    <div key={area} className="flex items-center gap-2 text-sm font-bold text-zinc-900">
                       <CheckCircle2 className="w-4 h-4 text-[#9f5f3b] flex-shrink-0" />
                       <span>{area}</span>
                     </div>
