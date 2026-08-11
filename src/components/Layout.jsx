@@ -6,6 +6,8 @@ import PullToRefresh from '@/components/PullToRefresh';
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from '@/components/ui/drawer';
 import { Image } from '@/components/ui/image';
 import { BRAND_LOGO_URL } from '@/lib/brand';
+import { useAuth } from '@/lib/AuthContext';
+import { hasModuleAccess, pathToPermission } from '@/lib/permissions';
 import {
   LayoutDashboard,
   Users,
@@ -79,6 +81,7 @@ const primaryItems = [
 const navGroups = [
   {
     label: 'Salg & Tilbud',
+    permission: 'sales',
     icon: Target,
     items: [
       { to: '/salgsoverblik', label: 'Salgsoverblik', icon: BarChart3 },
@@ -89,6 +92,7 @@ const navGroups = [
   },
   {
     label: 'Kunder',
+    permission: 'customers',
     icon: Users,
     items: [
       { to: '/kunder', label: 'Kunder', icon: Users },
@@ -100,6 +104,7 @@ const navGroups = [
   },
   {
     label: 'Projekter',
+    permission: 'projects',
     icon: HardHat,
     items: [
       { to: '/projekter', label: 'Projekter', icon: HardHat },
@@ -114,6 +119,7 @@ const navGroups = [
   },
   {
     label: 'Økonomi',
+    permission: 'finance',
     icon: FileSpreadsheet,
     items: [
       { to: '/faktura', label: 'Fakturaer', icon: Receipt },
@@ -133,6 +139,7 @@ const navGroups = [
   },
   {
     label: 'Planlægning',
+    permission: 'planning',
     icon: CalendarDays,
     items: [
       { to: '/planlaegning', label: 'Planlægning', icon: CalendarDays },
@@ -146,6 +153,7 @@ const navGroups = [
   },
   {
     label: 'Opgaver',
+    permission: 'tasks',
     icon: ClipboardList,
     items: [
       { to: '/opgaveliste', label: 'Opgaveliste', icon: ClipboardList },
@@ -154,6 +162,7 @@ const navGroups = [
   },
   {
     label: 'Materialer & Lager',
+    permission: 'materials',
     icon: Package,
     items: [
       { to: '/materialeliste', label: 'Materialer', icon: Package },
@@ -167,6 +176,7 @@ const navGroups = [
   },
   {
     label: 'Materiel & Udstyr',
+    permission: 'equipment',
     icon: Wrench,
     items: [
       { to: '/materiel', label: 'Materiel', icon: Wrench },
@@ -181,6 +191,7 @@ const navGroups = [
   },
   {
     label: 'Medarbejdere',
+    permission: 'employees',
     icon: Contact,
     items: [
       { to: '/medarbejdere', label: 'Medarbejdere', icon: Contact },
@@ -204,6 +215,7 @@ const navGroups = [
   },
   {
     label: 'Leverandører',
+    permission: 'suppliers',
     icon: Truck,
     items: [
       { to: '/leverandoerer', label: 'Leverandører', icon: Truck },
@@ -214,6 +226,7 @@ const navGroups = [
   },
   {
     label: 'Kvalitet & Sikkerhed',
+    permission: 'quality',
     icon: ShieldCheck,
     items: [
       { to: '/kvalitetssikring', label: 'Kvalitet', icon: ShieldCheck },
@@ -229,6 +242,7 @@ const navGroups = [
   },
   {
     label: 'Miljø & Affald',
+    permission: 'environment',
     icon: Recycle,
     items: [
       { to: '/miljoe-affald', label: 'Miljø & Affald', icon: Recycle },
@@ -239,6 +253,7 @@ const navGroups = [
   },
   {
     label: 'Service & Abonnementer',
+    permission: 'service',
     icon: RefreshCw,
     items: [
       { to: '/serviceaftaler', label: 'Serviceaftaler', icon: RefreshCw },
@@ -250,6 +265,7 @@ const navGroups = [
   },
   {
     label: 'Dokumenter & Viden',
+    permission: 'documents',
     icon: Archive,
     items: [
       { to: '/dokumenter', label: 'Dokumenter', icon: Archive },
@@ -261,6 +277,7 @@ const navGroups = [
   },
   {
     label: 'Firma',
+    permission: 'company',
     icon: Building2,
     items: [
       { to: '/ledelsesoverblik', label: 'Ledelse', icon: BarChart3 },
@@ -274,6 +291,7 @@ const navGroups = [
   },
   {
     label: 'Skærme',
+    permission: 'screens',
     icon: Monitor,
     items: [
       { to: '/storskaerm', label: 'Storskærm', icon: Monitor },
@@ -282,10 +300,8 @@ const navGroups = [
   },
 ];
 
-const allItems = [
-  ...primaryItems,
-  ...navGroups.flatMap((g) => g.items),
-];
+export const internalNavGroups = navGroups;
+export const routePermissionForPath = (pathname) => pathToPermission(pathname, navGroups);
 
 function NavLinkRow({ item }) {
   return (
@@ -308,11 +324,17 @@ function NavLinkRow({ item }) {
 
 export default function Layout() {
   const location = useLocation();
+  const { user } = useAuth();
   const [openGroups, setOpenGroups] = useState({});
   const [menuOpen, setMenuOpen] = useState(false);
+  const visibleGroups = navGroups.filter((group) => hasModuleAccess(user, group.permission));
+  const allItems = [
+    ...primaryItems,
+    ...visibleGroups.flatMap((g) => g.items),
+  ];
 
   // Auto-expand the group that contains the active route
-  const activeGroup = navGroups.find((g) =>
+  const activeGroup = visibleGroups.find((g) =>
     g.items.some((i) => location.pathname === i.to)
   )?.label;
 
@@ -339,7 +361,7 @@ export default function Layout() {
           {primaryItems.map((item) => (
             <NavLinkRow key={item.to} item={item} />
           ))}
-          {navGroups.map((group) => {
+          {visibleGroups.map((group) => {
             const open = isGroupOpen(group.label);
             return (
               <div key={group.label}>
@@ -418,7 +440,7 @@ export default function Layout() {
                 <item.icon className="w-4 h-4" /> {item.label}
               </NavLink>
             ))}
-            {navGroups.map((group) => (
+            {visibleGroups.map((group) => (
               <div key={group.label}>
                 <div className="flex items-center gap-2 text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1.5 px-1">
                   <group.icon className="w-3.5 h-3.5" /> {group.label}

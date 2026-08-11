@@ -42,6 +42,17 @@ function db(array $config): PDO {
   return $pdo;
 }
 
+function ensure_user_permissions_column(PDO $pdo): void {
+  static $checked = false;
+  if ($checked) return;
+  $stmt = $pdo->prepare("SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'jd_users' AND COLUMN_NAME = 'permissions'");
+  $stmt->execute();
+  if ((int)$stmt->fetchColumn() === 0) {
+    $pdo->exec("ALTER TABLE jd_users ADD COLUMN permissions JSON NULL AFTER role");
+  }
+  $checked = true;
+}
+
 function uuidv4(): string {
   $data = random_bytes(16);
   $data[6] = chr((ord($data[6]) & 0x0f) | 0x40);
@@ -52,8 +63,9 @@ function uuidv4(): string {
 function current_user(PDO $pdo): ?array {
   $header = $_SERVER['HTTP_AUTHORIZATION'] ?? '';
   if (!preg_match('/Bearer\s+(.+)/i', $header, $m)) return null;
+  ensure_user_permissions_column($pdo);
   $hash = hash('sha256', $m[1]);
-  $stmt = $pdo->prepare('SELECT u.id, u.email, u.name, u.role FROM jd_sessions s JOIN jd_users u ON u.id = s.user_id WHERE s.token_hash = ? AND s.expires_at > UTC_TIMESTAMP()');
+  $stmt = $pdo->prepare('SELECT u.id, u.email, u.name, u.role, u.permissions FROM jd_sessions s JOIN jd_users u ON u.id = s.user_id WHERE s.token_hash = ? AND s.expires_at > UTC_TIMESTAMP()');
   $stmt->execute([$hash]);
   return $stmt->fetch() ?: null;
 }

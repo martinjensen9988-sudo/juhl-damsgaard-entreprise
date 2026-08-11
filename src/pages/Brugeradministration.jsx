@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { base44 } from '@/api/base44Client';
 import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import {
@@ -10,6 +11,7 @@ import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription,
 } from '@/components/ui/dialog';
 import { useAuth } from '@/lib/AuthContext';
+import { PERMISSION_MODULES, normalizePermissions } from '@/lib/permissions';
 import { useToast } from '@/components/ui/use-toast';
 import { KeyRound, Mail, Search, Shield, Trash2, UserPlus } from 'lucide-react';
 
@@ -24,6 +26,9 @@ export default function Brugeradministration() {
   const [inviteName, setInviteName] = useState('');
   const [invitePassword, setInvitePassword] = useState('');
   const [inviteRole, setInviteRole] = useState('user');
+  const [invitePermissions, setInvitePermissions] = useState(PERMISSION_MODULES.map((p) => p.id));
+  const [permissionUser, setPermissionUser] = useState(null);
+  const [permissionDraft, setPermissionDraft] = useState([]);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
   const { toast } = useToast();
@@ -55,6 +60,14 @@ export default function Brugeradministration() {
   );
 
   const adminCount = users.filter((u) => u.role === 'admin').length;
+  const customerCount = users.filter((u) => u.role === 'customer').length;
+  const employeeCount = users.filter((u) => u.role === 'user').length;
+
+  const togglePermission = (current, permission, checked) => (
+    checked
+      ? Array.from(new Set([...current, permission]))
+      : current.filter((entry) => entry !== permission)
+  );
 
   if (!isAdmin) {
     return (
@@ -83,6 +96,7 @@ export default function Brugeradministration() {
           name: inviteName.trim(),
           password: invitePassword,
           role: inviteRole,
+          permissions: inviteRole === 'user' ? invitePermissions : [],
         });
         toast({ title: 'Bruger oprettet', description: `${inviteEmail} kan nu logge ind` });
       } else {
@@ -94,6 +108,7 @@ export default function Brugeradministration() {
       setInviteName('');
       setInvitePassword('');
       setInviteRole('user');
+      setInvitePermissions(PERMISSION_MODULES.map((p) => p.id));
       await load();
     } catch (err) {
       setError(err.message || 'Kunne ikke sende invitation');
@@ -104,12 +119,38 @@ export default function Brugeradministration() {
 
   const changeRole = async (user, role) => {
     try {
-      if (base44.users?.updateUserRole) await base44.users.updateUserRole(user.id, role);
+      const permissions = role === 'user' ? normalizePermissions(user.permissions) : [];
+      if (base44.users?.updateUser) await base44.users.updateUser(user.id, { role, permissions });
+      else if (base44.users?.updateUserRole) await base44.users.updateUserRole(user.id, role);
       else await base44.entities.User.update(user.id, { role });
       toast({ title: 'Rolle opdateret', description: `${user.email} er nu ${role}` });
       await load();
     } catch (err) {
       toast({ title: 'Fejl', description: err.message, variant: 'destructive' });
+    }
+  };
+
+  const openPermissions = (target) => {
+    setPermissionUser(target);
+    setPermissionDraft(normalizePermissions(target.permissions));
+  };
+
+  const savePermissions = async () => {
+    if (!permissionUser) return;
+    setSubmitting(true);
+    try {
+      await base44.users.updateUser(permissionUser.id, {
+        role: 'user',
+        permissions: permissionDraft,
+      });
+      toast({ title: 'Adgange opdateret', description: permissionUser.email });
+      setPermissionUser(null);
+      setPermissionDraft([]);
+      await load();
+    } catch (err) {
+      toast({ title: 'Fejl', description: err.message, variant: 'destructive' });
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -150,8 +191,8 @@ export default function Brugeradministration() {
           <div className="text-3xl font-bold text-slate-900 mt-1">{adminCount}</div>
         </div>
         <div className="bg-white rounded-xl border p-5">
-          <div className="text-sm text-slate-500">Almindelige brugere</div>
-          <div className="text-3xl font-bold text-slate-900 mt-1">{users.length - adminCount}</div>
+          <div className="text-sm text-slate-500">Medarbejdere / kunder</div>
+          <div className="text-3xl font-bold text-slate-900 mt-1">{employeeCount} / {customerCount}</div>
         </div>
       </div>
 
@@ -174,15 +215,16 @@ export default function Brugeradministration() {
                 <th className="px-4 py-3 font-medium">Bruger</th>
                 <th className="px-4 py-3 font-medium">Email</th>
                 <th className="px-4 py-3 font-medium">Rolle</th>
+                <th className="px-4 py-3 font-medium">Adgange</th>
                 <th className="px-4 py-3 font-medium">Oprettet</th>
                 <th className="px-4 py-3 font-medium text-right">Handling</th>
               </tr>
             </thead>
             <tbody className="divide-y">
               {loading ? (
-                <tr><td colSpan={5} className="px-4 py-8 text-center text-slate-400">Indlæser…</td></tr>
+                <tr><td colSpan={6} className="px-4 py-8 text-center text-slate-400">Indlæser…</td></tr>
               ) : filtered.length === 0 ? (
-                <tr><td colSpan={5} className="px-4 py-8 text-center text-slate-400">Ingen brugere fundet</td></tr>
+                <tr><td colSpan={6} className="px-4 py-8 text-center text-slate-400">Ingen brugere fundet</td></tr>
               ) : filtered.map((u) => (
                 <tr key={u.id} className="hover:bg-slate-50">
                   <td className="px-4 py-3 font-medium text-slate-900">
@@ -210,6 +252,17 @@ export default function Brugeradministration() {
                         {useSimplyApi && <SelectItem value="customer">Kundeportal</SelectItem>}
                       </SelectContent>
                     </Select>
+                  </td>
+                  <td className="px-4 py-3">
+                    {u.role === 'admin' ? (
+                      <span className="text-xs font-medium text-amber-700">Alle adgange</span>
+                    ) : u.role === 'customer' ? (
+                      <span className="text-xs font-medium text-slate-500">Kundeportal</span>
+                    ) : (
+                      <Button variant="outline" size="sm" onClick={() => openPermissions(u)}>
+                        Vælg adgange ({u.permissions == null ? 'alle' : normalizePermissions(u.permissions).length})
+                      </Button>
+                    )}
                   </td>
                   <td className="px-4 py-3 text-slate-500 text-xs">
                     {u.created_date ? new Date(u.created_date).toLocaleDateString('da-DK') : '—'}
@@ -290,9 +343,31 @@ export default function Brugeradministration() {
                 </SelectContent>
               </Select>
               <p className="text-xs text-slate-500">
-                Administrator har fuld adgang. Bruger har intern adgang. Kundeportal kan kun bruge kundeportalen.
+                Administrator har fuld adgang. Bruger kan begrænses med adgange herunder. Kundeportal kan kun bruge kundeportalen.
               </p>
             </div>
+            {useSimplyApi && inviteRole === 'user' && (
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <Label>Adgange</Label>
+                  <div className="flex gap-2">
+                    <Button type="button" variant="ghost" size="sm" onClick={() => setInvitePermissions(PERMISSION_MODULES.map((p) => p.id))}>Alle</Button>
+                    <Button type="button" variant="ghost" size="sm" onClick={() => setInvitePermissions([])}>Ingen</Button>
+                  </div>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 rounded-lg border p-3">
+                  {PERMISSION_MODULES.map((permission) => (
+                    <label key={permission.id} className="flex items-center gap-2 text-sm text-slate-700">
+                      <Checkbox
+                        checked={invitePermissions.includes(permission.id)}
+                        onCheckedChange={(checked) => setInvitePermissions((current) => togglePermission(current, permission.id, checked === true))}
+                      />
+                      {permission.label}
+                    </label>
+                  ))}
+                </div>
+              </div>
+            )}
             {error && <div className="text-sm text-red-600">{error}</div>}
             <DialogFooter>
               <Button type="button" variant="outline" onClick={() => setShowInvite(false)}>Annuller</Button>
@@ -301,6 +376,43 @@ export default function Brugeradministration() {
               </Button>
             </DialogFooter>
           </form>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={!!permissionUser} onOpenChange={(open) => !open && setPermissionUser(null)}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Vælg adgange</DialogTitle>
+            <DialogDescription>
+              {permissionUser?.email} kan kun se de moduler, der er valgt her.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-3">
+            <div className="flex justify-end gap-2">
+              <Button type="button" variant="ghost" size="sm" onClick={() => setPermissionDraft(PERMISSION_MODULES.map((p) => p.id))}>Alle</Button>
+              <Button type="button" variant="ghost" size="sm" onClick={() => setPermissionDraft([])}>Ingen</Button>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 rounded-lg border p-3">
+              {PERMISSION_MODULES.map((permission) => (
+                <label key={permission.id} className="flex items-center gap-2 text-sm text-slate-700">
+                  <Checkbox
+                    checked={permissionDraft.includes(permission.id)}
+                    onCheckedChange={(checked) => setPermissionDraft((current) => togglePermission(current, permission.id, checked === true))}
+                  />
+                  {permission.label}
+                </label>
+              ))}
+            </div>
+            <p className="text-xs text-slate-500">
+              Hvis ingen adgange er valgt, kan brugeren kun se dashboard og egen profil.
+            </p>
+          </div>
+          <DialogFooter>
+            <Button type="button" variant="outline" onClick={() => setPermissionUser(null)}>Annuller</Button>
+            <Button type="button" onClick={savePermissions} disabled={submitting}>
+              {submitting ? 'Gemmer…' : 'Gem adgange'}
+            </Button>
+          </DialogFooter>
         </DialogContent>
       </Dialog>
     </div>

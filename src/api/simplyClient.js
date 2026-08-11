@@ -51,12 +51,14 @@ export const simplyClient = {
   },
   users: {
     listUsers: () => request('/auth.php?action=users'),
-    createUser: ({ email, password, name = '', role = 'user' }) =>
-      request('/auth.php?action=create-user', { method: 'POST', body: { email, password, name, role } }),
+    createUser: ({ email, password, name = '', role = 'user', permissions = [] }) =>
+      request('/auth.php?action=create-user', { method: 'POST', body: { email, password, name, role, permissions } }),
     inviteUser: (email, role = 'user') =>
       request('/auth.php?action=create-user', { method: 'POST', body: { email, role } }),
     updateUserRole: (id, role) =>
       request('/auth.php?action=update-user', { method: 'POST', body: { id, role } }),
+    updateUser: (id, patch) =>
+      request('/auth.php?action=update-user', { method: 'POST', body: { id, ...patch } }),
     deleteUser: (id) =>
       request('/auth.php?action=delete-user', { method: 'POST', body: { id } }),
   },

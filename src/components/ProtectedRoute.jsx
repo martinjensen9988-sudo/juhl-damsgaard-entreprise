@@ -1,6 +1,9 @@
 import { useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
 import { useAuth } from '@/lib/AuthContext';
+import { useLocation } from 'react-router-dom';
+import { routePermissionForPath } from '@/components/Layout';
+import { hasModuleAccess } from '@/lib/permissions';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 
 const DefaultFallback = () => (
@@ -16,6 +19,7 @@ export default function ProtectedRoute({
   allowedRoles,
 }) {
   const { user, isAuthenticated, isLoadingAuth, authChecked, authError, checkUserAuth } = useAuth();
+  const location = useLocation();
 
   useEffect(() => {
     if (!authChecked && !isLoadingAuth) {
@@ -39,6 +43,11 @@ export default function ProtectedRoute({
   }
 
   if (allowedRoles?.length && !allowedRoles.includes(user?.role)) {
+    return unauthorizedElement;
+  }
+
+  const routePermission = routePermissionForPath(location.pathname);
+  if (routePermission && !hasModuleAccess(user, routePermission)) {
     return unauthorizedElement;
   }
 

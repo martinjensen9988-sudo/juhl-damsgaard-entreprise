@@ -17,6 +17,97 @@ if (!$user && !($method === 'GET' && in_array($entity, $publicReadEntities, true
   respond(['error' => 'Unauthorized'], 401);
 }
 
+function user_permissions(?array $user): ?array {
+  if (!$user || !array_key_exists('permissions', $user) || $user['permissions'] === null || $user['permissions'] === '') return null;
+  $decoded = json_decode((string)$user['permissions'], true);
+  return is_array($decoded) ? array_values(array_filter($decoded, 'is_string')) : [];
+}
+
+function entity_modules(string $entity): array {
+  $map = [
+    'ActivityLog' => ['company'],
+    'AsbestFjernelse' => ['environment', 'quality'],
+    'Assignment' => ['planning', 'tasks', 'projects'],
+    'BudgetItem' => ['finance'],
+    'Campaign' => ['sales', 'company'],
+    'Certificate' => ['employees', 'service'],
+    'CertificateLog' => ['employees'],
+    'CompanyResource' => ['documents', 'company'],
+    'CompanySettings' => ['company'],
+    'Contact' => ['customers', 'suppliers'],
+    'Customer' => ['customers'],
+    'CustomerContactLog' => ['customers'],
+    'CustomerFeedback' => ['customers'],
+    'CustomerReference' => ['customers', 'documents'],
+    'Deviation' => ['quality', 'projects'],
+    'Employee' => ['employees'],
+    'Equipment' => ['equipment'],
+    'EquipmentBooking' => ['equipment', 'planning'],
+    'EquipmentMaintenance' => ['equipment'],
+    'Expense' => ['finance'],
+    'Handover' => ['service', 'projects'],
+    'InsuranceCase' => ['quality', 'environment'],
+    'InternalMessage' => ['employees'],
+    'InventoryItem' => ['materials'],
+    'Invoice' => ['finance'],
+    'JournalEntry' => ['finance'],
+    'KnowledgeArticle' => ['documents'],
+    'Lead' => ['sales'],
+    'MarketingPost' => ['company', 'sales'],
+    'Material' => ['materials', 'projects'],
+    'MaterialNeed' => ['materials', 'projects'],
+    'MeetingBooking' => ['planning', 'customers'],
+    'Milestone' => ['projects'],
+    'Newsletter' => ['company', 'sales'],
+    'PhotoArchive' => ['documents', 'projects'],
+    'PortalSetting' => ['company'],
+    'Project' => ['projects'],
+    'ProjectDocument' => ['documents', 'projects'],
+    'ProjectImage' => ['documents', 'projects'],
+    'ProjectNote' => ['projects'],
+    'PurchaseOrder' => ['materials', 'finance'],
+    'QualityCheck' => ['quality'],
+    'Quote' => ['sales'],
+    'QuoteTemplate' => ['sales'],
+    'SafetyChecklist' => ['quality'],
+    'SafetyLog' => ['quality'],
+    'SafetyProtocol' => ['quality'],
+    'Service' => ['service', 'sales'],
+    'ServiceAgreement' => ['service'],
+    'ServiceTask' => ['service', 'tasks'],
+    'Shift' => ['planning', 'employees'],
+    'SignatureRequest' => ['documents', 'sales'],
+    'Subcontractor' => ['suppliers'],
+    'Subscription' => ['service', 'finance'],
+    'Supplier' => ['suppliers'],
+    'SupplierInvoice' => ['finance', 'suppliers'],
+    'SupportTicket' => ['customers'],
+    'Task' => ['tasks'],
+    'TimeEntry' => ['employees', 'finance'],
+    'User' => ['employees'],
+    'VacationRequest' => ['employees', 'planning'],
+    'VatReport' => ['finance'],
+    'Vehicle' => ['equipment'],
+    'WasteLog' => ['environment'],
+    'WebsiteInquiry' => ['sales'],
+  ];
+  return $map[$entity] ?? [];
+}
+
+function assert_user_entity_access(?array $user, string $entity): void {
+  if (!$user || ($user['role'] ?? '') !== 'user') return;
+  $permissions = user_permissions($user);
+  if ($permissions === null) return;
+  $modules = entity_modules($entity);
+  if (!$modules) return;
+  foreach ($modules as $module) {
+    if (in_array($module, $permissions, true)) return;
+  }
+  respond(['error' => 'Forbidden'], 403);
+}
+
+assert_user_entity_access($user, $entity);
+
 function customer_email(array $user): string {
   return strtolower(trim((string)($user['email'] ?? '')));
 }

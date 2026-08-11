@@ -7,6 +7,8 @@ $action = $_GET['action'] ?? '';
 $body = json_body();
 
 function ensure_auth_tables(PDO $pdo): void {
+  ensure_user_permissions_column($pdo);
+
   $pdo->exec("CREATE TABLE IF NOT EXISTS jd_password_resets (
     token_hash CHAR(64) PRIMARY KEY,
     user_id VARCHAR(36) NOT NULL,
@@ -20,12 +22,18 @@ function ensure_auth_tables(PDO $pdo): void {
 }
 
 function public_user(array $user): array {
+  $permissions = null;
+  if (isset($user['permissions']) && $user['permissions'] !== null && $user['permissions'] !== '') {
+    $decoded = json_decode((string)$user['permissions'], true);
+    if (is_array($decoded)) $permissions = array_values(array_filter($decoded, 'is_string'));
+  }
   return [
     'id' => $user['id'],
     'email' => $user['email'],
     'name' => $user['name'] ?? null,
     'full_name' => $user['name'] ?? null,
     'role' => $user['role'],
+    'permissions' => $permissions,
     'created_date' => $user['created_date'] ?? null,
   ];
 }
@@ -33,6 +41,31 @@ function public_user(array $user): array {
 function normalize_role(string $role): string {
   return in_array($role, ['admin', 'user', 'customer'], true) ? $role : 'user';
 }
+
+function normalize_permissions($permissions): array {
+  $allowed = [
+    'sales',
+    'customers',
+    'projects',
+    'finance',
+    'planning',
+    'tasks',
+    'materials',
+    'equipment',
+    'employees',
+    'suppliers',
+    'quality',
+    'environment',
+    'service',
+    'documents',
+    'company',
+    'screens',
+  ];
+  if (!is_array($permissions)) return [];
+  return array_values(array_intersect($allowed, array_values(array_unique(array_map('strval', $permissions)))));
+}
+
+ensure_auth_tables($pdo);
 
 if ($action === 'me') {
   $user = current_user($pdo);
@@ -61,7 +94,7 @@ if ($action === 'register') {
 if ($action === 'users') {
   $admin = require_user($pdo);
   require_admin($admin);
-  $stmt = $pdo->query('SELECT id, email, name, role, created_date FROM jd_users ORDER BY created_date DESC');
+  $stmt = $pdo->query('SELECT id, email, name, role, permissions, created_date FROM jd_users ORDER BY created_date DESC');
   respond(array_map('public_user', $stmt->fetchAll()));
 }
 
@@ -72,18 +105,19 @@ if ($action === 'create-user') {
   $password = (string)($body['password'] ?? '');
   $name = trim((string)($body['name'] ?? ''));
   $role = normalize_role((string)($body['role'] ?? 'user'));
+  $permissions = $role === 'user' ? normalize_permissions($body['permissions'] ?? []) : [];
   if (!filter_var($email, FILTER_VALIDATE_EMAIL) || strlen($password) < 8) {
     respond(['error' => 'Gyldig email og mindst 8 tegns adgangskode kræves'], 400);
   }
   $id = uuidv4();
   try {
-    $stmt = $pdo->prepare('INSERT INTO jd_users (id, email, name, role, password_hash) VALUES (?, ?, ?, ?, ?)');
-    $stmt->execute([$id, $email, $name !== '' ? $name : null, $role, password_hash($password, PASSWORD_DEFAULT)]);
+    $stmt = $pdo->prepare('INSERT INTO jd_users (id, email, name, role, permissions, password_hash) VALUES (?, ?, ?, ?, ?, ?)');
+    $stmt->execute([$id, $email, $name !== '' ? $name : null, $role, json_encode($permissions, JSON_UNESCAPED_SLASHES), password_hash($password, PASSWORD_DEFAULT)]);
   } catch (PDOException $e) {
     if ($e->getCode() === '23000') respond(['error' => 'Brugeren findes allerede'], 409);
     throw $e;
   }
-  $stmt = $pdo->prepare('SELECT id, email, name, role, created_date FROM jd_users WHERE id = ?');
+  $stmt = $pdo->prepare('SELECT id, email, name, role, permissions, created_date FROM jd_users WHERE id = ?');
   $stmt->execute([$id]);
   respond(public_user($stmt->fetch()), 201);
 }
@@ -93,15 +127,16 @@ if ($action === 'update-user') {
   require_admin($admin);
   $id = (string)($body['id'] ?? '');
   $role = normalize_role((string)($body['role'] ?? 'user'));
+  $permissions = $role === 'user' ? normalize_permissions($body['permissions'] ?? []) : [];
   if ($id === '') respond(['error' => 'Bruger ID mangler'], 400);
   if ($role !== 'admin') {
     $stmt = $pdo->prepare("SELECT COUNT(*) FROM jd_users WHERE role = 'admin' AND id <> ?");
     $stmt->execute([$id]);
     if ((int)$stmt->fetchColumn() < 1) respond(['error' => 'Der skal være mindst én administrator'], 400);
   }
-  $stmt = $pdo->prepare('UPDATE jd_users SET role = ? WHERE id = ?');
-  $stmt->execute([$role, $id]);
-  $stmt = $pdo->prepare('SELECT id, email, name, role, created_date FROM jd_users WHERE id = ?');
+  $stmt = $pdo->prepare('UPDATE jd_users SET role = ?, permissions = ? WHERE id = ?');
+  $stmt->execute([$role, json_encode($permissions, JSON_UNESCAPED_SLASHES), $id]);
+  $stmt = $pdo->prepare('SELECT id, email, name, role, permissions, created_date FROM jd_users WHERE id = ?');
   $stmt->execute([$id]);
   $user = $stmt->fetch();
   if (!$user) respond(['error' => 'Bruger ikke fundet'], 404);
