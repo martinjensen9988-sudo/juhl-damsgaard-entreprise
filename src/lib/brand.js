@@ -17,3 +17,7 @@ export const BRAND_DIGITAL_CARD_URL =
 
 export const BRAND_NAME = 'Juhl & Damsgaard Entreprise';
 export const BRAND_NAME_SHORT = 'Juhl & Damsgaard';
+export const BRAND_PHONE = '40602086';
+export const BRAND_PHONE_DISPLAY = '+45 40 60 20 86';
+export const BRAND_PHONE_LINK = '+4540602086';
+export const BRAND_EMAIL = 'hej@juhldamsgaard.dk';

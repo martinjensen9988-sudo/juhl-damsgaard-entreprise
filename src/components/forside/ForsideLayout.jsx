@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Menu, Phone, X } from 'lucide-react';
 import { Image } from '@/components/ui/image';
-import { BRAND_LOGO_URL } from '@/lib/brand';
+import { BRAND_EMAIL, BRAND_LOGO_URL, BRAND_PHONE_DISPLAY, BRAND_PHONE_LINK } from '@/lib/brand';
 import { base44 } from '@/api/base44Client';
 
 const navLinks = [
@@ -35,9 +35,9 @@ export default function ForsideLayout({ children }) {
             ))}
           </div>
           <div className="flex items-center gap-2">
-            <Link to="/kontakt" className="hidden md:inline-flex items-center gap-2 text-sm font-semibold text-zinc-900 border border-stone-300 px-4 py-2 rounded-md hover:border-[#9f5f3b] hover:text-[#9f5f3b] transition">
-              <Phone className="w-4 h-4" /> Kontakt
-            </Link>
+            <a href={`tel:${BRAND_PHONE_LINK}`} className="hidden md:inline-flex items-center gap-2 text-sm font-semibold text-zinc-900 border border-stone-300 px-4 py-2 rounded-md hover:border-[#9f5f3b] hover:text-[#9f5f3b] transition">
+              <Phone className="w-4 h-4" /> {BRAND_PHONE_DISPLAY}
+            </a>
             {user?.role === 'admin' ? (
               <Link to="/dashboard" className="hidden sm:inline-flex text-sm font-semibold text-white bg-[#9f5f3b] px-4 py-2 rounded-md hover:bg-[#7d472c] transition">
                 Admin panel
@@ -94,7 +94,9 @@ export default function ForsideLayout({ children }) {
             <span className="font-bold text-white">Juhl & Damsgaard Entreprise</span>
           </div>
           <div className="text-sm text-stone-400">© 2026 Juhl & Damsgaard Entreprise. Alle rettigheder forbeholdt.</div>
-          <div className="flex items-center gap-4 text-sm text-stone-300">
+          <div className="flex flex-wrap items-center justify-center gap-4 text-sm text-stone-300">
+            <a href={`tel:${BRAND_PHONE_LINK}`} className="hover:text-[#d9a17f] transition">{BRAND_PHONE_DISPLAY}</a>
+            <a href={`mailto:${BRAND_EMAIL}`} className="hover:text-[#d9a17f] transition">{BRAND_EMAIL}</a>
             <Link to="/portal" className="hover:text-[#d9a17f] transition">Kundeportal</Link>
             <Link to="/login" className="hover:text-[#d9a17f] transition">Log ind</Link>
           </div>
