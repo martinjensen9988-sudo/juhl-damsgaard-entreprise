@@ -13,10 +13,10 @@ export default function AuthLayout({ icon: Icon, title, subtitle, footer, childr
         <div className="relative z-10 flex flex-col justify-between p-12 text-white">
           <div>
             <p className="text-sm font-semibold uppercase tracking-[0.18em] text-amber-300">Juhl & Damsgaard</p>
-            <h1 className="mt-5 max-w-xl text-5xl font-bold leading-tight tracking-tight">Entreprise-systemet til drift, tilbud og projekter.</h1>
+            <h1 className="mt-5 max-w-xl text-5xl font-bold leading-tight tracking-tight">Internt arbejdsrum for Juhl & Damsgaard.</h1>
           </div>
           <p className="max-w-lg text-sm leading-6 text-slate-200">
-            Samlet adgang til kunder, tilbud, faktura, medarbejdere, kvalitetssikring og økonomi.
+            Her styrer vi opgaver, tilbud, faktura, medarbejdere, kvalitetssikring og økonomi i vores entreprenørarbejde.
           </p>
         </div>
       </div>

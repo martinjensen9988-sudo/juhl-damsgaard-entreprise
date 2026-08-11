@@ -43,7 +43,7 @@ export default function Login() {
     <AuthLayout
       icon={LogIn}
       title="Log ind"
-      subtitle="Adgang til Juhl & Damsgaard systemet"
+      subtitle="Adgang for Juhl & Damsgaard medarbejdere"
       footer={
         <>
           Har du ikke en bruger?{" "}

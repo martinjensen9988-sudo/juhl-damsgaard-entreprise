@@ -136,7 +136,7 @@ export default function Register() {
     <AuthLayout
       icon={UserPlus}
       title="Opret bruger"
-      subtitle="Opret adgang til Juhl & Damsgaard systemet"
+      subtitle="Opret adgang for Juhl & Damsgaard medarbejdere"
       footer={
         <>
           Har du allerede en bruger?{" "}
