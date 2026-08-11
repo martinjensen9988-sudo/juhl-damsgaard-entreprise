@@ -101,11 +101,15 @@ export const simplyClient = {
   auth: {
     async me() {
       const user = await request('/auth.php?action=me');
-      if (!user) throw new Error('Authentication required');
+      if (!user) {
+        const error = new Error('Authentication required');
+        error.status = 401;
+        throw error;
+      }
       return user;
     },
     async loginViaEmailPassword(email, password) {
-      const result = await request('/auth.php?action=login', { method: 'POST', body: { email, password } });
+      const result = await request('/auth.php?action=login', { method: 'POST', body: { email: email.trim(), password: password.trim() } });
       if (result?.access_token) localStorage.setItem(TOKEN_KEY, result.access_token);
       return result;
     },

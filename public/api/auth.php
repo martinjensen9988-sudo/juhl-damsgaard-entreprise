@@ -41,7 +41,7 @@ if ($action === 'me') {
 
 if ($action === 'login') {
   $email = strtolower(trim((string)($body['email'] ?? '')));
-  $password = (string)($body['password'] ?? '');
+  $password = trim((string)($body['password'] ?? ''));
   $stmt = $pdo->prepare('SELECT * FROM jd_users WHERE email = ? LIMIT 1');
   $stmt->execute([$email]);
   $user = $stmt->fetch();
