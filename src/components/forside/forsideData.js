@@ -226,10 +226,9 @@ export const allServices = [
 ];
 
 export const stats = [
-  { value: '25+', label: 'År i branchen' },
-  { value: '500+', label: 'Projekter gennemført' },
-  { value: '100%', label: 'Tilfredse kunder' },
-  { value: '24t', label: 'Svartid' },
+  { value: 'Fyn & Jylland', label: 'Fast arbejdsområde' },
+  { value: '350 kr.', label: 'Timepris inkl. moms' },
+  { value: '24t', label: 'Typisk svartid' },
 ];
 
 export const benefits = [

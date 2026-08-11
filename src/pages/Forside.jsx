@@ -119,7 +119,7 @@ export default function Forside() {
       <InteraktivtHus />
 
       <section className="bg-[#9f5f3b] text-white py-10">
-        <div className="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+        <div className="max-w-5xl mx-auto px-6 grid grid-cols-1 sm:grid-cols-3 gap-8 text-center">
           {stats.map((s) => (
             <div key={s.label}>
               <div className="text-3xl md:text-5xl font-black tracking-tight">{s.value}</div>
