@@ -20,7 +20,18 @@ function ensure_auth_tables(PDO $pdo): void {
 }
 
 function public_user(array $user): array {
-  return ['id' => $user['id'], 'email' => $user['email'], 'name' => $user['name'], 'role' => $user['role']];
+  return [
+    'id' => $user['id'],
+    'email' => $user['email'],
+    'name' => $user['name'] ?? null,
+    'full_name' => $user['name'] ?? null,
+    'role' => $user['role'],
+    'created_date' => $user['created_date'] ?? null,
+  ];
+}
+
+function normalize_role(string $role): string {
+  return $role === 'admin' ? 'admin' : 'user';
 }
 
 if ($action === 'me') {
@@ -44,21 +55,76 @@ if ($action === 'login') {
 }
 
 if ($action === 'register') {
-  if (($config['allow_registration'] ?? false) !== true) {
-    respond(['error' => 'Registration is disabled'], 403);
-  }
+  respond(['error' => 'Medarbejderadgang oprettes af administrator'], 403);
+}
+
+if ($action === 'users') {
+  $admin = require_user($pdo);
+  require_admin($admin);
+  $stmt = $pdo->query('SELECT id, email, name, role, created_date FROM jd_users ORDER BY created_date DESC');
+  respond(array_map('public_user', $stmt->fetchAll()));
+}
+
+if ($action === 'create-user') {
+  $admin = require_user($pdo);
+  require_admin($admin);
   $email = strtolower(trim((string)($body['email'] ?? '')));
   $password = (string)($body['password'] ?? '');
+  $name = trim((string)($body['name'] ?? ''));
+  $role = normalize_role((string)($body['role'] ?? 'user'));
   if (!filter_var($email, FILTER_VALIDATE_EMAIL) || strlen($password) < 8) {
-    respond(['error' => 'Valid email and at least 8 character password required'], 400);
+    respond(['error' => 'Gyldig email og mindst 8 tegns adgangskode kræves'], 400);
   }
   $id = uuidv4();
-  $stmt = $pdo->prepare('INSERT INTO jd_users (id, email, password_hash) VALUES (?, ?, ?)');
-  $stmt->execute([$id, $email, password_hash($password, PASSWORD_DEFAULT)]);
-  $token = bin2hex(random_bytes(32));
-  $stmt = $pdo->prepare('INSERT INTO jd_sessions (token_hash, user_id, expires_at) VALUES (?, ?, DATE_ADD(UTC_TIMESTAMP(), INTERVAL 30 DAY))');
-  $stmt->execute([hash('sha256', $token), $id]);
-  respond(['ok' => true, 'id' => $id, 'access_token' => $token, 'user' => ['id' => $id, 'email' => $email, 'name' => null, 'role' => 'admin']], 201);
+  try {
+    $stmt = $pdo->prepare('INSERT INTO jd_users (id, email, name, role, password_hash) VALUES (?, ?, ?, ?, ?)');
+    $stmt->execute([$id, $email, $name !== '' ? $name : null, $role, password_hash($password, PASSWORD_DEFAULT)]);
+  } catch (PDOException $e) {
+    if ($e->getCode() === '23000') respond(['error' => 'Brugeren findes allerede'], 409);
+    throw $e;
+  }
+  $stmt = $pdo->prepare('SELECT id, email, name, role, created_date FROM jd_users WHERE id = ?');
+  $stmt->execute([$id]);
+  respond(public_user($stmt->fetch()), 201);
+}
+
+if ($action === 'update-user') {
+  $admin = require_user($pdo);
+  require_admin($admin);
+  $id = (string)($body['id'] ?? '');
+  $role = normalize_role((string)($body['role'] ?? 'user'));
+  if ($id === '') respond(['error' => 'Bruger ID mangler'], 400);
+  if ($role !== 'admin') {
+    $stmt = $pdo->prepare("SELECT COUNT(*) FROM jd_users WHERE role = 'admin' AND id <> ?");
+    $stmt->execute([$id]);
+    if ((int)$stmt->fetchColumn() < 1) respond(['error' => 'Der skal være mindst én administrator'], 400);
+  }
+  $stmt = $pdo->prepare('UPDATE jd_users SET role = ? WHERE id = ?');
+  $stmt->execute([$role, $id]);
+  $stmt = $pdo->prepare('SELECT id, email, name, role, created_date FROM jd_users WHERE id = ?');
+  $stmt->execute([$id]);
+  $user = $stmt->fetch();
+  if (!$user) respond(['error' => 'Bruger ikke fundet'], 404);
+  respond(public_user($user));
+}
+
+if ($action === 'delete-user') {
+  $admin = require_user($pdo);
+  require_admin($admin);
+  $id = (string)($body['id'] ?? '');
+  if ($id === '') respond(['error' => 'Bruger ID mangler'], 400);
+  if ($id === $admin['id']) respond(['error' => 'Du kan ikke slette din egen bruger'], 400);
+  $stmt = $pdo->prepare('SELECT role FROM jd_users WHERE id = ?');
+  $stmt->execute([$id]);
+  $target = $stmt->fetch();
+  if (!$target) respond(['error' => 'Bruger ikke fundet'], 404);
+  if (($target['role'] ?? '') === 'admin') {
+    $stmt = $pdo->query("SELECT COUNT(*) FROM jd_users WHERE role = 'admin'");
+    if ((int)$stmt->fetchColumn() <= 1) respond(['error' => 'Der skal være mindst én administrator'], 400);
+  }
+  $stmt = $pdo->prepare('DELETE FROM jd_users WHERE id = ?');
+  $stmt->execute([$id]);
+  respond(['ok' => true]);
 }
 
 if ($action === 'forgot-password') {

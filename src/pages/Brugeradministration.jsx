@@ -9,8 +9,11 @@ import {
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription,
 } from '@/components/ui/dialog';
+import { useAuth } from '@/lib/AuthContext';
 import { useToast } from '@/components/ui/use-toast';
-import { UserPlus, Search, Trash2, Shield, Mail } from 'lucide-react';
+import { KeyRound, Mail, Search, Shield, Trash2, UserPlus } from 'lucide-react';
+
+const useSimplyApi = import.meta.env.VITE_API_MODE === 'simply';
 
 export default function Brugeradministration() {
   const [users, setUsers] = useState([]);
@@ -18,15 +21,25 @@ export default function Brugeradministration() {
   const [search, setSearch] = useState('');
   const [showInvite, setShowInvite] = useState(false);
   const [inviteEmail, setInviteEmail] = useState('');
+  const [inviteName, setInviteName] = useState('');
+  const [invitePassword, setInvitePassword] = useState('');
   const [inviteRole, setInviteRole] = useState('user');
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
   const { toast } = useToast();
+  const { user } = useAuth();
+  const isAdmin = user?.role === 'admin';
 
   const load = async () => {
+    if (!isAdmin) {
+      setLoading(false);
+      return;
+    }
     setLoading(true);
     try {
-      const data = await base44.entities.User.list('-created_date', 200);
+      const data = base44.users?.listUsers
+        ? await base44.users.listUsers()
+        : await base44.entities.User.list('-created_date', 200);
       setUsers(data);
     } catch (e) {
       // ignore
@@ -35,7 +48,7 @@ export default function Brugeradministration() {
     }
   };
 
-  useEffect(() => { load(); }, []);
+  useEffect(() => { load(); }, [isAdmin]);
 
   const filtered = users.filter((u) =>
     `${u.full_name || ''} ${u.email || ''}`.toLowerCase().includes(search.toLowerCase())
@@ -43,15 +56,43 @@ export default function Brugeradministration() {
 
   const adminCount = users.filter((u) => u.role === 'admin').length;
 
+  if (!isAdmin) {
+    return (
+      <div className="rounded-xl border bg-white p-6">
+        <div className="flex items-start gap-3">
+          <Shield className="mt-1 h-5 w-5 text-amber-600" />
+          <div>
+            <h1 className="text-xl font-bold text-slate-900">Kun administrator</h1>
+            <p className="mt-2 text-sm leading-6 text-slate-600">
+              Brugeradministration er låst til administratorer. Medarbejderadgang oprettes kun af admin.
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   const handleInvite = async (e) => {
     e.preventDefault();
     setSubmitting(true);
     setError('');
     try {
-      await base44.users.inviteUser(inviteEmail.trim(), inviteRole);
-      toast({ title: 'Invitation sendt', description: `Invitation sendt til ${inviteEmail}` });
+      if (useSimplyApi) {
+        await base44.users.createUser({
+          email: inviteEmail.trim(),
+          name: inviteName.trim(),
+          password: invitePassword,
+          role: inviteRole,
+        });
+        toast({ title: 'Bruger oprettet', description: `${inviteEmail} kan nu logge ind` });
+      } else {
+        await base44.users.inviteUser(inviteEmail.trim(), inviteRole);
+        toast({ title: 'Invitation sendt', description: `Invitation sendt til ${inviteEmail}` });
+      }
       setShowInvite(false);
       setInviteEmail('');
+      setInviteName('');
+      setInvitePassword('');
       setInviteRole('user');
       await load();
     } catch (err) {
@@ -63,7 +104,8 @@ export default function Brugeradministration() {
 
   const changeRole = async (user, role) => {
     try {
-      await base44.entities.User.update(user.id, { role });
+      if (base44.users?.updateUserRole) await base44.users.updateUserRole(user.id, role);
+      else await base44.entities.User.update(user.id, { role });
       toast({ title: 'Rolle opdateret', description: `${user.email} er nu ${role}` });
       await load();
     } catch (err) {
@@ -74,7 +116,8 @@ export default function Brugeradministration() {
   const removeUser = async (user) => {
     if (!window.confirm(`Fjern bruger ${user.email}? Dette kan ikke fortrydes.`)) return;
     try {
-      await base44.entities.User.delete(user.id);
+      if (base44.users?.deleteUser) await base44.users.deleteUser(user.id);
+      else await base44.entities.User.delete(user.id);
       toast({ title: 'Bruger fjernet' });
       await load();
     } catch (err) {
@@ -187,7 +230,9 @@ export default function Brugeradministration() {
           <DialogHeader>
             <DialogTitle>Inviter ny bruger</DialogTitle>
             <DialogDescription>
-              Brugeren modtager en email med invitation og opretter selv sin adgangskode.
+              {useSimplyApi
+                ? 'Opret medarbejderadgang direkte. Brugeren kan ændre adgangskode senere via glemt adgangskode.'
+                : 'Brugeren modtager en email med invitation og opretter selv sin adgangskode.'}
             </DialogDescription>
           </DialogHeader>
           <form onSubmit={handleInvite} className="space-y-4">
@@ -202,6 +247,35 @@ export default function Brugeradministration() {
                 placeholder="navn@firma.dk"
               />
             </div>
+            {useSimplyApi && (
+              <>
+                <div className="space-y-2">
+                  <Label htmlFor="name">Navn</Label>
+                  <Input
+                    id="name"
+                    value={inviteName}
+                    onChange={(e) => setInviteName(e.target.value)}
+                    placeholder="Medarbejdernavn"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="password">Midlertidig adgangskode</Label>
+                  <div className="relative">
+                    <KeyRound className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                    <Input
+                      id="password"
+                      type="password"
+                      required
+                      minLength={8}
+                      value={invitePassword}
+                      onChange={(e) => setInvitePassword(e.target.value)}
+                      className="pl-9"
+                      placeholder="Mindst 8 tegn"
+                    />
+                  </div>
+                </div>
+              </>
+            )}
             <div className="space-y-2">
               <Label>Rolle</Label>
               <Select value={inviteRole} onValueChange={setInviteRole}>

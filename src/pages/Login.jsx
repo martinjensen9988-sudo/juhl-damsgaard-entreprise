@@ -44,7 +44,7 @@ export default function Login() {
       icon={LogIn}
       title="Log ind"
       subtitle="Adgang for Juhl & Damsgaard medarbejdere"
-      footer={
+      footer={!useSimplyApi ? (
         <>
           Har du ikke en bruger?{" "}
           <Link
@@ -54,7 +54,7 @@ export default function Login() {
             Opret bruger
           </Link>
         </>
-      }
+      ) : null}
     >
       {!useSimplyApi && (
         <>

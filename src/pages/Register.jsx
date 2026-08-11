@@ -132,6 +132,26 @@ export default function Register() {
     );
   }
 
+  if (useSimplyApi) {
+    return (
+      <AuthLayout
+        icon={UserPlus}
+        title="Medarbejderadgang"
+        subtitle="Nye medarbejdere oprettes kun af administrator"
+        footer={
+          <Link to="/login" className="text-primary font-medium hover:underline">
+            Gå til log ind
+          </Link>
+        }
+      >
+        <div className="rounded-lg border border-amber-200 bg-amber-50 p-4 text-sm leading-6 text-amber-950">
+          Af sikkerhedshensyn kan medarbejdere ikke selv oprette adgang her. Administrator opretter brugere fra
+          brugeradministrationen. Kundeportalen er ikke påvirket af denne begrænsning.
+        </div>
+      </AuthLayout>
+    );
+  }
+
   return (
     <AuthLayout
       icon={UserPlus}

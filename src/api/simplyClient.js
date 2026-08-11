@@ -49,6 +49,17 @@ export const simplyClient = {
   functions: {
     invoke: (name, body = {}) => request(`/functions.php?name=${encodeURIComponent(name)}`, { method: 'POST', body }),
   },
+  users: {
+    listUsers: () => request('/auth.php?action=users'),
+    createUser: ({ email, password, name = '', role = 'user' }) =>
+      request('/auth.php?action=create-user', { method: 'POST', body: { email, password, name, role } }),
+    inviteUser: (email, role = 'user') =>
+      request('/auth.php?action=create-user', { method: 'POST', body: { email, role } }),
+    updateUserRole: (id, role) =>
+      request('/auth.php?action=update-user', { method: 'POST', body: { id, role } }),
+    deleteUser: (id) =>
+      request('/auth.php?action=delete-user', { method: 'POST', body: { id } }),
+  },
   integrations: {
     Core: {
       async UploadFile({ file }) {
