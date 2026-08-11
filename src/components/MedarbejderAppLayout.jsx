@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { NavLink, Link } from 'react-router-dom';
 import { Home, Clock, ListChecks, MessageSquare, User, LogOut, HardHat, Bell, Receipt } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
@@ -21,25 +21,39 @@ export default function MedarbejderAppLayout() {
   const [clockedIn, setClockedIn] = useState(false);
   const { unreadMessages, unreadTasks, markMessagesRead, markTasksRead, requestPermission, permission } = useMaNotifications();
 
-  useEffect(() => {
-    base44.auth.me().then(setUser).catch(() => {});
-    setClockedIn(!!localStorage.getItem('ma_clock_start'));
-  }, []);
+  const loadActiveClock = useCallback(async (currentUser = user) => {
+    if (!currentUser?.id) {
+      setClockedIn(false);
+      return null;
+    }
+    const active = await base44.entities.TimeEntry
+      .filter({ user_id: currentUser.id, status: 'I gang' }, '-created_date', 1)
+      .then((rows) => rows?.[0] || null)
+      .catch(() => null);
+    setClockedIn(!!active);
+    return active;
+  }, [user]);
 
-  const syncClock = () => {
-    const start = localStorage.getItem('ma_clock_start');
-    setClockedIn(!!start);
+  useEffect(() => {
+    base44.auth.me().then((currentUser) => {
+      setUser(currentUser);
+      loadActiveClock(currentUser);
+    }).catch(() => {});
+  }, [loadActiveClock]);
+
+  const syncClock = useCallback(() => {
+    const active = loadActiveClock();
     window.dispatchEvent(new Event('ma-clock-change'));
-  };
+    return active;
+  }, [loadActiveClock]);
 
   useEffect(() => {
     const handler = () => {
-      const start = localStorage.getItem('ma_clock_start');
-      setClockedIn(!!start);
+      loadActiveClock();
     };
     window.addEventListener('ma-clock-change', handler);
     return () => window.removeEventListener('ma-clock-change', handler);
-  }, []);
+  }, [loadActiveClock]);
 
   const badges = { tasks: unreadTasks, messages: unreadMessages };
 

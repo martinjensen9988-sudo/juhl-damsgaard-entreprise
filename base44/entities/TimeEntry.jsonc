@@ -14,6 +14,10 @@
       "type": "string",
       "title": "Medarbejder"
     },
+    "user_id": {
+      "type": "string",
+      "title": "Bruger ID"
+    },
     "date": {
       "type": "string",
       "format": "date",
@@ -26,6 +30,25 @@
     "description": {
       "type": "string",
       "title": "Beskrivelse"
+    },
+    "status": {
+      "type": "string",
+      "title": "Status",
+      "enum": [
+        "I gang",
+        "Afsluttet"
+      ],
+      "default": "Afsluttet"
+    },
+    "clock_started_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Tjek ind tidspunkt"
+    },
+    "clock_ended_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Tjek ud tidspunkt"
     },
     "task_type": {
       "type": "string",

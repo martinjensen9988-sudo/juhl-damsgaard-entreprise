@@ -9,6 +9,7 @@ $sort = $_GET['sort'] ?? null;
 $limit = min(1000, max(1, (int)($_GET['limit'] ?? 200)));
 $definition = entity_config($entityMap, $entity);
 $table = $definition['table'];
+ensure_entity_table($pdo, $table);
 $method = $_SERVER['REQUEST_METHOD'];
 $publicReadEntities = ['AppRelease'];
 $user = current_user($pdo);
@@ -63,6 +64,7 @@ function entity_modules(string $entity): array {
     'MeetingBooking' => ['planning', 'customers'],
     'Milestone' => ['projects'],
     'Newsletter' => ['company', 'sales'],
+    'NotificationRead' => ['employees'],
     'PhotoArchive' => ['documents', 'projects'],
     'PortalSetting' => ['company'],
     'Project' => ['projects'],

@@ -9,6 +9,7 @@ export default function MaHome() {
   const { user, syncClock, clockedIn } = useOutletContext();
   const [elapsed, setElapsed] = useState(0);
   const [startTs, setStartTs] = useState(null);
+  const [activeEntry, setActiveEntry] = useState(null);
 
   // Cached via react-query — instant cache hits on re-entry, background refetch keeps fresh.
   const tasksQ = useEntityList('Task', { key: 'ma-home' });
@@ -21,10 +22,20 @@ export default function MaHome() {
 
   const refreshAll = () => Promise.all([tasksQ.refetch(), timeQ.refetch(), projectsQ.refetch()]);
 
+  const applyActiveEntry = (entry) => {
+    setActiveEntry(entry || null);
+    const parsed = entry?.clock_started_at ? Date.parse(entry.clock_started_at) : null;
+    setStartTs(Number.isFinite(parsed) ? parsed : null);
+  };
+
   useEffect(() => {
-    const start = localStorage.getItem('ma_clock_start');
-    if (start) setStartTs(Number(start));
-  }, []);
+    let mounted = true;
+    if (!user?.id) return undefined;
+    syncClock?.().then((entry) => {
+      if (mounted) applyActiveEntry(entry);
+    });
+    return () => { mounted = false; };
+  }, [user?.id, syncClock]);
 
   useEffect(() => {
     if (!startTs) { setElapsed(0); return; }
@@ -43,33 +54,50 @@ export default function MaHome() {
   const todaysHours = (timeEntries || []).filter((t) => t.date === today && (!t.user_name || t.user_name === myName)).reduce((s, t) => s + (t.hours || 0), 0);
   const weekHours = (timeEntries || []).filter((t) => t.date >= weekAgo && (!t.user_name || t.user_name === myName)).reduce((s, t) => s + (t.hours || 0), 0);
 
-  const clockIn = () => {
-    const ts = Date.now();
-    localStorage.setItem('ma_clock_start', String(ts));
-    setStartTs(ts);
-    syncClock();
+  const clockIn = async () => {
+    if (activeEntry || !user?.id) return;
+    const now = new Date();
+    const created = await base44.entities.TimeEntry.create({
+      project_id: 'intern',
+      project_name: 'Intern tid',
+      user_id: user.id,
+      user_name: myName,
+      date: today,
+      hours: 0,
+      description: 'Tjekket ind via app',
+      task_type: 'Andet',
+      status: 'I gang',
+      clock_started_at: now.toISOString(),
+    });
+    applyActiveEntry(created);
+    syncClock?.();
   };
 
   const clockOut = async () => {
-    if (!startTs) return;
+    if (!startTs || !activeEntry?.id) return;
+    const endedAt = new Date();
     const hours = Math.max(0.25, Math.round(((Date.now() - startTs) / 3600000) * 4) / 4);
     try {
-      await base44.entities.TimeEntry.create({
+      await base44.entities.TimeEntry.update(activeEntry.id, {
         date: today,
         hours,
         description: 'Tjekket ud via app',
         user_name: myName,
+        user_id: user?.id,
         task_type: 'Andet',
+        status: 'Afsluttet',
+        clock_ended_at: endedAt.toISOString(),
       });
     } catch (e) {}
-    localStorage.removeItem('ma_clock_start');
+    setActiveEntry(null);
     setStartTs(null);
     setElapsed(0);
-    syncClock();
+    syncClock?.();
     refreshAll();
   };
 
   const fmtTime = (s) => `${Math.floor(s / 3600)}t ${Math.floor((s % 3600) / 60)}m ${s % 60}s`;
+  const isClockedIn = Boolean(activeEntry || clockedIn);
 
   return (
     <PullToRefresh onRefresh={refreshAll} className="p-4 space-y-5">
@@ -80,26 +108,26 @@ export default function MaHome() {
       </div>
 
       {/* Clock in/out card */}
-      <div className={`rounded-2xl p-5 ${clockedIn ? 'bg-emerald-600' : 'bg-slate-950 dark:bg-slate-800'} text-white shadow-lg`}>
+      <div className={`rounded-2xl p-5 ${isClockedIn ? 'bg-emerald-600' : 'bg-slate-950 dark:bg-slate-800'} text-white shadow-lg`}>
         <div className="flex items-center justify-between">
           <div>
-            <div className="text-xs uppercase tracking-wide opacity-80">{clockedIn ? 'Du er tjekket ind' : 'Klar til at starte?'}</div>
-            {clockedIn ? (
+            <div className="text-xs uppercase tracking-wide opacity-80">{isClockedIn ? 'Du er tjekket ind' : 'Klar til at starte?'}</div>
+            {isClockedIn ? (
               <div className="text-3xl font-bold tabular-nums mt-1">{fmtTime(elapsed)}</div>
             ) : (
               <div className="text-lg font-medium mt-1">Tjek ind for at registrere tid</div>
             )}
           </div>
           <button
-            onClick={clockedIn ? clockOut : clockIn}
+            onClick={isClockedIn ? clockOut : clockIn}
             className={`w-16 h-16 rounded-full flex items-center justify-center transition-transform active:scale-95 ${
-              clockedIn ? 'bg-white text-emerald-600' : 'bg-amber-400 text-slate-950'
+              isClockedIn ? 'bg-white text-emerald-600' : 'bg-amber-400 text-slate-950'
             }`}
           >
-            {clockedIn ? <Square className="w-7 h-7" /> : <Play className="w-7 h-7 ml-1" />}
+            {isClockedIn ? <Square className="w-7 h-7" /> : <Play className="w-7 h-7 ml-1" />}
           </button>
         </div>
-        {clockedIn && <p className="text-xs opacity-80 mt-3">Tryk på knappen for at tjekke ud og gemme tiden</p>}
+        {isClockedIn && <p className="text-xs opacity-80 mt-3">Tryk på knappen for at tjekke ud og gemme tiden</p>}
       </div>
 
       {/* Stats */}

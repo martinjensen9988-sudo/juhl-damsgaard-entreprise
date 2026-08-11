@@ -738,6 +738,20 @@ return [
       "notes"
     ]
   ],
+  "NotificationRead" => [
+    "table" => "jd_notification_read",
+    "required" => [
+      "user_id",
+      "item_type",
+      "item_id"
+    ],
+    "properties" => [
+      "user_id",
+      "item_type",
+      "item_id",
+      "read_at"
+    ]
+  ],
   "PhotoArchive" => [
     "table" => "jd_photo_archive",
     "required" => [
@@ -1206,9 +1220,13 @@ return [
       "project_id",
       "project_name",
       "user_name",
+      "user_id",
       "date",
       "hours",
       "description",
+      "status",
+      "clock_started_at",
+      "clock_ended_at",
       "task_type"
     ]
   ],

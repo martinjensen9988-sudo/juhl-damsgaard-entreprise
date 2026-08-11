@@ -1,13 +1,13 @@
 const API_ROOT = '/api';
-const TOKEN_KEY = 'simply_access_token';
+let accessToken = null;
 
 async function request(path, { method = 'GET', body } = {}) {
-  const token = localStorage.getItem(TOKEN_KEY);
   const response = await fetch(`${API_ROOT}${path}`, {
     method,
+    credentials: 'same-origin',
     headers: {
       ...(body ? { 'Content-Type': 'application/json' } : {}),
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
     },
     body: body ? JSON.stringify(body) : undefined,
   });
@@ -65,12 +65,12 @@ export const simplyClient = {
   integrations: {
     Core: {
       async UploadFile({ file }) {
-        const token = localStorage.getItem(TOKEN_KEY);
         const formData = new FormData();
         formData.append('file', file);
         const response = await fetch(`${API_ROOT}/upload.php`, {
           method: 'POST',
-          headers: token ? { Authorization: `Bearer ${token}` } : {},
+          credentials: 'same-origin',
+          headers: accessToken ? { Authorization: `Bearer ${accessToken}` } : {},
           body: formData,
         });
         const data = await response.json().catch(() => null);
@@ -112,16 +112,16 @@ export const simplyClient = {
     },
     async loginViaEmailPassword(email, password) {
       const result = await request('/auth.php?action=login', { method: 'POST', body: { email: email.trim(), password: password.trim() } });
-      if (result?.access_token) localStorage.setItem(TOKEN_KEY, result.access_token);
+      accessToken = result?.access_token || null;
       return result;
     },
     async register({ email, password }) {
       const result = await request('/auth.php?action=register', { method: 'POST', body: { email, password } });
-      if (result?.access_token) localStorage.setItem(TOKEN_KEY, result.access_token);
+      accessToken = result?.access_token || null;
       return result;
     },
     async verifyOtp() {
-      return { ok: true, access_token: localStorage.getItem(TOKEN_KEY) };
+      return { ok: true, access_token: accessToken };
     },
     async resendOtp() {
       return { ok: true };
@@ -135,12 +135,15 @@ export const simplyClient = {
     async changePassword({ currentPassword, newPassword }) {
       return request('/auth.php?action=change-password', { method: 'POST', body: { currentPassword, newPassword } });
     },
-    async logout() {
+    async logout(returnTo) {
       await request('/auth.php?action=logout', { method: 'POST' }).catch(() => null);
-      localStorage.removeItem(TOKEN_KEY);
+      accessToken = null;
+      if (returnTo) {
+        window.location.href = `/login?returnTo=${encodeURIComponent(returnTo)}`;
+      }
     },
     setToken(token) {
-      localStorage.setItem(TOKEN_KEY, token);
+      accessToken = token || null;
     },
     redirectToLogin(returnTo = window.location.pathname) {
       window.location.href = `/login?returnTo=${encodeURIComponent(returnTo)}`;

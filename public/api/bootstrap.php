@@ -65,11 +65,38 @@ function uuidv4(): string {
   return vsprintf('%s%s-%s-%s-%s-%s%s%s', str_split(bin2hex($data), 4));
 }
 
-function current_user(PDO $pdo): ?array {
+function auth_cookie_options(): array {
+  return [
+    'expires' => time() + 60 * 60 * 24 * 30,
+    'path' => '/',
+    'secure' => (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off'),
+    'httponly' => true,
+    'samesite' => 'Lax',
+  ];
+}
+
+function set_auth_cookie(string $token): void {
+  setcookie('jd_session', $token, auth_cookie_options());
+}
+
+function clear_auth_cookie(): void {
+  $options = auth_cookie_options();
+  $options['expires'] = time() - 3600;
+  setcookie('jd_session', '', $options);
+}
+
+function request_auth_token(): ?string {
   $header = $_SERVER['HTTP_AUTHORIZATION'] ?? '';
-  if (!preg_match('/Bearer\s+(.+)/i', $header, $m)) return null;
+  if (preg_match('/Bearer\s+(.+)/i', $header, $m)) return $m[1];
+  $cookieToken = $_COOKIE['jd_session'] ?? '';
+  return is_string($cookieToken) && $cookieToken !== '' ? $cookieToken : null;
+}
+
+function current_user(PDO $pdo): ?array {
+  $token = request_auth_token();
+  if (!$token) return null;
   ensure_user_auth_columns($pdo);
-  $hash = hash('sha256', $m[1]);
+  $hash = hash('sha256', $token);
   $stmt = $pdo->prepare('SELECT u.id, u.email, u.name, u.role, u.permissions, u.must_change_password FROM jd_sessions s JOIN jd_users u ON u.id = s.user_id WHERE s.token_hash = ? AND s.expires_at > UTC_TIMESTAMP()');
   $stmt->execute([$hash]);
   return $stmt->fetch() ?: null;
@@ -112,8 +139,26 @@ function entity_table(array $entityMap, string $entity): string {
   return entity_config($entityMap, $entity)['table'];
 }
 
+function ensure_entity_table(PDO $pdo, string $table): void {
+  if (!preg_match('/^jd_[a-z0-9_]+$/', $table)) {
+    respond(['error' => 'Invalid entity table'], 500);
+  }
+  $pdo->exec("CREATE TABLE IF NOT EXISTS $table (
+    id VARCHAR(36) PRIMARY KEY,
+    data JSON NOT NULL,
+    created_by VARCHAR(255) NULL,
+    created_by_id VARCHAR(36) NULL,
+    created_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    INDEX idx_{$table}_created_date (created_date),
+    INDEX idx_{$table}_updated_date (updated_date),
+    INDEX idx_{$table}_created_by_id (created_by_id)
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci");
+}
+
 function entity_get(PDO $pdo, array $entityMap, string $entity, string $id): ?array {
   $table = entity_table($entityMap, $entity);
+  ensure_entity_table($pdo, $table);
   $stmt = $pdo->prepare("SELECT * FROM $table WHERE id = ?");
   $stmt->execute([$id]);
   $row = $stmt->fetch();
@@ -122,6 +167,7 @@ function entity_get(PDO $pdo, array $entityMap, string $entity, string $id): ?ar
 
 function entity_filter(PDO $pdo, array $entityMap, string $entity, array $filter = [], ?string $sort = null, int $limit = 200): array {
   $table = entity_table($entityMap, $entity);
+  ensure_entity_table($pdo, $table);
   $where = [];
   $params = [];
   foreach ($filter as $key => $value) {
@@ -149,6 +195,7 @@ function entity_filter(PDO $pdo, array $entityMap, string $entity, array $filter
 
 function entity_create(PDO $pdo, array $entityMap, string $entity, array $data, array $user): array {
   $table = entity_table($entityMap, $entity);
+  ensure_entity_table($pdo, $table);
   $id = (string)($data['id'] ?? uuidv4());
   unset($data['id'], $data['created_date'], $data['updated_date']);
   $stmt = $pdo->prepare("INSERT INTO $table (id, data, created_by, created_by_id) VALUES (?, ?, ?, ?)");

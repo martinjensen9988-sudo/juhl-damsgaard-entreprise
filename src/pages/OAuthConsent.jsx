@@ -45,12 +45,9 @@ export default function OAuthConsent() {
           return;
         }
         const data = await res.json();
-        // Gate on the server's auth result, NOT base44.auth.isAuthenticated():
-        // the SDK check runs the bearer path, so a cookie-only session (platform
-        // login/SSO, or a private app with a stale localStorage token) would read
-        // as signed-out and redirect — even though /consent-info just
-        // authenticated this same request via its cookie fallback. data.authenticated
-        // keeps the redirect decision in agreement with what the server returned.
+        // Gate on the server's auth result, not a separate client-side SDK
+        // check. data.authenticated keeps the redirect decision in agreement
+        // with what the server returned.
         if (!data.authenticated) {
           // The short handle rides back in returnTo; login_path is
           // owner-configured and validated server-side as a same-origin path.
@@ -59,9 +56,7 @@ export default function OAuthConsent() {
           // which honors from_url rather than returnTo. Rebuild the query from
           // `ctx` alone — never forward window.location.search raw: the platform
           // resume returns from_url verbatim, so crafted extras on the consent
-          // link (app_base_url, access_token, …) would ride through the login
-          // round-trip and app-params.js would persist them into the freshly
-          // authenticated session.
+          // link (app_base_url, access_token, …) would ride through login.
           const returnTo =
             window.location.pathname + "?ctx=" + encodeURIComponent(ctx);
           const encoded = encodeURIComponent(returnTo);

@@ -94,7 +94,8 @@ if ($action === 'login') {
   $token = bin2hex(random_bytes(32));
   $stmt = $pdo->prepare('INSERT INTO jd_sessions (token_hash, user_id, expires_at) VALUES (?, ?, DATE_ADD(UTC_TIMESTAMP(), INTERVAL 30 DAY))');
   $stmt->execute([hash('sha256', $token), $user['id']]);
-  respond(['access_token' => $token, 'user' => public_user($user)]);
+  set_auth_cookie($token);
+  respond(['ok' => true, 'user' => public_user($user)]);
 }
 
 if ($action === 'register') {
@@ -262,11 +263,12 @@ if ($action === 'change-password') {
 }
 
 if ($action === 'logout') {
-  $header = $_SERVER['HTTP_AUTHORIZATION'] ?? '';
-  if (preg_match('/Bearer\s+(.+)/i', $header, $m)) {
+  $token = request_auth_token();
+  if ($token) {
     $stmt = $pdo->prepare('DELETE FROM jd_sessions WHERE token_hash = ?');
-    $stmt->execute([hash('sha256', $m[1])]);
+    $stmt->execute([hash('sha256', $token)]);
   }
+  clear_auth_cookie();
   respond(['ok' => true]);
 }
 

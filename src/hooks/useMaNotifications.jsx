@@ -1,16 +1,6 @@
 import { useEffect, useState, useCallback, useRef } from 'react';
 import { base44 } from '@/api/base44Client';
 
-const READ_MSG_KEY = 'ma_read_msgs';
-const READ_TASK_KEY = 'ma_read_tasks';
-
-function getRead(key) {
-  try { return new Set(JSON.parse(localStorage.getItem(key) || '[]')); } catch { return new Set(); }
-}
-function setRead(key, ids) {
-  try { localStorage.setItem(key, JSON.stringify([...ids])); } catch {}
-}
-
 export function useMaNotifications() {
   const [user, setUser] = useState(null);
   const [unreadMessages, setUnreadMessages] = useState(0);
@@ -31,14 +21,15 @@ export function useMaNotifications() {
 
   const process = useCallback(async () => {
     if (!user) return;
-    const [msgs, tasks] = await Promise.all([
+    const [msgs, tasks, reads] = await Promise.all([
       base44.entities.InternalMessage.list('-created_date', 50).catch(() => []),
       base44.entities.Task.list('-created_date', 100).catch(() => []),
+      base44.entities.NotificationRead.filter({ user_id: user.id }, '-created_date', 500).catch(() => []),
     ]);
     const incoming = (msgs || []).filter((m) => m.recipient_user_id === user.id);
     const myTasks = (tasks || []).filter((t) => t.assigned_user_id === user.id && t.status !== 'Gennemført');
-    const readMsgs = getRead(READ_MSG_KEY);
-    const readTasks = getRead(READ_TASK_KEY);
+    const readMsgs = new Set((reads || []).filter((r) => r.item_type === 'message').map((r) => r.item_id));
+    const readTasks = new Set((reads || []).filter((r) => r.item_type === 'task').map((r) => r.item_id));
 
     setUnreadMessages(incoming.filter((m) => !readMsgs.has(m.id)).length);
     setUnreadTasks(myTasks.filter((t) => !readTasks.has(t.id)).length);
@@ -67,17 +58,31 @@ export function useMaNotifications() {
 
   const markMessagesRead = useCallback(async () => {
     if (!user) return;
-    const msgs = await base44.entities.InternalMessage.list('-created_date', 50).catch(() => []);
+    const [msgs, reads] = await Promise.all([
+      base44.entities.InternalMessage.list('-created_date', 50).catch(() => []),
+      base44.entities.NotificationRead.filter({ user_id: user.id, item_type: 'message' }, '-created_date', 500).catch(() => []),
+    ]);
+    const existing = new Set((reads || []).map((r) => r.item_id));
     const ids = (msgs || []).filter((m) => m.recipient_user_id === user.id).map((m) => m.id);
-    setRead(READ_MSG_KEY, ids);
+    const rows = ids
+      .filter((id) => !existing.has(id))
+      .map((id) => ({ user_id: user.id, item_type: 'message', item_id: id, read_at: new Date().toISOString() }));
+    if (rows.length) await base44.entities.NotificationRead.bulkCreate(rows).catch(() => null);
     setUnreadMessages(0);
   }, [user]);
 
   const markTasksRead = useCallback(async () => {
     if (!user) return;
-    const tasks = await base44.entities.Task.list('-created_date', 100).catch(() => []);
+    const [tasks, reads] = await Promise.all([
+      base44.entities.Task.list('-created_date', 100).catch(() => []),
+      base44.entities.NotificationRead.filter({ user_id: user.id, item_type: 'task' }, '-created_date', 500).catch(() => []),
+    ]);
+    const existing = new Set((reads || []).map((r) => r.item_id));
     const ids = (tasks || []).filter((t) => t.assigned_user_id === user.id).map((t) => t.id);
-    setRead(READ_TASK_KEY, ids);
+    const rows = ids
+      .filter((id) => !existing.has(id))
+      .map((id) => ({ user_id: user.id, item_type: 'task', item_id: id, read_at: new Date().toISOString() }));
+    if (rows.length) await base44.entities.NotificationRead.bulkCreate(rows).catch(() => null);
     setUnreadTasks(0);
   }, [user]);
 

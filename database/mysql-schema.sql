@@ -10,9 +10,7 @@ CREATE TABLE IF NOT EXISTS jd_users (
   email VARCHAR(255) NOT NULL UNIQUE,
   name VARCHAR(255) NULL,
   role VARCHAR(50) NOT NULL DEFAULT 'admin',
-  permissions JSON NULL,
   password_hash VARCHAR(255) NOT NULL,
-  must_change_password TINYINT(1) NOT NULL DEFAULT 0,
   email_verified TINYINT(1) NOT NULL DEFAULT 1,
   created_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
@@ -26,17 +24,6 @@ CREATE TABLE IF NOT EXISTS jd_sessions (
   FOREIGN KEY (user_id) REFERENCES jd_users(id) ON DELETE CASCADE,
   INDEX idx_jd_sessions_user_id (user_id),
   INDEX idx_jd_sessions_expires_at (expires_at)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
-CREATE TABLE IF NOT EXISTS jd_password_resets (
-  token_hash CHAR(64) PRIMARY KEY,
-  user_id VARCHAR(36) NOT NULL,
-  expires_at DATETIME NOT NULL,
-  used_at DATETIME NULL,
-  created_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (user_id) REFERENCES jd_users(id) ON DELETE CASCADE,
-  INDEX idx_jd_password_resets_user_id (user_id),
-  INDEX idx_jd_password_resets_expires_at (expires_at)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS jd_account (
@@ -469,6 +456,18 @@ CREATE TABLE IF NOT EXISTS jd_newsletter (
   INDEX idx_jd_newsletter_created_date (created_date),
   INDEX idx_jd_newsletter_updated_date (updated_date),
   INDEX idx_jd_newsletter_created_by_id (created_by_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS jd_notification_read (
+  id VARCHAR(36) PRIMARY KEY,
+  data JSON NOT NULL,
+  created_by VARCHAR(255) NULL,
+  created_by_id VARCHAR(36) NULL,
+  created_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  INDEX idx_jd_notification_read_created_date (created_date),
+  INDEX idx_jd_notification_read_updated_date (updated_date),
+  INDEX idx_jd_notification_read_created_by_id (created_by_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS jd_photo_archive (
