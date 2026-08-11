@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { BRAND_EMAIL, BRAND_LOGO_FULL_URL, BRAND_NAME, BRAND_PHONE_LINK } from '@/lib/brand';
+import { serviceAreas } from '@/lib/localAreas';
 
 const SITE_URL = 'https://juhldamsgaard.dk';
 
@@ -67,7 +68,7 @@ export const localBusinessSchema = {
     addressRegion: 'Midtjylland',
     addressCountry: 'DK',
   },
-  areaServed: ['Fyn', 'Jylland', 'Odense', 'Kolding', 'Vejle', 'Aarhus', 'Middelfart', 'Fredericia'],
+  areaServed: serviceAreas,
   openingHoursSpecification: [
     {
       '@type': 'OpeningHoursSpecification',

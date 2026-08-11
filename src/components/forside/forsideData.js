@@ -7,6 +7,7 @@ import {
   ParkingCircle, Fence, Lightbulb, Shovel, Mountain, Truck, HousePlus, Banknote, FileWarning,
   Zap, Ruler, Thermometer, Plug, PaintRoller, DoorClosed,
 } from 'lucide-react';
+import { localAreaText } from '../../lib/localAreas.js';
 
 export const services = [
   {
@@ -274,7 +275,7 @@ export const faqItems = [
   {
     category: 'Område',
     q: 'Hvilket område dækker I?',
-    a: 'Vi dækker hele Fyn og Jylland. Er du i tvivl om vi kører til din adresse, så kontakt os — så finder vi en løsning.',
+    a: `Vi dækker hele Fyn og Jylland efter aftale, blandt andet ${localAreaText}. Er du i tvivl om vi kører til din adresse, så kontakt os - så finder vi en løsning.`,
   },
   {
     category: 'Asbest og miljø',

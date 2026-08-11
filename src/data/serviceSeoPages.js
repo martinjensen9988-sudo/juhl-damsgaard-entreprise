@@ -1,4 +1,4 @@
-const sharedAreas = ['Fyn', 'Jylland', 'Odense', 'Kolding', 'Vejle', 'Fredericia', 'Middelfart', 'Aarhus'];
+import { localAreaText, serviceAreas } from '../lib/localAreas.js';
 
 const image = {
   src: '/assets/juhl-damsgaard-logo.jpeg',
@@ -15,8 +15,8 @@ const makeFaq = (name) => [
     a: 'Ja, vi løser opgaver for private boligejere, boligforeninger, virksomheder og andre bygherrer på Fyn og i Jylland.',
   },
   {
-    q: 'Dækker I Odense, Kolding og Vejle?',
-    a: 'Ja. Vi kører blandt andet til Odense, Kolding, Vejle, Fredericia, Middelfart og resten af Fyn og Jylland efter aftale.',
+    q: 'Dækker I Fyn og Jylland?',
+    a: `Ja. Vi dækker hele Fyn og Jylland efter aftale, blandt andet ${localAreaText}. Er du i tvivl om vi kører til din adresse, så kontakt os - så finder vi en løsning.`,
   },
   {
     q: 'Hvad skal vi sende for at få et tilbud?',
@@ -33,7 +33,7 @@ export const serviceSeoPages = {
     slug: 'gravearbejde',
     shortName: 'gravearbejde',
     image,
-    areas: sharedAreas,
+    areas: serviceAreas,
     lead:
       'Skal du bruge gravearbejde til fundament, kloak, dræn, forsyningsledninger eller terrænregulering, hjælper Juhl & Damsgaard Entreprise med en praktisk løsning fra første opmåling til ryddet arbejdsområde.',
     sections: [
@@ -68,7 +68,7 @@ export const serviceSeoPages = {
     slug: 'kloak-draen',
     shortName: 'kloak og dræn',
     image,
-    areas: sharedAreas,
+    areas: serviceAreas,
     lead:
       'Kloak- og drænarbejde skal udføres rigtigt første gang. Vi hjælper med udgravning, etablering, udskiftning og retablering, så vand, spildevand og regnvand ledes sikkert væk.',
     sections: [
@@ -103,7 +103,7 @@ export const serviceSeoPages = {
     slug: 'beton-stobning',
     shortName: 'beton og støbning',
     image,
-    areas: sharedAreas,
+    areas: serviceAreas,
     lead:
       'Vi udfører betonarbejde til fundamenter, gulve, sokler, trapper, plader og mindre konstruktioner, hvor underlag, armering, udstøbning og finish skal passe sammen.',
     sections: [
@@ -138,7 +138,7 @@ export const serviceSeoPages = {
     slug: 'asfalt-brolaegning',
     shortName: 'asfalt og brolægning',
     image,
-    areas: sharedAreas,
+    areas: serviceAreas,
     lead:
       'Vi etablerer asfalt, fliser, sten og brolagte arealer med korrekt opbygning, fald og afslutning, så indkørsler, stier, gårdspladser og erhvervsarealer fungerer i hverdagen.',
     sections: [
@@ -173,7 +173,7 @@ export const serviceSeoPages = {
     slug: 'toemrerarbejde',
     shortName: 'tømrerarbejde',
     image,
-    areas: sharedAreas,
+    areas: serviceAreas,
     lead:
       'Vi udfører tømrerarbejde som selvstændige opgaver eller som del af en samlet entreprise med gravearbejde, beton, VVS, el og færdig aflevering.',
     sections: [
@@ -208,7 +208,7 @@ export const serviceSeoPages = {
     slug: 'vvs-installationer',
     shortName: 'VVS-installationer',
     image,
-    areas: sharedAreas,
+    areas: serviceAreas,
     lead:
       'Vi koordinerer VVS-arbejde i renoveringer, tilbygninger, skadesager og entrepriser, så vand, varme og sanitet passer til resten af byggeriet.',
     sections: [
@@ -243,7 +243,7 @@ export const serviceSeoPages = {
     slug: 'elektriker',
     shortName: 'elektriker',
     image,
-    areas: sharedAreas,
+    areas: serviceAreas,
     lead:
       'Vi koordinerer el-arbejde i bygge- og renoveringsopgaver, så installationer, føringsveje, belysning og dokumentation passer ind i den samlede entreprise.',
     sections: [
@@ -278,7 +278,7 @@ export const serviceSeoPages = {
     slug: 'skadeservice',
     shortName: 'skadeservice',
     image,
-    areas: sharedAreas,
+    areas: serviceAreas,
     lead:
       'Ved vandskade, stormskade eller anden akut skade hjælper vi med afklaring, afdækning, udbedring og billedokumentation til forsikring og videre håndværk.',
     sections: [
@@ -313,7 +313,7 @@ export const serviceSeoPages = {
     slug: 'totalentreprise',
     shortName: 'totalentreprise',
     image,
-    areas: sharedAreas,
+    areas: serviceAreas,
     lead:
       'Med totalentreprise får du én samlet samarbejdspartner, der koordinerer fag, materialer, tidsplan og aflevering, så byggeprojektet bliver mere overskueligt.',
     sections: [
@@ -353,7 +353,7 @@ for (const page of Object.values(serviceSeoPages)) {
     },
     {
       h: `Få tilbud på ${page.shortName} i dit område`,
-      p: `Vil du have et tilbud på ${page.shortName}, kan du sende billeder, mål, adresse og en kort beskrivelse af det ønskede resultat. Vi hjælper kunder på Fyn og i Jylland, herunder Odense, Kolding, Vejle, Fredericia, Middelfart og nærliggende byer. Vi kan give en første vurdering ud fra materialet, og ved større opgaver aftaler vi besigtigelse, så vi kan gennemgå adgang, materialer og tidsplan. Målet er et tydeligt tilbud, hvor arbejde, materialer, moms og opgavebeskrivelse hænger sammen, før arbejdet går i gang.`,
+      p: `Vil du have et tilbud på ${page.shortName}, kan du sende billeder, mål, adresse og en kort beskrivelse af det ønskede resultat. Vi hjælper kunder på Fyn og i Jylland, blandt andet i ${localAreaText}. Vi kan give en første vurdering ud fra materialet, og ved større opgaver aftaler vi besigtigelse, så vi kan gennemgå adgang, materialer og tidsplan. Målet er et tydeligt tilbud, hvor arbejde, materialer, moms og opgavebeskrivelse hænger sammen, før arbejdet går i gang.`,
     },
     {
       h: 'En praktisk samarbejdspartner fra start til slut',

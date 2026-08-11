@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { serviceSeoPages, shortServicePaths } from '../src/data/serviceSeoPages.js';
 import { faqItems } from '../src/components/forside/forsideData.js';
+import { serviceAreas } from '../src/lib/localAreas.js';
 
 const distDir = path.resolve('dist');
 const indexPath = path.join(distDir, 'index.html');
@@ -79,7 +80,7 @@ const localBusinessSchema = {
     addressRegion: 'Midtjylland',
     addressCountry: 'DK',
   },
-  areaServed: ['Fyn', 'Jylland', 'Odense', 'Kolding', 'Vejle', 'Aarhus', 'Middelfart', 'Fredericia'],
+  areaServed: serviceAreas,
   openingHoursSpecification: [
     {
       '@type': 'OpeningHoursSpecification',
