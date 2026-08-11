@@ -20,15 +20,47 @@
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
-        "@type": "LocalBusiness",
-        "name": "Juhl & Damsgaard Entreprise",
-        "url": "https://juhldamsgaard.dk/",
-        "image": "https://juhldamsgaard.dk/assets/juhl-damsgaard-logo.jpeg",
-        "telephone": "+4540602086",
-        "email": "hej@juhldamsgaard.dk",
-        "areaServed": ["Fyn", "Jylland", "Danmark"],
-        "priceRange": "$$",
-        "description": "Dansk entreprenørvirksomhed med gravearbejde, kloak, beton, anlæg, tømrer, VVS, elektriker, skadeservice og totalentreprise."
+        "@graph": [
+          {
+            "@type": "Organization",
+            "@id": "https://juhldamsgaard.dk/#organization",
+            "name": "Juhl & Damsgaard Entreprise",
+            "url": "https://juhldamsgaard.dk/",
+            "logo": {
+              "@type": "ImageObject",
+              "url": "https://juhldamsgaard.dk/assets/juhl-damsgaard-logo.jpeg"
+            },
+            "email": "hej@juhldamsgaard.dk",
+            "telephone": "+4540602086"
+          },
+          {
+            "@type": "LocalBusiness",
+            "@id": "https://juhldamsgaard.dk/#localbusiness",
+            "name": "Juhl & Damsgaard Entreprise",
+            "url": "https://juhldamsgaard.dk/",
+            "image": "https://juhldamsgaard.dk/assets/juhl-damsgaard-logo.jpeg",
+            "logo": "https://juhldamsgaard.dk/assets/juhl-damsgaard-logo.jpeg",
+            "telephone": "+4540602086",
+            "email": "hej@juhldamsgaard.dk",
+            "address": {
+              "@type": "PostalAddress",
+              "addressLocality": "Karup",
+              "addressRegion": "Midtjylland",
+              "addressCountry": "DK"
+            },
+            "areaServed": ["Fyn", "Jylland", "Odense", "Kolding", "Vejle", "Fredericia", "Middelfart", "Aarhus"],
+            "openingHoursSpecification": [
+              {
+                "@type": "OpeningHoursSpecification",
+                "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+                "opens": "07:00",
+                "closes": "17:00"
+              }
+            ],
+            "priceRange": "$$",
+            "description": "Dansk entreprenørvirksomhed med gravearbejde, kloak, beton, anlæg, tømrer, VVS, elektriker, skadeservice og totalentreprise."
+          }
+        ]
       }
     </script>
     <link rel="manifest" href="/manifest.json" />

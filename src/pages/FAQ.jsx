@@ -9,8 +9,17 @@ import { HelpCircle, ArrowRight, Phone } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import ForsideLayout from '@/components/forside/ForsideLayout';
 import { faqItems } from '@/components/forside/forsideData';
+import { faqSchema, useSeo } from '@/lib/seo';
 
 export default function FAQ() {
+  useSeo({
+    title: 'FAQ om entreprenørarbejde | Juhl & Damsgaard Entreprise',
+    description:
+      'Svar på spørgsmål om gravearbejde, kloak, beton, tømrer, VVS, elektriker, skadeservice, tilbud og arbejdsområde på Fyn og i Jylland.',
+    canonicalPath: '/faq',
+    schema: [faqSchema(faqItems, '/faq')],
+  });
+
   return (
     <ForsideLayout>
       {/* Hero */}

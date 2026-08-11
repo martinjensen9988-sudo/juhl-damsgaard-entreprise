@@ -280,6 +280,14 @@ const AuthenticatedApp = () => {
         <Route path="/" element={<Forside />} />
         <Route path="/tjenester" element={<Tjenester />} />
         <Route path="/tjenester/:slug" element={<TjenesteDetalje />} />
+        <Route path="/kloak-draen" element={<TjenesteDetalje slug="kloak-draen" />} />
+        <Route path="/beton-stobning" element={<TjenesteDetalje slug="beton-stobning" />} />
+        <Route path="/asfalt-brolaegning" element={<TjenesteDetalje slug="asfalt-brolaegning" />} />
+        <Route path="/toemrerarbejde" element={<TjenesteDetalje slug="toemrerarbejde" />} />
+        <Route path="/vvs-installationer" element={<TjenesteDetalje slug="vvs-installationer" />} />
+        <Route path="/elektriker" element={<TjenesteDetalje slug="elektriker" />} />
+        <Route path="/skadeservice" element={<TjenesteDetalje slug="skadeservice" />} />
+        <Route path="/totalentreprise" element={<TjenesteDetalje slug="totalentreprise" />} />
         <Route path="/beregn-tilbud" element={<BeregnTilbud />} />
         <Route path="/forespoergsel" element={<Forespoergsel />} />
         <Route path="/om-os" element={<OmOs />} />
