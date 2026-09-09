@@ -12,6 +12,8 @@ import { Sparkles, Upload, X, Image as ImageIcon, FileCheck2 } from 'lucide-reac
 import LineItemEditor from '@/components/LineItemEditor';
 import { formatDKK, calcSubtotal, calcVAT, calcTotal } from '@/lib/format';
 
+const useSimplyApi = import.meta.env.VITE_API_MODE === 'simply';
+
 const genQuoteNumber = (existing) => {
   const year = new Date().getFullYear();
   const prefix = `TIL-${year}-`;
@@ -40,6 +42,7 @@ export default function AITilbud() {
   const [lineItems, setLineItems] = useState([]);
   const [cleanedNotes, setCleanedNotes] = useState('');
   const [aiMessage, setAiMessage] = useState('');
+  const [assumptions, setAssumptions] = useState([]);
   const [generated, setGenerated] = useState(false);
   const [saving, setSaving] = useState(false);
 
@@ -89,21 +92,40 @@ export default function AITilbud() {
     if (!notes.trim() && images.length === 0) return;
     setGenerating(true);
     try {
+      if (useSimplyApi) {
+        const sourceMessage = notes.trim() || 'Der er uploadet billeder fra byggepladsen. Lav et vejledende tilbud ud fra opgaven, hvis der er tekst nok, ellers bed om en kort opgavebeskrivelse.';
+        const response = await base44.functions.invoke('aiQuoteCalculator', { message: sourceMessage });
+        const result = response.data || response;
+        const items = (result.line_items || []).map((item) => ({
+          description: item.description || '',
+          quantity: item.quantity || 1,
+          unit: item.unit || 'stk',
+          unit_price: item.unit_price || 0,
+        }));
+        setLineItems(items);
+        setCleanedNotes(result.task_description || result.cleaned_notes || result.message || notes);
+        setAiMessage(result.ai_message || result.message || '');
+        setAssumptions(Array.isArray(result.assumptions) ? result.assumptions : []);
+        setGenerated(true);
+        return;
+      }
+
       const prompt = `Du er prisberegner for Juhl & Damsgaard Entreprise. Lav et vejledende tilbud med linjeelementer${
         notes ? ` baseret på denne beskrivelse: "${notes}"` : ' baseret på billederne fra byggepladsen'
       }.
 
 Vejledende priser (ekskl. moms):
+- Standard timepris: 280 kr/time ekskl. moms, svarende til 350 kr/time inkl. moms. Alle timebaserede arbejdslinjer skal bruge unit_price 280.
 - Væg-/loftmaling (incl. grund og spartling efter behov): 75 kr/m²
 - Facademaling: 95 kr/m² · Maling af træværk/vinduer: 120 kr/m² · Tapetopsætning: 85 kr/m² · Spartling/slibning: 60 kr/m² · Grundmaling: 25 kr/m²
 - VANDSKURING (skuring/reputning af murværk, inkl. arbejdsløn + materialer til standard grå murbruge/tyndpuds): Minimum 250 kr/m² (nem opgave, lav højde) · Gennemsnit 400 kr/m² (standard parcelhus) · Maksimum 650 kr/m² (besværlige forhold / indfarvet mørtel). Vælg pris ud fra beskrivelsen.
 - Vandskuring forarbejde (kun hvis muren ikke er klar): Algeafrensning/højtryksspuling 35-70 kr/m² · Let sandblæsning (afrensning af gammel maling) 100-180 kr/m² · Udfræsning og omfugning (møre fuger) 500-1000 kr/m²
 - Vandskuring faste omkostninger: Stilladsleje (huse i 1,5/2 plan over 2,2 m højde) 10.000-15.000 kr (fast pr. sag) · Udskiftning af frostsprængte mursten 100 kr/sten · Affaldshåndtering/oprydning 1.500-3.000 kr (fast pr. sag) · Opstartsgebyr/miljøafgifter ved opgaver under 50 m² 2.500 kr (fast)
 - Maling materiale (væg-/loftmaling): 145 kr/liter · Facademaling: 175 kr/liter · Træmaling/lak: 195 kr/liter · Grundmaling: 95 kr/liter
-- Tømrer: 495 kr/time · Gipsvæg: 245 kr/m² · Beklædning træ: 295 kr/m² · Dørmontage: 1250 kr/stk · Vindueskift: 1850 kr/stk · Gulvlægning trægulv: 245 kr/m²
-- VVS: 695 kr/time · Håndvask: 1850 kr/stk · Toilet: 2200 kr/stk · Badeværelsesrenovering komplet: 1850 kr/m²
-- Elektriker: 595 kr/time · Stikkontakt/afbryder: 450 kr/stk · Armatur: 750 kr/stk · Eltavle: 6500 kr/stk
-- Gravearbejde: 580 kr/m³ · Grøftegravning: 320 kr/m · Afgravning: 145 kr/m³ · Nedrivning: 450 kr/m² · Kloakrør Ø300: 850 kr/m · Kloakbrønd: 4500 kr/stk · Asfaltering: 395 kr/m² · Betonfundament: 850 kr/m² · Beton støbning: 1150 kr/m³ · Transport: 3500 kr/fs · Maskinleje: 4500 kr/dag · Affaldsbortkørsel: 3500 kr/fs · Håndarbejde: 280 kr/time
+- Tømrer: 280 kr/time (350 kr/time inkl. moms) · Gipsvæg: 245 kr/m² · Beklædning træ: 295 kr/m² · Dørmontage: 1250 kr/stk · Vindueskift: 1850 kr/stk · Gulvlægning trægulv: 245 kr/m²
+- VVS: 280 kr/time (350 kr/time inkl. moms) · Håndvask: 1850 kr/stk · Toilet: 2200 kr/stk · Badeværelsesrenovering komplet: 1850 kr/m²
+- Elektriker: 280 kr/time (350 kr/time inkl. moms) · Stikkontakt/afbryder: 450 kr/stk · Armatur: 750 kr/stk · Eltavle: 6500 kr/stk
+- Gravearbejde: 580 kr/m³ · Grøftegravning: 320 kr/m · Afgravning: 145 kr/m³ · Nedrivning: 450 kr/m² · Kloakrør Ø300: 850 kr/m · Kloakbrønd: 4500 kr/stk · Asfaltering: 395 kr/m² · Betonfundament: 850 kr/m² · Beton støbning: 1150 kr/m³ · Transport: 3500 kr/fs · Maskinleje: 4500 kr/dag · Affaldsbortkørsel: 3500 kr/fs · Håndarbejde: 280 kr/time (350 kr/time inkl. moms)
 - Teknisk isolering: Rørisolering (mineraluld) 145 kr/m · Beholderisolering 295 kr/m² · Ventilationsisolering 185 kr/m · Teknisk isolering (tag/væg) 245 kr/m² · Brandisolering 395 kr/m² · Armeringssokkel isolering 165 kr/m · Indblæsning af isolering – PRIS INKL. ARBEJDE OG MATERIALER (éen samlet linje pr. tykkelse, ekskl. moms): 150 mm=96 kr/m² (120 inkl. moms) · 200 mm=120 kr/m² (150 inkl. moms) · 250 mm=140 kr/m² (175 inkl. moms) · 300 mm=152 kr/m² (190 inkl. moms)
 - Slutrengøring/byggepladsrengøring: 75 kr/m² · Glarmester (vinduespolering): 45 kr/m²
 
@@ -122,11 +144,12 @@ Forbrugsmaterialer (skal altid medtages som separate linjer, når de er nødvend
 - Isoleringsmateriale (tilbehør): Dampspærre folie 25 kr/m² · Tape 12 kr/m · Klemmer/beslag 8 kr/stk · Afdækningsfolie 15 kr/m²
 
 Regler:
+- STØRRE BYGGERI/GARAGE: Hvis kunden vil opføre garage, carport, udhus eller tilbygning, må du aldrig lave én samlet m²-linje som "opførelse". En garage på f.eks. 80 m² skal opdeles i udgravning, bortkørsel af jord, bundopbygning, fundament/sokkel, armering, beton, evt. betonpumpe, vægge, tagkonstruktion, tagbelægning, tagrender, isolering af gulv/vægge/loft, garageporte, døre, vinduer, maskiner, stillads/lift, materialelevering, affalds- og modtagegebyrer, tegninger/statik/myndighedsbehandling, el og evt. afvanding/faskine. Hvis der skal nedrives eksisterende skur, tilføj nedrivning, affald og risiko for asbest/miljøscreening. En garage over samlet 50 m² sekundær bebyggelse kræver normalt byggetilladelse; nævn det i ai_message/assumptions. Arbejdstimer til ny isoleret garage må aldrig være 10 timer; brug som minimum ca. 3,5 time pr. m² plus nedrivning og koordinering.
 - VANDSKURING ≠ MALING: Vandskuring er skuring/reputning af murværk (fugerne bearbejdes med mørtel) – IKKE maling eller højtryksspuling. Hvis kunden beder om "vandskuring", må du ALDRIG tilføje malelinjer (facademaling, grundmaling, spartling). Vælg vandskuringspris ud fra forhold (250/400/650 kr/m²) baseret på højde og besværlighed. Tilføj forarbejdslinjer KUN hvis relevant (algeafrensning 35-70 kr/m², sandblæsning 100-180 kr/m², omfugning 500-1000 kr/m²). Tilføj altid faste gebyrer når de gælder: stilladsleje 10.000-15.000 kr ved højde over 2,2 m / 1,5-2 plan, opstartsgebyr 2.500 kr ved areal under 50 m², affaldshåndtering 1.500-3.000 kr, og murstensudskiftning 100 kr/sten hvis frostsprængte sten nævnes. Enhed = m² for arbejde/forarbejde, stk for mursten, fs for faste gebyrer. Kun hvis kunden udtrykkeligt også beder om maling, tilføjes malelinjer.
 - ENHED: Hver linje SKAL have en korrekt enhed (m², m³, m, stk, time, liter, dag, fs, sæt, rulle). Aldrig tom enhed. Brug den enhed der passer til opgaven (væg = m², rør = m, beton = m³, maling = liter).
 - MINIMUM ANTAL LINJER: Et tilbud må ALDRIG have kun én linje. Hver opgave skal have mindst 2-3 linjer: (1) selve arbejdet/ydelsen, (2) hovedmaterialet, (3) tilbehørsmateriale. Hvis tilbuddet kun har 1 linje er det FEJL – tilføj altid materialelinjer.
 - VIGTIGT: Hver eneste opgave kunden nævner SKAL have mindst én arbejdslinje i tilbuddet. Glem aldrig en nævnt opgave (f.eks. hvis kunden skriver "maling" skal der altid være en male-linje; "rengøring" → slutrengørings-linje; "isolering" → isolerings-linje; både maling og isolering → én linje for hver).
-- ISOLERING KLASSEFICERES SOM TEKNISK ISOLERING (ikke tømrer): Når kunden nævner "isolering", "krybekælder", "kælder", "loft", "væg", "tag", "rør" el. lign. – brug Teknisk isolering-priserne (245 kr/m² for tag/væg-flader, 145 kr/m for rør, 185 kr/m ventilation, 395 kr/m² brand). Brug ALDRIG tømmerprisen 495 kr/time til isoleringsopgaver. Tilføj også: (a) hovedmateriale mineraluld/EPS ca. 85-110 kr/m², (b) dampspærre folie 25 kr/m², (c) tape/klemmer ca. 35 kr/m².
+- ISOLERING KLASSEFICERES SOM TEKNISK ISOLERING (ikke tømrer): Når kunden nævner "isolering", "krybekælder", "kælder", "loft", "væg", "tag", "rør" el. lign. – brug Teknisk isolering-priserne (245 kr/m² for tag/væg-flader, 145 kr/m for rør, 185 kr/m ventilation, 395 kr/m² brand). Brug ALDRIG tømrer-timepris til isoleringsopgaver. Tilføj også: (a) hovedmateriale mineraluld/EPS ca. 85-110 kr/m², (b) dampspærre folie 25 kr/m², (c) tape/klemmer ca. 35 kr/m².
 - INDBLÆSNING – SPØRG OM TYKKELSE: Hvis kunden anmoder om indblæsning af isolering UDEN at angive lagtykkelse (mm), må du IKKE gætte eller lave et tilbud. Sæt "ai_message" til at bede kunden om tykkelsen, f.eks.: "For at give dig et præcist tilbud på indblæsning, skal jeg vide den ønskede lagtykkelse. Vi tilbyder: 150 mm (120 kr/m² inkl. moms), 200 mm (150 kr/m²), 250 mm (175 kr/m²) eller 300 mm (190 kr/m²). Hvilken tykkelse ønsker du?". Returner line_items som en tom liste [] og cleaned_notes tom. Når kunden angiver tykkelse, beregnes tilbuddet med den valgte tykkelse.
 - INDBLÆSNING – NÆVN TYKKELSEN I TILBUDET: Når tilbuddet beregnes med en valgt tykkelse, skal "ai_message" ALTID nævne det valgte antal mm tydeligt, f.eks. "Tilbuddet omfatter indblæsning af 250 mm isolering svarende til XX m²". Linjebeskrivelsen skal også indeholde tykkelsen, f.eks. "Indblæsning af isolering (250 mm)".
 - Vælg KUN de prislinjer der hører til de fag kunden beskriver (ved maling: kun maling/spartling/grundmaling/tapet – ingen gravemaskine, transport eller affald; ved teknisk isolering: kun isoleringslinjer + isoleringsmateriale).
@@ -145,6 +168,7 @@ Regler:
   • Generelt: pensler, ruller, slibepapir, afdækningsfolie, maskeringstape (1 sæt 75 kr pr. 50 m²)
   - Ved malearbejde: beregn altid maltforbrug og tilføj en separat materialelinje for maling. Forbrug: ca. 1 liter dækker 10 m² med 1 strøg – de fleste opgaver kræver 2 strøg, så divider maleflade med 5 for at få literantal (f.eks. 160 m² ÷ 5 = 32 liter). Brug korrekt malttype ud fra opgaven (væg-/loftmaling, facademaling, træmaling el. grundmaling) med tilhørende literpris. Angiv unit "liter" og antal liter som quantity.
   - TJEKLISTE FØR SVAR: (1) Har tilbuddet mindst 2 linjer? (2) Har hver arbejdsopgave en tilhørende materialelinje? (3) Er isolering klassificeret som teknisk isolering (ikke tømrer)? Hvis nej – ret og tilføj linjer før du returnerer.
+- cleaned_notes skal være en professionel beskrivelse af kundens opgave på korrekt dansk. ai_message skal forklare de vigtigste antagelser kort.
 - Alle priser er ekskl. moms.
 - Hver linje: description, quantity, unit (stk, m², m³, time, m, fs, dag, sæt), unit_price.`;
 
@@ -156,6 +180,7 @@ Regler:
           properties: {
             cleaned_notes: { type: 'string', description: 'Den rettede og professionelt formulerede opgavebeskrivelse på korrekt dansk, uden stavefejl' },
             ai_message: { type: 'string', description: 'Besked fra AI til kunden, f.eks. spørgsmål om manglende info (indblæsningstykkelse) eller forklaring af antagelser. Tom streng hvis ingen besked.' },
+            assumptions: { type: 'array', items: { type: 'string' }, description: 'Vigtige antagelser, forbehold, myndighedskrav og risici' },
             line_items: {
               type: 'array',
               items: {
@@ -181,6 +206,7 @@ Regler:
       setLineItems(items);
       setCleanedNotes(result.cleaned_notes || notes);
       setAiMessage(result.ai_message || '');
+      setAssumptions(Array.isArray(result.assumptions) ? result.assumptions : []);
       setGenerated(true);
     } catch (e) {
       console.error(e);
@@ -207,7 +233,7 @@ Regler:
         date: new Date().toISOString().slice(0, 10),
         valid_until: validUntil || new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10),
         line_items: lineItems,
-        notes: cleanedNotes || notes || '',
+        notes: [cleanedNotes || notes || '', assumptions.length ? `Antagelser/forbehold:\n- ${assumptions.join('\n- ')}` : ''].filter(Boolean).join('\n\n'),
       });
       navigate('/tilbud');
     } catch (e) {
@@ -342,6 +368,20 @@ Regler:
               {lineItems.length === 0 && (
                 <p className="text-xs text-amber-600 mt-2 pl-6">Udfyld tykkelsen i noterne og klik "Generer" igen.</p>
               )}
+            </div>
+          )}
+
+          {assumptions.length > 0 && (
+            <div className="rounded-lg border border-amber-200 bg-amber-50 p-4">
+              <h3 className="text-sm font-semibold text-amber-900 mb-2">Antagelser og forbehold</h3>
+              <ul className="space-y-1 text-sm text-amber-900">
+                {assumptions.map((item, index) => (
+                  <li key={index} className="flex gap-2">
+                    <span aria-hidden="true">-</span>
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
             </div>
           )}
 

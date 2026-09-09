@@ -6,7 +6,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { useToast } from '@/components/ui/use-toast';
-import { Plus, Upload, Send, FileText, PenLine, X, Clock, CheckCircle2, Loader2 } from 'lucide-react';
+import { Plus, Send, FileText, PenLine, X, Clock, CheckCircle2, Loader2 } from 'lucide-react';
 
 const STATUS_STYLE = {
   Kladde: 'bg-slate-100 text-slate-700',

@@ -6,7 +6,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
-import { Plus, Pencil, Trash2, AlertTriangle, Upload, Camera } from 'lucide-react';
+import { Plus, Pencil, Trash2, AlertTriangle, Camera } from 'lucide-react';
 import { formatDate, formatDKK } from '@/lib/format';
 import { useToast } from '@/components/ui/use-toast';
 import { Image as ImageComponent } from '@/components/ui/image';

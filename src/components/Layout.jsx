@@ -6,6 +6,8 @@ import PullToRefresh from '@/components/PullToRefresh';
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from '@/components/ui/drawer';
 import { Image } from '@/components/ui/image';
 import { BRAND_LOGO_URL } from '@/lib/brand';
+import { useAuth } from '@/lib/AuthContext';
+import { hasModuleAccess, pathToPermission } from '@/lib/permissions';
 import {
   LayoutDashboard,
   Users,
@@ -29,11 +31,9 @@ import {
   ClipboardList,
   ShieldCheck,
   FileSpreadsheet,
-  PieChart,
   Sparkles,
   Wrench,
   Filter,
-  Milestone,
   Headphones,
   ShoppingCart,
   Award,
@@ -42,8 +42,6 @@ import {
   Recycle,
   Palmtree,
   Calculator,
-  UserRound,
-  Timer,
   FileCheck,
   Star,
   CalendarClock,
@@ -59,17 +57,13 @@ import {
   Tv,
   Car,
   Briefcase,
-  MapPin,
   HelpCircle,
-  PenLine,
   ClipboardCheck,
-  GraduationCap,
   MessageSquare,
   ChevronDown,
   BookOpen,
-  FileBarChart,
-  TrendingUp,
   Menu as MenuIcon,
+  LogOut,
 } from 'lucide-react';
 
 const primaryItems = [
@@ -79,6 +73,7 @@ const primaryItems = [
 const navGroups = [
   {
     label: 'Salg & Tilbud',
+    permission: 'sales',
     icon: Target,
     items: [
       { to: '/salgsoverblik', label: 'Salgsoverblik', icon: BarChart3 },
@@ -89,6 +84,7 @@ const navGroups = [
   },
   {
     label: 'Kunder',
+    permission: 'customers',
     icon: Users,
     items: [
       { to: '/kunder', label: 'Kunder', icon: Users },
@@ -100,52 +96,45 @@ const navGroups = [
   },
   {
     label: 'Projekter',
+    permission: 'projects',
     icon: HardHat,
     items: [
       { to: '/projekter', label: 'Projekter', icon: HardHat },
       { to: '/projektstatus', label: 'Projektstatus', icon: Activity },
-      { to: '/projekt-arkiv', label: 'Projektarkiv', icon: Files },
       { to: '/projekt-oekonomi', label: 'Projektøkonomi', icon: Calculator },
       { to: '/projektkalender', label: 'Projektkalender', icon: CalendarDays },
-      { to: '/projekt-milepaele', label: 'Milepæle', icon: Milestone },
-      { to: '/projekt-tidslinje', label: 'Projekttidslinje', icon: Milestone },
       { to: '/drifts-logbog', label: 'Driftslogbog', icon: ClipboardList },
     ],
   },
   {
     label: 'Økonomi',
+    permission: 'finance',
     icon: FileSpreadsheet,
     items: [
       { to: '/faktura', label: 'Fakturaer', icon: Receipt },
-      { to: '/faktura-arkiv', label: 'Fakturaarkiv', icon: Archive },
       { to: '/regnskab', label: 'Regnskab', icon: FileSpreadsheet },
-      { to: '/regnskab-program', label: 'Regnskabsprogram', icon: Calculator },
       { to: '/regnskab-bogfoering', label: 'Bogføring', icon: BookOpen },
       { to: '/regnskab-moms', label: 'Momsangivelse', icon: Receipt },
-      { to: '/regnskab-rapporter', label: 'Årsrapport', icon: FileBarChart },
-      { to: '/regnskab-aarsoversigt', label: 'P&L årsoversigt', icon: TrendingUp },
-      { to: '/daekningsbidrag', label: 'Dækningsbidrag', icon: PieChart },
       { to: '/leverandoerfakturaer', label: 'Leverandørfakturaer', icon: FileCheck },
       { to: '/udgiftsstyring', label: 'Udgiftsstyring', icon: Receipt },
-      { to: '/udlaegsstyring', label: 'Udlæg', icon: Receipt },
       { to: '/oekonomi-rapport', label: 'Økonomirapport', icon: BarChart3 },
     ],
   },
   {
     label: 'Planlægning',
+    permission: 'planning',
     icon: CalendarDays,
     items: [
       { to: '/planlaegning', label: 'Planlægning', icon: CalendarDays },
       { to: '/ugeplanlaegning', label: 'Ugeplan', icon: CalendarDays },
       { to: '/vagtplan', label: 'Vagtplan', icon: CalendarClock },
-      { to: '/vejr-planlaegning', label: 'Vejr & planlægning', icon: CalendarDays },
       { to: '/moede-booking', label: 'Mødebooker', icon: CalendarPlus },
       { to: '/ressourceallokering', label: 'Ressource', icon: Users2 },
-      { to: '/moede-kalender', label: 'Mødekalender', icon: CalendarPlus },
     ],
   },
   {
     label: 'Opgaver',
+    permission: 'tasks',
     icon: ClipboardList,
     items: [
       { to: '/opgaveliste', label: 'Opgaveliste', icon: ClipboardList },
@@ -154,56 +143,43 @@ const navGroups = [
   },
   {
     label: 'Materialer & Lager',
+    permission: 'materials',
     icon: Package,
     items: [
       { to: '/materialeliste', label: 'Materialer', icon: Package },
-      { to: '/materialeindkoeb', label: 'Indkøb', icon: ShoppingCart },
-      { to: '/indkoebs-styring', label: 'Materiale indkøb', icon: ShoppingCart },
+      { to: '/indkoebs-styring', label: 'Indkøb', icon: ShoppingCart },
       { to: '/indkoebs-godkendelse', label: 'Indkøbsgodkendelse', icon: ClipboardCheck },
       { to: '/lager-styring', label: 'Lagerstyring', icon: Warehouse },
-      { to: '/materiale-lager', label: 'Materialelager', icon: Package },
-      { to: '/materiel-lokationer', label: 'Materiellokationer', icon: MapPin },
     ],
   },
   {
     label: 'Materiel & Udstyr',
+    permission: 'equipment',
     icon: Wrench,
     items: [
       { to: '/materiel', label: 'Materiel', icon: Wrench },
       { to: '/udstyrskalender', label: 'Udstyrskalender', icon: CalendarDays },
       { to: '/udstyr-booking', label: 'Udstyr booking', icon: CalendarDays },
       { to: '/vaerktoej-service', label: 'Værktøjsservice', icon: Wrench },
-      { to: '/materiel-logistik', label: 'Materiellogistik', icon: Truck },
-      { to: '/vaerksted', label: 'Værksted', icon: Wrench },
       { to: '/bilpark', label: 'Bilpark', icon: Car },
-      { to: '/udstyrs-historik', label: 'Udstyrshistorik', icon: History },
     ],
   },
   {
     label: 'Medarbejdere',
+    permission: 'employees',
     icon: Contact,
     items: [
       { to: '/medarbejdere', label: 'Medarbejdere', icon: Contact },
-      { to: '/medarbejder-arkiv', label: 'Medarbejderarkiv', icon: Contact },
-      { to: '/medarbejder-cv', label: 'Medarbejder-CV', icon: Award },
-      { to: '/personale-oversigt', label: 'Personaleoversigt', icon: Users },
-      { to: '/medarbejder-administration', label: 'Administration', icon: UserCog },
-      { to: '/ferie-administration', label: 'Ferie', icon: Palmtree },
       { to: '/tidsregistrering', label: 'Tidsregistrering', icon: Clock },
       { to: '/tidskalender', label: 'Tidskalender', icon: CalendarDays },
-      { to: '/timeseddel-rapport', label: 'Timeseddel', icon: Timer },
-      { to: '/brugerprofil', label: 'Brugerprofil', icon: UserRound },
-      { to: '/kursusstyring', label: 'Kursusstyring', icon: GraduationCap },
-      { to: '/kursus-oversigt', label: 'Kursusoversigt', icon: GraduationCap },
-      { to: '/certifikat-kontrol', label: 'Certifikatkontrol', icon: Award },
-      { to: '/timebank-oversigt', label: 'Timebank', icon: Clock },
-      { to: '/kompetence-matrix', label: 'Kompetence-matrix', icon: Award },
+      { to: '/ferie-administration', label: 'Ferie', icon: Palmtree },
       { to: '/bruger-administration', label: 'Brugeradministration', icon: UserCog },
       { to: '/medarbejder-beskeder', label: 'Medarbejderbeskeder', icon: MessageSquare },
     ],
   },
   {
     label: 'Leverandører',
+    permission: 'suppliers',
     icon: Truck,
     items: [
       { to: '/leverandoerer', label: 'Leverandører', icon: Truck },
@@ -214,31 +190,30 @@ const navGroups = [
   },
   {
     label: 'Kvalitet & Sikkerhed',
+    permission: 'quality',
     icon: ShieldCheck,
     items: [
       { to: '/kvalitetssikring', label: 'Kvalitet', icon: ShieldCheck },
       { to: '/sikkerhedslog', label: 'Sikkerhedslog', icon: ShieldAlert },
       { to: '/afvigelser', label: 'Afvigelser', icon: AlertOctagon },
-      { to: '/afvigelsesstyring', label: 'Afvigelsesstyring', icon: AlertOctagon },
       { to: '/sikkerhed-apv', label: 'Sikkerhed & APV', icon: ShieldCheck },
       { to: '/sikkerheds-tjekliste', label: 'Sikkerheds-tjekliste', icon: ClipboardCheck },
-      { to: '/mangel-liste', label: 'Mangel-oversigt', icon: AlertOctagon },
       { to: '/forsikringssager', label: 'Forsikringssager', icon: ShieldAlert },
-      { to: '/kvalitetsstyring-oversigt', label: 'Kvalitetsoversigt', icon: ShieldCheck },
     ],
   },
   {
     label: 'Miljø & Affald',
+    permission: 'environment',
     icon: Recycle,
     items: [
       { to: '/miljoe-affald', label: 'Miljø & Affald', icon: Recycle },
       { to: '/affalds-styring', label: 'Affaldshåndtering', icon: Recycle },
       { to: '/asbestfjernelse', label: 'Asbest', icon: ShieldAlert },
-      { to: '/forsikringssager', label: 'Forsikringssager', icon: ShieldAlert },
     ],
   },
   {
     label: 'Service & Abonnementer',
+    permission: 'service',
     icon: RefreshCw,
     items: [
       { to: '/serviceaftaler', label: 'Serviceaftaler', icon: RefreshCw },
@@ -250,21 +225,21 @@ const navGroups = [
   },
   {
     label: 'Dokumenter & Viden',
+    permission: 'documents',
     icon: Archive,
     items: [
       { to: '/dokumenter', label: 'Dokumenter', icon: Archive },
       { to: '/dokument-styring', label: 'Dokumentstyring', icon: Files },
       { to: '/vidensbase', label: 'Vidensbase', icon: HelpCircle },
       { to: '/billedarkiv', label: 'Billedarkiv', icon: Images },
-      { to: '/digital-signatur', label: 'Digital signatur', icon: PenLine },
     ],
   },
   {
     label: 'Firma',
+    permission: 'company',
     icon: Building2,
     items: [
       { to: '/ledelsesoverblik', label: 'Ledelse', icon: BarChart3 },
-      { to: '/noegletal', label: 'Nøgletal', icon: PieChart },
       { to: '/aktivitetslog', label: 'Aktivitetslog', icon: History },
       { to: '/marketing', label: 'Marketing', icon: Target },
       { to: '/firma-profil', label: 'Firma profil', icon: Building2 },
@@ -274,6 +249,7 @@ const navGroups = [
   },
   {
     label: 'Skærme',
+    permission: 'screens',
     icon: Monitor,
     items: [
       { to: '/storskaerm', label: 'Storskærm', icon: Monitor },
@@ -282,10 +258,8 @@ const navGroups = [
   },
 ];
 
-const allItems = [
-  ...primaryItems,
-  ...navGroups.flatMap((g) => g.items),
-];
+export const internalNavGroups = navGroups;
+export const routePermissionForPath = (pathname) => pathToPermission(pathname, navGroups);
 
 function NavLinkRow({ item }) {
   return (
@@ -308,11 +282,17 @@ function NavLinkRow({ item }) {
 
 export default function Layout() {
   const location = useLocation();
+  const { user, logout } = useAuth();
   const [openGroups, setOpenGroups] = useState({});
   const [menuOpen, setMenuOpen] = useState(false);
+  const visibleGroups = navGroups.filter((group) => hasModuleAccess(user, group.permission));
+  const allItems = [
+    ...primaryItems,
+    ...visibleGroups.flatMap((g) => g.items),
+  ];
 
   // Auto-expand the group that contains the active route
-  const activeGroup = navGroups.find((g) =>
+  const activeGroup = visibleGroups.find((g) =>
     g.items.some((i) => location.pathname === i.to)
   )?.label;
 
@@ -339,7 +319,7 @@ export default function Layout() {
           {primaryItems.map((item) => (
             <NavLinkRow key={item.to} item={item} />
           ))}
-          {navGroups.map((group) => {
+          {visibleGroups.map((group) => {
             const open = isGroupOpen(group.label);
             return (
               <div key={group.label}>
@@ -374,8 +354,24 @@ export default function Layout() {
             Kundeportal
           </a>
         </div>
-        <div className="px-6 py-4 border-t border-slate-800 text-xs text-slate-600">
-          © 2026 Juhl & Damsgaard
+        <div className="px-3 py-4 border-t border-slate-800">
+          <div className="px-3 pb-3">
+            <div className="text-xs font-medium text-slate-500">Logget ind som</div>
+            <div className="mt-1 truncate text-sm font-semibold text-white">
+              {user?.full_name || user?.name || user?.email || 'Bruger'}
+            </div>
+          </div>
+          <button
+            type="button"
+            onClick={() => logout(true)}
+            className="flex w-full items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-semibold text-red-300 hover:bg-red-950/40 hover:text-red-100 transition-all"
+          >
+            <LogOut className="w-[18px] h-[18px]" />
+            Log ud
+          </button>
+          <div className="px-3 pt-3 text-xs text-slate-600">
+            © 2026 Juhl & Damsgaard
+          </div>
         </div>
       </aside>
 
@@ -418,7 +414,7 @@ export default function Layout() {
                 <item.icon className="w-4 h-4" /> {item.label}
               </NavLink>
             ))}
-            {navGroups.map((group) => (
+            {visibleGroups.map((group) => (
               <div key={group.label}>
                 <div className="flex items-center gap-2 text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1.5 px-1">
                   <group.icon className="w-3.5 h-3.5" /> {group.label}
@@ -447,6 +443,16 @@ export default function Layout() {
               <a href="/portal" onClick={() => setMenuOpen(false)} className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-amber-600 hover:bg-slate-100">
                 <ExternalLink className="w-4 h-4" /> Kundeportal
               </a>
+              <button
+                type="button"
+                onClick={() => {
+                  setMenuOpen(false);
+                  logout(true);
+                }}
+                className="flex w-full items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-semibold text-red-600 hover:bg-red-50"
+              >
+                <LogOut className="w-4 h-4" /> Log ud
+              </button>
             </div>
           </div>
         </DrawerContent>

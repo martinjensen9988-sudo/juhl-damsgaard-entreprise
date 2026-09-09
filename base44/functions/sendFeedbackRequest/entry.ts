@@ -41,7 +41,7 @@ export default async function(req) {
 
     try {
       await base44.asServiceRole.entities.ActivityLog.create({
-        entity_type: 'Project',
+        entity_type: 'Projekt',
         entity_id: project.id,
         entity_name: project.name || project_id,
         action: 'Feedback anmodning sendt',

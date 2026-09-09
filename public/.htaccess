@@ -1,0 +1,45 @@
+Options -MultiViews
+
+RewriteEngine On
+RewriteBase /
+
+# Force HTTPS on the real domain when SSL is enabled.
+# Simply.com's temporary linux/unoeuro URL must stay on HTTP.
+RewriteCond %{HTTPS} !=on
+RewriteCond %{HTTP_HOST} !\.unoeuro-server\.com$ [NC]
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# Serve real files and folders directly.
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# Missing hashed assets must return 404 instead of the React HTML fallback.
+RewriteRule ^assets/ - [R=404,L]
+
+# React Router fallback for deep links and page refreshes.
+RewriteRule ^ index.html [L]
+
+<IfModule mod_headers.c>
+  Header set X-Content-Type-Options "nosniff"
+  Header set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
+  Header set Content-Security-Policy "upgrade-insecure-requests"
+  <FilesMatch "^(index\.html|manifest\.json)$">
+    Header set Cache-Control "no-store, no-cache, must-revalidate, max-age=0"
+    Header set Pragma "no-cache"
+    Header set Expires "0"
+  </FilesMatch>
+</IfModule>
+
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType text/html "access plus 0 seconds"
+  ExpiresByType text/css "access plus 1 year"
+  ExpiresByType application/javascript "access plus 1 year"
+  ExpiresByType image/svg+xml "access plus 1 year"
+  ExpiresByType image/png "access plus 1 year"
+  ExpiresByType image/jpeg "access plus 1 year"
+  ExpiresByType image/webp "access plus 1 year"
+  ExpiresByType font/woff2 "access plus 1 year"
+</IfModule>

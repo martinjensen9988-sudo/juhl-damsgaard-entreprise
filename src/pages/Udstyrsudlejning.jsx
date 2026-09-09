@@ -6,7 +6,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
-import { Plus, Pencil, Trash2, Package, Wrench } from 'lucide-react';
+import { Plus, Pencil, Trash2, Wrench } from 'lucide-react';
 import { formatDate, formatDKK } from '@/lib/format';
 
 const STATUSES = ['Reserveret', 'Udleveret', 'Returneret', 'Annulleret'];

@@ -8,7 +8,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { calcLineTotal, formatDKK } from '@/lib/format';
 
 const UNITS = [
   { value: 'stk', label: 'stk' },

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { base44 } from '@/api/base44Client';
 import { Send, Loader2, CheckCircle2 } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { BRAND_PHONE_DISPLAY } from '@/lib/brand';
 
 const empty = { name: '', email: '', phone: '', project_type: 'Andet', description: '', address: '' };
 
@@ -54,7 +55,7 @@ export default function ForsideKontaktForm() {
         <div className="grid md:grid-cols-2 gap-4">
           <div>
             <label className="text-sm text-slate-300 mb-1 block">Telefon</label>
-            <input value={form.phone} onChange={(e) => field('phone', e.target.value)} className="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-sm focus:outline-none focus:ring-2 focus:ring-amber-400" placeholder="+45 00 00 00 00" />
+            <input value={form.phone} onChange={(e) => field('phone', e.target.value)} className="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-sm focus:outline-none focus:ring-2 focus:ring-amber-400" placeholder={BRAND_PHONE_DISPLAY} />
           </div>
           <div>
             <label className="text-sm text-slate-300 mb-1 block">Opgavetype</label>

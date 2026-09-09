@@ -5,6 +5,7 @@ import { formatDKK, calcSubtotal, calcVAT, calcTotal } from '@/lib/format';
 import ForsideLayout from '@/components/forside/ForsideLayout';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Send, Loader2, CheckCircle2, ArrowLeft, FileText, Mail, Clock, ShieldCheck } from 'lucide-react';
+import { BRAND_PHONE_DISPLAY } from '@/lib/brand';
 
 const PROJECT_TYPES = ['Gravearbejde', 'Kloak', 'Asfalt', 'Beton', 'Nedrivning', 'Anlæg', 'Malerarbejde', 'Tømrer', 'VVS', 'Elektriker', 'Totalentreprise', 'Andet'];
 
@@ -40,7 +41,7 @@ export default function Forespoergsel() {
   const vat = state.estimate ? Number(state.estimate.vat) || calcVAT(subtotal) : calcVAT(subtotal);
   const total = state.estimate ? Number(state.estimate.total) || calcTotal(lineItems) : calcTotal(lineItems);
   const source = state.source || (state.estimate ? 'AI tilbudschat' : 'Prisberegner');
-  const requestSummary = state.estimate?.message || '';
+  const requestSummary = state.estimate?.task_description || state.estimate?.cleaned_notes || state.estimate?.message || '';
 
   const [form, setForm] = useState({ name: '', email: '', phone: '', address: '', project_type: 'Andet', description: '' });
   const [sending, setSending] = useState(false);
@@ -164,7 +165,7 @@ export default function Forespoergsel() {
                     <div className="grid md:grid-cols-2 gap-4">
                       <div>
                         <label className="text-sm font-medium text-slate-700 mb-1 block">Telefon</label>
-                        <input value={form.phone} onChange={(e) => field('phone', e.target.value)} className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400" placeholder="+45 00 00 00 00" />
+                        <input value={form.phone} onChange={(e) => field('phone', e.target.value)} className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400" placeholder={BRAND_PHONE_DISPLAY} />
                       </div>
                       <div>
                         <label className="text-sm font-medium text-slate-700 mb-1 block">Opgavetype</label>

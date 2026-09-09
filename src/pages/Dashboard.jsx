@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { base44 } from '@/api/base44Client';
-import { formatDKK, calcSubtotal, calcVAT, calcTotal, formatDate } from '@/lib/format';
-import { HardHat, FileText, Receipt, TrendingUp, ArrowRight, Clock, CheckCircle2, AlertCircle } from 'lucide-react';
+import { formatDKK, calcTotal, formatDate } from '@/lib/format';
+import { HardHat, FileText, Receipt, TrendingUp, ArrowRight, CheckCircle2, AlertCircle } from 'lucide-react';
 import ProjectTimeline from '@/components/ProjectTimeline';
 import ProjektOekonomiOverview from '@/components/ProjektOekonomiOverview';
 import DashboardCharts from '@/components/DashboardCharts';

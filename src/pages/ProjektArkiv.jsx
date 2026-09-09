@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
-import { formatDate, formatDKK } from '@/lib/format';
+import { formatDKK } from '@/lib/format';
 import { Files, FileText, Receipt, ShieldCheck, ChevronDown, ChevronRight } from 'lucide-react';
 
 const lineTotal = (items = []) => items.reduce((s, i) => s + (Number(i.quantity) || 0) * (Number(i.unit_price) || 0), 0);

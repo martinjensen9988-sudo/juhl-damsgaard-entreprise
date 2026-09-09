@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
 import { Card } from '@/components/ui/card';
 import { Users, Loader2, Briefcase, Clock, AlertTriangle } from 'lucide-react';
-import { formatDate } from '@/lib/format';
 
 export default function Ressourceallokering() {
   const [employees, setEmployees] = useState([]);

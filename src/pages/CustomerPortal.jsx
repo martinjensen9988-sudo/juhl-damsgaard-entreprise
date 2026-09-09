@@ -5,7 +5,6 @@ import { Image as Img } from '@/components/ui/image';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Label } from '@/components/ui/label';
 import { formatDKK, calcSubtotal, calcVAT, calcTotal, formatDate } from '@/lib/format';
 import { useToast } from '@/components/ui/use-toast';
 import { HardHat, Camera, Calculator, Plus, Trash2, FileText, Receipt, Check, ArrowUpRight } from 'lucide-react';
@@ -68,7 +67,7 @@ export default function CustomerPortal() {
           base44.entities.Invoice.list('-created_date', 50),
         ]);
         setProjects(p);
-        setQuotes(q.filter((x) => x.customer_email === u.email));
+        setQuotes(u.role === 'admin' ? q : q.filter((x) => x.customer_email === u.email));
         setInvoices(i);
         // Load images for each project
         const imgMap = {};

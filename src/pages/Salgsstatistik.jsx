@@ -3,7 +3,7 @@ import { base44 } from '@/api/base44Client';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend } from 'recharts';
 import { formatDKK } from '@/lib/format';
-import { TrendingUp, TrendingDown, Target, Trophy, Percent, BarChart3 } from 'lucide-react';
+import { TrendingUp, Target, Trophy, Percent, BarChart3 } from 'lucide-react';
 
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'Maj', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dec'];
 const QUOTE_COLORS = { Accepteret: '#10b981', Sendt: '#3b82f6', Kladde: '#94a3b8', Afvist: '#ef4444', Udløbet: '#f59e0b' };

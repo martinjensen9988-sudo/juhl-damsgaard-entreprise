@@ -1,0 +1,32 @@
+{
+  "name": "NotificationRead",
+  "type": "object",
+  "properties": {
+    "user_id": {
+      "type": "string",
+      "title": "Bruger ID"
+    },
+    "item_type": {
+      "type": "string",
+      "title": "Type",
+      "enum": [
+        "message",
+        "task"
+      ]
+    },
+    "item_id": {
+      "type": "string",
+      "title": "Element ID"
+    },
+    "read_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Læst"
+    }
+  },
+  "required": [
+    "user_id",
+    "item_type",
+    "item_id"
+  ]
+}

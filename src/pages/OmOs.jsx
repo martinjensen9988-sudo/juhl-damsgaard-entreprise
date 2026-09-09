@@ -22,7 +22,7 @@ export default function OmOs() {
       </section>
 
       <section className="bg-amber-400 text-slate-950 py-10">
-        <div className="max-w-6xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+        <div className="max-w-5xl mx-auto px-6 grid grid-cols-1 sm:grid-cols-3 gap-8 text-center">
           {stats.map((s) => (
             <div key={s.label}>
               <div className="text-4xl md:text-5xl font-bold tracking-tight">{s.value}</div>
@@ -73,7 +73,7 @@ export default function OmOs() {
         <div className="max-w-6xl mx-auto px-6">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-white">Hvad vores kunder siger</h2>
-            <p className="text-slate-400 mt-3">Tilfredse kunder er vores bedste reference.</p>
+            <p className="text-slate-400 mt-3">Kundernes oplevelser er vores bedste reference.</p>
           </div>
           <div className="grid md:grid-cols-3 gap-6">
             {testimonials.map((t, i) => (

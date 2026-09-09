@@ -6,7 +6,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
-import { Plus, Pencil, Trash2, Wallet, TrendingDown } from 'lucide-react';
+import { Plus, Pencil, Trash2, Wallet } from 'lucide-react';
 import { formatDate, formatDKK } from '@/lib/format';
 
 const categories = ['Forsikring', 'Leasing', 'Husleje', 'Løn', 'Brændstof', 'Telefon/Internet', 'Software', 'El/Vand/Varme', 'Markedsføring', 'Andet'];

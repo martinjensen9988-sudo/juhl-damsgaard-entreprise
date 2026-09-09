@@ -1,6 +1,8 @@
 import { useEffect } from 'react';
-import { Outlet } from 'react-router-dom';
+import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import { useAuth } from '@/lib/AuthContext';
+import { routePermissionForPath } from '@/components/Layout';
+import { hasModuleAccess } from '@/lib/permissions';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 
 const DefaultFallback = () => (
@@ -9,8 +11,14 @@ const DefaultFallback = () => (
   </div>
 );
 
-export default function ProtectedRoute({ fallback = <DefaultFallback />, unauthenticatedElement }) {
-  const { isAuthenticated, isLoadingAuth, authChecked, authError, checkUserAuth } = useAuth();
+export default function ProtectedRoute({
+  fallback = <DefaultFallback />,
+  unauthenticatedElement,
+  unauthorizedElement = unauthenticatedElement,
+  allowedRoles,
+}) {
+  const { user, isAuthenticated, isLoadingAuth, authChecked, authError, checkUserAuth } = useAuth();
+  const location = useLocation();
 
   useEffect(() => {
     if (!authChecked && !isLoadingAuth) {
@@ -31,6 +39,19 @@ export default function ProtectedRoute({ fallback = <DefaultFallback />, unauthe
 
   if (!isAuthenticated) {
     return unauthenticatedElement;
+  }
+
+  if (allowedRoles?.length && !allowedRoles.includes(user?.role)) {
+    return unauthorizedElement;
+  }
+
+  if (user?.must_change_password && location.pathname !== '/change-password') {
+    return <Navigate to={`/change-password?returnTo=${encodeURIComponent(location.pathname)}`} replace />;
+  }
+
+  const routePermission = routePermissionForPath(location.pathname);
+  if (routePermission && !hasModuleAccess(user, routePermission)) {
+    return unauthorizedElement;
   }
 
   return <Outlet />;

@@ -30,7 +30,10 @@ export default function PortalLayout() {
               <Link to="/dashboard" className="text-sm text-amber-400 hover:text-amber-300 font-medium">Admin panel</Link>
             )}
             <button
-              onClick={() => base44.auth.logout('/login')}
+              onClick={async () => {
+                await base44.auth.logout();
+                window.location.href = '/kunde-login';
+              }}
               className="flex items-center gap-1.5 text-sm text-slate-300 hover:text-white"
             >
               <LogOut className="w-4 h-4" /> Log ud

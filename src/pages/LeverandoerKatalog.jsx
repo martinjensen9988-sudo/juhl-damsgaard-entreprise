@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
 import { base44 } from '@/api/base44Client';
-import { Store, Plus, Pencil, Trash2, Phone, Mail, ExternalLink, MapPin } from 'lucide-react';
+import { Store, Plus, Pencil, Trash2, Phone, Mail, MapPin } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';

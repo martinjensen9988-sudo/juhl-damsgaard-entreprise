@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
 import { formatDate } from '@/lib/format';
-import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { ListOrdered, ArrowUp, ArrowDown, CheckCircle2, Circle, Clock, Flame } from 'lucide-react';
+import { ListOrdered, CheckCircle2, Circle, Clock, Flame } from 'lucide-react';
 
 const PRIORITIES = ['Høj', 'Normal', 'Lav'];
 const STATUSES = ['Ikke startet', 'I gang', 'Afventer', 'Gennemført'];

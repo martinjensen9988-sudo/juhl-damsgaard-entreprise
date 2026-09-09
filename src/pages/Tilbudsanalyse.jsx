@@ -2,7 +2,7 @@ import { useEffect, useState, useMemo } from 'react';
 import { base44 } from '@/api/base44Client';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Target, TrendingUp, TrendingDown, CheckCircle2, XCircle, Clock, FileText } from 'lucide-react';
+import { Target, TrendingDown, CheckCircle2, XCircle, FileText } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend } from 'recharts';
 
 const STATUS_COLORS = { Accepteret: '#10b981', Afvist: '#ef4444', Udløbet: '#f59e0b', Sendt: '#3b82f6', Kladde: '#94a3b8' };

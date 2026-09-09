@@ -7,6 +7,7 @@ import {
   ParkingCircle, Fence, Lightbulb, Shovel, Mountain, Truck, HousePlus, Banknote, FileWarning,
   Zap, Ruler, Thermometer, Plug, PaintRoller, DoorClosed,
 } from 'lucide-react';
+import { localAreaText } from '../../lib/localAreas.js';
 
 export const services = [
   {
@@ -226,10 +227,9 @@ export const allServices = [
 ];
 
 export const stats = [
-  { value: '25+', label: 'År i branchen' },
-  { value: '500+', label: 'Projekter gennemført' },
-  { value: '100%', label: 'Tilfredse kunder' },
-  { value: '24t', label: 'Svartid' },
+  { value: 'Fyn & Jylland', label: 'Fast arbejdsområde' },
+  { value: '350 kr.', label: 'Timepris inkl. moms' },
+  { value: '24t', label: 'Typisk svartid' },
 ];
 
 export const benefits = [
@@ -253,43 +253,218 @@ export const testimonials = [
 
 export const faqItems = [
   {
+    category: 'Ydelser',
     q: 'Hvilke opgaver løser I?',
     a: 'Vi udfører alt inden for entreprenørarbejde — gravearbejde, kloak og dræn, asfalt og brolægning, beton og støbning, nedrivning, anlæg, asbestfjernelse, skadeservice, viceværtsservice og snerydding. Derudover har vi tømrere, VVS-installatører og elektrikere, så vi også tager byggeopgaver, installationer og totalentrepriser — kort sagt alt andet. Se det fulde overblik længere oppe.',
   },
   {
+    category: 'Proces',
     q: 'Hvor hurtigt kan I komme ud?',
     a: 'Ved akutte skader rykker vi typisk ud samme dag. Ved planlagte opgaver aftaler vi en tid der passer dig — vi holder altid de deadlines vi sætter.',
   },
   {
+    category: 'Tilbud og pris',
     q: 'Får jeg et uforpligtende tilbud?',
     a: 'Ja. Du kan bruge vores prisberegner på hjemmesiden eller kontakte os direkte. Du modtager et transparent og uforpligtende tilbud, før vi går i gang.',
   },
   {
+    category: 'Kunder',
     q: 'Arbejder I for både private og erhverv?',
     a: 'Ja, vi løser opgaver for både private boligejere, foreninger, kommuner og erhvervsvirksomheder — fra mindre reparationsopgaver til større totalentrepriser.',
   },
   {
+    category: 'Område',
     q: 'Hvilket område dækker I?',
-    a: 'Vi dækker hele Fyn og Jylland. Er du i tvivl om vi kører til din adresse, så kontakt os — så finder vi en løsning.',
+    a: `Vi dækker hele Fyn og Jylland efter aftale, blandt andet ${localAreaText}. Er du i tvivl om vi kører til din adresse, så kontakt os - så finder vi en løsning.`,
   },
   {
+    category: 'Asbest og miljø',
     q: 'Er I certificeret til asbestfjernelse?',
     a: 'Ja, vi er uddannede og certificeret til sikker asbestfjernelse og udsteder certifikat ved afsluttet opgave, så du har dokumentation for korrekt bortskaffelse.',
   },
   {
+    category: 'Skadeservice',
     q: 'Kan I håndtere forsikringssager?',
     a: 'Ja. Vi har erfaring med skadesrapportering og udbedring i samarbejde med forsikringsselskaber, og vi sørger for fuld billedokumentation undervejs.',
   },
   {
+    category: 'Serviceaftaler',
     q: 'Tilbyder I løbende service og vicevært?',
     a: 'Ja, vi tilbyder faste serviceaftaler med tilsyn, vedligehold og viceværtsservice for foreninger og virksomheder, samt vintervedligeholdelse med snerydding.',
   },
   {
+    category: 'Betaling',
     q: 'Hvordan betaler jeg?',
-    a: 'Du modtager en faktura med de aftalte betalingsbetingelser. Vi tilbyder fleksible betalingsvilkår efter aftale — også acconto på større opgaver.',
+    a: 'Ved større opgaver tager vi som udgangspunkt 50% i aconto ved opstart. Det gør vi for at sikre materialer, maskiner, levering og planlægning af de fag der skal bruges. Resten aftales tydeligt i tilbuddet, og du er altid velkommen til at ringe og tage en snak med os, så finder vi en løsning der passer til opgaven.',
   },
   {
+    category: 'Aflevering',
     q: 'Rydder I op efter arbejdet?',
     a: 'Ja. Vi efterlader altid byggepladsen ryddet og i orden, så du står med et færdigt og pænt resultat.',
+  },
+  {
+    category: 'Tilbud og pris',
+    q: 'Hvad koster det at få lavet en opgave?',
+    a: 'Prisen afhænger af opgavetype, adgangsforhold, materialer, maskiner, bortkørsel, tidsforbrug og om andre fag skal koordineres. Vores interne timepris er 350 kr. inkl. moms, men et færdigt tilbud bør altid vise både arbejdsløn, materialer, moms og en tydelig beskrivelse af opgaven.',
+  },
+  {
+    category: 'Tilbud og pris',
+    q: 'Hvad skal jeg sende for at få et præcist tilbud?',
+    a: 'Send adresse, billeder, mål, ønsket tidsplan og en kort beskrivelse af det ønskede resultat. Ved gravearbejde, kloak, beton og belægning er billeder af adgangsforhold og eksisterende areal meget nyttige. Ved større opgaver kan en besigtigelse være nødvendig.',
+  },
+  {
+    category: 'Tilbud og pris',
+    q: 'Kan AI-tilbuddet bruges som endelig pris?',
+    a: 'AI-tilbuddet er et hurtigt prisgrundlag og en god start. Endelig pris kan kræve gennemgang af billeder, adresse, materialevalg, mål og adgangsforhold. Vi bruger AI’en til at gøre tilbuddet hurtigere og mere struktureret, men vi kvalitetstjekker altid større opgaver.',
+  },
+  {
+    category: 'Tilbud og pris',
+    q: 'Er materialer med i jeres tilbud?',
+    a: 'Ja, tilbud skal som udgangspunkt indeholde både arbejde og materialer. Det kan for eksempel være stabilgrus, sand, rør, beton, armering, træ, fittings, kabler, fliser, asfalt, bortkørsel og andre relevante materialer afhængigt af opgaven.',
+  },
+  {
+    category: 'Tilbud og pris',
+    q: 'Kan I lave tilbud ud fra billeder?',
+    a: 'Ja, ofte kan vi lave en første vurdering ud fra billeder og en beskrivelse. Hvis opgaven er kompleks, eller hvis jordbund, kloak, installationer eller bærende konstruktioner har betydning, anbefaler vi typisk en besigtigelse.',
+  },
+  {
+    category: 'Område',
+    q: 'Kører I til Odense?',
+    a: 'Ja, vi udfører entreprenørarbejde i Odense og på resten af Fyn. Det gælder blandt andet gravearbejde, kloak og dræn, beton, asfalt, brolægning, tømrerarbejde, VVS, el, skadeservice og totalentreprise.',
+  },
+  {
+    category: 'Område',
+    q: 'Kører I til Kolding og Vejle?',
+    a: 'Ja, vi løser opgaver i både Kolding, Vejle og resten af Jylland efter aftale. Send adresse og opgavebeskrivelse, så vurderer vi kørsel, tidsplan og prisgrundlag.',
+  },
+  {
+    category: 'Område',
+    q: 'Tager I mindre opgaver, hvis kunden bor langt væk?',
+    a: 'Det afhænger af opgavens størrelse og planlægning. Ved mindre opgaver vurderer vi transport og tidsforbrug, så prisen stadig giver mening. Nogle gange kan mindre opgaver samles med andre opgaver i samme område.',
+  },
+  {
+    category: 'Ydelser',
+    q: 'Kan I tage hele projektet som totalentreprise?',
+    a: 'Ja. Ved totalentreprise samler vi gravearbejde, kloak, beton, tømrer, VVS, elektriker og afsluttende arbejde i én samlet plan. Det giver kunden én kontaktperson og mindre koordinering mellem forskellige fag.',
+  },
+  {
+    category: 'Ydelser',
+    q: 'Laver I både gravearbejde og kloak?',
+    a: 'Ja, vi kan håndtere gravearbejde sammen med kloak- og drænrelaterede opgaver. Hvor opgaven kræver autorisation eller særlig dokumentation, sørger vi for korrekt koordinering med relevante fagfolk.',
+  },
+  {
+    category: 'Ydelser',
+    q: 'Kan I lave fundament og betonarbejde?',
+    a: 'Ja, vi udfører betonarbejde som fundamenter, sokler, gulve, plader, trapper og mindre konstruktioner. Vi tager højde for udgravning, bærelag, armering, betonleverance og efterbehandling.',
+  },
+  {
+    category: 'Ydelser',
+    q: 'Laver I asfalt, fliser og brolægning?',
+    a: 'Ja. Vi hjælper med asfalt, brolægning, fliser, indkørsler, stier, gårdspladser, parkeringsarealer og retablering efter gravearbejde. Holdbarheden afhænger især af korrekt opbygning under belægningen.',
+  },
+  {
+    category: 'Ydelser',
+    q: 'Kan I hjælpe med tømrerarbejde?',
+    a: 'Ja, vi udfører tømrerarbejde som reparationer, træbeklædning, tagværk, carport, udhus, tilbygninger og opgaver hvor tømrerfaget indgår i en samlet entreprise.',
+  },
+  {
+    category: 'Ydelser',
+    q: 'Kan I koordinere VVS og elektriker?',
+    a: 'Ja. Ved opgaver hvor VVS eller el kræver autoriserede fagfolk, koordinerer vi arbejdet, så installationerne passer med resten af byggeriet og udføres korrekt.',
+  },
+  {
+    category: 'Skadeservice',
+    q: 'Hvad gør jeg ved akut vandskade?',
+    a: 'Stop vandet hvis muligt, begræns skaden, tag billeder og kontakt os hurtigt. Vi hjælper med afdækning, åbning af konstruktioner, dokumentation, udbedring og koordinering med relevante fag.',
+  },
+  {
+    category: 'Skadeservice',
+    q: 'Kan I dokumentere skaden til forsikringen?',
+    a: 'Ja, vi kan tage billeder før, under og efter arbejdet og beskrive hvad der er udført. Det giver et bedre grundlag for dialog med forsikringsselskabet.',
+  },
+  {
+    category: 'Skadeservice',
+    q: 'Udbedrer I også skaden efter oprydning?',
+    a: 'Ja, vi kan ofte håndtere hele forløbet fra første indsats til færdig reparation. Det kan omfatte nedtagning, tørring, tømrerarbejde, VVS, el, beton, overflader og afsluttende oprydning.',
+  },
+  {
+    category: 'Proces',
+    q: 'Hvordan foregår en typisk opgave?',
+    a: 'Først afklarer vi opgaven og indsamler billeder, mål og adresse. Derefter laver vi et tilbud eller aftaler besigtigelse. Når tilbuddet er godkendt, planlægger vi materialer, mandskab og tidsplan, udfører arbejdet og afleverer området ryddet.',
+  },
+  {
+    category: 'Proces',
+    q: 'Kommer I ud og besigtiger opgaven?',
+    a: 'Ja, ved større eller mere komplekse opgaver giver det bedst mening at se forholdene på stedet. Ved mindre og enkle opgaver kan billeder og mål nogle gange være nok til en første vurdering.',
+  },
+  {
+    category: 'Proces',
+    q: 'Hvor lang tid tager en opgave?',
+    a: 'Det afhænger af omfang, materialer, vejret, adgangsforhold og om flere fag skal ind over. Mindre opgaver kan ofte klares hurtigt, mens totalentrepriser og større grave-, beton- eller kloakopgaver kræver mere planlægning.',
+  },
+  {
+    category: 'Proces',
+    q: 'Kan arbejdet udføres mens vi bor i huset?',
+    a: 'Ofte ja, men det afhænger af opgaven. Ved støj, støv, vandafbrydelse, strøm, gravearbejde tæt på adgangsveje eller skadeservice aftaler vi praktiske forhold på forhånd, så hverdagen påvirkes mindst muligt.',
+  },
+  {
+    category: 'Proces',
+    q: 'Hvad hvis der dukker uforudsete forhold op?',
+    a: 'Hvis vi finder skjulte skader, ukendte installationer, dårlig jordbund eller andet uforudset, stopper vi op og forklarer situationen. Ekstraarbejde aftales, før vi går videre, så du ikke får overraskelser uden dialog.',
+  },
+  {
+    category: 'Materialer',
+    q: 'Kan jeg selv købe materialerne?',
+    a: 'Det kan i nogle tilfælde aftales, men vi anbefaler ofte at lade os stå for materialerne. Så kan vi sikre korrekt kvalitet, mængde, levering og ansvar for at materialerne passer til opgaven.',
+  },
+  {
+    category: 'Materialer',
+    q: 'Bortskaffer I jord og byggeaffald?',
+    a: 'Ja, vi kan håndtere bortkørsel og bortskaffelse af jord, beton, træ, belægning og byggeaffald via relevante løsninger. Ved særlige materialer som asbest eller forurenede materialer kræves korrekt håndtering og dokumentation.',
+  },
+  {
+    category: 'Materialer',
+    q: 'Retablerer I efter gravearbejde?',
+    a: 'Ja, retablering kan indgå i opgaven. Det kan være jord, grus, fliser, asfalt, græs, belægning eller anden afslutning afhængigt af hvad området skal bruges til bagefter.',
+  },
+  {
+    category: 'Kunder',
+    q: 'Arbejder I for boligforeninger?',
+    a: 'Ja, vi hjælper boligforeninger med vedligehold, belægning, kloak, dræn, skadeservice, viceværtservice, snerydning, mindre reparationer og større samlede projekter.',
+  },
+  {
+    category: 'Kunder',
+    q: 'Arbejder I for virksomheder?',
+    a: 'Ja, vi udfører entreprenørarbejde for erhvervskunder, blandt andet adgangsveje, pladser, drift, skader, reparationer, beton, belægning, installationer og totalentrepriser.',
+  },
+  {
+    category: 'Serviceaftaler',
+    q: 'Kan vi få en fast serviceaftale?',
+    a: 'Ja, vi kan lave faste aftaler på tilsyn, vedligehold, småreparationer, viceværtservice, snerydning og andre tilbagevendende opgaver for virksomheder, foreninger og ejendomme.',
+  },
+  {
+    category: 'Serviceaftaler',
+    q: 'Tilbyder I snerydning og vinterservice?',
+    a: 'Ja, vi tilbyder snerydning, grusning og saltning efter aftale. Det er især relevant for foreninger, virksomheder og ejendomme, hvor adgangsveje og gangarealer skal holdes sikre.',
+  },
+  {
+    category: 'Betaling',
+    q: 'Skal der betales aconto?',
+    a: 'Ja, ved større opgaver tager vi som udgangspunkt 50% i aconto første gang. Det dækker blandt andet materialer, maskiner, levering og reservation af de fag der skal bruges. Ring gerne og tag en snak med os, så gennemgår vi opgaven og aftaler betalingsplanen tydeligt i tilbuddet.',
+  },
+  {
+    category: 'Betaling',
+    q: 'Er priserne inklusiv moms?',
+    a: 'Når vi kommunikerer til private, viser vi som udgangspunkt priser inklusiv moms. I tilbud kan vi også vise beløb eksklusiv moms, moms og totalbeløb, så økonomien er tydelig.',
+  },
+  {
+    category: 'Aflevering',
+    q: 'Får jeg dokumentation på arbejdet?',
+    a: 'Ved behov kan vi levere billeder, beskrivelser og dokumentation af udført arbejde. Det er især relevant ved skjulte installationer, kloak, dræn, skadeservice, forsikringssager og kvalitetskontrol.',
+  },
+  {
+    category: 'Aflevering',
+    q: 'Hvad sker der når arbejdet er færdigt?',
+    a: 'Vi gennemgår arbejdet, rydder op og afleverer området i den aftalte stand. Hvis der er dokumentation, billeder eller opfølgningspunkter, samler vi det, så du har overblik efter afleveringen.',
   },
 ];

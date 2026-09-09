@@ -68,6 +68,18 @@ After pushing your changes to git, open the Base44 dashboard and publish the app
 base44 dashboard open
 ```
 
+## Deploy Frontend To Simply.com
+
+This Vite app can be built as a static frontend and uploaded to Simply.com webhosting.
+
+```bash
+npm run build:simply
+```
+
+Upload the contents of `dist/` to `public_html`.
+
+See [docs/SIMPLY_DEPLOY.md](docs/SIMPLY_DEPLOY.md) for the full checklist and the Base44 backend limitation.
+
 ## Docs & Support
 
 Documentation: [https://docs.base44.com/Integrations/Using-GitHub](https://docs.base44.com/Integrations/Using-GitHub)

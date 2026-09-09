@@ -1,10 +1,8 @@
 import { useEffect, useState } from 'react';
 import { base44 } from '@/api/base44Client';
 import { Button } from '@/components/ui/button';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Select, SelectContent, SelectItem, SelectTrigger } from '@/components/ui/select';
 import { CloudRain, Sun, Cloud, CloudSnow, Zap, RefreshCw, HardHat, MapPin, AlertTriangle } from 'lucide-react';
-import { format } from 'date-fns';
-import { da } from 'date-fns/locale';
 
 const WEATHER_ICON = { Klar: Sun, Skyet: Cloud, Regn: CloudRain, Sne: CloudSnow, Torden: Zap };
 const WEATHER_COLOR = { Klar: 'bg-amber-100 text-amber-600', Skyet: 'bg-slate-100 text-slate-500', Regn: 'bg-blue-100 text-blue-600', Sne: 'bg-cyan-100 text-cyan-600', Torden: 'bg-purple-100 text-purple-600' };

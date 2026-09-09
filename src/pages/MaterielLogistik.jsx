@@ -6,7 +6,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
-import { Truck, Plus, MapPin, ArrowRight, Pencil, Package } from 'lucide-react';
+import { Truck, MapPin, ArrowRight, Package } from 'lucide-react';
 import { format } from 'date-fns';
 import { da } from 'date-fns/locale';
 

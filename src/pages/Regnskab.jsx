@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { base44 } from '@/api/base44Client';
 import { Button } from '@/components/ui/button';
 import { formatDKK, calcTotal, formatDate } from '@/lib/format';
-import { Download, FileSpreadsheet, Check, Settings, ExternalLink } from 'lucide-react';
+import { Download, FileSpreadsheet, Settings, ExternalLink } from 'lucide-react';
 
 const STATUS_BADGE = {
   Kladde: 'bg-slate-100 text-slate-500',

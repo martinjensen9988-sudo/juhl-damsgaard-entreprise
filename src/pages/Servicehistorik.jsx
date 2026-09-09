@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
 import { base44 } from '@/api/base44Client';
-import { Wrench, Plus, Pencil, Trash2, Calendar } from 'lucide-react';
+import { Wrench, Plus, Pencil, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';

@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { base44 } from '@/api/base44Client';
-import { formatDKK, calcSubtotal, calcVAT, calcTotal, formatDate } from '@/lib/format';
-import { Button } from '@/components/ui/button';
+import { formatDKK, calcTotal, formatDate } from '@/lib/format';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { ClipboardList, Clock, Package, TrendingUp, CheckCircle2, AlertTriangle } from 'lucide-react';
 

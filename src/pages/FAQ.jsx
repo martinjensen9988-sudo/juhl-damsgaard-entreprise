@@ -9,8 +9,25 @@ import { HelpCircle, ArrowRight, Phone } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import ForsideLayout from '@/components/forside/ForsideLayout';
 import { faqItems } from '@/components/forside/forsideData';
+import { faqSchema, useSeo } from '@/lib/seo';
 
 export default function FAQ() {
+  const groupedFaq = faqItems.reduce((groups, item) => {
+    const category = item.category || 'Generelt';
+    if (!groups[category]) groups[category] = [];
+    groups[category].push(item);
+    return groups;
+  }, {});
+  const categories = Object.entries(groupedFaq);
+
+  useSeo({
+    title: 'FAQ om entreprenørarbejde, priser og tilbud | Juhl & Damsgaard',
+    description:
+      'Stor FAQ om entreprenørarbejde, priser, tilbud, gravearbejde, kloak, beton, tømrer, VVS, elektriker, skadeservice og arbejdsområde på Fyn og i Jylland.',
+    canonicalPath: '/faq',
+    schema: [faqSchema(faqItems, '/faq')],
+  });
+
   return (
     <ForsideLayout>
       {/* Hero */}
@@ -24,31 +41,54 @@ export default function FAQ() {
             Spørgsmål? <span className="text-amber-400">Vi svarer.</span>
           </h1>
           <p className="text-lg text-slate-300 mt-6 leading-relaxed">
-            Her finder du svar på de mest almindelige spørgsmål om vores tjenester, processer og vilkår.
-            Mangler du svar på noget, er du altid velkommen til at kontakte os.
+            Her finder du svar om tilbud, priser, materialer, gravearbejde, kloak, beton,
+            skadeservice, totalentreprise, betaling og hvordan vi arbejder på Fyn og i Jylland.
           </p>
         </div>
       </section>
 
-      {/* FAQ accordion */}
-      <section className="py-16 bg-white">
-        <div className="max-w-3xl mx-auto px-6">
-          <Accordion type="single" collapsible className="space-y-3">
-            {faqItems.map((item, i) => (
-              <AccordionItem
-                key={i}
-                value={`item-${i}`}
-                className="border border-slate-200 rounded-xl px-5 data-[state=open]:border-amber-300 data-[state=open]:shadow-md transition"
+      <section className="py-10 bg-white border-b border-slate-200">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="flex flex-wrap gap-2 justify-center">
+            {categories.map(([category, items]) => (
+              <a
+                key={category}
+                href={`#${category.toLowerCase().replaceAll(' ', '-')}`}
+                className="rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-semibold text-slate-700 hover:border-amber-300 hover:text-amber-700 transition"
               >
-                <AccordionTrigger className="text-left text-base font-semibold text-slate-900 hover:no-underline">
-                  {item.q}
-                </AccordionTrigger>
-                <AccordionContent className="text-slate-600 leading-relaxed">
-                  {item.a}
-                </AccordionContent>
-              </AccordionItem>
+                {category} ({items.length})
+              </a>
             ))}
-          </Accordion>
+          </div>
+        </div>
+      </section>
+
+      <section className="py-16 bg-white">
+        <div className="max-w-5xl mx-auto px-6 space-y-12">
+          {categories.map(([category, items]) => (
+            <section key={category} id={category.toLowerCase().replaceAll(' ', '-')} className="scroll-mt-28">
+              <div className="mb-5">
+                <h2 className="text-2xl md:text-3xl font-black text-slate-950">{category}</h2>
+                <p className="text-slate-500 mt-2">{items.length} spørgsmål og svar</p>
+              </div>
+              <Accordion type="single" collapsible className="space-y-3">
+                {items.map((item) => (
+                  <AccordionItem
+                    key={item.q}
+                    value={item.q}
+                    className="border border-slate-200 rounded-xl px-5 data-[state=open]:border-amber-300 data-[state=open]:shadow-md transition"
+                  >
+                    <AccordionTrigger className="text-left text-base font-semibold text-slate-900 hover:no-underline">
+                      {item.q}
+                    </AccordionTrigger>
+                    <AccordionContent className="text-slate-600 leading-relaxed">
+                      {item.a}
+                    </AccordionContent>
+                  </AccordionItem>
+                ))}
+              </Accordion>
+            </section>
+          ))}
         </div>
       </section>
 

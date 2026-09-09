@@ -1,6 +1,6 @@
 import { useEffect, useState, useMemo } from 'react';
 import { base44 } from '@/api/base44Client';
-import { format, parseISO, differenceInDays, eachDayOfInterval, isWithinInterval } from 'date-fns';
+import { format, parseISO, differenceInDays, eachDayOfInterval } from 'date-fns';
 import { Loader2, Flag, Calendar, Clock, AlertTriangle, CheckCircle2 } from 'lucide-react';
 
 const STATUS_STYLE = {
